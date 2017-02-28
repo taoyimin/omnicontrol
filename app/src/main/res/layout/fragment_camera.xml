@@ -2,25 +2,112 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/panel_display"></RelativeLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/panel_ctrl">
+        android:layout_height="match_parent"
+        android:id="@+id/panel_ctrl"
+        android:layout_below="@id/panel_display">
         <GridView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="450dp"
+            android:layout_height="match_parent"
             android:id="@+id/channel_list"/>
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ctrl"></RelativeLayout>
+            android:layout_height="220dp"
+            android:id="@+id/ctrl"
+            android:layout_toRightOf="@id/channel_list"
+            android:background="@color/colorPrimaryDark">
+            <RelativeLayout
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:id="@+id/ctrl_go"
+                android:layout_margin="20dp">
+                <ImageButton
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@color/colorAccent"
+                    android:id="@+id/btn_go_up"
+                    android:layout_centerHorizontal="true"/>
+                 <ImageButton
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@color/colorAccent"
+                     android:layout_centerVertical="true"
+                     android:layout_alignParentStart="true"
+                     android:layout_below="@+id/btn_go_up"
+                     android:id="@+id/btn_go_left"/>
+                 <ImageButton
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@color/colorAccent"
+                     android:layout_alignParentEnd="true"
+                     android:layout_below="@+id/btn_go_up"
+                     android:layout_centerVertical="true"
+                     android:id="@+id/btn_go_right"/>
+                 <ImageButton
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:src="@color/colorAccent"
+                     android:layout_alignParentBottom="true"
+                     android:layout_centerHorizontal="true"
+                     android:layout_below="@+id/btn_go_left"
+                     android:id="@+id/btn_go_down"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:id="@+id/ctrl_zoom"
+                android:layout_toRightOf="@+id/ctrl_go">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="放大"
+                    android:id="@+id/btn_zoomin"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="慢速"
+                     android:id="@+id/btn_speeddown"
+                     android:layout_below="@+id/btn_zoomin"/>
+                 <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="播放"
+                     android:id="@+id/btn_play"
+                     android:layout_below="@+id/btn_zoomin"
+                     android:layout_toRightOf="@id/btn_speeddown"/>
+                 <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="快速"
+                     android:id="@+id/btn_speedup"
+                     android:layout_below="@+id/btn_zoomin"
+                     android:layout_toRightOf="@+id/btn_play"
+                     android:layout_alignParentEnd="true"/>
+
+                <Button
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="缩小"
+                    android:id="@+id/btn_zoomout"
+                    android:layout_alignParentEnd="true"
+                    android:layout_toEndOf="@+id/btn_play" />
+            </RelativeLayout>
+        </RelativeLayout>
         <GridView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/presets"/>
+            android:layout_width="360dp"
+            android:layout_height="match_parent"
+            android:id="@+id/presets"
+            android:layout_toRightOf="@+id/ctrl"/>
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:id="@+id/panel_display"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"></RelativeLayout>
 </RelativeLayout>
