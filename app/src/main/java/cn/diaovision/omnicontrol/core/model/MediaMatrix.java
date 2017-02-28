@@ -1,4 +1,4 @@
-package cn.diaovision.omnicontrol.model;
+package cn.diaovision.omnicontrol.core.model;
 
 import io.realm.RealmObject;
 

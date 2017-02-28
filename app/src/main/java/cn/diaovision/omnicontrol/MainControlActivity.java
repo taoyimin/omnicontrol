@@ -8,6 +8,6 @@ public class MainControlActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_control);
+        setContentView(R.layout.activity_main);
     }
 }
