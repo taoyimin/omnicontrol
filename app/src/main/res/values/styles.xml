@@ -5,12 +5,24 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:buttonStyle">@style/NavigationButton</item>
     </style>
 
     <!--bottom navigation bar-->
-    <style name="NavigationButton" parent="Widget.AppCompat.Button">
-        <item name="android:background">@android:color/transparent</item>
+    <style name="BottomTabText" parent="AppCompatTextView">
+        <item name="android:textSize">@dimen/txt_tab_size</item>
     </style>
+
+    <!--bottom navigation bar-->
+    <style name="PannelTitleText" parent="AppCompatTextView">
+        <item name="android:textSize">@dimen/txt_tab_size</item>
+        <item name="android:textColor">@color/panel_title_text</item>
+    </style>
+
+
+    <!--textview-->
+    <style name="AppCompatTextView">
+        <item name="android:textColor">@color/text_body_light</item>
+    </style>
+
 
 </resources>

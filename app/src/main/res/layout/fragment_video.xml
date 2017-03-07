@@ -1,26 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:id="@+id/display_panel">
         <VideoView
-            android:layout_width="200dp"
-            android:layout_height="100dp"
-            android:id="@+id/video_main"/>
+            android:layout_width="800dp"
+            android:layout_height="900dp"
+            android:id="@+id/video_main"
+            android:layout_centerHorizontal="true"/>
         </RelativeLayout>
-    <RelativeLayout
+    <android.support.percent.PercentRelativeLayout
+        xmlns:appCompat="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <GridView
-            android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_alignParentBottom="true">
+        <android.support.v7.widget.AppCompatTextView
+            appCompat:layout_widthPercent="50%"
             android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/widget_padding"
+            android:paddingTop="@dimen/widget_padding"
+            android:text="@string/txt_input"
+            android:gravity="center"
+            android:background="@drawable/panel_title_bg"
+            android:textAppearance="@style/PannelTitleText"
+            android:id="@+id/txt_input"/>
+        <android.support.v7.widget.AppCompatTextView
+            appCompat:layout_widthPercent="50%"
+            android:paddingBottom="@dimen/widget_padding"
+            android:paddingTop="@dimen/widget_padding"
+            android:layout_height="wrap_content"
+            android:text="@string/txt_output"
+            android:layout_toRightOf="@+id/txt_input"
+            android:gravity="center"
+            android:background="@drawable/panel_title_bg"
+            android:textAppearance="@style/PannelTitleText"
+            android:id="@+id/txt_output"/>
+        <android.support.v7.widget.RecyclerView
+            appCompat:layout_widthPercent="50%"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/txt_input"
             android:id="@+id/input" />
-        <GridView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <android.support.v7.widget.RecyclerView
+            appCompat:layout_widthPercent="50%"
+            android:layout_height="200dp"
+            android:layout_toRightOf="@+id/input"
+            android:layout_below="@+id/txt_input"
             android:id="@+id/output"/>
-    </RelativeLayout>
+    </android.support.percent.PercentRelativeLayout>
+
 </RelativeLayout>

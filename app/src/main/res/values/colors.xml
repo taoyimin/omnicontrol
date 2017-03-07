@@ -1,8 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimary">#1d6966</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <!--common colors-->
     <color name="transparent">#00000000</color>
+    <color name="white">#ffffff</color>
+    <color name="grey">#aaaaaa</color>
+
+    <!--text color in white themes-->
+    <color name="text_body_light">#555555</color>
+
+    <!--botton colors-->
+    <color name="btn_light_bg">#57d2f7</color>
+    <color name="btn_light_txt">#f0f0f0</color>
+
+    <!--edittext colors-->
+    <color name="input_light_border">#888888</color>
+
+    <!--bottom navigation bar colors-->
+    <color name="bb_bg">#1d6966</color>
+    <color name="bb_text">#eeeeee</color>
+    <color name="bb_text_selected">#f0f0f0</color>
+    <color name="bb_bg_tab_selected">#2ea09c</color>
+
+
+    <!--pannel bg color-->
+    <color name="panel_title_bg">#3cd2cd</color>
+    <color name="panel_title_border">#caefee</color>
+    <color name="panel_title_text">#eeeeee</color>
 </resources>

@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/panel_ctrl"
-        android:layout_below="@id/panel_display">
+        android:layout_below="@+id/panel_display">
         <GridView
             android:layout_width="450dp"
             android:layout_height="match_parent"
@@ -60,26 +60,26 @@
                 android:layout_centerVertical="true"
                 android:id="@+id/ctrl_zoom"
                 android:layout_toRightOf="@+id/ctrl_go">
-                <Button
+                <android.support.v7.widget.AppCompatImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="放大"
                     android:id="@+id/btn_zoomin"/>
 
-                <Button
+                <android.support.v7.widget.AppCompatImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="慢速"
                      android:id="@+id/btn_speeddown"
                      android:layout_below="@+id/btn_zoomin"/>
-                 <Button
+                <android.support.v7.widget.AppCompatImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="播放"
                      android:id="@+id/btn_play"
                      android:layout_below="@+id/btn_zoomin"
                      android:layout_toRightOf="@id/btn_speeddown"/>
-                 <Button
+                <android.support.v7.widget.AppCompatImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="快速"
@@ -88,7 +88,7 @@
                      android:layout_toRightOf="@+id/btn_play"
                      android:layout_alignParentEnd="true"/>
 
-                <Button
+                <android.support.v7.widget.AppCompatImageButton
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:text="缩小"

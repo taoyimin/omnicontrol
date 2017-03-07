@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<tabs>
+    <tab
+        id="@+id/tab_power"
+        icon="@drawable/ic_power"
+        title="电源"
+        barColorWhenSelected="#5D4037"/>
+    <tab
+        id="@+id/tab_video"
+        icon="@drawable/ic_video"
+        title="视频"
+        barColorWhenSelected="#2b95cb"/>
+    <tab
+        id="@+id/tab_audio"
+        icon="@drawable/ic_audio"
+        title="音频"
+        barColorWhenSelected="#f29d14"/>
+    <tab
+        id="@+id/tab_light"
+        icon="@drawable/ic_light"
+        title="灯光"
+        barColorWhenSelected="#12dc2d"/>
+    <tab
+        id="@+id/tab_camera"
+        icon="@drawable/ic_camera"
+        title="摄像"
+        barColorWhenSelected="#2a12dc"/>
+    <tab
+        id="@+id/tab_player"
+        icon="@drawable/ic_disc"
+        title="DVD"/>
+    <tab
+        id="@+id/tab_meeting"
+        icon="@drawable/ic_meeting"
+        title="会议"/>
+    <tab
+        id="@+id/tab_config"
+        icon="@drawable/ic_config"
+        title="设置"/>
+</tabs>
