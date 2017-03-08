@@ -73,15 +73,6 @@ public class VideoFragment extends Fragment{
             @Override
             public void onUnselect(View v, int position) {
                 Toast.makeText(getActivity().getApplicationContext(), "port unselected = " + String.valueOf(position), Toast.LENGTH_SHORT).show();
-
-//                get position 24
-//                int pos = 24;
-//                int firstPosition = ((GridLayoutManager) layoutManager).findFirstVisibleItemPosition();
-//                int lastPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
-//
-//                if (pos<= firstPosition || pos >= lastPosition){
-//                    inputPorts.smoothScrollToPosition(pos);
-//                }
             }
 
             @Override

@@ -63,7 +63,7 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
             public void onClick(View view) {
                 if (lastSelectedPos < 0){
                     //new select
-                    lastSelectedPos = position;
+                    lastSelectedPos = holder.pos;
                     ((CircleCharView) view.findViewById(R.id.port_circle)).select();
                     lastSelectedView = view;
                     if (itemClickListener != null) {
@@ -71,9 +71,11 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
                     }
                 }
                 else {
-                    if (lastSelectedPos != position) {
-                        lastSelectedPos = position;
-                        ((CircleCharView) lastSelectedView.findViewById(R.id.port_circle)).unselect();
+                    if (lastSelectedPos != holder.pos) {
+                        if((int) lastSelectedView.getTag() == lastSelectedPos) {
+                            ((CircleCharView) lastSelectedView.findViewById(R.id.port_circle)).unselect();
+                        }
+                        lastSelectedPos = holder.pos;
                         lastSelectedView = view;
                         //reselect
                         ((CircleCharView) view.findViewById(R.id.port_circle)).select();
@@ -96,16 +98,6 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
             }
         });
 
-        holder.getV().setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                if (itemClickListener!=null){
-                    itemClickListener.onLongClick(view, (int) view.getTag());
-                }
-                return false;
-            }
-        });
-
         //bind view here
         if (ports != null){
             Port p = ports.get(position);
@@ -117,10 +109,9 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
             //reset the view click state
             if (lastSelectedPos == position){
                 holder.cView.select(0);
-                Log.i("<UI>","<UI> bind position at " + holder.pos + " :selected");
+                lastSelectedView = holder.getV(); //reset selectedView here (old one may be recycled)
             }
             else {
-                Log.i("<UI>","<UI> bind position at " + holder.pos + " :unselected");
                 holder.cView.unselect(0);
             }
             holder.v.setTag(position); //view position
@@ -138,21 +129,6 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
         return ports.size();
     }
 
-    @Override
-    public void onViewDetachedFromWindow(PortItemViewHolder holder) {
-        super.onViewDetachedFromWindow(holder);
-    }
-
-
-    @Override
-    public void onViewRecycled(PortItemViewHolder holder) {
-        super.onViewRecycled(holder);
-        if (lastSelectedView != null && lastSelectedPos == holder.pos){
-            ((CircleCharView) lastSelectedView.findViewById(R.id.port_circle)).unselect(0);
-            ((CircleCharView) holder.v.findViewById(R.id.port_circle)).unselect(0);
-            Log.i("<UI>", "<UI> selectedview recycled at " + holder.pos);
-        }
-    }
 
     public List<Port> getPorts() {
         return ports;
@@ -183,6 +159,7 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
 
             alias = (AppCompatTextView) v.findViewById(R.id.port_alias);
             cView = (CircleCharView) v.findViewById(R.id.port_circle);
+            cView.unselect(0);
         }
 
         public View getV(){

@@ -163,12 +163,7 @@ public class CircleCharView extends View {
     }
 
     public void unselect(){
-        if (!clicked){
-            return;
-        }
-        else {
-            clicked = !clicked;
-        }
+        clicked = false;
 
         int clickIndicatorAlphaStop = 0;
         int clickIndicatorAlphaStart = 0;
@@ -184,12 +179,7 @@ public class CircleCharView extends View {
     }
 
     public void unselect(long duration){
-        if (!clicked){
-            return;
-        }
-        else {
-            clicked = !clicked;
-        }
+        clicked = false;
 
         int clickIndicatorAlphaStop = 0;
         int clickIndicatorAlphaStart = 0;
@@ -204,12 +194,7 @@ public class CircleCharView extends View {
         this.startAnimation(anime);
     }
     public void select(){
-        if (clicked){
-            return;
-        }
-        else {
-            clicked = !clicked;
-        }
+        clicked = true;
 
         int clickIndicatorAlphaStop = 0;
         int clickIndicatorAlphaStart = 0;
@@ -225,12 +210,7 @@ public class CircleCharView extends View {
     }
 
     public void select(long duration){
-        if (clicked){
-            return;
-        }
-        else {
-            clicked = !clicked;
-        }
+        clicked = true;
 
         int clickIndicatorAlphaStop = 0;
         int clickIndicatorAlphaStart = 0;
