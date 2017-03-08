@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.diaovision.omnicontrol.util.CrashHandler;
 import cn.diaovision.omnicontrol.view.AudioFragment;
 import cn.diaovision.omnicontrol.view.CameraFragment;
 import cn.diaovision.omnicontrol.view.ConfigLoginFragment;
@@ -160,6 +161,9 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
         });
 
         gestureDetector = new GestureDetectorCompat(this, this);
+
+        CrashHandler.getInstance().init(this);
+
     }
 
     void switchFragment(int i){

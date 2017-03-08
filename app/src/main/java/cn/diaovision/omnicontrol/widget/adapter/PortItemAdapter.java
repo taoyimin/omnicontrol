@@ -72,6 +72,8 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
                 }
                 else {
                     if (lastSelectedPos != holder.pos) {
+
+                        //only unselect old selectedView if the view is still on the window
                         if((int) lastSelectedView.getTag() == lastSelectedPos) {
                             ((CircleCharView) lastSelectedView.findViewById(R.id.port_circle)).unselect();
                         }
@@ -138,6 +140,22 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
         if(ports != null) {
             this.ports = ports;
             notifyDataSetChanged();
+        }
+    }
+
+    public void changeSelectedItem(int pos, View view){
+        if (pos != (int) view.getTag()){
+//            Log.i("<UI>", "<UI> pos = " + pos + " tagpos = " + (int) view.getTag());
+        }
+
+        if (lastSelectedPos != pos){
+            ((CircleCharView) view.findViewById(R.id.port_circle)).select();
+            if (lastSelectedView !=null && (int) lastSelectedView.getTag() == lastSelectedPos) {
+                ((CircleCharView) lastSelectedView.findViewById(R.id.port_circle)).unselect();
+            }
+            lastSelectedPos = pos;
+            lastSelectedView = view;
+//            lastSelectedView.setTag(pos);
         }
     }
 

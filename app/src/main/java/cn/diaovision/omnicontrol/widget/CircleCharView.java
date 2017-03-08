@@ -37,8 +37,6 @@ public class CircleCharView extends View {
 
     boolean clicked;
 
-    boolean preSelected;
-    boolean curSelected;
 
     int preState = 0;
     int state = 0;
@@ -237,14 +235,6 @@ public class CircleCharView extends View {
             this.preState = this.state; //backup preState
             this.state = state;
             this.postInvalidate();
-
-            AnimationSet animeSet = new AnimationSet(true);
-
-            AttributeAnimation anime = AttributeAnimation.ofFloat(this, "stateOldAlpha", 0, 255);
-            anime.setDuration(200);
-            animeSet.addAnimation(anime);
-
-            this.startAnimation(anime);
         }
     }
 
