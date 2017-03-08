@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="wrap_content" android:layout_height="wrap_content">
     <cn.diaovision.omnicontrol.widget.CircleCharView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_centerHorizontal="true"
         android:id="@+id/port_circle"/>
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/port_circle"
-        android:layout_marginTop="4dp"
         android:layout_centerHorizontal="true"
+        android:textAppearance="@style/ItemTitleText"
         android:id="@+id/port_alias"/>
 </RelativeLayout>

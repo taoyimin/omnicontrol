@@ -9,4 +9,5 @@
     <dimen name="txt_title_size">48sp</dimen>
 
     <dimen name="txt_tab_size">24sp</dimen>
+    <dimen name="txt_item_size">18sp</dimen>
 </resources>

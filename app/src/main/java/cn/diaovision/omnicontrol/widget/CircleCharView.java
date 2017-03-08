@@ -36,6 +36,10 @@ public class CircleCharView extends View {
     Paint p;
 
     boolean clicked;
+
+    boolean preSelected;
+    boolean curSelected;
+
     int preState = 0;
     int state = 0;
 
@@ -127,6 +131,7 @@ public class CircleCharView extends View {
         canvas.drawText(c, w / 2.0f - txtBound.width() / 2.0f, baseline, p);
 
         //draw click indicator
+        p.setShadowLayer(10, 0, 0, Color.BLACK);
         p.setColor(clickIndicatorColor);
         p.setAlpha(clickIndicatorAlpha);
         p.setStyle(Paint.Style.STROKE);
@@ -142,19 +147,107 @@ public class CircleCharView extends View {
         int clickIndicatorAlphaStart = 0;
         //create a click transition animation
         if (clicked) {
-            clickIndicatorAlphaStop = 255;
             clickIndicatorAlphaStart = 0;
-            clickIndicatorColor = Color.parseColor("#0057d2f7");
+            clickIndicatorAlphaStop = 255;
+            clickIndicatorColor = Color.parseColor("#57d2f7");
         }
         else{
             clickIndicatorAlphaStart = 255;
             clickIndicatorAlphaStop = 0;
-            clickIndicatorColor = Color.parseColor("#ff57d2f7");
+            clickIndicatorColor = Color.parseColor("#57d2f7");
         }
 
         AttributeAnimation anime = AttributeAnimation.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
         anime.setDuration(200);
         this.startAnimation(anime);
+    }
+
+    public void unselect(){
+        if (!clicked){
+            return;
+        }
+        else {
+            clicked = !clicked;
+        }
+
+        int clickIndicatorAlphaStop = 0;
+        int clickIndicatorAlphaStart = 0;
+        //create a click transition animation
+
+        clickIndicatorAlphaStart = 255;
+        clickIndicatorAlphaStop = 0;
+        clickIndicatorColor = Color.parseColor("#57d2f7");
+
+        AttributeAnimation anime = AttributeAnimation.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
+        anime.setDuration(200);
+        this.startAnimation(anime);
+    }
+
+    public void unselect(long duration){
+        if (!clicked){
+            return;
+        }
+        else {
+            clicked = !clicked;
+        }
+
+        int clickIndicatorAlphaStop = 0;
+        int clickIndicatorAlphaStart = 0;
+        //create a click transition animation
+
+        clickIndicatorAlphaStart = 255;
+        clickIndicatorAlphaStop = 0;
+        clickIndicatorColor = Color.parseColor("#57d2f7");
+
+        AttributeAnimation anime = AttributeAnimation.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
+        anime.setDuration(duration);
+        this.startAnimation(anime);
+    }
+    public void select(){
+        if (clicked){
+            return;
+        }
+        else {
+            clicked = !clicked;
+        }
+
+        int clickIndicatorAlphaStop = 0;
+        int clickIndicatorAlphaStart = 0;
+        //create a click transition animation
+
+        clickIndicatorAlphaStart = 0;
+        clickIndicatorAlphaStop = 255;
+        clickIndicatorColor = Color.parseColor("#57d2f7");
+
+        AttributeAnimation anime = AttributeAnimation.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
+        anime.setDuration(200);
+        this.startAnimation(anime);
+    }
+
+    public void select(long duration){
+        if (clicked){
+            return;
+        }
+        else {
+            clicked = !clicked;
+        }
+
+        int clickIndicatorAlphaStop = 0;
+        int clickIndicatorAlphaStart = 0;
+        //create a click transition animation
+
+        clickIndicatorAlphaStart = 0;
+        clickIndicatorAlphaStop = 255;
+        clickIndicatorColor = Color.parseColor("#57d2f7");
+
+        AttributeAnimation anime = AttributeAnimation.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
+        anime.setDuration(duration);
+        this.startAnimation(anime);
+    }
+
+    public void setChar(String c){
+        this.c = c;
+        this.postInvalidate();
     }
 
     public void changeState(int state){

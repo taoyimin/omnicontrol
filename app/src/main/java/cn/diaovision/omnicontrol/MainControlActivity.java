@@ -124,8 +124,8 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
         }
         //set init tab scale
         int pos =  navigationBar.getSelectedTabPosition();
-        navigationBar.getTabAt(pos).getCustomView().setScaleX(1.2f);
-        navigationBar.getTabAt(pos).getCustomView().setScaleY(1.2f);
+        navigationBar.getTabAt(pos).getCustomView().findViewById(R.id.tab_content).setScaleX(1.2f);
+        navigationBar.getTabAt(pos).getCustomView().findViewById(R.id.tab_content).setScaleY(1.2f);
 
         //navigation tab selection
         navigationBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
