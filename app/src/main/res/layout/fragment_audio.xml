@@ -2,25 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <FrameLayout
+    <cn.diaovision.omnicontrol.widget.VolumeBar
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/display"/>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <GridView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/input"/>
-         <GridView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/output"/>
-        <GridView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/volume"/>
-    </RelativeLayout>
-
+        android:layout_height="20dp" />
 </RelativeLayout>

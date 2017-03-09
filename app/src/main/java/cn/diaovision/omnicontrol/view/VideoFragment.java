@@ -32,18 +32,10 @@ public class VideoFragment extends Fragment{
 
     @BindView(R.id.input)
     PortRadioGroupView inputPorts;
-//    PortItemAdapter inputPortAdapter;
-//    GridLayoutManager inputPortLayoutMgr;
-//    boolean inputPortScrolling = false;
-//    boolean inputPortDragging = false;
 
 
     @BindView(R.id.output)
     PortRadioGroupView outputPorts;
-//    PortItemAdapter outputPortAdapter;
-//    GridLayoutManager outputPortLayoutMgr;
-//    boolean outputPortScrolling = false;
-//    boolean outputPortDragging = false;
 
     /***********
      *Datum
@@ -104,6 +96,7 @@ public class VideoFragment extends Fragment{
 
             }
         });
+
         return v;
     }
 }

@@ -7,11 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 
 import java.util.List;
 
-import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.widget.adapter.PortItemAdapter;
 
@@ -107,11 +105,12 @@ public class PortRadioGroupView extends RecyclerView {
                                 int firstPosition = layoutMgr.findFirstVisibleItemPosition();
                                 int lastPosition = layoutMgr.findLastVisibleItemPosition();
 
-                                Log.i("<UI>", "<UI> cild0tag = " + layoutMgr.getChildAt(0).getTag() +  " postag = " + layoutMgr.getChildAt(position-firstPosition).getTag() + " last first pos = " +lastPosition + " " + firstPosition + " " + position);
+//                                Log.i("<UI>", "<UI> cild0tag = " + layoutMgr.getChildAt(0).getTag() +  " postag = " + layoutMgr.getChildAt(position-firstPosition).getTag() + " last first pos = " +lastPosition + " " + firstPosition + " " + position);
                             }
                             else {
+                                //dragging should be unset once the scroll is done
                                 dragging = false;
-                                Log.i("<UI>", "<UI> dragging + scrolling" + dragging + " " + scrolling);
+//                                Log.i("<UI>", "<UI> dragging + scrolling" + dragging + " " + scrolling);
                             }
                             break;
                     }

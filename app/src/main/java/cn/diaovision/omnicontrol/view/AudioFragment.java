@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.R;
 
 /**
@@ -21,7 +22,10 @@ public class AudioFragment extends Fragment{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+
+        View v = inflater.inflate(R.layout.fragment_audio, container, false);
+        ButterKnife.bind(this, v);
+        return v;
     }
 
 }
