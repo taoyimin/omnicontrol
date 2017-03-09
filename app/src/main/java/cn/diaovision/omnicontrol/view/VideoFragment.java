@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
-import cn.diaovision.omnicontrol.widget.CircleCharView;
+import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
 import cn.diaovision.omnicontrol.widget.adapter.PortItemAdapter;
 
 /**
@@ -31,19 +31,19 @@ import cn.diaovision.omnicontrol.widget.adapter.PortItemAdapter;
 public class VideoFragment extends Fragment{
 
     @BindView(R.id.input)
-    RecyclerView inputPorts;
-    PortItemAdapter inputPortAdapter;
-    GridLayoutManager inputPortLayoutMgr;
-    boolean inputPortScrolling = false;
-    boolean inputPortDragging = false;
+    PortRadioGroupView inputPorts;
+//    PortItemAdapter inputPortAdapter;
+//    GridLayoutManager inputPortLayoutMgr;
+//    boolean inputPortScrolling = false;
+//    boolean inputPortDragging = false;
 
 
     @BindView(R.id.output)
-    RecyclerView outputPorts;
-    PortItemAdapter outputPortAdapter;
-    GridLayoutManager outputPortLayoutMgr;
-    boolean outputPortScrolling = false;
-    boolean outputPortDragging = false;
+    PortRadioGroupView outputPorts;
+//    PortItemAdapter outputPortAdapter;
+//    GridLayoutManager outputPortLayoutMgr;
+//    boolean outputPortScrolling = false;
+//    boolean outputPortDragging = false;
 
     /***********
      *Datum
@@ -77,116 +77,33 @@ public class VideoFragment extends Fragment{
             outports.add(port);
         }
 
-        //Input port adapter
-        inputPortAdapter = new PortItemAdapter(ports, R.layout.item_port);
-        inputPortLayoutMgr = new GridLayoutManager(getActivity().getApplicationContext(), 6, GridLayoutManager.VERTICAL, false);
-        inputPorts.setLayoutManager(inputPortLayoutMgr);
-        inputPorts.setAdapter(inputPortAdapter);
+        //RecyclerView config
+        inputPorts.config(ports, R.layout.item_port);
+        outputPorts.config(outports, R.layout.item_port);
 
-
-//        //Output port adapter
-        outputPortAdapter = new PortItemAdapter(outports, R.layout.item_port);
-        outputPortLayoutMgr = new GridLayoutManager(getActivity().getApplicationContext(), 6, GridLayoutManager.VERTICAL, false);
-        outputPorts.setLayoutManager(outputPortLayoutMgr);
-        outputPorts.setAdapter(outputPortAdapter);
-
-        inputPortAdapter.setOnItemClickedListener(new PortItemAdapter.OnItemClickListener() {
+        inputPorts.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
             @Override
-            public void onLongClick(View v, int position) { }
-
-            @Override
-            public void onUnselect(View v, int position) {
-                Toast.makeText(getActivity().getApplicationContext(), "port unselected = " + String.valueOf(position), Toast.LENGTH_SHORT).show();
+            public void onSelected(int pos) {
+                outputPorts.select(pos);
             }
 
             @Override
-            public void onSelect(View v, final int position) {
-                Toast.makeText(getActivity().getApplicationContext(), "port selected = " + String.valueOf(position), Toast.LENGTH_SHORT).show();
+            public void onUnselected(int pos) {
 
-                int firstPosition = outputPortLayoutMgr.findFirstVisibleItemPosition();
-                int lastPosition = outputPortLayoutMgr.findLastVisibleItemPosition();
-                Log.i("<UI>", "<UI> firstpos = " + firstPosition + " lastpos = " + lastPosition + " pos = " + position);
-                if (position < firstPosition || position > lastPosition){
-                    outputPorts.smoothScrollToPosition(position);
-                    outputPorts.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                        @Override
-                        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                            super.onScrollStateChanged(recyclerView, newState);
-                            int firstPosition;
-//                            Log.i("<UI>", "<UI> scroll state" + newState);
-                            switch(newState){
-                                case RecyclerView.SCROLL_STATE_SETTLING:
-                                    if (!outputPortDragging && !outputPortScrolling){
-//                                    firstPosition = outputPortLayoutMgr.findFirstVisibleItemPosition();
-                                        outputPortScrolling = true; //a scrolling occurs
-//                                        Log.i("<UI>", "<UI> settling" + outputPortLayoutMgr.findFirstVisibleItemPosition());
-                                    }
-                                    break;
-                                case RecyclerView.SCROLL_STATE_DRAGGING:
-                                    outputPortDragging = true;
-//                                    firstPosition = outputPortLayoutMgr.findFirstVisibleItemPosition();
-//                                    Log.i("<UI>", "<UI> dragging, pos");
-                                    break;
-                                case RecyclerView.SCROLL_STATE_IDLE:
-                                    if (!outputPortDragging && outputPortScrolling){
-                                        outputPortDragging = false;
-                                        outputPortScrolling = false;
-                                        firstPosition = outputPortLayoutMgr.findFirstVisibleItemPosition();
-                                        int lastPos = outputPortLayoutMgr.findLastVisibleItemPosition();
-                                        //N.B.: firstVisibleItemPosition is not the first child of layoutmanager
-                                        outputPortAdapter.changeSelectedItem(position, outputPortLayoutMgr.getChildAt(position-(int) outputPortLayoutMgr.getChildAt(0).getTag()));
-                                        Log.i("<UI>", "<UI> change item selection, first pos = " + firstPosition + " pos = " + position + " postag = "+outputPortLayoutMgr.getChildAt(position-firstPosition).getTag());
-                                        Log.i("<UI>", "<UI> childCount = " + outputPortLayoutMgr.getChildAt(0).getTag() + " position visible  = " +lastPos + " " + firstPosition);
-                                    }
-                                    break;
-                            }
-                        }
-
-                        @Override
-                        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                            super.onScrolled(recyclerView, dx, dy);
-//                            Log.i("<UI>", "<UI> scrolled, dy = " + dy);
-                        }
-                    });
-
-                }
-                else {
-                    //a hotfix for layoutmanager.getChildAt
-                    outputPortAdapter.changeSelectedItem(position, outputPortLayoutMgr.getChildAt(position-(int) outputPortLayoutMgr.getChildAt(0).getTag()));
-                    Log.i("<UI>", "<UI> change item selection, first pos = " + firstPosition + " pos = " + position + " postag = "+outputPortLayoutMgr.getChildAt(position-firstPosition).getTag());
-                    Log.i("<UI>", "<UI> childCount = " + outputPortLayoutMgr.getChildAt(0).getTag() + " position visible  = " + lastPosition + " " + firstPosition);
-
-                }
             }
-
         });
 
-        outputPortAdapter.setOnItemClickedListener(new PortItemAdapter.OnItemClickListener() {
+        outputPorts.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
             @Override
-            public void onLongClick(View v, int position) { }
-
-            @Override
-            public void onUnselect(View v, int position) {
-                Toast.makeText(getActivity().getApplicationContext(), "port unselected = " + String.valueOf(position), Toast.LENGTH_SHORT).show();
+            public void onSelected(int pos) {
+                inputPorts.select(pos);
             }
 
             @Override
-            public void onSelect(View v, int position) {
-//                Toast.makeText(getActivity().getApplicationContext(), "port selected = " + String.valueOf(position), Toast.LENGTH_SHORT).show();
+            public void onUnselected(int pos) {
 
-                int firstPosition = inputPortLayoutMgr.findFirstVisibleItemPosition();
-                int lastPosition = inputPortLayoutMgr.findLastVisibleItemPosition();
-                if (position <= firstPosition || position > lastPosition){
-                    inputPorts.smoothScrollToPosition(position);
-                }
-
-//                firstPosition = inputPortLayoutMgr.findFirstVisibleItemPosition();
-//                ((CircleCharView) inputPortLayoutMgr.getChildAt(position - firstPosition).findViewById(R.id.port_circle)).select();
-//                inputPortAdapter.changeSelectedItem(position, inputPortLayoutMgr.getChildAt(position-firstPosition));
             }
-
         });
-
         return v;
     }
 }

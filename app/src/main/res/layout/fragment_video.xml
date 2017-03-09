@@ -39,14 +39,14 @@
             android:background="@drawable/panel_title_bg"
             android:textAppearance="@style/PannelTitleText"
             android:id="@+id/txt_output"/>
-        <android.support.v7.widget.RecyclerView
+        <cn.diaovision.omnicontrol.widget.PortRadioGroupView
             appCompat:layout_widthPercent="50%"
             android:layout_height="300dp"
             android:layout_below="@+id/txt_input"
             android:id="@+id/input"
             android:background="@color/panel_input"
             />
-        <android.support.v7.widget.RecyclerView
+        <cn.diaovision.omnicontrol.widget.PortRadioGroupView
             appCompat:layout_widthPercent="50%"
             android:layout_height="300dp"
             android:layout_toRightOf="@+id/input"

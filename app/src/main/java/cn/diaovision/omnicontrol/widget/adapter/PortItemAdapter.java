@@ -144,6 +144,7 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
     }
 
     public void changeSelectedItem(int pos, View view){
+        //TODO: something wrong here
         if (pos != (int) view.getTag()){
 //            Log.i("<UI>", "<UI> pos = " + pos + " tagpos = " + (int) view.getTag());
         }
@@ -155,7 +156,6 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
             }
             lastSelectedPos = pos;
             lastSelectedView = view;
-//            lastSelectedView.setTag(pos);
         }
     }
 
