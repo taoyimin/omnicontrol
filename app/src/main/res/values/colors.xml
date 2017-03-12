@@ -34,4 +34,7 @@
     <!--pannel bg color-->
     <color name="panel_input">#fefafa</color>
     <color name="panel_output">#fbfba7</color>
+
+    <!--seekbar color-->
+    <color name="seekbar_thumb">#ff6a06</color>
 </resources>

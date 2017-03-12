@@ -3,6 +3,15 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <cn.diaovision.omnicontrol.widget.VolumeBar
-        android:layout_width="match_parent"
-        android:layout_height="20dp" />
+        android:layout_marginTop="36dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="20dp"
+        android:layout_height="match_parent"
+        android:id="@+id/bar"
+        android:thumb="@drawable/seekbar_thumb"/>
+    <ImageButton
+        android:layout_width="48px"
+        android:layout_height="48px"
+        android:layout_centerInParent="true"
+        android:background="@color/colorAccent"/>
 </RelativeLayout>
