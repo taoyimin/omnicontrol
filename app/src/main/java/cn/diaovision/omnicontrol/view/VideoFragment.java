@@ -76,7 +76,7 @@ public class VideoFragment extends Fragment{
         inputPorts.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
             @Override
             public void onSelected(int pos) {
-//                outputPorts.select(pos);
+                outputPorts.select(pos);
             }
 
             @Override
@@ -88,7 +88,7 @@ public class VideoFragment extends Fragment{
         outputPorts.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
             @Override
             public void onSelected(int pos) {
-//                inputPorts.select(pos);
+                inputPorts.select(pos);
             }
 
             @Override

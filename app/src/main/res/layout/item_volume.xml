@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:background="@drawable/list_item_bg">
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/ItemTitleText"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/alias"/>
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_marginTop="@dimen/widget_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/ItemTitleText"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/val"
+        android:layout_below="@+id/alias"/>
+    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/val"
+        android:layout_marginTop="@dimen/widget_margin">
+        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+            android:id="@+id/seekbar"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:splitTrack="false"
+            android:thumb="@drawable/ic_tab_thumb"
+            android:progressBackgroundTint="@color/seekbar_thumb"
+            android:progressTint="@color/seekbar_thumb"
+            app:seekBarRotation="CW270" />
+    </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+</RelativeLayout>

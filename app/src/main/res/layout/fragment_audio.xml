@@ -1,17 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:appCompat="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <cn.diaovision.omnicontrol.widget.VolumeBar
-        android:layout_marginTop="36dp"
-        android:layout_centerHorizontal="true"
-        android:layout_width="20dp"
-        android:layout_height="match_parent"
-        android:id="@+id/bar"
-        android:thumb="@drawable/seekbar_thumb"/>
-    <ImageButton
-        android:layout_width="48px"
-        android:layout_height="48px"
-        android:layout_centerInParent="true"
-        android:background="@color/colorAccent"/>
+    android:layout_height="match_parent" >
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+         <android.support.v7.widget.AppCompatTextView
+            appCompat:layout_widthPercent="30%"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/widget_padding"
+            android:paddingTop="@dimen/widget_padding"
+            android:text="@string/txt_input"
+            android:gravity="center"
+            android:background="@drawable/panel_title_bg"
+            android:textAppearance="@style/PannelTitleText"
+            android:id="@+id/txt_input"/>
+        <android.support.v7.widget.AppCompatTextView
+            appCompat:layout_widthPercent="30%"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/widget_padding"
+            android:paddingTop="@dimen/widget_padding"
+            android:text="@string/txt_output"
+            android:layout_toRightOf="@+id/txt_input"
+            android:gravity="center"
+            android:background="@drawable/panel_title_bg"
+            android:textAppearance="@style/PannelTitleText"
+            android:id="@+id/txt_output"/>
+         <android.support.v7.widget.AppCompatTextView
+            appCompat:layout_widthPercent="40%"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/widget_padding"
+            android:paddingTop="@dimen/widget_padding"
+            android:text="@string/txt_output"
+            android:layout_toRightOf="@+id/txt_output"
+            android:gravity="center"
+            android:background="@drawable/panel_title_bg"
+            android:textAppearance="@style/PannelTitleText"
+            android:id="@+id/txt_chn"/>
+
+        <cn.diaovision.omnicontrol.widget.PortRadioGroupView
+            appCompat:layout_widthPercent="30%"
+            android:layout_height="300dp"
+            android:layout_below="@+id/txt_input"
+            android:id="@+id/input"
+            android:background="@color/panel_input" />
+
+        <cn.diaovision.omnicontrol.widget.PortRadioGroupView
+            appCompat:layout_widthPercent="30%"
+            android:layout_height="300dp"
+            android:layout_toRightOf="@+id/input"
+            android:layout_below="@+id/txt_input"
+            android:id="@+id/output"
+            android:background="@color/panel_output" />
+
+        <cn.diaovision.omnicontrol.widget.VolumeChannelRadioGroupView
+            appCompat:layout_widthPercent="40%"
+            android:layout_height="300dp"
+            android:layout_toRightOf="@+id/output"
+            android:layout_below="@+id/txt_input"
+            android:id="@+id/audioChnList" />
+    </android.support.percent.PercentRelativeLayout>
 </RelativeLayout>

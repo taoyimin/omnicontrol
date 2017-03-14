@@ -37,4 +37,8 @@
 
     <!--seekbar color-->
     <color name="seekbar_thumb">#ff6a06</color>
+
+    <!--item bg select color-->
+    <color name="item_bg">#ffeadc</color>
+    <color name="item_selected">#ff6a06</color>
 </resources>

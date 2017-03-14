@@ -1,7 +1,11 @@
 apply plugin: 'com.android.application'
 
-apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'realm-android'
+//for butterknife
+//apply plugin: 'com.android.library'
+apply plugin: 'com.jakewharton.butterknife'
+
+//for realm
+//apply plugin: 'realm-android'
 
 android {
     compileSdkVersion 25
@@ -23,24 +27,27 @@ android {
 }
 
 dependencies {
+
+//    classpath 'io.realm:realm-gradle-plugin:2.3.1'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:design:25.1.0'
-    compile 'com.android.support:appcompat-v7:25.1.0'
-    compile 'com.android.support:gridlayout-v7:25.1.0'
-    compile 'com.android.support:recyclerview-v7:25.1.0'
-    compile 'com.android.support:cardview-v7:25.1.0'
+    compile 'com.android.support:design:25.2.0'
+    compile 'com.android.support:appcompat-v7:25.2.0'
+    compile 'com.android.support:gridlayout-v7:25.2.0'
+    compile 'com.android.support:recyclerview-v7:25.2.0'
+    compile 'com.android.support:cardview-v7:25.2.0'
+    compile 'com.android.support:percent:25.2.0'
+
+    //vertical seekbar
+    compile 'com.h6ah4i.android.widget.verticalseekbar:verticalseekbar:0.7.2'
 
     //navigation bar
-    compile 'devlight.io:navigationtabbar:1.2.5'
-
+//    compile 'devlight.io:navigationtabbar:1.2.5'
     //bottom navigation bar
-    compile 'com.roughike:bottom-bar:2.1.1'
+//    compile 'com.roughike:bottom-bar:2.1.1'
 
-    //precentlayout
-    compile 'com.android.support:percent:25.1.0'
 
     //Rxjava
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
@@ -50,7 +57,7 @@ dependencies {
 
     //Butterknife
     compile 'com.jakewharton:butterknife:8.5.1'
-    apt 'com.jakewharton:butterknife-compiler:8.5.1'
+//    apt 'com.jakewharton:butterknife-compiler:8.5.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
     //realm

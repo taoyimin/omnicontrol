@@ -21,7 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 
-import com.roughike.bottombar.BottomBar;
+//import com.roughike.bottombar.BottomBar;
 
 import java.util.ArrayList;
 
@@ -36,7 +36,7 @@ import cn.diaovision.omnicontrol.view.LightFragment;
 import cn.diaovision.omnicontrol.view.MeetingFragment;
 import cn.diaovision.omnicontrol.view.PowerFragment;
 import cn.diaovision.omnicontrol.view.VideoFragment;
-import devlight.io.library.ntb.NavigationTabBar;
+//import devlight.io.library.ntb.NavigationTabBar;
 
 public class MainControlActivity extends BaseActivity implements GestureDetector.OnGestureListener{
 

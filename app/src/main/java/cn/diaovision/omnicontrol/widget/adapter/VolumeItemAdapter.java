@@ -7,11 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar;
+
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.R;
-import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
+import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.widget.CircleCharView;
 
 /**
@@ -19,9 +23,9 @@ import cn.diaovision.omnicontrol.widget.CircleCharView;
  * Created by liulingfeng on 2017/3/2.
  */
 
-public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortItemViewHolder>{
+public class VolumeItemAdapter extends RecyclerView.Adapter<VolumeItemAdapter.VolumeItemHolder>{
 
-    List<Port> ports;
+    List<Channel> channels;
     int layout;
 
     int lastSelectedPos = -1;
@@ -34,25 +38,24 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
 
     private OnItemClickListener itemClickListener;
 
-    public PortItemAdapter(List<Port> ports, int layout){
-        this.ports = ports;
+    public VolumeItemAdapter(List<Channel> channels, int layout){
+        this.channels = channels;
         this.layout = layout;
         isBinding = new AtomicBoolean(false);
     }
 
     @Override
-    public PortItemViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
+    public VolumeItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
 
-
-        PortItemViewHolder vholder = new PortItemViewHolder(v);
+        VolumeItemHolder vholder = new VolumeItemHolder(v);
         ctx = parent.getContext();
+
         return vholder;
     }
 
-
     @Override
-    public void onBindViewHolder(final PortItemViewHolder holder, final int position) {
+    public void onBindViewHolder(final VolumeItemHolder holder, final int position) {
         isBinding.set(true);
 
         holder.getV().setOnClickListener(new View.OnClickListener() {
@@ -61,7 +64,7 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
                 if (lastSelectedPos < 0){
                     //new select
                     lastSelectedPos = holder.pos;
-                    ((CircleCharView) view.findViewById(R.id.port_circle)).select();
+
                     lastSelectedView = view;
                     if (itemClickListener != null) {
                         itemClickListener.onSelect(view, (int) view.getTag());
@@ -72,7 +75,6 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
 
                         //only unselect old selectedView if the view is still on the window
                         if((int) lastSelectedView.getTag() == lastSelectedPos) {
-                            ((CircleCharView) lastSelectedView.findViewById(R.id.port_circle)).unselect();
                         }
                         lastSelectedPos = holder.pos;
                         lastSelectedView = view;
@@ -98,21 +100,20 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
         });
 
         //bind view here
-        if (ports != null){
-            Port p = ports.get(position);
-            holder.alias.setText(p.alias);
-            holder.cView.changeState(p.state);
-            holder.cView.setChar(String.valueOf(p.idx)); //port index (may be different from the view position)
+        if (channels != null){
+            Channel chn = channels.get(position);
+            holder.val = chn.val;
             holder.pos = position;
+            holder.valTxt.setText(chn.val);
+            holder.aliasTxt.setText(chn.alias);
+            holder.bar.setProgress(chn.val);
 
             //reset the view click state
             if (lastSelectedPos == position){
-                holder.cView.select(0);
-                lastSelectedView = holder.getV(); //reset selectedView here (old one may be recycled)
             }
             else {
-                holder.cView.unselect(0);
             }
+
             holder.v.setTag(position); //view position
         }
 
@@ -125,64 +126,62 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
 
     @Override
     public int getItemCount() {
-        return ports.size();
+        return channels == null ? 0 : channels.size();
     }
 
 
-    public List<Port> getPorts() {
-        return ports;
+    public List<Channel> getChannels() {
+        return channels;
     }
 
-    public void setPorts(List<Port> ports) {
-        if(ports != null) {
-            this.ports = ports;
-            notifyDataSetChanged();
+    public void setChannels(List<Channel> channels) {
+        if(channels != null) {
+            this.channels = channels;
         }
+        notifyDataSetChanged();
     }
 
     public void changeSelectedItem(int pos, View view){
+        //TODO: something wrong here
+        if (pos != (int) view.getTag()){
+        }
+
         if (lastSelectedPos != pos){
-            ((CircleCharView) view.findViewById(R.id.port_circle)).select();
             if (lastSelectedView !=null && (int) lastSelectedView.getTag() == lastSelectedPos) {
-                ((CircleCharView) lastSelectedView.findViewById(R.id.port_circle)).unselect();
             }
             lastSelectedPos = pos;
             lastSelectedView = view;
         }
     }
 
-    public class PortItemViewHolder extends RecyclerView.ViewHolder{
+    public class VolumeItemHolder extends RecyclerView.ViewHolder{
         View v;
-        AppCompatTextView alias;
-        CircleCharView cView;
+
+        int val;
         int pos;
 
-        public PortItemViewHolder(View itemView) {
-            super(itemView);
-            v = itemView;
-            v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    cView.click();
-                }
-            });
+        @BindView(R.id.alias)
+        AppCompatTextView aliasTxt;
 
-            alias = (AppCompatTextView) v.findViewById(R.id.port_alias);
-            cView = (CircleCharView) v.findViewById(R.id.port_circle);
-            cView.unselect(0);
+        @BindView(R.id.val)
+        AppCompatTextView valTxt;
+
+        @BindView(R.id.seekbar)
+        VerticalSeekBar bar;
+
+        public VolumeItemHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            v = itemView;
         }
 
         public View getV(){
             return v;
         }
 
-        public CircleCharView getCView() {
-            return cView;
-        }
     }
 
     public interface OnItemClickListener{
-        void onLongClick(View v, int position);
         void onSelect(View v, int position);
         void onUnselect(View v, int position);
     }

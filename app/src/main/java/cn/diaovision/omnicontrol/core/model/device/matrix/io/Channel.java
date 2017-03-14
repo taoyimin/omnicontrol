@@ -13,4 +13,8 @@ public class Channel {
     public Controller controller;
     public int type;
     public int state;
+
+    public int idx;
+    public int val;
+    public String alias;
 }

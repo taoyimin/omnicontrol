@@ -1,5 +1,6 @@
 package cn.diaovision.omnicontrol.widget;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -7,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
@@ -16,6 +18,7 @@ import android.view.ViewDebug;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.Transformation;
+import android.widget.Toast;
 
 import java.lang.reflect.Field;
 import java.text.AttributedCharacterIterator;
@@ -41,9 +44,6 @@ public class CircleCharView extends View {
     int preState = 0;
     int state = 0;
 
-    //state color
-    int statePreAlpha = 0;
-    int stateCurAlpha = 255;
     //click color
     int clickIndicatorAlpha = 0;
     int clickIndicatorColor = Color.parseColor("#ffffff");
@@ -101,39 +101,29 @@ public class CircleCharView extends View {
                 p.setColor(Color.parseColor("#c9cabb"));
                 break;
         }
-        p.setShadowLayer(30, 0, 0, Color.BLACK);
         p.setStyle(Paint.Style.FILL);
         canvas.drawCircle(w/2.0f, h/2.0f, r-10, p);
 
         //draw text
-        p.clearShadowLayer();
         p.setStyle(Paint.Style.FILL);
         p.setStrokeWidth(10);
         p.setColor(Color.parseColor("#ffffff"));
 
-        /*
-        if (Integer.valueOf(c) > 10) {
+        if (Integer.valueOf(c) >= 10) {
             //divide the number into to digits
-            int val = Integer.valueOf(c);
-            String dg10 = String.valueOf((int) (val / 10));
-            p.getTextBounds(dg10, 0, dg10.length(), txtBound);
-            canvas.drawText(dg10, w / 2.0f - txtBound.width()*1.2f, baseline, p);
-            String dg = String.valueOf(val % 10);
-            p.getTextBounds(dg, 0, dg.length(), txtBound);
-            canvas.drawText(dg10, w / 2.0f + txtBound.width()*0.2f, baseline, p);
+            canvas.drawText(c, w / 2.0f - txtBound.width()*(0.5f), baseline, p);
         }
         else {
+            canvas.drawText(c, w / 2.0f - txtBound.width() / 2.0f, baseline, p);
         }
-        */
 
-        canvas.drawText(c, w / 2.0f - txtBound.width() / 2.0f, baseline, p);
 
         //draw click indicator
-        p.setShadowLayer(10, 0, 0, Color.BLACK);
         p.setColor(clickIndicatorColor);
         p.setAlpha(clickIndicatorAlpha);
         p.setStyle(Paint.Style.STROKE);
         p.setStrokeWidth(20);
+
 
         canvas.drawCircle(w / 2.0f, h / 2.0f, r, p);
     }
@@ -155,25 +145,21 @@ public class CircleCharView extends View {
             clickIndicatorColor = Color.parseColor("#57d2f7");
         }
 
-        AttributeAnimation anime = AttributeAnimation.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
+        ObjectAnimator anime = ObjectAnimator.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
         anime.setDuration(200);
-        this.startAnimation(anime);
+        anime.start();
     }
 
     public void unselect(){
         clicked = false;
-
-        int clickIndicatorAlphaStop = 0;
-        int clickIndicatorAlphaStart = 0;
-        //create a click transition animation
-
-        clickIndicatorAlphaStart = 255;
-        clickIndicatorAlphaStop = 0;
         clickIndicatorColor = Color.parseColor("#57d2f7");
 
-        AttributeAnimation anime = AttributeAnimation.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
+        //create a click transition animation
+        int clickIndicatorAlphaStart = 255;
+        int clickIndicatorAlphaStop = 0;
+        ObjectAnimator anime = ObjectAnimator.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
         anime.setDuration(200);
-        this.startAnimation(anime);
+        anime.start();
     }
 
     public void unselect(long duration){
@@ -187,9 +173,9 @@ public class CircleCharView extends View {
         clickIndicatorAlphaStop = 0;
         clickIndicatorColor = Color.parseColor("#57d2f7");
 
-        AttributeAnimation anime = AttributeAnimation.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
+        ObjectAnimator anime = ObjectAnimator.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
         anime.setDuration(duration);
-        this.startAnimation(anime);
+        anime.start();
     }
     public void select(){
         clicked = true;
@@ -202,9 +188,9 @@ public class CircleCharView extends View {
         clickIndicatorAlphaStop = 255;
         clickIndicatorColor = Color.parseColor("#57d2f7");
 
-        AttributeAnimation anime = AttributeAnimation.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
+        ObjectAnimator anime = ObjectAnimator.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
         anime.setDuration(200);
-        this.startAnimation(anime);
+        anime.start();
     }
 
     public void select(long duration){
@@ -218,9 +204,9 @@ public class CircleCharView extends View {
         clickIndicatorAlphaStop = 255;
         clickIndicatorColor = Color.parseColor("#57d2f7");
 
-        AttributeAnimation anime = AttributeAnimation.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
+        ObjectAnimator anime = ObjectAnimator.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
         anime.setDuration(duration);
-        this.startAnimation(anime);
+        anime.start();
     }
 
     public void setChar(String c){
@@ -238,4 +224,14 @@ public class CircleCharView extends View {
         }
     }
 
+    public int getClickIndicatorAlpha() {
+        return clickIndicatorAlpha;
+    }
+
+    public void setClickIndicatorAlpha(int clickIndicatorAlpha) {
+        this.clickIndicatorAlpha = clickIndicatorAlpha;
+        //ObjectAnimator does not call invalidate when set the property value
+        //manually call it in setter
+        this.postInvalidate();
+    }
 }
