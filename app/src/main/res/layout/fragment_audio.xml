@@ -5,9 +5,20 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/panel_up_wrapper">
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/img_audio"/>
+    </RelativeLayout>
     <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/panel_up_wrapper">
 
          <android.support.v7.widget.AppCompatTextView
             appCompat:layout_widthPercent="30%"
@@ -35,7 +46,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/widget_padding"
             android:paddingTop="@dimen/widget_padding"
-            android:text="@string/txt_output"
+            android:text="@string/txt_channel"
             android:layout_toRightOf="@+id/txt_output"
             android:gravity="center"
             android:background="@drawable/panel_title_bg"

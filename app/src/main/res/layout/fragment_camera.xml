@@ -1,113 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:appCompat="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:id="@+id/panel_display"></RelativeLayout>
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/panel_ctrl"
-        android:layout_below="@+id/panel_display">
-        <GridView
-            android:layout_width="450dp"
-            android:layout_height="match_parent"
-            android:id="@+id/channel_list"/>
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
         <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="220dp"
-            android:id="@+id/ctrl"
-            android:layout_toRightOf="@id/channel_list"
-            android:background="@color/colorPrimaryDark">
+            appCompat:layout_widthPercent="40%"
+            android:layout_height="300dp"
+            android:id="@+id/channel_list_wrapper">
+        <cn.diaovision.omnicontrol.widget.PortRadioGroupView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:id="@+id/channel_list"/>
+        </RelativeLayout>
+        <android.support.percent.PercentRelativeLayout
+            appCompat:layout_widthPercent="30%"
+            android:layout_height="300dp"
+            android:id="@+id/board_ctrl"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/channel_list_wrapper">
             <RelativeLayout
-                android:layout_width="200dp"
-                android:layout_height="match_parent"
+                appCompat:layout_widthPercent="50%"
+                android:layout_height="wrap_content"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:paddingTop="48dp"
+                android:paddingBottom="48dp"
                 android:id="@+id/ctrl_go"
-                android:layout_margin="20dp">
-                <ImageButton
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@color/colorAccent"
+                android:layout_centerVertical="true">
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
                     android:id="@+id/btn_go_up"
-                    android:layout_centerHorizontal="true"/>
-                 <ImageButton
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@color/colorAccent"
-                     android:layout_centerVertical="true"
-                     android:layout_alignParentStart="true"
-                     android:layout_below="@+id/btn_go_up"
-                     android:id="@+id/btn_go_left"/>
-                 <ImageButton
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@color/colorAccent"
-                     android:layout_alignParentEnd="true"
-                     android:layout_below="@+id/btn_go_up"
-                     android:layout_centerVertical="true"
-                     android:id="@+id/btn_go_right"/>
-                 <ImageButton
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:src="@color/colorAccent"
-                     android:layout_alignParentBottom="true"
-                     android:layout_centerHorizontal="true"
-                     android:layout_below="@+id/btn_go_left"
-                     android:id="@+id/btn_go_down"/>
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_go"
+                    android:background="@color/transparent"
+                    android:tint="@color/item_camera_preset"/>
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_below="@+id/btn_go_up"
+                    android:layout_marginTop="36dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/btn_go_left"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_go"
+                    android:background="@color/transparent"
+                    android:rotation="-90"
+                    android:tint="@color/item_camera_preset"/>
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_below="@+id/btn_go_up"
+                    android:layout_marginTop="36dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/btn_go_right"
+                    android:src="@drawable/ic_go"
+                    android:background="@color/transparent"
+                    android:rotation="90"
+                    android:tint="@color/item_camera_preset"/>
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="36dp"
+                    android:layout_below="@id/btn_go_left"
+                    android:id="@+id/btn_go_down"
+                    android:src="@drawable/ic_go"
+                    android:background="@color/transparent"
+                    android:rotation="180"
+                    android:tint="@color/item_camera_preset"/> />
             </RelativeLayout>
             <RelativeLayout
-                android:layout_width="250dp"
+                appCompat:layout_widthPercent="50%"
+                android:layout_height="wrap_content"
+                android:id="@+id/ctrl_zoom"
+                android:layout_toRightOf="@+id/ctrl_go"
+                android:layout_centerVertical="true">
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:id="@+id/btn_zoomin"
+                    android:src="@drawable/ic_zoomin"
+                    android:layout_marginBottom="36dp"
+                    android:layout_marginLeft="18dp"
+                    android:background="@color/transparent"
+                    android:tint="@color/item_camera_preset"/> />
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:id="@+id/btn_zoomout"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="36dp"
+                    android:layout_marginRight="18dp"
+                    android:src="@drawable/ic_zoomout"
+                    android:background="@color/transparent"
+                    android:tint="@color/item_camera_preset"/>
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:id="@+id/btn_backwards"
+                    android:layout_below="@+id/btn_zoomin"
+                    android:layout_marginLeft="18dp"
+                    android:src="@drawable/ic_backwards"
+                    android:background="@color/transparent"
+                    android:tint="@color/item_camera_preset"/>
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:id="@+id/btn_play"
+                    android:layout_below="@+id/btn_zoomin"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/ic_play"
+                    android:background="@color/transparent"
+                    android:tint="@color/item_camera_preset"/>
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:id="@+id/btn_forwards"
+                    android:layout_below="@+id/btn_zoomin"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="18dp"
+                    android:src="@drawable/ic_play"
+                    android:background="@color/transparent"
+                    android:tint="@color/item_camera_preset"/>
+            </RelativeLayout>
+        </android.support.percent.PercentRelativeLayout>
+        <RelativeLayout android:layout_height="300dp"
+            appCompat:layout_widthPercent="30%"
+            android:layout_toRightOf="@+id/board_ctrl">
+            <cn.diaovision.omnicontrol.widget.CameraPresetRadioGroupView
+                android:layout_marginLeft="24dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:id="@+id/ctrl_zoom"
-                android:layout_toRightOf="@+id/ctrl_go">
-                <android.support.v7.widget.AppCompatImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="放大"
-                    android:id="@+id/btn_zoomin"/>
-
-                <android.support.v7.widget.AppCompatImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="慢速"
-                     android:id="@+id/btn_speeddown"
-                     android:layout_below="@+id/btn_zoomin"/>
-                <android.support.v7.widget.AppCompatImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="播放"
-                     android:id="@+id/btn_play"
-                     android:layout_below="@+id/btn_zoomin"
-                     android:layout_toRightOf="@id/btn_speeddown"/>
-                <android.support.v7.widget.AppCompatImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="快速"
-                     android:id="@+id/btn_speedup"
-                     android:layout_below="@+id/btn_zoomin"
-                     android:layout_toRightOf="@+id/btn_play"
-                     android:layout_alignParentEnd="true"/>
-
-                <android.support.v7.widget.AppCompatImageButton
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:text="缩小"
-                    android:id="@+id/btn_zoomout"
-                    android:layout_alignParentEnd="true"
-                    android:layout_toEndOf="@+id/btn_play" />
-            </RelativeLayout>
+                android:id="@+id/preset_list"/>
         </RelativeLayout>
-        <GridView
-            android:layout_width="360dp"
-            android:layout_height="match_parent"
-            android:id="@+id/presets"
-            android:layout_toRightOf="@+id/ctrl"/>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="450dp"
-        android:id="@+id/panel_display"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"></RelativeLayout>
+    </android.support.percent.PercentRelativeLayout>
 </RelativeLayout>

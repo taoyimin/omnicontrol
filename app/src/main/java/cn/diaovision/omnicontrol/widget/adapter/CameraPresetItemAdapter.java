@@ -1,30 +1,28 @@
 package cn.diaovision.omnicontrol.widget.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SeekBar;
-
-import com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import cn.diaovision.omnicontrol.R;
-import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
+import cn.diaovision.omnicontrol.core.model.device.endpoint.IpCamera.Preset;
+import cn.diaovision.omnicontrol.widget.CircleCharView;
 
 /**
- * Universal port recyclerview adapter
+ * Preset recyclerview adapter
  * Created by liulingfeng on 2017/3/2.
  */
 
-public class VolumeItemAdapter extends RecyclerView.Adapter<VolumeItemAdapter.VolumeItemHolder>{
+public class CameraPresetItemAdapter extends RecyclerView.Adapter<CameraPresetItemAdapter.CameraPresetItemViewHolder>{
 
-    List<Channel> channels;
+    List<Preset> presets;
     int layout;
 
     int lastSelectedPos = -1;
@@ -37,25 +35,24 @@ public class VolumeItemAdapter extends RecyclerView.Adapter<VolumeItemAdapter.Vo
 
     private OnItemClickListener itemClickListener;
 
-    public VolumeItemAdapter(List<Channel> channels, int layout){
-        this.channels = channels;
+    public CameraPresetItemAdapter(List<Preset> presets, int layout){
+        this.presets = presets;
         this.layout = layout;
         isBinding = new AtomicBoolean(false);
     }
 
     @Override
-    public VolumeItemHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CameraPresetItemViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(layout, parent, false);
 
-        VolumeItemHolder vholder = new VolumeItemHolder(v);
+        CameraPresetItemViewHolder vholder = new CameraPresetItemViewHolder(v);
         ctx = parent.getContext();
-
         return vholder;
     }
 
+
     @Override
-    public void onBindViewHolder(final VolumeItemHolder holder, final int position) {
-        Log.i("U", "UI bind audio pos = " + position);
+    public void onBindViewHolder(final CameraPresetItemViewHolder holder, final int position) {
         isBinding.set(true);
 
         holder.getV().setOnClickListener(new View.OnClickListener() {
@@ -67,7 +64,6 @@ public class VolumeItemAdapter extends RecyclerView.Adapter<VolumeItemAdapter.Vo
                     view.setSelected(true);
 
                     lastSelectedView = view;
-
                     if (itemClickListener != null) {
                         itemClickListener.onSelect(view, (int) view.getTag());
                     }
@@ -103,45 +99,29 @@ public class VolumeItemAdapter extends RecyclerView.Adapter<VolumeItemAdapter.Vo
         });
 
         //bind view here
-        if (channels != null){
-            final Channel chn = channels.get(position);
-            holder.val = chn.val;
+        if (presets != null){
+            Preset p = presets.get(position);
+            holder.info.setText(p.getName());
+            int iconRes;
+            switch (p.getAngle()){
+                case 90:
+                    iconRes = R.drawable.ic_campos_00;
+                    break;
+                default:
+                    iconRes = R.drawable.ic_campos_00;
+                    break;
+            }
+            holder.icon.setImageDrawable(ctx.getDrawable(iconRes));
             holder.pos = position;
-            holder.valTxt.setText(String.valueOf(chn.val));
-            holder.aliasTxt.setText(chn.alias);
-            holder.bar.setProgress(chn.val);
-
-            Log.i("U", "UI bind chn " + position + " val = " + chn.val);
-
-            holder.bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    holder.valTxt.setText(String.valueOf(progress));
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    int progress = seekBar.getProgress();
-                    chn.val = progress;
-                    holder.valTxt.setText(String.valueOf(progress));
-                }
-            });
 
             //reset the view click state
-
             if (lastSelectedPos == position){
-                holder.getV().setSelected(true);
                 lastSelectedView = holder.getV(); //reset selectedView here (old one may be recycled)
+                holder.getV().setSelected(true);
             }
             else {
                 holder.getV().setSelected(false);
             }
-
             holder.v.setTag(position); //view position
         }
 
@@ -154,70 +134,53 @@ public class VolumeItemAdapter extends RecyclerView.Adapter<VolumeItemAdapter.Vo
 
     @Override
     public int getItemCount() {
-        return channels == null ? 0 : channels.size();
+        return presets.size();
     }
 
-
-    public List<Channel> getChannels() {
-        return channels;
+    public List<Preset> getPresets() {
+        return presets;
     }
 
-    public void setChannels(List<Channel> channels) {
-        if(channels != null) {
-            this.channels = channels;
+    public void setPresets(List<Preset> presets) {
+        if(presets != null) {
+            this.presets = presets;
+            notifyDataSetChanged();
         }
-        notifyDataSetChanged();
     }
 
     public void changeSelectedItem(int pos, View view){
-
         if (lastSelectedPos != pos){
+            ((CircleCharView) view.findViewById(R.id.port_circle)).select();
             if (lastSelectedView !=null && (int) lastSelectedView.getTag() == lastSelectedPos) {
-                lastSelectedView.setSelected(false);
+                ((CircleCharView) lastSelectedView.findViewById(R.id.port_circle)).unselect();
             }
-            view.setSelected(true);
             lastSelectedPos = pos;
             lastSelectedView = view;
         }
     }
 
-    public class VolumeItemHolder extends RecyclerView.ViewHolder{
+    public class CameraPresetItemViewHolder extends RecyclerView.ViewHolder{
         View v;
-
-        int val;
+        AppCompatImageView icon;
+        AppCompatTextView info;
         int pos;
 
-//        @BindView(R.id.alias)
-        AppCompatTextView aliasTxt;
-
-//        @BindView(R.id.val)
-        AppCompatTextView valTxt;
-
-//        @BindView(R.id.seekbar)
-        VerticalSeekBar bar;
-
-        public VolumeItemHolder(View itemView) {
+        public CameraPresetItemViewHolder(View itemView) {
             super(itemView);
             v = itemView;
-//            ButterKnife.bind(this, itemView);
-            aliasTxt = (AppCompatTextView) v.findViewById(R.id.alias);
-            valTxt = (AppCompatTextView)  v.findViewById(R.id.val);
-            bar = (VerticalSeekBar)  v.findViewById(R.id.seekbar);
 
+            icon = (AppCompatImageView) v.findViewById(R.id.icon);
+            info = (AppCompatTextView) v.findViewById(R.id.info);
         }
 
         public View getV(){
             return v;
         }
-
     }
 
     public interface OnItemClickListener{
+        void onLongClick(View v, int position);
         void onSelect(View v, int position);
         void onUnselect(View v, int position);
-    }
-
-    public interface OnItemVolumeChangeListener{
-        void onVolumeChanged(int val, int position);
     }
 }

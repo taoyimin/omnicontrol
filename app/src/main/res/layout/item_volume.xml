@@ -19,10 +19,12 @@
         android:layout_below="@+id/alias"/>
     <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="260dp"
         android:layout_centerInParent="true"
         android:layout_below="@+id/val"
-        android:layout_marginTop="@dimen/widget_margin">
+        android:layout_marginTop="@dimen/widget_margin"
+        android:paddingLeft="@dimen/widget_padding"
+        android:paddingRight="@dimen/widget_padding">
         <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
             android:id="@+id/seekbar"
             android:layout_width="0dp"

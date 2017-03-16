@@ -1,14 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:appCompat="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/panel_display"></RelativeLayout>
-    <RelativeLayout
+    <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/panel_ctrl">
-    </RelativeLayout>
+        <cn.diaovision.omnicontrol.widget.PortRadioGroupView
+            appCompat:layout_widthPercent="40%"
+            android:layout_height="300dp"
+            android:layout_below="@+id/txt_input"
+            android:id="@+id/channel_list"
+            android:background="@color/panel_input" />
+        <RelativeLayout
+            appCompat:layout_widthPercent="30%"
+            android:layout_height="match_parent"
+            android:id="@+id/board_ctrl">
+        </RelativeLayout>
+         <!--<cn.diaovision.omnicontrol.widget.PortRadioGroupView-->
+            <!--appCompat:layout_widthPercent="40%"-->
+            <!--android:layout_height="300dp"-->
+            <!--android:layout_below="@+id/txt_input"-->
+            <!--android:id="@+id/camera_preset"-->
+            <!--android:background="@color/panel_input" />-->
+    </android.support.percent.PercentRelativeLayout>
 </RelativeLayout>

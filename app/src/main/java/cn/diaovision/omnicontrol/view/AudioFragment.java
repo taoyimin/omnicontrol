@@ -3,6 +3,7 @@ package cn.diaovision.omnicontrol.view;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,13 +76,16 @@ public class AudioFragment extends Fragment{
 
 
         inputList.config(ports, R.layout.item_port);
+        inputList.configLayout(LinearLayoutManager.VERTICAL, 3);
         outputList.config(outports, R.layout.item_port);
+        outputList.configLayout(LinearLayoutManager.VERTICAL, 3);
         volumeChannelList.config(audioChnList, R.layout.item_volume);
 
         inputList.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
             @Override
             public void onSelected(int pos) {
                 outputList.select(pos);
+                volumeChannelList.select(pos);
             }
 
             @Override
@@ -94,6 +98,7 @@ public class AudioFragment extends Fragment{
             @Override
             public void onSelected(int pos) {
                 inputList.select(pos);
+                volumeChannelList.select(pos);
             }
 
             @Override

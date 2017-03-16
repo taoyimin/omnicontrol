@@ -3,30 +3,27 @@ package cn.diaovision.omnicontrol.widget;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutCompat;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import java.util.List;
 
-import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
+import cn.diaovision.omnicontrol.core.model.device.endpoint.IpCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
+import cn.diaovision.omnicontrol.widget.adapter.CameraPresetItemAdapter;
 import cn.diaovision.omnicontrol.widget.adapter.PortItemAdapter;
-import cn.diaovision.omnicontrol.widget.adapter.VolumeItemAdapter;
 
 /**
  * Created by liulingfeng on 2017/3/9.
  */
 
-public class VolumeChannelRadioGroupView extends RecyclerView {
+public class CameraPresetRadioGroupView extends RecyclerView {
     Context ctx;
-    List<Channel> channelList;
+    List<IpCamera.Preset> presetList;
     int layout;
-    LinearLayoutManager layoutMgr;
-    VolumeItemAdapter adapter;
+    GridLayoutManager layoutMgr;
+    CameraPresetItemAdapter adapter;
 
     OnItemSelectListener onItemSelectListener;
 
@@ -36,23 +33,27 @@ public class VolumeChannelRadioGroupView extends RecyclerView {
 
 
 
-    public VolumeChannelRadioGroupView(Context context, @Nullable AttributeSet attrs) {
+    public CameraPresetRadioGroupView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public void config(List<Channel> channelList, int layout){
-        this.channelList = channelList;
+    public void config(List<IpCamera.Preset> presetList, int layout){
+        this.presetList = presetList;
         this.layout = layout;
 
-        layoutMgr = new LinearLayoutManager(ctx, LinearLayoutManager.HORIZONTAL, false);
-        adapter = new VolumeItemAdapter(channelList, layout);
+        layoutMgr = new GridLayoutManager(ctx, 3, GridLayoutManager.VERTICAL, false);
+        adapter = new CameraPresetItemAdapter(presetList, layout);
 
 
         this.setLayoutManager(layoutMgr);
-        Log.i("U", "UI runs here");
         this.setAdapter(adapter);
 
-        adapter.setOnItemClickedListener(new VolumeItemAdapter.OnItemClickListener() {
+        adapter.setOnItemClickedListener(new CameraPresetItemAdapter.OnItemClickListener() {
+            @Override
+            public void onLongClick(View v, int position) {
+
+            }
+
             @Override
             public void onSelect(View v, int position) {
                 if (onItemSelectListener != null){
@@ -65,6 +66,7 @@ public class VolumeChannelRadioGroupView extends RecyclerView {
                 if (onItemSelectListener != null){
                     onItemSelectListener.onUnselected(position);
                 }
+
             }
         });
 
@@ -76,8 +78,8 @@ public class VolumeChannelRadioGroupView extends RecyclerView {
         if (!configed)
             return;
 
-        int firstPosition = ((LinearLayoutManager) this.getLayoutManager()).findFirstVisibleItemPosition();
-        int lastPosition = ((LinearLayoutManager) this.getLayoutManager()).findLastVisibleItemPosition();
+        int firstPosition = ((GridLayoutManager) this.getLayoutManager()).findFirstVisibleItemPosition();
+        int lastPosition = ((GridLayoutManager) this.getLayoutManager()).findLastVisibleItemPosition();
         if (position < firstPosition || position > lastPosition){
             this.smoothScrollToPosition(position);
             this.addOnScrollListener(new OnScrollListener() {
@@ -141,16 +143,18 @@ public class VolumeChannelRadioGroupView extends RecyclerView {
         this.getAdapter().notifyDataSetChanged();
     }
 
-    public List<Channel> getChannelList() {
-        return channelList;
+    public List<IpCamera.Preset> getPresetList() {
+        return presetList;
     }
 
-    public void setChannelList(List<Channel> channelList) {
-        this.channelList = channelList;
+    public void setPresetList(List<IpCamera.Preset> portList) {
+        this.presetList = portList;
+        adapter = new CameraPresetItemAdapter(presetList, layout);
+        adapter.notifyDataSetChanged();
     }
 
-    public void configLayout(int direction){
-        layoutMgr = new LinearLayoutManager(ctx, direction, false);
+    public void configLayout(int direction, int spancount){
+        layoutMgr = new GridLayoutManager(ctx, spancount, direction, false);
         this.setLayoutManager(layoutMgr);
     }
 

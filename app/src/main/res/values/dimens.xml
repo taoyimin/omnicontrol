@@ -9,5 +9,10 @@
     <dimen name="txt_title_size">48sp</dimen>
 
     <dimen name="txt_tab_size">24sp</dimen>
+    <dimen name="txt_tab_size_small">16sp</dimen>
     <dimen name="txt_item_size">18sp</dimen>
+
+
+    <!-- Default icon size, per the Android Material Design guidelines. -->
+    <dimen name="icon_size">24dp</dimen>
 </resources>

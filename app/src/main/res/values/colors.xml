@@ -39,6 +39,9 @@
     <color name="seekbar_thumb">#ff6a06</color>
 
     <!--item bg select color-->
-    <color name="item_bg">#ffeadc</color>
-    <color name="item_selected">#ff6a06</color>
+    <color name="item_bg">#fff7f1</color>
+    <color name="item_selected">#d6cfca</color>
+
+    <!--item bg select color-->
+    <color name="item_camera_preset">#25eb39</color>
 </resources>

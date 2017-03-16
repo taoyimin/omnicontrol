@@ -8,4 +8,5 @@
 
     <string name="txt_input">输入</string>
     <string name="txt_output">输出</string>
+    <string name="txt_channel">通道</string>
 </resources>
