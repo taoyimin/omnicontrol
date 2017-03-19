@@ -18,6 +18,7 @@ import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.IpCamera.Preset;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.widget.CameraPresetRadioGroupView;
+import cn.diaovision.omnicontrol.widget.PlayerControllerView;
 import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
 
 /**
@@ -32,6 +33,9 @@ public class CameraFragment extends Fragment{
 
     @BindView(R.id.channel_list)
     PortRadioGroupView cameraList;
+
+    @BindView(R.id.play_controller)
+    PlayerControllerView playerControllerView;
 
     @Nullable
     @Override
@@ -59,18 +63,12 @@ public class CameraFragment extends Fragment{
         cameraList.configLayout(GridLayoutManager.VERTICAL, 4);
         camerPresetView.config(presetList, R.layout.item_preset);
 
-//        camerPresetView.setOnItemSelectListener(new CameraPresetRadioGroupView.OnItemSelectListener() {
-//            @Override
-//            public void onSelected(int pos) {
-//                Toast.makeText(getContext(), "preset selected: " + String.valueOf(presetList.get(pos).getAngle()), Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onUnselected(int pos) {
-//
-//            }
-//        });
-
+        playerControllerView.setOnControlListener(new PlayerControllerView.OnControlListener() {
+            @Override
+            public void onControl(int cmd) {
+                Toast.makeText(getContext(), "cmd = " + cmd, Toast.LENGTH_SHORT).show();
+            }
+        });
         return v;
     }
 }

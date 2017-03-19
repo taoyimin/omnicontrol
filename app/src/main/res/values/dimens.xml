@@ -15,4 +15,8 @@
 
     <!-- Default icon size, per the Android Material Design guidelines. -->
     <dimen name="icon_size">24dp</dimen>
+
+    <!-- controller button size, per the Android Material Design guidelines. -->
+    <dimen name="ctrl_btn">48dp</dimen>
+    <dimen name="margin_ctrl_btn">8dp</dimen>
 </resources>

@@ -43,5 +43,5 @@
     <color name="item_selected">#d6cfca</color>
 
     <!--item bg select color-->
-    <color name="item_camera_preset">#25eb39</color>
+    <color name="item_camera_preset">#189a25</color>
 </resources>

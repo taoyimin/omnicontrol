@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:appCompat="http://schemas.android.com/apk/res-auto">
+
+        <android.support.percent.PercentRelativeLayout
+            android:id="@+id/board_ctrl"
+            android:layout_height="300dp"
+            android:layout_width="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/channel_list_wrapper"
+            appCompat:layout_widthPercent="30%">
+
+            <RelativeLayout
+                android:id="@+id/ctrl_go"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingBottom="48dp"
+                android:paddingLeft="24dp"
+                android:paddingRight="24dp"
+                android:paddingTop="48dp"
+                appCompat:layout_widthPercent="50%">
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/btn_go_up"
+                    android:layout_width="@dimen/ctrl_btn"
+                    android:layout_height="@dimen/ctrl_btn"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/transparent"
+                    android:src="@drawable/ic_go"
+                    android:tint="@color/item_camera_preset" />
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/btn_go_left"
+                    android:layout_width="@dimen/ctrl_btn"
+                    android:layout_height="@dimen/ctrl_btn"
+                    android:layout_below="@+id/btn_go_up"
+                    android:layout_toLeftOf="@+id/btn_stumb"
+                    android:layout_marginTop="@dimen/margin_ctrl_btn"
+                    android:background="@color/transparent"
+                    android:rotation="-90"
+                    android:src="@drawable/ic_go"
+                    android:tint="@color/item_camera_preset" />
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/btn_stumb"
+                    android:layout_width="@dimen/ctrl_btn"
+                    android:layout_height="@dimen/ctrl_btn"
+                    android:layout_alignStart="@+id/btn_go_up"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/btn_go_up"
+                    android:layout_marginTop="@dimen/margin_ctrl_btn"
+                    android:background="@color/transparent"/>
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/btn_go_right"
+                    android:layout_width="@dimen/ctrl_btn"
+                    android:layout_height="@dimen/ctrl_btn"
+                    android:layout_toRightOf="@id/btn_stumb"
+                    android:layout_below="@+id/btn_go_up"
+                    android:layout_marginTop="@dimen/margin_ctrl_btn"
+                    android:background="@color/transparent"
+                    android:rotation="90"
+                    android:src="@drawable/ic_go"
+                    android:tint="@color/item_camera_preset" />
+
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/btn_go_down"
+                    android:layout_width="@dimen/ctrl_btn"
+                    android:layout_height="@dimen/ctrl_btn"
+                    android:layout_below="@id/btn_go_left"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/margin_ctrl_btn"
+                    android:background="@color/transparent"
+                    android:rotation="180"
+                    android:src="@drawable/ic_go"
+                    android:tint="@color/item_camera_preset" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/ctrl_zoom"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/ctrl_go"
+                appCompat:layout_widthPercent="50%">
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/btn_zoomin"
+                    android:layout_width="@dimen/ctrl_btn"
+                    android:layout_height="@dimen/ctrl_btn"
+                    android:layout_marginBottom="36dp"
+                    android:layout_marginLeft="18dp"
+                    android:background="@color/transparent"
+                    android:src="@drawable/ic_zoomin"
+                    android:tint="@color/item_camera_preset" />
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/btn_zoomout"
+                    android:layout_width="@dimen/ctrl_btn"
+                    android:layout_height="@dimen/ctrl_btn"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="36dp"
+                    android:layout_marginRight="18dp"
+                    android:background="@color/transparent"
+                    android:src="@drawable/ic_zoomout"
+                    android:tint="@color/item_camera_preset" />
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/btn_backwards"
+                    android:layout_width="@dimen/ctrl_btn"
+                    android:layout_height="@dimen/ctrl_btn"
+                    android:layout_below="@+id/btn_zoomin"
+                    android:layout_marginLeft="18dp"
+                    android:background="@color/transparent"
+                    android:src="@drawable/ic_backwards"
+                    android:tint="@color/item_camera_preset" />
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/btn_play"
+                    android:layout_width="@dimen/ctrl_btn"
+                    android:layout_height="@dimen/ctrl_btn"
+                    android:layout_below="@+id/btn_zoomin"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/transparent"
+                    android:src="@drawable/ic_play"
+                    android:tint="@color/item_camera_preset" />
+
+                <android.support.v7.widget.AppCompatImageButton
+                    android:id="@+id/btn_forwards"
+                    android:layout_width="@dimen/ctrl_btn"
+                    android:layout_height="@dimen/ctrl_btn"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/btn_zoomin"
+                    android:layout_marginRight="18dp"
+                    android:background="@color/transparent"
+                    android:src="@drawable/ic_play"
+                    android:tint="@color/item_camera_preset" />
+            </RelativeLayout>
+        </android.support.percent.PercentRelativeLayout>
+</merge>
