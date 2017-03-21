@@ -1,17 +1,22 @@
 package cn.diaovision.omnicontrol.core.model.device.endpoint;
 
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
-import cn.diaovision.omnicontrol.core.protocol.CameraProtocol;
 
 /**
+ * Hi-definition cameras connected to the matrix, for controlling
  * Created by liulingfeng on 2017/3/2.
  */
 
-public class IpCamera {
+public class HiCamera {
+    public static int PROTO_FELICA_D = 0;
+    public static int PROTO_FELICA_A = 1;
+    public static int PROTO_PILSA = 2;
 
-    CameraProtocol proto;
     int state;
-    Port port;
+    int proto; //camera protocols used to control the device
+    int baudrate; //baudrate for controlling
+    String address; //camera address
+    Port port; //which the port is plugged
 
     boolean inPreset;
     Preset preset;

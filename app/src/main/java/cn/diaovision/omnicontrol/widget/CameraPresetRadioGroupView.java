@@ -9,10 +9,8 @@ import android.view.View;
 
 import java.util.List;
 
-import cn.diaovision.omnicontrol.core.model.device.endpoint.IpCamera;
-import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
+import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.widget.adapter.CameraPresetItemAdapter;
-import cn.diaovision.omnicontrol.widget.adapter.PortItemAdapter;
 
 /**
  * Created by liulingfeng on 2017/3/9.
@@ -20,7 +18,7 @@ import cn.diaovision.omnicontrol.widget.adapter.PortItemAdapter;
 
 public class CameraPresetRadioGroupView extends RecyclerView {
     Context ctx;
-    List<IpCamera.Preset> presetList;
+    List<HiCamera.Preset> presetList;
     int layout;
     GridLayoutManager layoutMgr;
     CameraPresetItemAdapter adapter;
@@ -37,7 +35,7 @@ public class CameraPresetRadioGroupView extends RecyclerView {
         super(context, attrs);
     }
 
-    public void config(List<IpCamera.Preset> presetList, int layout){
+    public void config(List<HiCamera.Preset> presetList, int layout){
         this.presetList = presetList;
         this.layout = layout;
 
@@ -143,11 +141,11 @@ public class CameraPresetRadioGroupView extends RecyclerView {
         this.getAdapter().notifyDataSetChanged();
     }
 
-    public List<IpCamera.Preset> getPresetList() {
+    public List<HiCamera.Preset> getPresetList() {
         return presetList;
     }
 
-    public void setPresetList(List<IpCamera.Preset> portList) {
+    public void setPresetList(List<HiCamera.Preset> portList) {
         this.presetList = portList;
         adapter = new CameraPresetItemAdapter(presetList, layout);
         adapter.notifyDataSetChanged();

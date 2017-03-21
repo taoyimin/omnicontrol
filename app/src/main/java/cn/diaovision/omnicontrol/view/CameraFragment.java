@@ -15,7 +15,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.R;
-import cn.diaovision.omnicontrol.core.model.device.endpoint.IpCamera.Preset;
+import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera.Preset;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.widget.CameraPresetRadioGroupView;
 import cn.diaovision.omnicontrol.widget.PlayerControllerView;

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import cn.diaovision.omnicontrol.R;
-import cn.diaovision.omnicontrol.core.model.device.endpoint.IpCamera.Preset;
+import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera.Preset;
 import cn.diaovision.omnicontrol.widget.CircleCharView;
 
 /**

@@ -1,6 +1,7 @@
-package cn.diaovision.omnicontrol.core.model;
+package cn.diaovision.omnicontrol.core.model.device;
 
 /**
+ * MCU controlling message
  * Created by liulingfeng on 2017/3/15.
  */
 
