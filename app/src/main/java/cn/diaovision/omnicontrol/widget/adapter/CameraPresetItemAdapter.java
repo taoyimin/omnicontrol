@@ -103,14 +103,7 @@ public class CameraPresetItemAdapter extends RecyclerView.Adapter<CameraPresetIt
             Preset p = presets.get(position);
             holder.info.setText(p.getName());
             int iconRes;
-            switch (p.getAngle()){
-                case 90:
-                    iconRes = R.drawable.ic_campos_00;
-                    break;
-                default:
-                    iconRes = R.drawable.ic_campos_00;
-                    break;
-            }
+            iconRes = R.drawable.ic_campos_00;
             holder.icon.setImageDrawable(ctx.getDrawable(iconRes));
             holder.pos = position;
 

@@ -5,6 +5,9 @@ import android.content.SharedPreferences;
 
 import cn.diaovision.omnicontrol.conn.TcpClient;
 import cn.diaovision.omnicontrol.conn.UdpClient;
+import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
+import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
+import cn.diaovision.omnicontrol.rx.RxBus;
 
 /**
  * Created by liulingfeng on 2017/3/2.
@@ -13,16 +16,32 @@ import cn.diaovision.omnicontrol.conn.UdpClient;
 public class OmniControlApplication extends Application {
     final static private String PREF_NAME = "omnicontrol";
 
-    //Singleton udpclient
-    UdpClient udpClient;
+    //RxBus
+    RxBus rxBus;
 
     //singleton tcpclient
     TcpClient mcuClient;
 
+    MediaMatrix mediaMatrix;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        updateUdpClient();
+        SharedPreferences pref = getAppPreferences();
+        String ip = pref.getString("ip", "192.168.1.1");
+        int port = pref.getInt("port", 5000);
+        saveAppPreference("ip", ip);
+        saveAppPreference("port", port);
+        mediaMatrix = new MediaMatrix.Builder().ip(ip).port(port).videoInInit(32).videoOutInit(32).id(1).build();
+
+        //add camera if previously stored
+        int camporto = getAppPreferences().getInt("cam_porto", -1);
+        int camport = getAppPreferences().getInt("cam_port", -1);
+        int cam_baudrate = getAppPreferences().getInt("cam_baudrate", -1);
+        int cam_proto = getAppPreferences().getInt("cam_proto", -1);
+        if (camporto >= 0) {
+            mediaMatrix.addCamera(camporto, camport, cam_baudrate, cam_proto);
+        }
     }
 
     @Override
@@ -36,24 +55,30 @@ public class OmniControlApplication extends Application {
     }
 
     public SharedPreferences getAppPreferences(){
-        return getSharedPreferences(PREF_NAME, MODE_APPEND);
+        return getSharedPreferences(PREF_NAME, MODE_PRIVATE);
     }
 
-    public void updateUdpClient(){
-        String udpServerIp = getAppPreferences().getString("udp_server_ip", "192.168.2.89");
-        int udpServerPort = getAppPreferences().getInt("udp_server_port", 5000);
-        if (udpClient == null) {
-            udpClient = new UdpClient(udpServerIp, udpServerPort);
-        }
+    public void saveAppPreference(String name, String val){
+        SharedPreferences.Editor editor = getAppPreferences().edit();
+        editor.putString(name, val);
+        editor.commit();
     }
 
-    public void updateMcuClient(){
+    public void saveAppPreference(String name, int val){
+        SharedPreferences.Editor editor = getAppPreferences().edit();
+        editor.putInt(name, val);
+        editor.commit();
     }
 
-    public UdpClient getUdpClient(){
-        if (udpClient == null){
-            updateUdpClient();
-        }
-        return udpClient;
+    public MediaMatrix getMediaMatrix() {
+        return mediaMatrix;
+    }
+
+    public void setMediaMatrix(MediaMatrix mediaMatrix) {
+        this.mediaMatrix = mediaMatrix;
+    }
+
+    public RxBus getRxBus() {
+        return RxBus.getInstance();
     }
 }

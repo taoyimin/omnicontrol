@@ -76,7 +76,8 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
     private final Fragment[] FRAGMENTS = {
             new PowerFragment(),
             new VideoFragment(),
-            new AudioFragment(),
+            new VideoFragment(),
+//            new AudioFragment(),
             new LightFragment(),
             new CameraFragment(),
             new DvdFragment(),

@@ -48,7 +48,7 @@ public class AudioFragment extends Fragment{
         /* test code */
         List<Port> ports = new ArrayList<>();
         for (int m = 0; m < 32; m ++){
-            Port port = new Port();
+            Port port = new Port(0, m, Port.TYPE_VIDEO, Port.DIR_IN);
             port.alias = "测试"+String.valueOf(m);
             port.idx = m;
             port.dir = Port.DIR_IN;
@@ -57,20 +57,17 @@ public class AudioFragment extends Fragment{
         }
         final List<Port> outports = new ArrayList<>();
         for (int m = 0; m < 32; m ++){
-            Port port = new Port();
+            Port port = new Port(0, m, Port.TYPE_VIDEO, Port.DIR_OUT);
             port.alias = "测试"+String.valueOf(m);
             port.idx = m;
-            port.dir = Port.DIR_IN;
             port.state = m%4;
             outports.add(port);
         }
         List<Channel> audioChnList = new ArrayList<>();
         for (int m = 0; m < 32; m ++){
-            Channel chn = new Channel();
-            chn.alias = "测试"+String.valueOf(m);
-            chn.idx = m;
+            int[] outs = new int[1];
+            Channel chn = new Channel(Channel.CHN_VIDEO,1, outs);
             chn.state = m%4;
-            chn.val = m;
             audioChnList.add(chn);
         }
 

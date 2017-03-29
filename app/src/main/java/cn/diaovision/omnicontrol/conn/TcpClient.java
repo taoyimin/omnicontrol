@@ -8,8 +8,15 @@ import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by liulingfeng on 2017/3/19.
@@ -165,7 +172,7 @@ public class TcpClient {
         }).start();
     }
 
-    public int send(byte data[]){
+    public int sendSync(byte data[]){
         if (state.get() == STATE_CONNECTED && output != null) {
             try {
                 output.write(data);
@@ -183,8 +190,41 @@ public class TcpClient {
         }
     }
 
+    public void recvRx(Consumer consumer){
+        Flowable.create(new FlowableOnSubscribe<byte[]>() {
+            @Override
+            public void subscribe(FlowableEmitter<byte[]> e){
+                while(true){
+                    if (state.get() == STATE_CONNECTED){
+                        byte buff[] = new byte[1024];
+                        int len = 0;
+                        try {
+                            len = input.read(buff);
+                             if (len > 0){
+                                 byte dataRecv[] = new byte[len];
+                                 e.onNext(dataRecv);
+                             }
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                            e.onError(e1);
+                        }
+
+                    }
+                }
+            }
+        }, BackpressureStrategy.BUFFER)
+                .map(new Function<byte[], String>() {
+                    @Override
+                    public String apply(byte[] bytes) throws Exception {
+                        return null;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .subscribe(consumer);
+    }
+
     //synchronously receive (for rxjava)
-    public int recv(byte data[]){
+    public int recvSync(byte data[]){
         if (state.get() == STATE_CONNECTED && input != null) {
             try {
                 byte buff[] = new byte[1024];

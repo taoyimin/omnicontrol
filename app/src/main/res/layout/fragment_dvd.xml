@@ -3,30 +3,250 @@
     xmlns:appCompat="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:id="@+id/panel_display"></RelativeLayout>
-    <android.support.percent.PercentRelativeLayout
+        android:layout_height="wrap_content"
+        android:text="IP地址"
+        android:textAppearance="@style/ItemTitleText"
+        android:id="@+id/ip_txt"/>
+    <android.support.v7.widget.AppCompatEditText
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:layout_toRightOf="@+id/ip_txt"
+        android:id="@+id/ip"/>
+     <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="端口"
+        android:textAppearance="@style/ItemTitleText"
+         android:layout_below="@+id/ip"
+        android:id="@+id/port_txt"/>
+    <android.support.v7.widget.AppCompatEditText
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:layout_below="@+id/ip"
+        android:layout_toRightOf="@+id/ip_txt"
+        android:id="@+id/port"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="设置IP"
+        android:id="@+id/btn_setip"
+        android:layout_below="@+id/port"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="输入端口"
+        android:layout_marginTop="@dimen/widget_margin"
+        android:textAppearance="@style/ItemTitleText"
+        android:layout_below="@+id/btn_setip"
+        android:id="@+id/inport_idx_txt"/>
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/inport_idx"
+        android:layout_below="@+id/btn_setip"
+        android:layout_toRightOf="@+id/inport_idx_txt"></Spinner>
+
+     <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="输出端口"
+        android:textAppearance="@style/ItemTitleText"
+         android:layout_below="@+id/inport_idx_txt"
+        android:id="@+id/outport_idx_txt"/>
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:id="@+id/outport_idx"
+        android:layout_below="@+id/inport_idx_txt"
+        android:layout_toRightOf="@+id/outport_idx_txt"></Spinner>
+    <android.support.v7.widget.AppCompatButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="切换视频"
+        android:layout_below="@+id/outport_idx"
+        android:layout_marginTop="@dimen/widget_margin"
+        android:id="@+id/btn_switch"/>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/panel_ctrl">
-        <cn.diaovision.omnicontrol.widget.PortRadioGroupView
-            appCompat:layout_widthPercent="40%"
-            android:layout_height="300dp"
-            android:layout_below="@+id/txt_input"
-            android:id="@+id/channel_list"
-            android:background="@color/panel_input" />
-        <RelativeLayout
-            appCompat:layout_widthPercent="30%"
+        android:orientation="horizontal"
+        android:layout_below="@id/btn_switch"
+        android:layout_marginTop="24dp"
+        android:id="@+id/cam_set1">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="摄像头设置"
+            android:textAppearance="@style/ItemTitleText"
+            android:id="@+id/cam_set_txt"
+            android:layout_marginRight="24dp"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="端口"
+            android:textAppearance="@style/ItemTitleText"
+            android:id="@+id/cam_porto_txt"/>
+
+        <Spinner
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:layout_below="@+id/ip"
+            android:layout_toRightOf="@+id/ip_txt"
+            android:layout_marginLeft="24dp"
+            android:id="@+id/cam_porto"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="地址"
+            android:textAppearance="@style/ItemTitleText"
+            android:id="@+id/cam_port_txt"/>
+
+        <Spinner
+            android:id="@+id/cam_port"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ip"
+            android:layout_toRightOf="@+id/ip_txt"
+            android:layout_marginLeft="24dp"
+            android:inputType="number" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_below="@+id/cam_set1"
+            android:id="@+id/cam_set2">
+            <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="摄像头设置"
+            android:textAppearance="@style/ItemTitleText"
+            android:layout_marginRight="24dp"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="波特率"
+            android:textAppearance="@style/ItemTitleText"
+            android:id="@+id/cam_baudrate_txt"/>
+        <Spinner
+            android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:id="@+id/board_ctrl">
-        </RelativeLayout>
-         <!--<cn.diaovision.omnicontrol.widget.PortRadioGroupView-->
-            <!--appCompat:layout_widthPercent="40%"-->
-            <!--android:layout_height="300dp"-->
-            <!--android:layout_below="@+id/txt_input"-->
-            <!--android:id="@+id/camera_preset"-->
-            <!--android:background="@color/panel_input" />-->
-    </android.support.percent.PercentRelativeLayout>
+            android:layout_marginLeft="24dp"
+            android:id="@+id/cam_baudrate"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="协议"
+            android:textAppearance="@style/ItemTitleText"
+            android:id="@+id/cam_proto_txt"/>
+        <Spinner
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="24dp"
+            android:id="@+id/cam_proto"></Spinner>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设置"
+            android:id="@+id/btn_set_cam"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/cam_set2"
+        android:layout_marginTop="24dp"
+        android:id="@+id/cam_go">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="上"
+            android:id="@+id/btn_up"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="下"
+            android:id="@+id/btn_down"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="左"
+            android:id="@+id/btn_left"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="右"
+            android:id="@+id/btn_right"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/cam_go"
+        android:id="@+id/cam_zoom">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="大"
+            android:id="@+id/btn_zoomin"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="小"
+            android:id="@+id/btn_zoomout"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="宽"
+            android:id="@+id/btn_wide"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="窄"
+            android:id="@+id/btn_narrow"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/cam_zoom"
+        android:id="@+id/cam_preset">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="存储预置位"
+            android:id="@+id/btn_preset_save"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="调用预置位"
+            android:id="@+id/btn_preset_load"/>
+    </LinearLayout>
+</RelativeLayout>
+</ScrollView>
 </RelativeLayout>

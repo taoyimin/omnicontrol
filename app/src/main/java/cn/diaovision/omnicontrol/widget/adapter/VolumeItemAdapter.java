@@ -105,13 +105,13 @@ public class VolumeItemAdapter extends RecyclerView.Adapter<VolumeItemAdapter.Vo
         //bind view here
         if (channels != null){
             final Channel chn = channels.get(position);
-            holder.val = chn.val;
+            holder.val = (Integer) chn.getProperty("volume");
             holder.pos = position;
-            holder.valTxt.setText(String.valueOf(chn.val));
-            holder.aliasTxt.setText(chn.alias);
-            holder.bar.setProgress(chn.val);
+            holder.valTxt.setText(String.valueOf(holder.val));
+            holder.aliasTxt.setText(chn.getAlias());
+            holder.bar.setProgress(holder.val);
 
-            Log.i("U", "UI bind chn " + position + " val = " + chn.val);
+            Log.i("U", "UI bind chn " + position + " val = " + holder.val);
 
             holder.bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
@@ -127,7 +127,7 @@ public class VolumeItemAdapter extends RecyclerView.Adapter<VolumeItemAdapter.Vo
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
                     int progress = seekBar.getProgress();
-                    chn.val = progress;
+                    chn.setProperty("volume", progress);
                     holder.valTxt.setText(String.valueOf(progress));
                 }
             });

@@ -1,17 +1,7 @@
 package cn.diaovision.omnicontrol.rx;
 
-import cn.diaovision.omnicontrol.conn.UdpClient;
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableOnSubscribe;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
@@ -21,34 +11,39 @@ import io.reactivex.subjects.Subject;
 
 public class RxBus {
     private static RxBus rxBus;
-    private final Subject<Object> _bus = PublishSubject.create();
+    private final Subject bus = PublishSubject.create();
 
-    public RxBus getInstance(){
+    public static RxBus getInstance(){
         if (rxBus == null) {
             rxBus = new RxBus();
         }
         return rxBus;
     }
 
-    public void send(Object o){
-        _bus.onNext(o);
+    public void post(Object o){
+        bus.onNext(o);
+
     }
 
-    public void subscribe(ObservableOnSubscribe subscriber){
-        _bus.subscribe((Observer<? super Object>) subscriber);
+    public void subscribe(RxSubscription rxSubscription){
+        rxSubscription.setDisposable( bus.subscribe(rxSubscription));
     }
 
-//    public void submitToUdpServer(final String cmd, Consumer consumer){
-//        Flowable.create(new FlowableOnSubscribe<String>() {
-//            @Override
-//            public void subscribe(FlowableEmitter<String> e) throws Exception {
-//                UdpClient client = new UdpClient("192.168.2.89", 5000);
-//                byte[] recv = client.send(cmd.getBytes(), cmd.getBytes().length);
-//                e.onNext(String.valueOf(recv));
-//            }
-//        }, BackpressureStrategy.BUFFER)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(consumer);
-//    }
+
+    static public abstract class RxSubscription implements Consumer{
+        Disposable disposable;
+
+        public Disposable getDisposable(){
+            return disposable;
+        }
+        public void setDisposable(Disposable disposable){
+            this.disposable = disposable;
+        }
+
+        public void unsubscribe(){
+            if (disposable != null){
+                disposable.dispose();
+            }
+        }
+    }
 }

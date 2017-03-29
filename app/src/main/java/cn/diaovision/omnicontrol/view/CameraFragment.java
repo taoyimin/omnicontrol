@@ -15,6 +15,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.R;
+import cn.diaovision.omnicontrol.core.model.device.State;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera.Preset;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.widget.CameraPresetRadioGroupView;
@@ -47,15 +48,15 @@ public class CameraFragment extends Fragment{
         /* test code */
         final List<Preset> presetList = new ArrayList<>();
         for (int m = 0; m < 12; m ++){
-            Preset preset = new Preset(m*30, String.valueOf(m*30));
+            Preset preset = new Preset(String.valueOf(m*30), 1);
             presetList.add(preset);
         }
         final List<Port> portList = new ArrayList<>();
         for (int m = 0; m < 8; m ++){
-            Port port = new Port();
+            Port port = new Port(1,1, Port.TYPE_VIDEO, Port.DIR_IN);
             port.alias = "测试"+String.valueOf(m);
             port.idx = m;
-            port.state = Port.STATE_ON;
+            port.state = State.ON;
             portList.add(port);
         }
 
