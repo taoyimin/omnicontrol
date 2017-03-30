@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,6 +16,9 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
+
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +35,14 @@ import cn.diaovision.omnicontrol.core.message.MatrixMessage;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by liulingfeng on 2017/2/24.
@@ -142,7 +154,7 @@ public class DvdFragment extends BaseFragment {
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()){
                     case MotionEvent.ACTION_DOWN:
-                        goUp();
+                        startGo(MatrixMessage.CAM_UP, 63);
                         break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
@@ -160,7 +172,7 @@ public class DvdFragment extends BaseFragment {
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()){
                     case MotionEvent.ACTION_DOWN:
-                        goDown();
+                        startGo(MatrixMessage.CAM_DOWN, 63);
                         break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
@@ -178,7 +190,7 @@ public class DvdFragment extends BaseFragment {
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()){
                     case MotionEvent.ACTION_DOWN:
-                        goLeft();
+                        startGo(MatrixMessage.CAM_LEFT, 63);
                         break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
@@ -196,7 +208,7 @@ public class DvdFragment extends BaseFragment {
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()){
                     case MotionEvent.ACTION_DOWN:
-                        goRight();
+                        startGo(MatrixMessage.CAM_RIGHT, 63);
                         break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
@@ -214,7 +226,7 @@ public class DvdFragment extends BaseFragment {
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()){
                     case MotionEvent.ACTION_DOWN:
-                        zoomin();
+                        startGo(MatrixMessage.CAM_ZOOMIN, 63);
                         break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
@@ -232,7 +244,7 @@ public class DvdFragment extends BaseFragment {
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()){
                     case MotionEvent.ACTION_DOWN:
-                        zoomout();
+                        startGo(MatrixMessage.CAM_ZOOMOUT, 63);
                         break;
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
@@ -250,42 +262,78 @@ public class DvdFragment extends BaseFragment {
 
     @OnClick(R.id.btn_setip)
     void setIp(){
-        String newIp = ipEdit.getText().toString();
-        int newPort = Integer.parseInt(portEdit.getText().toString());
-        UdpClient udpClient = new UdpClient(newIp, newPort);
-        byte[] bytes = MatrixMessage.buildGetIdMessage(0).toBytes();
-        byte[] recv = udpClient.send(bytes, bytes.length);
-        if (recv.length > 0){
-            int id = 1;
-            getApp().getMediaMatrix().setReachable(true);
-            getApp().getMediaMatrix().setId(id);
-            getApp().getMediaMatrix().setIp(newIp, newPort);
-            getApp().getMediaMatrix().setReachable(true);
-            Toast.makeText(getContext(), "IP set", Toast.LENGTH_SHORT).show();
-            getApp().saveAppPreference("ip", newIp);
-            getApp().saveAppPreference("port", newPort);
-        }
-        else {
-            getApp().getMediaMatrix().setReachable(false);
-            Toast.makeText(getContext(), "Matrix unreachable", Toast.LENGTH_SHORT).show();
-        }
+        final String newIp = ipEdit.getText().toString();
+        final int newPort = Integer.parseInt(portEdit.getText().toString());
+        Flowable.just("")
+                .map(new Function<String, String>() {
+                    @Override
+                    public String apply(String s) throws Exception {
+                        UdpClient udpClient = new UdpClient(newIp, newPort);
+                        byte[] bytes = MatrixMessage.buildGetIdMessage(0).toBytes();
+                        byte[] recv = udpClient.send(bytes, bytes.length);
+                        if (recv.length > 0){
+                            return "success";
+                        }
+                        else {
+                            return "failed";
+                        }
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Exception {
+                if (s == "success"){
+                    getApp().getMediaMatrix().setReachable(true);
+                    getApp().getMediaMatrix().setId(1);
+                    getApp().getMediaMatrix().setIp(newIp, newPort);
+                    getApp().getMediaMatrix().setReachable(true);
+                    Toast.makeText(getContext(), "IP set", Toast.LENGTH_SHORT).show();
+                    getApp().saveAppPreference("ip", newIp);
+                    getApp().saveAppPreference("port", newPort);
+                }
+                else if (s == "failed"){
+                    getApp().getMediaMatrix().setReachable(false);
+                    Toast.makeText(getContext(), "Matrix unreachable", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
     }
 
     @OnClick(R.id.btn_switch)
     void switchChannel(){
         if (getApp().getMediaMatrix().isReachable()){
-            int in = inportSpin.getSelectedItemPosition();
-            int[] outs = {outportSpin.getSelectedItemPosition()};
-            int res = getApp().getMediaMatrix().switchVideo(in, outs);
-            if (res >= 0){
-                getApp().saveAppPreference("inport", in);
-                getApp().saveAppPreference("outport", outs[0]);
 
-                Toast.makeText(getContext(), "Switch succeed", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                Toast.makeText(getContext(), "Switch failed", Toast.LENGTH_SHORT).show();
-            }
+            final int in = inportSpin.getSelectedItemPosition();
+            final int[] outs = {outportSpin.getSelectedItemPosition()};
+            Flowable.just("")
+                    .map(new Function<String, String>() {
+                @Override
+                public String apply(String str) throws Exception {
+                    int res = getApp().getMediaMatrix().switchVideo(in, outs);
+                    if (res >= 0) {
+                        return "success";
+                    }
+                    else {
+                        return "failed";
+                    }
+                }
+            })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<String>() {
+                @Override
+                public void accept(String s) throws Exception {
+                    if (s == "success"){
+                        Toast.makeText(getContext(), "Switch succeed", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (s == "failed") {
+                        Toast.makeText(getContext(), "Switch failed", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 
@@ -326,108 +374,154 @@ public class DvdFragment extends BaseFragment {
         getApp().saveAppPreference("cam_proto_spin", protoIdx);
     }
 
-    void goUp(){
-        MediaMatrix mediaMatrix = getApp().getMediaMatrix();
+    void startGo(final int cmd, final int speed){
+        final MediaMatrix mediaMatrix = getApp().getMediaMatrix();
         if (mediaMatrix.isReachable()){
-            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
-            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
-            if (camera != null){
-                mediaMatrix.startCameraGo(camPorto, MatrixMessage.CAM_UP, 63);
-            }
+            Flowable.just("")
+                    .map(new Function<String, String>() {
+                        @Override
+                        public String apply(String s) throws Exception {
+                            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
+                            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
+                            if (camera != null){
+                                int res = mediaMatrix.startCameraGo(camPorto, cmd, speed);
+                                if (res >= 0){
+                                    return "success";
+                                }
+                                else {
+                                    return "failed";
+                                }
+                            }
+                            else {
+                                return "none";
+                            }
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<String>() {
+                        @Override
+                        public void accept(String s) throws Exception {
+                            if (s == "success"){
+                            }
+                            else if (s == "failed"){
+                            }
+                            else if (s == "none"){
+                            }
+                        }
+                    });
         }
     }
 
-    void goDown(){
-        MediaMatrix mediaMatrix = getApp().getMediaMatrix();
-        if (mediaMatrix.isReachable()){
-            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
-            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
-            if (camera != null){
-                mediaMatrix.startCameraGo(camPorto, MatrixMessage.CAM_DOWN, 63);
-            }
-        }
-    }
-
-    void goLeft(){
-        MediaMatrix mediaMatrix = getApp().getMediaMatrix();
-        if (mediaMatrix.isReachable()){
-            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
-            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
-            if (camera != null){
-                mediaMatrix.startCameraGo(camPorto, MatrixMessage.CAM_LEFT, 63);
-            }
-        }
-    }
-
-    void goRight(){
-        MediaMatrix mediaMatrix = getApp().getMediaMatrix();
-        if (mediaMatrix.isReachable()){
-            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
-            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
-            if (camera != null){
-                mediaMatrix.startCameraGo(camPorto, MatrixMessage.CAM_RIGHT, 63);
-            }
-        }
-    }
-
-    void zoomin(){
-        MediaMatrix mediaMatrix = getApp().getMediaMatrix();
-        if (mediaMatrix.isReachable()){
-            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
-            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
-            if (camera != null){
-                mediaMatrix.startCameraGo(camPorto, MatrixMessage.CAM_ZOOMIN, 63);
-            }
-        }
-    }
-
-
-    void zoomout(){
-        MediaMatrix mediaMatrix = getApp().getMediaMatrix();
-        if (mediaMatrix.isReachable()){
-            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
-            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
-            if (camera != null){
-                mediaMatrix.startCameraGo(camPorto, MatrixMessage.CAM_ZOOMOUT, 63);
-            }
-        }
-    }
 
     void stopGo(){
-        MediaMatrix mediaMatrix = getApp().getMediaMatrix();
+        final MediaMatrix mediaMatrix = getApp().getMediaMatrix();
         if (mediaMatrix.isReachable()){
-            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
-            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
-            if (camera != null){
-                mediaMatrix.stopCameraGo(camPorto);
-            }
+            Flowable.just("")
+                    .map(new Function<String, String>() {
+                        @Override
+                        public String apply(String s) throws Exception {
+                            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
+                            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
+                            if (camera != null){
+                                int res = mediaMatrix.stopCameraGo(camPorto);
+                                if (res >= 0){
+                                    return "success";
+                                }
+                                else {
+                                    return "failed";
+                                }
+                            }
+                            else {
+                                return "none";
+                            }
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<String>() {
+                        @Override
+                        public void accept(String s) throws Exception {
+                            if (s == "success"){
+                            }
+                            else if (s == "failed"){
+                            }
+                            else if (s == "none"){
+                            }
+                        }
+                    });
         }
     }
 
     @OnClick(R.id.btn_preset_save)
     void savePreset(){
-        MediaMatrix mediaMatrix = getApp().getMediaMatrix();
+        final MediaMatrix mediaMatrix = getApp().getMediaMatrix();
         if (mediaMatrix.isReachable()){
-            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
-            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
-            if (camera != null){
-                int res = mediaMatrix.setCameraPreset(camPorto, 1, "预置");
-                if (res > 0){
-                    getApp().saveAppPreference("cam_preset_porto", camPorto);
-                }
-            }
+            Flowable.just("")
+                    .map(new Function<String, String>() {
+                        @Override
+                        public String apply(String s) throws Exception {
+                            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
+                            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
+                            if (camera != null){
+                                int res = mediaMatrix.setCameraPreset(camPorto, 1, "预置");
+                                if (res >= 0){
+                                    getApp().saveAppPreference("cam_preset_porto", camPorto);
+                                    return "success";
+                                }
+                                else {
+                                    return "failed";
+                                }
+                            }
+                            else{
+                                return "none";
+                            }
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<String>() {
+                        @Override
+                        public void accept(String s) throws Exception {
+
+                        }
+                    });
+
         }
     }
 
     @OnClick(R.id.btn_preset_load)
     void loadPreset(){
-        MediaMatrix mediaMatrix = getApp().getMediaMatrix();
+        final MediaMatrix mediaMatrix = getApp().getMediaMatrix();
         if (mediaMatrix.isReachable()){
-            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
-            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
-            if (camera != null){
-                int res = mediaMatrix.loadCameraPreset(camPorto, 1);
-            }
+            Flowable.just("")
+                    .map(new Function<String, String>() {
+                        @Override
+                        public String apply(String s) throws Exception {
+                            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
+                            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
+                            if (camera != null){
+                                int res = mediaMatrix.loadCameraPreset(camPorto, 1);
+                                if (res >= 0){
+                                    return "success";
+                                }
+                                else {
+                                    return "failed";
+                                }
+                            }
+                            else {
+                                return "none";
+                            }
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<String>() {
+                        @Override
+                        public void accept(String s) throws Exception {
+
+                        }
+                    });
         }
     }
 }
