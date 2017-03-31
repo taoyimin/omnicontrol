@@ -29,7 +29,7 @@ public class UdpClient {
         byte[] recv = new byte[0];
         try {
             DatagramSocket udpSkt = new DatagramSocket();
-            udpSkt.setSoTimeout(5); //set timeout 5 sec
+            udpSkt.setSoTimeout(5000); //set timeout 5 sec
             InetAddress addr = InetAddress.getByName(ip);
             DatagramPacket packet = new DatagramPacket(bytes, len, addr, port);
             udpSkt.send(packet);
@@ -37,9 +37,9 @@ public class UdpClient {
             udpSkt.receive(packetRecv);
             byte[] data = packetRecv.getData();
             int ll = packetRecv.getLength();
-            udpSkt.close();
             recv = new byte[ll];
             System.arraycopy(data, 0, recv, 0, ll);
+            udpSkt.close();
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (SocketException e) {

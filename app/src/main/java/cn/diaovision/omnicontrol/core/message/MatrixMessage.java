@@ -185,8 +185,8 @@ public class MatrixMessage {
     static public MatrixMessage buildSwitchMessage(int id, int portIn, int portOut){
         byte[] payload = new byte[7];
         payload[0] = MODEL;
-        System.arraycopy(hex2char(portIn,3), 0, payload, 1, 3);
-        System.arraycopy(hex2char(portOut,3), 0, payload, 4, 3);
+        System.arraycopy(hex2char(portOut,3), 0, payload, 1, 3);
+        System.arraycopy(hex2char(portIn,3), 0, payload, 4, 3);
         return new MatrixMessage(hex2char(id, 2), MSG_SWITCH, payload, true);
     }
 
