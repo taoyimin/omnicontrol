@@ -49,7 +49,7 @@ public class VolumeChannelRadioGroupView extends RecyclerView {
 
 
         this.setLayoutManager(layoutMgr);
-        Log.i("U", "UI runs here");
+//        Log.i("U", "UI runs here");
         this.setAdapter(adapter);
 
         adapter.setOnItemClickedListener(new VolumeItemAdapter.OnItemClickListener() {

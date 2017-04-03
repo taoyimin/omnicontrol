@@ -1,11 +1,12 @@
 package cn.diaovision.omnicontrol.rx;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
-/**
+/* 简单的RxBus实例*
  * Created by liulingfeng on 2017/3/21.
  */
 
@@ -20,7 +21,8 @@ public class RxBus {
         return rxBus;
     }
 
-    public void post(Object o){
+    public void post(RxMessage o){
+        bus.observeOn(AndroidSchedulers.mainThread());
         bus.onNext(o);
 
     }
@@ -29,8 +31,7 @@ public class RxBus {
         rxSubscription.setDisposable( bus.subscribe(rxSubscription));
     }
 
-
-    static public abstract class RxSubscription implements Consumer{
+    static public abstract class RxSubscription implements Consumer<RxMessage>{
         Disposable disposable;
 
         public Disposable getDisposable(){

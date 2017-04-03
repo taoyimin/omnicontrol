@@ -1,20 +1,33 @@
 package cn.diaovision.omnicontrol.core.message;
 
 /**
+ * 视频会议消息协议
  * Created by liulingfeng on 2017/2/22.
  */
 
 public class McuMessage {
-    public McuMessage createLoginMessage(String name, String key){
-        return new McuMessage();
+    /*MCU manager messages*/
+    /*Request MSG */
+
+    /*ACK MSG */
+
+    /*client messages*/
+    /*Request MSG */
+
+    /*ACK MSG */
+
+
+    public byte[] buildHeader(int len, int ver, int msgType){
+        byte[] bytes = new byte[2+2+1];
+        return bytes;
     }
-    public McuMessage createNewConfMesage(){
-        return new McuMessage();
+
+    public byte[] buildLoginMessage(String name, String password){
+        byte[] bytes = new byte[64];
+        return bytes;
     }
-    public McuMessage createDelConfMessage(){
-        return new McuMessage();
-    }
-    public McuMessage createGetConfInfoMessage(){
-        return new McuMessage();
+
+
+    static public class Builder{
     }
 }

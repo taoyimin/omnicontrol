@@ -14,7 +14,7 @@ import cn.diaovision.omnicontrol.R;
  * Created by liulingfeng on 2017/2/24.
  * */
 
-public class PowerFragment  extends BaseFragment implements PowerContract.View{
+public class SimpleFragment extends BaseFragment implements PowerContract.View{
 
     @BindView(R.id.btn_preset_save)
     Button btnX;

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * RadioGroupView关联器，暂时未使用
  * Created by liulingfeng on 2017/3/9.
  */
 

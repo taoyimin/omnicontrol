@@ -6,6 +6,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 /**
+ * 通信类服务
  * Created by liulingfeng on 2017/2/21.
  */
 
