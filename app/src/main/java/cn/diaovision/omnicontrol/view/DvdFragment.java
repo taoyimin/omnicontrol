@@ -35,6 +35,9 @@ import cn.diaovision.omnicontrol.core.message.MatrixMessage;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
+import cn.diaovision.omnicontrol.rx.RxExecutor;
+import cn.diaovision.omnicontrol.rx.RxMessage;
+import cn.diaovision.omnicontrol.rx.RxReq;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
@@ -308,32 +311,29 @@ public class DvdFragment extends BaseFragment {
 
             final int in = inportSpin.getSelectedItemPosition();
             final int[] outs = {outportSpin.getSelectedItemPosition()};
-            Flowable.just("")
-                    .map(new Function<String, String>() {
+
+            RxExecutor.getInstance().post(new RxReq() {
                 @Override
-                public String apply(String str) throws Exception {
+                public RxMessage request() {
                     int res = getApp().getMediaMatrix().switchVideo(in, outs);
                     if (res >= 0) {
-                        return "success";
+                        return new RxMessage("success");
                     }
                     else {
-                        return "failed";
+                        return new RxMessage("failed");
                     }
                 }
-            })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<String>() {
+            }, new Consumer<RxMessage>() {
                 @Override
-                public void accept(String s) throws Exception {
-                    if (s == "success"){
+                public void accept(RxMessage msg) throws Exception {
+                    if (msg.what.equals("success")){
                         Toast.makeText(getContext(), "Switch succeed", Toast.LENGTH_SHORT).show();
                     }
-                    else if (s == "failed") {
+                    else if (msg.what.equals("failed")){
                         Toast.makeText(getContext(), "Switch failed", Toast.LENGTH_SHORT).show();
                     }
                 }
-            });
+            }, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN);
         }
     }
 

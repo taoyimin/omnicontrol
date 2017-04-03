@@ -16,8 +16,8 @@ import cn.diaovision.omnicontrol.R;
 
 public class PowerFragment  extends BaseFragment implements PowerContract.View{
 
-    @BindView(R.id.btn_preset_save)
-    Button btnX;
+//    @BindView(R.id.btn_preset_save)
+//    Button btnX;
 
     PowerContract.Presenter presenter;
 
@@ -33,14 +33,14 @@ public class PowerFragment  extends BaseFragment implements PowerContract.View{
         super.onActivityCreated(savedInstanceState);
 
         //TODO: config view and presenter here
-        btnX.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                presenter.start();
-                presenter.func();
-
-            }
-        });
+//        btnX.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                presenter.start();
+//                presenter.func();
+//
+//            }
+//        });
 
 
 

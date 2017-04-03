@@ -36,7 +36,7 @@ public class RxExecutor {
                 .map(new Function<Object, Object>() {
                     @Override
                     public Object apply(Object o) throws Exception {
-                        Object res = req.request();
+                        RxMessage res = req.request();
                         return res;
                     }
                 })

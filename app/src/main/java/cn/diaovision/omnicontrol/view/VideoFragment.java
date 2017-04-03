@@ -44,13 +44,13 @@ public class VideoFragment extends BaseFragment{
      ************/
     MediaMatrix mediaMatrix = new MediaMatrix();
 
-    RxBus.RxSubscription rxSubscription = new RxBus.RxSubscription() {
-        @Override
-        public void accept(Object o) throws Exception {
-            if (String.class.isInstance(o)){
-            }
-        }
-    };
+//    RxBus.RxSubscription rxSubscription = new RxBus.RxSubscription() {
+//        @Override
+//        public void accept(Object o) throws Exception {
+//            if (String.class.isInstance(o)){
+//            }
+//        }
+//    };
 
 
 
@@ -87,7 +87,7 @@ public class VideoFragment extends BaseFragment{
             public void onSelected(int pos) {
                 outputPorts.select(pos);
                 //TODO: send udp packet to server
-                getRxBus().post(new String("Message matrix"));
+//                getRxBus().post(new String("Message matrix"));
             }
 
             @Override

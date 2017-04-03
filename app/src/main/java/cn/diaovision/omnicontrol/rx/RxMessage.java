@@ -17,4 +17,9 @@ public class RxMessage {
         this.what = what;
         this.val = val;
     }
+
+    public RxMessage(String what){
+        this.what = what;
+    }
+
 }
