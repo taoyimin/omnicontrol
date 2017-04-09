@@ -2,18 +2,11 @@ package cn.diaovision.omnicontrol.view;
 
 import android.support.annotation.NonNull;
 
-import butterknife.Optional;
-import cn.diaovision.omnicontrol.rx.RxBus;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.processors.PublishProcessor;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
@@ -21,7 +14,7 @@ import io.reactivex.subjects.Subject;
  * Created by liulingfeng on 2017/4/3.
  */
 
-public class PowerPresenter implements PowerContract.Presenter {
+public class CameraPresenter implements CameraContract.Presenter {
 
     //通过Subject实现ViewModel的双向绑定
     Subject bus = PublishSubject.create();
@@ -39,9 +32,9 @@ public class PowerPresenter implements PowerContract.Presenter {
 
     /*double binding between view and presenter*/
     @NonNull
-    private final PowerContract.View view;
+    private final CameraContract.View view;
 
-    public PowerPresenter(PowerContract.View view){
+    public CameraPresenter(CameraContract.View view){
         this.view = view;
 
         bus.subscribe(subscriber);

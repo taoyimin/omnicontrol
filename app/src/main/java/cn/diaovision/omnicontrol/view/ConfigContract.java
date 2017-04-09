@@ -10,10 +10,12 @@ import cn.diaovision.omnicontrol.BaseView;
  * Created by liulingfeng on 2017/4/3.
  * */
 
-public interface SimpleContract {
+public interface ConfigContract {
     interface View extends BaseView<Presenter>{
+        void changeTitle();
     }
 
     interface Presenter extends BasePresenter{
+        void func();
     }
 }

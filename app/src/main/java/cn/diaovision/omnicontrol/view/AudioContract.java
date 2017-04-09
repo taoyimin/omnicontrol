@@ -10,7 +10,7 @@ import cn.diaovision.omnicontrol.BaseView;
  * Created by liulingfeng on 2017/4/3.
  * */
 
-public interface SimpleContract {
+public interface AudioContract {
     interface View extends BaseView<Presenter>{
     }
 

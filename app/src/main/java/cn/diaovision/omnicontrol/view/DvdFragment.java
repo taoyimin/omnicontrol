@@ -51,7 +51,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by liulingfeng on 2017/2/24.
  */
 
-public class DvdFragment extends BaseFragment {
+public class DvdFragment extends BaseFragment implements DvdContract.View{
 
     @BindView(R.id.ip)
     AppCompatEditText ipEdit;
@@ -523,5 +523,10 @@ public class DvdFragment extends BaseFragment {
                         }
                     });
         }
+    }
+
+    @Override
+    public void bindPresenter() {
+
     }
 }

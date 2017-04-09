@@ -5,6 +5,6 @@ package cn.diaovision.omnicontrol;
  */
 
 public interface  BaseView<T> {
-    void setPresenter(); //内部初始化态的MVP模式
+//    void setPresenter(); //内部初始化态的MVP模式
     //void bindViewModel(T viewModel); //MVVM模式
 }

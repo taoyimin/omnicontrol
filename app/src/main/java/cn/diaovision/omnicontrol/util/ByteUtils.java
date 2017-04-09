@@ -5,37 +5,24 @@ package cn.diaovision.omnicontrol.util;
  */
 
 public class ByteUtils {
-    public static byte[] toHexChar(byte b, int len){
-        if (len == 2) {
-            byte[] bytes = new byte[2];
 
-            int val = (int) (b & 0xff);
-            if (val <= 0x0f) {
-                bytes[0] = '0';
-                bytes[1] = (byte) (val&0x0f);
-            }
-            return bytes;
+    public static byte[] int2bytes(int val, int len){
+        byte[] bytes = new byte[len];
+        for (int m = 0; m < len; m ++){
+            bytes[m] = (byte) ( (val >>(8*m)) & 0xff );
         }
-        else if (len == 3) {
-            byte[] bytes = new byte[3];
-            int val = (int) (b & 0xff);
-            if (val <= 0x0f) {
-                bytes[0] = '0';
-                bytes[1] = '0';
-                bytes[2] = (byte) (val&0x0f);
-            }
-            else {
-                bytes[0] = '0';
-                bytes[1] = (byte) ((val >> 8) & 0x0f);
-                bytes[2] = (byte) (val & 0x0f);
-            }
-            return bytes;
-        }
-        else{
-            return null;
-        }
+        return bytes;
     }
 
+    public static int bytes2int(byte[] bytes){
+        int val = 0;
+        for (int m = 0; m < bytes.length; m ++){
+            val += bytes[m] << (8*m);
+        }
+        return val;
+    }
+
+    /*简单的异或校验计算*/
     public static byte checksum (byte[] bytes){
         byte cs = 0x00;
         for (byte b : bytes) {

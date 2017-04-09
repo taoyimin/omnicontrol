@@ -14,17 +14,17 @@ import cn.diaovision.omnicontrol.R;
  * Created by liulingfeng on 2017/2/24.
  * */
 
-public class SimpleFragment extends BaseFragment implements PowerContract.View{
+public class SimpleFragment extends BaseFragment implements SimpleContract.View{
 
 //    @BindView(R.id.btn_preset_save)
 //    Button btnX;
 
-    PowerContract.Presenter presenter;
+    SimpleContract.Presenter presenter;
 
     //TODO: 内部生成presenter，不通过外部指定
     @Override
-    public void setPresenter() {
-        this.presenter = new PowerPresenter(this);
+    public void bindPresenter() {
+        presenter = new SimplePresenter(this);
     }
 
     @Override
@@ -50,8 +50,4 @@ public class SimpleFragment extends BaseFragment implements PowerContract.View{
     /* *********************************
      * presenter-view interactions
      * *********************************/
-    @Override
-    public void changeTitle() {
-
-    }
 }

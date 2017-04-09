@@ -2,39 +2,29 @@ package cn.diaovision.omnicontrol;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 
 //import com.roughike.bottombar.BottomBar;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.util.CrashHandler;
-import cn.diaovision.omnicontrol.view.AudioFragment;
 import cn.diaovision.omnicontrol.view.CameraFragment;
-import cn.diaovision.omnicontrol.view.ConfigLoginFragment;
 import cn.diaovision.omnicontrol.view.DvdFragment;
 import cn.diaovision.omnicontrol.view.LightFragment;
-import cn.diaovision.omnicontrol.view.MeetingFragment;
+import cn.diaovision.omnicontrol.view.ConferenceFragment;
 import cn.diaovision.omnicontrol.view.PowerFragment;
+import cn.diaovision.omnicontrol.view.ConfigFragment;
 import cn.diaovision.omnicontrol.view.VideoFragment;
 //import devlight.io.library.ntb.NavigationTabBar;
 
@@ -81,8 +71,8 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
             new LightFragment(),
             new CameraFragment(),
             new DvdFragment(),
-            new MeetingFragment(),
-            new ConfigLoginFragment(),
+            new ConferenceFragment(),
+            new ConfigFragment(),
     };
 
     //Context

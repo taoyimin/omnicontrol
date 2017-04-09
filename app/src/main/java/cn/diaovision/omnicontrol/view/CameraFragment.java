@@ -14,6 +14,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.State;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera.Preset;
@@ -26,7 +27,7 @@ import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
  * Created by liulingfeng on 2017/2/24.
  */
 
-public class CameraFragment extends Fragment{
+public class CameraFragment extends BaseFragment implements CameraContract.View{
 
 
     @BindView(R.id.preset_list)
@@ -38,6 +39,8 @@ public class CameraFragment extends Fragment{
     @BindView(R.id.play_controller)
     PlayerControllerView playerControllerView;
 
+    CameraPresenter presenter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -45,6 +48,15 @@ public class CameraFragment extends Fragment{
         View v = inflater.inflate(R.layout.fragment_camera, container, false);
         ButterKnife.bind(this, v);
 
+        return v;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        //set presenter
+        presenter = new CameraPresenter(this);
         /* test code */
         final List<Preset> presetList = new ArrayList<>();
         for (int m = 0; m < 12; m ++){
@@ -70,6 +82,12 @@ public class CameraFragment extends Fragment{
                 Toast.makeText(getContext(), "cmd = " + cmd, Toast.LENGTH_SHORT).show();
             }
         });
-        return v;
     }
+
+    @Override
+    public void bindPresenter() {
+        this.presenter = new CameraPresenter(this);
+
+    }
+
 }

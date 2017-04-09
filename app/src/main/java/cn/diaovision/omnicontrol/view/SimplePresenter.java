@@ -14,7 +14,7 @@ import io.reactivex.subjects.Subject;
  * Created by liulingfeng on 2017/4/3.
  */
 
-public class SimplePresenter implements PowerContract.Presenter {
+public class SimplePresenter implements SimpleContract.Presenter {
 
     //通过Subject实现ViewModel的双向绑定
     Subject bus = PublishSubject.create();
@@ -32,9 +32,9 @@ public class SimplePresenter implements PowerContract.Presenter {
 
     /*double binding between view and presenter*/
     @NonNull
-    private final PowerContract.View view;
+    private final SimpleContract.View view;
 
-    public SimplePresenter(PowerContract.View view){
+    public SimplePresenter(SimpleContract.View view){
         this.view = view;
 
         bus.subscribe(subscriber);
@@ -48,7 +48,6 @@ public class SimplePresenter implements PowerContract.Presenter {
 
 
     /* invoked by the view interaction*/
-    @Override
     public void func() {
         RxExecutor.getInstance().post(new RxReq() {
             @Override
@@ -60,7 +59,6 @@ public class SimplePresenter implements PowerContract.Presenter {
             @Override
             public void accept(RxMessage msg) throws Exception {
                 //TODO: 这里添加presenter根据提交请求的异步返回结果对view的操作逻辑
-                view.changeTitle();
 
                 //TODO: 采用MVVM方式更新(可选)
                 //RxBus.getInstance().post(new RxMessage("MVP", null));

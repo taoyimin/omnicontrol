@@ -6,20 +6,15 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import org.reactivestreams.Subscription;
-
 import java.util.Set;
 
 import cn.diaovision.omnicontrol.rx.RxBus;
-import cn.diaovision.omnicontrol.rx.RxExecutor;
-import cn.diaovision.omnicontrol.rx.RxReq;
-import io.reactivex.Flowable;
 
 /**
  * Created by liulingfeng on 2017/3/21.
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment{
 
     OmniControlApplication app;
     Set<RxBus.RxSubscription> rxSubscriptionSet;
@@ -28,6 +23,7 @@ public abstract class BaseFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         app = (OmniControlApplication) getActivity().getApplication();
+        bindPresenter();
     }
 
     public OmniControlApplication getApp() {
@@ -59,5 +55,7 @@ public abstract class BaseFragment extends Fragment {
         }).start();
     }
 
+    public abstract void bindPresenter();
 }
+
 

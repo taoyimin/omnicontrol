@@ -12,10 +12,10 @@ import cn.diaovision.omnicontrol.BaseView;
 
 public interface PowerContract {
     interface View extends BaseView<Presenter>{
-        void changeTitle();
+//        void changeTitle();
     }
 
     interface Presenter extends BasePresenter{
-        void func();
+//        void func();
     }
 }

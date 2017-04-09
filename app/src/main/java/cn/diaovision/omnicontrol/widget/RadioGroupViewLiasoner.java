@@ -10,6 +10,7 @@ import java.util.Set;
  * Created by liulingfeng on 2017/3/9.
  */
 
+@Deprecated
 public class RadioGroupViewLiasoner {
     PortRadioGroupView pViewA;
     PortRadioGroupView pViewB;

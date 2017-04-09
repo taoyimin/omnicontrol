@@ -26,7 +26,7 @@ import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
  * Created by liulingfeng on 2017/2/24.
  */
 
-public class VideoFragment extends BaseFragment{
+public class VideoFragment extends BaseFragment implements VideoContract.View{
 
     @BindView(R.id.input)
     PortRadioGroupView inputPorts;
@@ -44,6 +44,7 @@ public class VideoFragment extends BaseFragment{
      ************/
     MediaMatrix mediaMatrix = new MediaMatrix();
 
+    VideoContract.Presenter presenter;
 //    RxBus.RxSubscription rxSubscription = new RxBus.RxSubscription() {
 //        @Override
 //        public void accept(Object o) throws Exception {
@@ -113,5 +114,11 @@ public class VideoFragment extends BaseFragment{
 
             }
         });
+    }
+
+
+    @Override
+    public void bindPresenter() {
+        presenter = new VideoPresenter(this);
     }
 }

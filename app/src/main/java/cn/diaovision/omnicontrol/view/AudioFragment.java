@@ -16,6 +16,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.diaovision.omnicontrol.BaseFragment;
+import cn.diaovision.omnicontrol.BasePresenter;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
@@ -27,7 +29,7 @@ import cn.diaovision.omnicontrol.widget.VolumeChannelRadioGroupView;
  * Created by liulingfeng on 2017/2/24.
  */
 
-public class AudioFragment extends Fragment{
+public class AudioFragment extends BaseFragment implements AudioContract.View{
 
     @BindView(R.id.input)
     PortRadioGroupView inputList;
@@ -36,6 +38,9 @@ public class AudioFragment extends Fragment{
     @BindView(R.id.audioChnList)
     VolumeChannelRadioGroupView volumeChannelList;
 
+
+    AudioPresenter presenter;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,7 +48,12 @@ public class AudioFragment extends Fragment{
         View v = inflater.inflate(R.layout.fragment_audio, container, false);
         ButterKnife.bind(this, v);
 
-           /* test code */
+        return v;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         /* test code */
         List<Port> ports = new ArrayList<>();
@@ -116,8 +126,11 @@ public class AudioFragment extends Fragment{
 
             }
         });
+    }
 
-        return v;
+    @Override
+    public void bindPresenter() {
+        presenter = new AudioPresenter(this);
     }
 
 }
