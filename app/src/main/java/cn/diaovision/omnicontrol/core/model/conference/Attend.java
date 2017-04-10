@@ -11,7 +11,10 @@ import io.realm.annotations.RealmClass;
 public class Attend implements RealmModel {
     String ip = "192.168.1.1";
     int port = 553;
-    String name;
+    String name = "";
+
+    public Attend(){
+    }
 
     public Attend(String ip, int port, String name) {
         this.ip = ip;

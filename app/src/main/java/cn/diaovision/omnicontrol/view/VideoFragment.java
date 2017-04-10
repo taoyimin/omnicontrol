@@ -61,9 +61,6 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
 
         View v = inflater.inflate(R.layout.fragment_video, container, false);
         ButterKnife.bind(this, v);
-
-
-
         return v;
     }
 

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <cn.diaovision.omnicontrol.widget.DirectionPad
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:id="@+id/pad_direction"
+        android:background="@color/bb_bg"></cn.diaovision.omnicontrol.widget.DirectionPad>
+    <View
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_toRightOf="@+id/pad_direction"
+        android:background="@color/btn_light_bg"
+        android:id="@+id/viewstub"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/x"
+        android:layout_below="@+id/pad_direction"
+        android:text="x"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/y"
+        android:layout_below="@+id/viewstub"
+        android:layout_toRightOf="@+id/x"
+        android:layout_marginLeft="48dp"
+        android:text="y"/>
+
+</RelativeLayout>

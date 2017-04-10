@@ -24,11 +24,8 @@ public class PreviewVideo {
         this.ip = ip;
         this.port = port;
         this.sourcePort = sourcePort;
-
-        Realm.init(null);
-        Realm realm = Realm.getInstance(new RealmConfiguration.Builder().build());
-        Chairman host = realm.copyToRealm(new Chairman());
     }
+
     public Port getSourcePort() {
         return sourcePort;
     }

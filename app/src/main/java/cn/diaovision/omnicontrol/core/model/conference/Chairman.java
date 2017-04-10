@@ -9,8 +9,7 @@ import io.realm.annotations.RealmClass;
  * Created by liulingfeng on 2017/4/4.
  */
 
-@RealmClass
-public class Chairman implements RealmModel{
+public class Chairman {
     String ip;
     int port;
     String name;
