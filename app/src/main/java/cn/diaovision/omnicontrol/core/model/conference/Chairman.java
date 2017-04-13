@@ -14,25 +14,24 @@ public class Chairman {
     int port;
     String name;
 
-    Map<String, LiveConf> meetingList;
+    Map<String, LiveConf> confList;
 
 
-    public void invite(Attend attend){
+    public void invite(Term term){
     }
 
-    public void kickoff(Attend attend){
+    public void kickoff(Term term){
     }
 
-    public void mute(Attend attend){
+    public void mute(Term term){
     }
 
-    public void unmute(Attend attend){
+    public void unmute(Term term){
     }
 
-    public void start(LiveConf meeting){
+    public void start(LiveConf conf){
     }
 
-    public void stop(LiveConf meeting){
+    public void stop(LiveConf conf){
     }
-
 }

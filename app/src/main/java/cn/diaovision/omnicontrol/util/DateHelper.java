@@ -6,11 +6,24 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
+/* A simple datehelper for building & converting date from & to strings
  * Created by liulingfeng on 2017/4/11.
  */
 
 public class DateHelper {
+    static private DateHelper instance;
+
+    private DateHelper(){
+
+    }
+
+    static public DateHelper getInstance(){
+        if (instance == null) {
+            instance = new DateHelper();
+        }
+        return instance;
+    }
+
     public Date buildDate(String dateStr){
         DateFormat format = new SimpleDateFormat("yyyy-mm-dd-hh-mm");
         try {

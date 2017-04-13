@@ -1,5 +1,8 @@
 package cn.diaovision.omnicontrol.util;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 /**
  * Created by liulingfeng on 2017/3/21.
  */
@@ -26,5 +29,17 @@ public class ByteUtils {
             val += bytes[offset+len-m-1] << (8*m);
         }
         return val;
+    }
+
+    public static int ip2num(String ip){
+        try {
+            InetAddress address = InetAddress.getByName(ip);
+            byte[] bytes = address.getAddress();
+            return ByteUtils.bytes2int(bytes, 0, 4);
+
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 }

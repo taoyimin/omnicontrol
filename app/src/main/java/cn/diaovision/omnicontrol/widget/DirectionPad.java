@@ -155,7 +155,6 @@ public class DirectionPad extends RelativeLayout {
                         preY = 0;
                         handler.setTranslationX(0);
                         handler.setTranslationY(0);
-//                        Log.i("A", "UI touch ended");
                         break;
                 }
                 return false;
@@ -193,7 +192,6 @@ public class DirectionPad extends RelativeLayout {
     int getDirection(float dx, float dy){
         float cx = w/2;
         float cy = h/2;
-        float radi = Math.min(cx, cy);
 
         float ddx = dx - cx;
         float ddy = cy - dy;
@@ -210,7 +208,6 @@ public class DirectionPad extends RelativeLayout {
         int[] velo = new int[2];
         float cx = w/2;
         float cy = h/2;
-        float radi = Math.min(cx, cy);
 
         float ddx = dx - cx;
         float ddy = cy - dy;
