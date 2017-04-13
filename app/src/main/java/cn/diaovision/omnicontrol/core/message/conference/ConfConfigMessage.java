@@ -64,7 +64,7 @@ public class ConfConfigMessage implements BaseMessage, Serializable {
     byte continuousMode; //1 byte, 四画面模式0:普通四画面1:主席四画面
 
     int termAttrNum; //2 bytes, termattr数量
-    Term.Attr[] termAttrs; //maximal 256
+    TermAttr[] termAttrs; //maximal 256
 
     //dual stream attrs
     byte dsVideoMode; //1 byte, 双流媒体格式：0:动态双流;1:高清双流;other:DisableDuoVideo
@@ -73,8 +73,13 @@ public class ConfConfigMessage implements BaseMessage, Serializable {
     byte dsStatus; //1 byte, 双流状态，1：已启动，0：停止，
     byte dsReserved; //1 byte, 保留字节
 
-    int[] BandwithMulti;	//会议的三种带宽
+    int[] bandwithMulti;	//会议的三种带宽
 
+
+    public ConfConfigMessage() {
+        bandwithMulti = new int[3];
+        termAttrs = new TermAttr[256];
+    }
 
     /*deep copy of template to confConfig*/
     static public ConfConfigMessage copyFrom(ConfConfigMessage t){
@@ -136,6 +141,13 @@ public class ConfConfigMessage implements BaseMessage, Serializable {
     public int calcMessageLength() {
         return 2785;
 //            return 32+64+2+1+2*2+1*4+2+1*4+2+1*4+32+2+1+1+4+2*2+4+1*4+4*2+1*2+x*256+1*4+2*3
+    }
+
+    static public class TermAttr{
+        int id; //2 bytes
+        int type;  //2 bytes
+        long addr; //4 bytes
+        int bandwidth; //2 bytes
     }
 }
 

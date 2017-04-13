@@ -2,6 +2,8 @@ package cn.diaovision.omnicontrol.core.model.conference;
 
 import java.net.Socket;
 
+import cn.diaovision.omnicontrol.core.message.conference.ConfConfigMessage;
+
 /**
  * Created by liulingfeng on 2017/4/5.
  */
@@ -17,8 +19,12 @@ public class Mcu {
     int termNum;
     Socket skt;
 
-    LiveConf.Config confConfigTemplate;
-    LiveConf.Config confConfig;
+    ConfConfigMessage confConfigTemplate;
+    ConfConfigMessage confConfig;
 
-    LiveConf[] conf;
+    LiveConf[] conf; //32
+
+    public Mcu(){
+        conf = new LiveConf[32];
+    }
 }

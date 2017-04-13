@@ -9,13 +9,11 @@ import io.realm.annotations.RealmClass;
  * Created by liulingfeng on 2017/4/4.
  */
 
-public class Chairman {
+public class Chair {
     String ip;
-    int port;
     String name;
-
-    Map<String, LiveConf> confList;
-
+    Term term; //哪一个term是主席
+    Mcu mcu;
 
     public void invite(Term term){
     }

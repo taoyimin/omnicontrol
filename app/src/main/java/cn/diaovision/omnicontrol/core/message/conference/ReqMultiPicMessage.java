@@ -12,7 +12,12 @@ public class ReqMultiPicMessage{
     int roundNum; //轮巡终端数
     int roundInterval; //轮巡间隔（秒数)，为0则表示不轮巡
     long termCount; //终端数
-    byte[] group; //组号
+    byte[] group; //组号, 32 bytes
     long[] termId; //终端ID, 32 bytes
+
+    public ReqMultiPicMessage(){
+        group = new byte[32];
+        termId = new long[32];
+    }
 };
 

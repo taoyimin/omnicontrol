@@ -35,11 +35,14 @@ public class TermConfigMessage implements BaseMessage, Serializable {
 
     byte chair;			//0:正常 1:主席
     byte floor;			//0:正常 1:申请主席
-    //byte[] reserved;     //保留
+    byte[] reserved;     //保留, 4 bytes
     byte termType;       //0--呼入  1--呼出  2--呼入呼出
     int bandwidth;	        //终端带宽
 
 
+    public TermConfigMessage(){
+        reserved = new byte[4];
+    }
     /*deep copy of template to termconfig*/
     static public TermConfigMessage copyFrom(TermConfigMessage t){
         try {

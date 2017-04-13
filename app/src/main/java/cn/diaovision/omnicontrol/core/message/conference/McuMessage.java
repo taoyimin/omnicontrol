@@ -16,7 +16,6 @@ import cn.diaovision.omnicontrol.util.DateHelper;
  * 3. long stores 4 bytes data
  * 4. String stores byte array (size specified in toBytes())
  * Created by liulingfeng on 2017/2/22.
- * TODO: create seperate Message class files in package conference
  ****************************************************************/
 
 public class McuMessage {
@@ -27,21 +26,21 @@ public class McuMessage {
     public final static byte TYPE_CREATE_CONF = 3;
     public final static byte TYPE_INVITE_TERM = 4;
     public final static byte TYPE_USER = 5; //login
-    public final static byte TYPE_ADD_CONF = 6;
+    public final static byte TYPE_ADD_CONF = 6; //not used
     public final static byte TYPE_ADD_TERM = 7;
-    public final static byte TYPE_ADD_ADDRBOOK = 8;
-    public final static byte TYPE_DEL_ADDRBOOK = 9;
+    public final static byte TYPE_ADD_ADDRBOOK = 8; //not used
+    public final static byte TYPE_DEL_ADDRBOOK = 9; //not used
     public final static byte TYPE_VER_INFO = 10;
     public final static byte TYPE_SPEAKER = 11; //发言
     public final static byte TYPE_CONFIG = 12;
     public final static byte TYPE_UPGRAGE_MSG = 13;
     public final static byte TYPE_UPGRAGE_MSG_RSP = 14;
     public final static byte TYPE_CHAIRUSER = 0x25;
-    public final static byte TYPE_MCMPINFO = 15;
+    public final static byte TYPE_MCMPINFO = 15; //not used
     //远遥，摄像头远程控制，Added by jinyuhe,2010.12.24
-    public final static byte TYPE_REMOTECTRL = 20;
+    public final static byte TYPE_REMOTECTRL = 20; //not used
     //注册请求，提交注册码(license)，Added by jinyuhe,2011.3.21
-    public final static byte TYPE_REGISTER = 21;
+    public final static byte TYPE_REGISTER = 21; //not used
     //流媒体操作请求，Added by jinyuhe,2011.4.19
     public final static byte TYPE_STREAMMEDIA = 22;
     //终端控制请求，Added by jinyuhe,2011.8.4
