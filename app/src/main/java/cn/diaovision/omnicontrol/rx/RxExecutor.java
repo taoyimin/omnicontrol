@@ -1,6 +1,11 @@
 package cn.diaovision.omnicontrol.rx;
 
+import org.reactivestreams.Subscriber;
+
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
@@ -31,6 +36,7 @@ public class RxExecutor {
         return instance;
     }
 
+    /*a simple rx call with consumer*/
     public void post(final RxReq req, Consumer consumer, int subsribeOn, int observeOn){
         Flowable.just("")
                 .map(new Function<Object, Object>() {
@@ -43,6 +49,23 @@ public class RxExecutor {
                 .subscribeOn(getScheduler(subsribeOn))
                 .observeOn(getScheduler(observeOn))
                 .subscribe(consumer);
+    }
+
+
+    /*a standard rx call: with subscriber*/
+    public void post(final RxReq req, Subscriber subscriber, int subsribeOn, int observeOn){
+        Flowable.create(new FlowableOnSubscribe<Object>() {
+            @Override
+            public void subscribe(FlowableEmitter<Object> e) throws Exception {
+                RxMessage res = req.request();
+                if (res == null){
+                    e.onError(new RuntimeException());
+                }
+                e.onNext(res);
+            }
+        }, BackpressureStrategy.BUFFER)
+                .subscribeOn(getScheduler(subsribeOn))
+                .observeOn(getScheduler(observeOn));
     }
 
     private Scheduler getScheduler(int type){

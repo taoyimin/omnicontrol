@@ -14,11 +14,11 @@ import cn.diaovision.omnicontrol.util.DateHelper;
  * 1. byte stores 1 byte data
  * 2. int stores 2 bytes data
  * 3. long stores 4 bytes data
- * 4. String stores byte array (size specified in toBytes())
+ * 4. String stores byte array (size specified in constructor)
  * Created by liulingfeng on 2017/2/22.
  ****************************************************************/
 
-public class McuMessage {
+public class McuMessage implements BaseMessage{
     public final static byte VERSION = 0x01;
 
     public final static byte TYPE_REQ = 1;
@@ -57,19 +57,58 @@ public class McuMessage {
     public final static byte TYPE_RES_CANCELFLOOR = 0x6C; //取消发言
     //Ended
 
+    //定义发给WEB页面的错误字
+    public final static int ERROR_WEB_CONF_ID = 0x1000; //会议ID错误
+    public final static int ERROR_WEB_ACCESS = 0x1003;	//权限
+    public final static int ERROR_WEB_LOGIN = 0x1004;	//登录
+    public final static int ERROR_WEB_CONF_NUM = 0x1006; //会议超过最大数
+    public final static int ERROR_WEB_TERM_NUM = 0x1007; //终端超过最大数
+    public final static int ERROR_WEB_CONF_NAME = 0x1008; //会议重名
+    public final static int ERROR_WEB_TERM_NAME = 0x1009; //终端重名
+    public final static int ERROR_WEB_USER_NAME = 0x100a;	//该用户存在
+    public final static int ERROR_WEB_USER_NO = 0x100b;//没有找到此用户
+    public final static int ERROR_WEB_CONF_TIME = 0x100c;	//预约会议时间错误
+    public final static int ERROR_WEB_CONF_MIX = 0x100d;	//只能有一个媒体混合的会议
+    public final static int ERROR_WEB_DELDEF = 0x100e;	//不能删除默认会议
+    public final static int ERROR_WEB_CONF_STR = 0x100f;	//流媒体端口冲突
+    public final static int ERROR_WEB_TERM_ADDR = 0x1010;	//终端地址冲突
+    public final static int ERROR_WEB_TERM_NOTFOUND = 0x1011;	//终端没有找到
+    public final static int ERROR_WEB_INVALID_PASSWORD = 0x1012;	//密码不对
+
     private Header header;
     private byte[] payload;
+
+    private int type;
+    private int subtype;
 
     public McuMessage(Header header, byte[] payload) {
         this.header = header;
         this.payload = payload;
     }
 
+    public int getType(){
+        return header.type;
+    }
+
+    public int getSubtype() {
+        return subtype;
+    }
+
+    public void setSubtype(int subtype) {
+        this.subtype = subtype;
+    }
+
+    @Override
     public byte[] toBytes(){
         byte[] bytes = new byte[header.toBytes().length + payload.length];
         System.arraycopy(header, 0, bytes, 0, header.toBytes().length);
         System.arraycopy(payload.length, 0, bytes, header.toBytes().length, payload.length);
         return bytes;
+    }
+
+    @Override
+    public int calcMessageLength() {
+        return header.toBytes().length + payload.length;
     }
 
     static public McuMessage buildLogin(String name, String password){
@@ -280,7 +319,7 @@ public class McuMessage {
 
     /* **********************************
      * 请求参会者取消发言
-     * TODO: check format
+     * TODO: check message type
      * **********************************/
     static public McuMessage buildReqTermCancelSpeach(int confId, long termId){
         ReqMessage reqMessage = new ReqMessage(ReqMessage.CANCEL_FLOOR);
@@ -477,30 +516,6 @@ public class McuMessage {
         public final static int TERMDATA = 4;
         public final static int USERLIST = 5;
     }
-
-    /*******************************************************************
-     * 各个信息体结构
-     *******************************************************************/
-
-
-
-
-    /* ********************
-     * 终端信息
-     * ********************/
-    static public class TermInfoMessage{
-        byte termNum;
-        Term.Config[] termConfig; //maximum 256
-    }
-
-    /* ********************
-     * 会议信息
-     * ********************/
-    static public class ConfInfoMessage{
-        byte confNum;
-        LiveConf.Config[] confConfig; //maximum 32
-    }
-
 
 //            //Added by jinyuhe，2012.8.9
 //            //定义发给终端的主席功能申请应答结果字
