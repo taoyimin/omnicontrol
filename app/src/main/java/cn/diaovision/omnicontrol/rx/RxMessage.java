@@ -5,6 +5,10 @@ package cn.diaovision.omnicontrol.rx;
  */
 
 public class RxMessage {
+    //TODO: add what type for RxMessage
+    public static final int DONE = 1; //request is done
+    public static final int ACK = 2; //ack returned
+
     public String what;
     public String str;
     public int intVal;
