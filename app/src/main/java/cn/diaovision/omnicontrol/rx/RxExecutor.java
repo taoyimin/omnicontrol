@@ -36,8 +36,10 @@ public class RxExecutor {
         return instance;
     }
 
-    /*a simple rx call with consumer*/
-    public void post(final RxReq req, Consumer consumer, int subsribeOn, int observeOn){
+    /* **********************************
+     * a simple async post work without subscriber
+     * **********************************/
+    public void post(final RxReq req, int subscribeOn){
         Flowable.just("")
                 .map(new Function<Object, Object>() {
                     @Override
@@ -46,13 +48,30 @@ public class RxExecutor {
                         return res;
                     }
                 })
-                .subscribeOn(getScheduler(subsribeOn))
+                .subscribeOn(getScheduler(subscribeOn));
+    }
+
+    /* **********************************
+     * a simple rx call with consumer
+     * **********************************/
+    public void post(final RxReq req, Consumer consumer, int subscribeOn, int observeOn){
+        Flowable.just("")
+                .map(new Function<Object, Object>() {
+                    @Override
+                    public Object apply(Object o) throws Exception {
+                        RxMessage res = req.request();
+                        return res;
+                    }
+                })
+                .subscribeOn(getScheduler(subscribeOn))
                 .observeOn(getScheduler(observeOn))
                 .subscribe(consumer);
     }
 
 
-    /*a standard rx call: with subscriber*/
+    /* **********************************
+     * a standard rx call: with subscriber
+     * **********************************/
     public void post(final RxReq req, Subscriber subscriber, int subsribeOn, int observeOn){
         Flowable.create(new FlowableOnSubscribe<Object>() {
             @Override
@@ -64,6 +83,25 @@ public class RxExecutor {
                 e.onNext(res);
             }
         }, BackpressureStrategy.BUFFER)
+                .subscribeOn(getScheduler(subsribeOn))
+                .observeOn(getScheduler(observeOn))
+        .subscribe(subscriber);
+    }
+
+
+    /* **********************************
+     * build a flowable
+     * @return: a flowable to subscribe
+     * **********************************/
+    public Flowable<RxMessage> buildFlow(final RxReq req, int subsribeOn, int observeOn){
+        return Flowable.just("")
+                .map(new Function<String, RxMessage>() {
+                    @Override
+                    public RxMessage apply(String s) throws Exception {
+                        RxMessage res = req.request();
+                        return res;
+                    }
+                })
                 .subscribeOn(getScheduler(subsribeOn))
                 .observeOn(getScheduler(observeOn));
     }
