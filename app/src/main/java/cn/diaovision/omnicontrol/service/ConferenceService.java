@@ -5,16 +5,11 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 
 import cn.diaovision.omnicontrol.conn.TcpClient;
@@ -39,35 +34,21 @@ public class ConferenceService extends Service {
         sendMsgList = new ArrayList<>();
         tcpClient = new TcpClient("192.168.2.1", 6000);
 
+
         RxExecutor.getInstance().post(new RxReq() {
             @Override
             public RxMessage request() {
                 try {
                     tcpClient.connect();
-                    return null;
+                    return new RxMessage("DONE");
                 } catch (IOException e) {
                     e.printStackTrace();
                     return null;
                 }
             }
-        }, new Subscriber() {
+        }, new Consumer() {
             @Override
-            public void onSubscribe(Subscription s) {
-
-            }
-
-            @Override
-            public void onNext(Object o) {
-
-            }
-
-            @Override
-            public void onError(Throwable t) {
-
-            }
-
-            @Override
-            public void onComplete() {
+            public void accept(Object o) throws Exception {
 
             }
         }, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN);
@@ -86,8 +67,24 @@ public class ConferenceService extends Service {
             this.sendMsgList = new ArrayBlockingQueue<McuMessage>(20);
         }
 
-        public Consumer send(McuMessage msg){
-            RxExecutor.getInstance().
+        public void send(final McuMessage msg){
+            Consumer consumer = new Consumer() {
+                @Override
+                public void accept(Object o) throws Exception {
+                }
+            };
+
+            RxExecutor.getInstance().post(new RxReq() {
+                @Override
+                public RxMessage request() {
+                    int res = tcpClient.sendSync(msg.toBytes());
+                    return new RxMessage("SEND", res);
+                }
+            }, new Consumer() {
+                @Override
+                public void accept(Object o) throws Exception {
+                }
+            }, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN);
         }
 
         @Override
