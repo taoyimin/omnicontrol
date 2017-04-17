@@ -145,7 +145,7 @@ public class PortRadioGroupView extends RecyclerView {
         return portList;
     }
 
-    public void setPortList(List<Port> portList) {
+    public void    setPortList(List<Port> portList) {
         this.portList = portList;
     }
 

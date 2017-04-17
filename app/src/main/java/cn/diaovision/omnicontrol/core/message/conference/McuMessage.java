@@ -1,10 +1,12 @@
 package cn.diaovision.omnicontrol.core.message.conference;
 
+import java.nio.BufferUnderflowException;
 import java.util.Date;
 import java.util.List;
 
 import cn.diaovision.omnicontrol.core.model.conference.LiveConf;
 import cn.diaovision.omnicontrol.core.model.conference.Term;
+import cn.diaovision.omnicontrol.util.ByteBuffer;
 import cn.diaovision.omnicontrol.util.ByteUtils;
 import cn.diaovision.omnicontrol.util.DateHelper;
 
@@ -77,9 +79,15 @@ public class McuMessage implements BaseMessage{
 
     private Header header;
     private byte[] payload;
+    private BaseMessage submsg;
 
     private int type;
     private int subtype;
+
+    public McuMessage(Header header, BaseMessage msg) {
+        this.header = header;
+        this.submsg = msg;
+    }
 
     public McuMessage(Header header, byte[] payload) {
         this.header = header;
@@ -92,10 +100,6 @@ public class McuMessage implements BaseMessage{
 
     public int getSubtype() {
         return subtype;
-    }
-
-    public void setSubtype(int subtype) {
-        this.subtype = subtype;
     }
 
     @Override
@@ -506,7 +510,16 @@ public class McuMessage implements BaseMessage{
 //            return new McuMessage(buildHeader(0, VERSION, REQ_CONF), new byte[0]).toBytes();
 //    }
 
+    static public McuMessage parse(ByteBuffer buffer){
+        byte[] header = new byte[4];
+        try {
+            buffer.read(header, 4);
+        } catch( BufferUnderflowException e){
+            return null;
+        }
 
+        return null;
+    }
 
     /*TODO: check if this is used*/
     static public class ResInfoMessage{

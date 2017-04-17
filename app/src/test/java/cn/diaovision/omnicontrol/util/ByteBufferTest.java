@@ -9,6 +9,36 @@ import static org.junit.Assert.*;
  */
 public class ByteBufferTest {
     @Test
+    public void push1() throws Exception {
+
+    }
+
+    @Test
+    public void read1() throws Exception {
+
+    }
+
+    @Test
+    public void pop1() throws Exception {
+
+    }
+
+    @Test
+    public void flush1() throws Exception {
+
+    }
+
+    @Test
+    public void reset1() throws Exception {
+
+    }
+
+    @Test
+    public void getContentLen1() throws Exception {
+
+    }
+
+    @Test
     public void push() throws Exception {
         ByteBuffer byteBuff = new ByteBuffer(10);
 

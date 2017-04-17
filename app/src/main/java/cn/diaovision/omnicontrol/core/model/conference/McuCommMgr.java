@@ -41,7 +41,9 @@ public class McuCommMgr {
     BaseCyclicThread checkConnectThread;
 
 
-    public McuCommMgr(){
+    public McuCommMgr(String ip, int port){
+        client = new TcpClient(ip, port);
+
         txQueue = new ArrayBlockingQueue<Pair<McuMessage, Consumer>>(10);
         txSendList = new ArrayList<>();
 
@@ -100,13 +102,15 @@ public class McuCommMgr {
 
 
     private void threadStart(){
-        if (sendThread == null || recvThread == null || pulseThread == null){
+        if (sendThread == null || recvThread == null || pulseThread == null || checkConnectThread == null){
             threadInit();
         }
 
         sendThread.start();
         recvThread.start();
         pulseThread.start();
+
+        checkConnectThread.start();
     }
 
     private void threadStop(){
@@ -118,6 +122,8 @@ public class McuCommMgr {
         sendThread.quit();
         recvThread.quit();
         pulseThread.quit();
+
+        checkConnectThread.quit();
 
     }
 
