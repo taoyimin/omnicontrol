@@ -6,6 +6,7 @@ import java.util.List;
 
 import cn.diaovision.omnicontrol.core.model.conference.LiveConf;
 import cn.diaovision.omnicontrol.core.model.conference.Term;
+import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.util.ByteBuffer;
 import cn.diaovision.omnicontrol.util.ByteUtils;
 import cn.diaovision.omnicontrol.util.DateHelper;
@@ -78,20 +79,14 @@ public class McuMessage implements BaseMessage{
     public final static int ERROR_WEB_INVALID_PASSWORD = 0x1012;	//密码不对
 
     private Header header;
-    private byte[] payload;
     private BaseMessage submsg;
 
     private int type;
-    private int subtype;
 
-    public McuMessage(Header header, BaseMessage msg) {
+    public McuMessage(Header header, BaseMessage submsg) {
         this.header = header;
-        this.submsg = msg;
-    }
-
-    public McuMessage(Header header, byte[] payload) {
-        this.header = header;
-        this.payload = payload;
+        this.submsg = submsg;
+        this.type = header.type;
     }
 
     public int getType(){
@@ -99,11 +94,25 @@ public class McuMessage implements BaseMessage{
     }
 
     public int getSubtype() {
-        return subtype;
+        switch (type){
+            case TYPE_REQ:
+                return ((ReqMessage) submsg).type;
+            case TYPE_USER:
+                return ((UserMessage) submsg).type;
+            case TYPE_STREAMMEDIA:
+                return ((StreamMediaMessage) submsg).type;
+            case TYPE_CREATE_CONF:
+                return 0;
+            case TYPE_TERM_CTRL:
+                return 0;
+            default:
+                return 0;
+        }
     }
 
     @Override
     public byte[] toBytes(){
+        byte[] payload = submsg.toBytes();
         byte[] bytes = new byte[header.toBytes().length + payload.length];
         System.arraycopy(header, 0, bytes, 0, header.toBytes().length);
         System.arraycopy(payload.length, 0, bytes, header.toBytes().length, payload.length);
@@ -112,20 +121,24 @@ public class McuMessage implements BaseMessage{
 
     @Override
     public int calcMessageLength() {
-        return header.toBytes().length + payload.length;
+        return header.toBytes().length + submsg.toBytes().length;
     }
 
-    static public McuMessage buildLogin(String name, String password){
-        if (name.length() == 0 || password.length() == 0){
+    static public McuMessage buildLogin(String name, String passwd){
+        if (name.length() == 0 || passwd.length() == 0){
             return null;
         }
 
         byte[] payload = new byte[65];
         payload[0] = UserMessage.LOGIN;
-        System.arraycopy(name.getBytes(), 0, payload, 1, name.length() > 32 ? 32 : name.length());
-        System.arraycopy(password.getBytes(), 0, payload, 32, password.length() > 32 ? 32 : password.length());
+        UserMessage userMessage = new UserMessage();
+        userMessage.type = UserMessage.LOGIN;
+        userMessage.name = name;
+        userMessage.passwd = passwd;
+
         Header header = new Header(65, TYPE_USER);
-        return new McuMessage(header, payload);
+
+        return new McuMessage(header, userMessage);
     }
 
     /* **********************************
@@ -139,7 +152,7 @@ public class McuMessage implements BaseMessage{
 
         ReqMessage reqMsg = new ReqMessage(ReqMessage.REQ_CONF_ALL);
 
-        return new McuMessage(header, reqMsg.toBytes());
+        return new McuMessage(header, reqMsg);
     }
 
 
@@ -153,7 +166,7 @@ public class McuMessage implements BaseMessage{
         ReqMessage reqMsg = new ReqMessage(ReqMessage.REQ_CONF);
         reqMsg.confId = id;
 
-        return new McuMessage(header, reqMsg.toBytes());
+        return new McuMessage(header, reqMsg);
     }
 
 
@@ -166,7 +179,7 @@ public class McuMessage implements BaseMessage{
 
         ReqMessage reqMsg = new ReqMessage(ReqMessage.REQ_CONF_CONFIGED);
 
-        return new McuMessage(header, reqMsg.toBytes());
+        return new McuMessage(header, reqMsg);
     }
 
 
@@ -180,7 +193,7 @@ public class McuMessage implements BaseMessage{
         ReqMessage reqMsg = new ReqMessage(ReqMessage.REQ_TERM_ALL);
         reqMsg.confId = confId;
 
-        return new McuMessage(header, reqMsg.toBytes());
+        return new McuMessage(header, reqMsg);
     }
 
 
@@ -220,7 +233,7 @@ public class McuMessage implements BaseMessage{
         int payloadLen = confConfigMsg.calcMessageLength();
         Header header = new Header(payloadLen, TYPE_CREATE_CONF);
 
-        return new McuMessage(header, confConfigMsg.toBytes());
+        return new McuMessage(header, confConfigMsg);
     }
 
 //    /* **********************************
@@ -244,7 +257,7 @@ public class McuMessage implements BaseMessage{
         int payloadLen = reqMessage.calcMessageLength();
         Header header = new Header(payloadLen, TYPE_REQ);
 
-        return new McuMessage(header, reqMessage.toBytes());
+        return new McuMessage(header, reqMessage);
     }
 
     /* **********************************
@@ -262,7 +275,7 @@ public class McuMessage implements BaseMessage{
         int payloadLen = streamMediaMessage.calcMessageLength();
         Header header = new Header(payloadLen, TYPE_STREAMMEDIA);
 
-        return new McuMessage(header, streamMediaMessage.toBytes());
+        return new McuMessage(header, streamMediaMessage);
     }
 
     /* **********************************
@@ -273,7 +286,7 @@ public class McuMessage implements BaseMessage{
         reqMessage.confId =  confId;
         reqMessage.termId[0] = termId;
 
-        return new McuMessage(new Header(1, TYPE_REQ), reqMessage.toBytes());
+        return new McuMessage(new Header(1, TYPE_REQ), reqMessage);
     }
 
     /* **********************************
@@ -284,7 +297,7 @@ public class McuMessage implements BaseMessage{
         reqMessage.confId =  confId;
         reqMessage.termId[0] = termId;
 
-        return new McuMessage(new Header(1, TYPE_REQ), reqMessage.toBytes());
+        return new McuMessage(new Header(1, TYPE_REQ), reqMessage);
     }
 
 
@@ -296,7 +309,7 @@ public class McuMessage implements BaseMessage{
         reqMessage.confId =  confId;
         reqMessage.termId[0] = termId;
 
-        return new McuMessage(new Header(1, TYPE_REQ), reqMessage.toBytes());
+        return new McuMessage(new Header(1, TYPE_REQ), reqMessage);
     }
 
     /* **********************************
@@ -307,7 +320,7 @@ public class McuMessage implements BaseMessage{
         reqMessage.confId =  confId;
         reqMessage.termId[0] = termId;
 
-        return new McuMessage(new Header(1, TYPE_REQ), reqMessage.toBytes());
+        return new McuMessage(new Header(1, TYPE_REQ), reqMessage);
     }
 
     /* **********************************
@@ -318,7 +331,7 @@ public class McuMessage implements BaseMessage{
         reqMessage.confId =  confId;
         reqMessage.termId[0] = termId;
 
-        return new McuMessage(new Header(1, TYPE_REQ), reqMessage.toBytes());
+        return new McuMessage(new Header(1, TYPE_REQ), reqMessage);
     }
 
     /* **********************************
@@ -330,7 +343,7 @@ public class McuMessage implements BaseMessage{
         reqMessage.confId =  confId;
         reqMessage.termId[0] = termId;
 
-        return new McuMessage(new Header(1, TYPE_REQ), reqMessage.toBytes());
+        return new McuMessage(new Header(1, TYPE_REQ), reqMessage);
     }
 
 
@@ -346,7 +359,7 @@ public class McuMessage implements BaseMessage{
 
         int payloadLen = termCtrlMessage.calcMessageLength();
         Header header = new Header(payloadLen, TYPE_TERM_CTRL);
-        return new McuMessage(header, termCtrlMessage.toBytes());
+        return new McuMessage(header, termCtrlMessage);
     }
 
     /* **********************************
@@ -360,7 +373,7 @@ public class McuMessage implements BaseMessage{
 
         int payloadLen = termConfigMessage.calcMessageLength();
         Header header = new Header(payloadLen, TYPE_TERM_CTRL);
-        return new McuMessage(header, termConfigMessage.toBytes());
+        return new McuMessage(header, termConfigMessage);
     }
 
 
@@ -373,7 +386,7 @@ public class McuMessage implements BaseMessage{
         reqMessage.termId[0] = termId;
         int paylaodLen = reqMessage.calcMessageLength();
         Header header = new Header(paylaodLen, TYPE_REQ);
-        return new McuMessage(header, reqMessage.toBytes());
+        return new McuMessage(header, reqMessage);
     }
 
 
@@ -394,7 +407,7 @@ public class McuMessage implements BaseMessage{
         reqMessage.termId[0] = interval;
         int payloadLen = reqMessage.calcMessageLength();
         Header header = new Header(payloadLen, TYPE_REQ);
-        return new McuMessage(header, reqMessage.toBytes());
+        return new McuMessage(header, reqMessage);
     }
 
     /* **********************************
@@ -412,7 +425,7 @@ public class McuMessage implements BaseMessage{
 
         int payloadLen = reqMessage.calcMessageLength();
         Header header = new Header(payloadLen, TYPE_REQ);
-        return new McuMessage(header, reqMessage.toBytes());
+        return new McuMessage(header, reqMessage);
     }
 
     /* **********************************
@@ -435,7 +448,7 @@ public class McuMessage implements BaseMessage{
 
         int payloadLen = reqMessage.calcMessageLength();
         Header header = new Header(payloadLen, TYPE_REQ);
-        return new McuMessage(header, reqMessage.toBytes());
+        return new McuMessage(header, reqMessage);
     }
 
     /* **********************************
@@ -447,7 +460,7 @@ public class McuMessage implements BaseMessage{
 
         int payloadLen = reqMessage.calcMessageLength();
         Header header = new Header(payloadLen, TYPE_REQ);
-        return new McuMessage(header, reqMessage.toBytes());
+        return new McuMessage(header, reqMessage);
     }
 
 
@@ -462,7 +475,7 @@ public class McuMessage implements BaseMessage{
 
         int payloadLen = reqMessage.calcMessageLength();
         Header header = new Header(payloadLen, TYPE_REQ);
-        return new McuMessage(header, reqMessage.toBytes());
+        return new McuMessage(header, reqMessage);
     }
 
     public McuMessage buildReqConfVideoMix(int confId, List<Integer> termIdList){
@@ -482,7 +495,7 @@ public class McuMessage implements BaseMessage{
 
         int payloadLen = reqMessage.calcMessageLength();
         Header header = new Header(payloadLen, TYPE_REQ);
-        return new McuMessage(header, reqMessage.toBytes());
+        return new McuMessage(header, reqMessage);
     }
 
 
@@ -492,7 +505,7 @@ public class McuMessage implements BaseMessage{
 
         int payloadLen = reqMessage.calcMessageLength();
         Header header = new Header(payloadLen, TYPE_REQ);
-        return new McuMessage(header, reqMessage.toBytes());
+        return new McuMessage(header, reqMessage);
     }
 
     /* **********************************
