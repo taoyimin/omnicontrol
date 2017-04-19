@@ -2,6 +2,8 @@ package cn.diaovision.omnicontrol.rx;
 
 import org.reactivestreams.Subscriber;
 
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
@@ -37,7 +39,7 @@ public class RxExecutor {
     }
 
     /* **********************************
-     * a simple async post work without subscriber
+     * a simple post without subscriber / consumer
      * **********************************/
     public void post(final RxReq req, int subscribeOn){
         Flowable.just("")
@@ -72,7 +74,7 @@ public class RxExecutor {
     /* **********************************
      * a standard rx call: with subscriber
      * **********************************/
-    public void post(final RxReq req, Subscriber subscriber, int subsribeOn, int observeOn){
+    public void post(final RxReq req, RxSubscriber subscriber, int subsribeOn, int observeOn){
         Flowable.create(new FlowableOnSubscribe<Object>() {
             @Override
             public void subscribe(FlowableEmitter<Object> e) throws Exception {
@@ -102,6 +104,24 @@ public class RxExecutor {
                         return res;
                     }
                 })
+                .subscribeOn(getScheduler(subsribeOn))
+                .observeOn(getScheduler(observeOn));
+    }
+
+    /* **********************************
+     * build a flowable with timeout
+     * @return: a flowable to subscribe
+     * **********************************/
+    public Flowable<RxMessage> buildFlow(final RxReq req, int timeout, int subsribeOn, int observeOn){
+        return Flowable.just("")
+                .map(new Function<String, RxMessage>() {
+                    @Override
+                    public RxMessage apply(String s) throws Exception {
+                        RxMessage res = req.request();
+                        return res;
+                    }
+                })
+                .timeout(timeout, TimeUnit.MILLISECONDS)
                 .subscribeOn(getScheduler(subsribeOn))
                 .observeOn(getScheduler(observeOn));
     }
