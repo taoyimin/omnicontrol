@@ -129,8 +129,6 @@ public class McuMessage implements BaseMessage{
             return null;
         }
 
-        byte[] payload = new byte[65];
-        payload[0] = UserMessage.LOGIN;
         UserMessage userMessage = new UserMessage();
         userMessage.type = UserMessage.LOGIN;
         userMessage.name = name;
@@ -523,16 +521,101 @@ public class McuMessage implements BaseMessage{
 //            return new McuMessage(buildHeader(0, VERSION, REQ_CONF), new byte[0]).toBytes();
 //    }
 
+
+    public BaseMessage getSubmsg() {
+        return submsg;
+    }
+
+    public void setSubmsg(BaseMessage submsg) {
+        this.submsg = submsg;
+    }
+
+    public boolean requiresAck(){
+        if (getType() == TYPE_REQ && getSubtype() == ReqMessage.REQ_TERM_ALL)
+            return true;
+        else if (getType() == TYPE_REQ && getSubtype() == ReqMessage.REQ_CONF_ALL)
+            return true;
+        else if (getType() == TYPE_REQ && getSubtype() == ReqMessage.REQ_CONF)
+            return true;
+        else if (getType() == TYPE_REQ && getSubtype() == ReqMessage.REQ_CONF_CONFIGED)
+            return true;
+        else
+            return false;
+    }
+
     static public McuMessage parse(ByteBuffer buffer){
-        byte[] header = new byte[4];
-        try {
-            buffer.read(header, 4);
-        } catch( BufferUnderflowException e){
+        byte[] headerBytes = new byte[4];
+        byte[] msgBytes;
+
+        if (buffer.getContentLen() < 4){
             return null;
         }
 
+        buffer.read(headerBytes, 4);
+        if (headerBytes[2] != VERSION || headerBytes[3] != TYPE_RES){
+            //if msg format unmatched
+            buffer.pop(headerBytes, 1);
+            return null;
+        }
+
+        int msgLen = ByteUtils.bytes2int(headerBytes, 0, 2);
+
+        if (msgLen > buffer.getContentLen() - 4){
+            //if buffer is insufficient
+            return null;
+        }
+        else {
+            msgBytes = new byte[msgLen + 4];
+            buffer.read(msgBytes, msgLen + 4);
+            BaseMessage msg = null;
+            switch (msgBytes[4]){
+                case ResMessage.USER:
+                    msg = parseLogin(msgBytes);
+                    break;
+                case ResMessage.CONF_ALL:
+                    msg = parseConfAll(msgBytes);
+                    break;
+                case ResMessage.TERM_ALL:
+                    msg = parseTermAll(msgBytes);
+                    break;
+                case ResMessage.CONF:
+                    msg = parseConf(msgBytes);
+                    break;
+                case ResMessage.CONF_CONFIG:
+                    msg = parseConfConfig(msgBytes);
+                    break;
+            }
+            if (msg != null){
+                buffer.pop(msgBytes, msgLen+4);
+                Header header = new Header(msgLen, TYPE_RES);
+                return new McuMessage(header, msg);
+            }
+            else {
+                buffer.pop(headerBytes, 1);
+                return null;
+            }
+        }
+    }
+
+    static private UserMessage parseLogin(byte[] buffer){
+        return new UserMessage();
+    }
+
+    static private ConfInfoMessage parseConfAll(byte[] buffer){
         return null;
     }
+    static private ConfInfoMessage parseConf(byte[] buffer){
+        return null;
+    }
+
+    static private ConfConfigMessage parseConfConfig(byte[] buffer){
+        return null;
+    }
+
+    static private TermInfoMessage parseTermAll(byte[] buffer){
+        return null;
+    }
+
 
     /*TODO: check if this is used*/
     static public class ResInfoMessage{
