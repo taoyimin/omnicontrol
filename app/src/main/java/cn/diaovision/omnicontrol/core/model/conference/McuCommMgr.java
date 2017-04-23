@@ -2,14 +2,25 @@ package cn.diaovision.omnicontrol.core.model.conference;
 
 
 import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import cn.diaovision.omnicontrol.BaseCyclicThread;
 import cn.diaovision.omnicontrol.conn.TcpClient;
 import cn.diaovision.omnicontrol.core.message.conference.McuMessage;
+import cn.diaovision.omnicontrol.core.message.conference.ReqMessage;
+import cn.diaovision.omnicontrol.core.message.conference.ResMessage;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
@@ -20,7 +31,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
-/**
+/** MCU communication manager
  * Created by liulingfeng on 2017/4/17.
  */
 
@@ -28,11 +39,13 @@ public class McuCommMgr {
     private final static int RECV_BUFF_LEN = 65535; //buffer length for receiving
     private final static int ACK_TIMEOUT = 3000; //ACK timeout
     private final static int QUEUE_LEN = 10;
-    private final static int RX_TIMEOUT = 2000; //Rx timeout
+    private final static int COMM_TIMEOUT = 5000; //Rx timeout
 
     private BlockingQueue<McuBundle> txQueue;
 
-    private BlockingQueue<McuBundle> txSendWithAckQueue;
+    private LinkedList<McuBundle> ackList;
+    private ReentrantLock ackListLock;
+
     ByteBuffer recvBuff;
 
     TcpClient client;
@@ -46,25 +59,23 @@ public class McuCommMgr {
 
         txQueue = new ArrayBlockingQueue<>(QUEUE_LEN);
 
-        txSendWithAckQueue = new ArrayBlockingQueue<McuBundle>(QUEUE_LEN);
-
         recvBuff = new ByteBuffer(RECV_BUFF_LEN);
 
+        ackList = new LinkedList<>();
+        ackListLock = new ReentrantLock();
         threadInit();
     }
 
     /*
      * connect to mcu server
      */
-    public void connect(Subscriber subscriber){
-        Flowable flowable = RxExecutor.getInstance().buildFlow(new RxReq() {
+    public void connect(RxSubscriber subscriber){
+        RxExecutor.getInstance().post(new RxReq() {
             @Override
             public RxMessage request() {
                 client.connect();
                 if (client.getState() == TcpClient.STATE_CONNECTED) {
-
                     threadStart();
-
                     return new RxMessage(RxMessage.CONNECTED);
                 }
                 else if (client.getState() == TcpClient.STATE_DISCONNECTED){
@@ -74,11 +85,7 @@ public class McuCommMgr {
                     return new RxMessage(RxMessage.DISCONNECTED);
                 }
             }
-        }, 2000, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN);
-
-        if (subscriber != null) {
-            flowable.subscribe(subscriber);
-        }
+        }, subscriber, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN, 2000);
     }
 
     /* ***************************************************
@@ -96,14 +103,42 @@ public class McuCommMgr {
         threadStop();
     }
 
-    public void send(McuMessage msg, RxSubscriber subscriber){
-        McuBundle bundle = new McuBundle();
-        bundle.msg = msg;
-        bundle.subscriber = subscriber;
-        bundle.timeSend = System.currentTimeMillis();
+    public void send(final McuMessage msg, final RxSubscriber subscriber){
 
-        txQueue.add(bundle);
-        //return immediately, async called in consumer
+        Flowable.just("")
+                //send
+                .map(new Function<String, McuMessage>() {
+                    @Override
+                    public McuMessage apply(String s) throws Exception {
+                        int res = client.send(msg.toBytes());
+                        if (res > 0){
+                            return msg;
+                        }
+                        else {
+                            throw new IOException();
+                        }
+                    }
+                })
+                //wait ack
+                .map(new Function<McuMessage, RxMessage>() {
+                    @Override
+                    public RxMessage apply(McuMessage mcuMessage) throws Exception {
+                        if (!mcuMessage.requiresAck()){
+                            return new RxMessage(RxMessage.DONE);
+                        }
+                        while(true){
+                            McuMessage ackMsg = findAndPopAck((ReqMessage) mcuMessage.getSubmsg());
+                            if (ackMsg != null){
+                                return new RxMessage(RxMessage.ACK, ackMsg.getSubmsg());
+                            }
+                            Thread.sleep(20);
+                        }
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .timeout(5000, TimeUnit.MILLISECONDS)
+                .subscribe(subscriber);
     }
 
 
@@ -127,23 +162,34 @@ public class McuCommMgr {
     }
 
     private void threadStop(){
-
-        txQueue.clear();
-        txSendWithAckQueue.clear();
-        recvBuff.flush();
-
         for (BaseCyclicThread thread : threadList){
             thread.quit();
+        }
+        threadList.clear();
 
+        ackListLock.lock();
+        try {
+            ackList.clear();
+        }
+        finally {
+            ackListLock.unlock();
         }
 
-        threadList.clear();
+        recvBuff.flush();
     }
 
     private void threadInit(){
 
         txQueue.clear();
-        txSendWithAckQueue.clear();
+
+        ackListLock.lock();
+        try {
+            ackList.clear();
+        }
+        finally {
+            ackListLock.unlock();
+        }
+
         recvBuff.flush();
 
         threadStop();
@@ -165,47 +211,50 @@ public class McuCommMgr {
                 }
             }
         };
-
         threadList.add(checkConnectThread);
 
-         //send thread output message+consumer(callback) to socket
-        BaseCyclicThread sendThread = new BaseCyclicThread() {
-            @Override
-            public void work() {
-                try {
-                    final McuBundle bundle = txQueue.take();
-
-                    Flowable flowable = RxExecutor.getInstance().buildFlow(new RxReq() {
-                        @Override
-                        public RxMessage request() {
-                            int res = client.send(bundle.msg.toBytes());
-                            if (res > 0){
-                                bundle.timeSend = System.currentTimeMillis();
-                                try {
-                                    txSendWithAckQueue.put(bundle);
-                                    return new RxMessage(RxMessage.DONE, bundle.msg);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                    return null;
-                                }
-                            }
-                            else {
-                                return null;
-                            }
-                        }
-                    }, 2000, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN);
-
-                    if (bundle.subscriber != null){
-                        flowable.subscribe(bundle.subscriber);
-                    }
-
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        threadList.add(sendThread);
+//         //send thread output message+consumer(callback) to socket
+//        BaseCyclicThread sendThread = new BaseCyclicThread() {
+//            @Override
+//            public void work() {
+//                try {
+//                    final McuBundle bundle = txQueue.take();
+//
+//                    Flowable flowable = RxExecutor.getInstance().buildFlow(new RxReq() {
+//                        @Override
+//                        public RxMessage request() {
+//                            int res = client.send(bundle.msg.toBytes());
+//                            if (res > 0){
+//                                bundle.timeSend = System.currentTimeMillis();
+//
+//                                //lock list
+//                                txSendWithAckLock.lock();
+//                                try {
+//                                    txSendWithAckList.add(bundle);
+//                                }
+//                                finally {
+//                                    txSendWithAckLock.unlock();
+//                                }
+//
+//                                return new RxMessage(RxMessage.DONE, bundle.msg);
+//                            }
+//                            else {
+//                                return null;
+//                            }
+//                        }
+//                    }, 2000, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN);
+//
+//                    if (bundle.subscriber != null){
+//                        flowable.subscribe(bundle.subscriber);
+//                    }
+//
+//                    Thread.sleep(10);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        };
+//        threadList.add(sendThread);
 
         //client receive thread
         BaseCyclicThread recvThread = new BaseCyclicThread() {
@@ -220,25 +269,30 @@ public class McuCommMgr {
                 final McuMessage msg = McuMessage.parse(recvBuff);
 
                 if (msg != null) {
-                    //TODO: if is transitted message (from mcu)
-                    if (msg.getType() == McuMessage.TYPE_CHAIRUSER ){
+                    if (msg.getType() == McuMessage.TYPE_RES) {
+                        ackListLock.lock();
+                        try {
+                            McuBundle bundle = new McuBundle();
+                            bundle.msg = msg;
+                            bundle.timeRecv = System.currentTimeMillis();
+                            bundle.subscriber = null;
+                            ackList.add(bundle);
+                        } finally {
+                            ackListLock.unlock();
+                        }
+                    }
+                    else {
+                        //send other types of messages to listener
                         if (commListener != null){
                             commListener.onRecv(msg);
                         }
                     }
+                }
 
-
-                    //TODO: if is ACK message (Rx handling here)
-                    Flowable.just("")
-                            .map(new Function<String, RxMessage>() {
-                                @Override
-                                public RxMessage apply(String s) throws Exception {
-                                    int res = handleMessage(msg);
-                                    return new RxMessage(RxMessage.ACK, msg);
-                                }
-                            })
-                            .subscribeOn(Schedulers.newThread())
-                            .observeOn(AndroidSchedulers.mainThread());
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
         };
@@ -253,8 +307,14 @@ public class McuCommMgr {
                     McuBundle bundle = new McuBundle();
                     bundle.msg = McuMessage.buildLogin("term", "123456");
                     bundle.subscriber = null;
-                    bundle.timeSend = 0;
-                    txQueue.put(bundle);
+                    send(bundle.msg, new RxSubscriber() {
+                        @Override
+                        public void onRxResult(Object o) {
+                        }
+                        @Override
+                        public void onRxError(Throwable e) {
+                        }
+                    });
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -262,14 +322,23 @@ public class McuCommMgr {
         };
         threadList.add(pulseThread);
 
+        //dieout recv ack messages
         BaseCyclicThread msgDieoutThread = new BaseCyclicThread() {
             @Override
-            public void work() {
+            public void work(){
+
+                ackListLock.lock();
                 try {
-                McuBundle bundle = txSendWithAckQueue.peek();
-                    if (System.currentTimeMillis() - bundle.timeSend > ACK_TIMEOUT) {
-                        txSendWithAckQueue.take();
+                    McuBundle bundle = ackList.getFirst();
+                    if (System.currentTimeMillis() - bundle.timeRecv > ACK_TIMEOUT) {
+                        ackList.removeFirst();
                     }
+                }
+                finally {
+                    ackListLock.unlock();
+                }
+
+                try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -280,16 +349,96 @@ public class McuCommMgr {
         threadList.add(msgDieoutThread);
     }
 
-    /******************************************************
-     * 消息处理主类型
-     * @param msg
-     * @return
-     */
-    public int handleMessage(McuMessage msg){
-        //如果是应答消息，应当去txWithAckList找对应的消息缓存，然后删除掉
-        //如果是转发消息，应当单独处理
-        return 0;
-   }
+    /* ************************************************************
+     *find ACK given the req message, and pop it from the list
+     * ************************************************************/
+    public McuMessage findAndPopAck(ReqMessage reqMsg){
+        McuBundle bundle = null;
+        ackListLock.lock();
+        try{
+            boolean foundReq = false;
+            int idx = -1;
+            for (int m = 0; m < ackList.size(); m ++){
+                McuBundle bb = ackList.get(m);
+                if (bb.msg.getSubtype() == ResMessage.CONF_ALL && reqMsg.getType() == ReqMessage.REQ_CONF_ALL) {
+                    foundReq = true;
+                    idx = m;
+                    break;
+                }
+                else if (bb.msg.getSubtype() == ResMessage.CONF && reqMsg.getType() == ReqMessage.REQ_CONF) {
+                    foundReq = true;
+                    idx = m;
+                    break;
+                }
+                else if (bb.msg.getSubtype() == ResMessage.TERM_ALL && reqMsg.getType() == ReqMessage.REQ_TERM_ALL) {
+                    foundReq = true;
+                    idx = m;
+                    break;
+                }
+                else if (bb.msg.getSubtype() == ResMessage.CONF_CONFIG && reqMsg.getType() == ReqMessage.REQ_CONF_CONFIGED) {
+                    foundReq = true;
+                    idx = m;
+                    break;
+                }
+
+            }
+
+            if (foundReq && idx > 0) {
+                bundle = ackList.get(idx);
+                ackList.remove(idx);
+            }
+        }
+        finally {
+            ackListLock.unlock();
+        }
+
+        return bundle.msg;
+    }
+
+//    /* ************************************************************
+//     *find request given the ACK message, and pop it from the list
+//     * ************************************************************/
+//    public McuBundle findAndPopRequest(ResMessage resMessage){
+//        McuBundle bundle = null;
+//        txSendWithAckLock.lock();
+//        try{
+//            boolean foundReq = false;
+//            int idx = -1;
+//
+//            for (int m = 0; m < txSendWithAckList.size(); m ++){
+//                McuBundle bb = txSendWithAckList.get(m);
+//                if (resMessage.type == ResMessage.CONF_ALL && bb.msg.getSubtype() == ReqMessage.REQ_CONF_ALL) {
+//                    foundReq = true;
+//                    idx = m;
+//                    break;
+//                }
+//                else if (resMessage.type == ResMessage.CONF && bb.msg.getSubtype() == ReqMessage.REQ_CONF){
+//                    foundReq = true;
+//                    idx = m;
+//                    break;
+//                }
+//                else if (resMessage.type == ResMessage.TERM_ALL && bb.msg.getSubtype() == ReqMessage.REQ_TERM_ALL){
+//                    foundReq = true;
+//                    idx = m;
+//                    break;
+//                }
+//                else if (resMessage.type == ResMessage.CONF_CONFIG && bb.msg.getSubtype() == ReqMessage.REQ_CONF_CONFIGED){
+//                    foundReq = true;
+//                    idx = m;
+//                    break;
+//                }
+//            }
+//
+//            if (foundReq && idx > 0) {
+//                bundle = txSendWithAckList.get(idx);
+//                txSendWithAckList.remove(idx);
+//            }
+//        }
+//        finally {
+//            txSendWithAckLock.unlock();
+//        }
+//        return bundle;
+//    }
 
     public void setCommListener(CommListener listener) {
         this.commListener = listener;
@@ -309,7 +458,7 @@ public class McuCommMgr {
     }
 
     private class McuBundle{
-        long timeSend;
+        long timeRecv;
         McuMessage msg;
         RxSubscriber subscriber;
     }
