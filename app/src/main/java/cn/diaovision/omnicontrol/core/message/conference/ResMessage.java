@@ -37,10 +37,10 @@ public class ResMessage{
     //30.创建会议响应		31.邀请终端响应
     //32.用户登录响应		33.获取用户列表响应
     //34.添加会议响应		35.添加终端响应
-    int type;
+    public int type;
 
-    byte status; //响应状态 1 == 成功 0 == 失败
-    int error; //错误字(包含失败的原因)	在添加会议成功时此位代表会议ID
+    public byte status; //响应状态 1 == 成功 0 == 失败
+    public int error; //错误字(包含失败的原因)	在添加会议成功时此位代表会议ID
 
     // 响应包含的信息 0 == NULL 1 == ConfInfo 2== TermInfo
     // 3 ==ConfData  4==TermData
