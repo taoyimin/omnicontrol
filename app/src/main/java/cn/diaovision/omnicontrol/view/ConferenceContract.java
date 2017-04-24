@@ -15,5 +15,6 @@ public interface ConferenceContract {
     }
 
     interface Presenter extends BasePresenter{
+        boolean login(String name, String passwd);
     }
 }

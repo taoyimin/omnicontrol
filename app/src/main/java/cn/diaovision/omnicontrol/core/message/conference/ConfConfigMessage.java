@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Date;
 
 import cn.diaovision.omnicontrol.core.model.conference.Term;
 import cn.diaovision.omnicontrol.util.ByteUtils;
+import cn.diaovision.omnicontrol.util.DateHelper;
 
 /**
  * Created by liulingfeng on 2017/4/13.
@@ -79,6 +81,20 @@ public class ConfConfigMessage implements BaseMessage, Serializable {
     public ConfConfigMessage() {
         bandwithMulti = new int[3];
         termAttrs = new TermAttr[256];
+    }
+
+    public void setDate(Date startTime, Date endTime){
+        startYear = DateHelper.getInstance().getYear(startTime);
+        startMonth = (byte) (DateHelper.getInstance().getMonth(startTime) & 0xff);
+        startDay = (byte) (DateHelper.getInstance().getMonth(startTime) & 0xff);
+        startHour = (byte) (DateHelper.getInstance().getHour(startTime) & 0xff);
+        startMin = (byte) (DateHelper.getInstance().getMin(startTime) & 0xff);
+
+        endYear = DateHelper.getInstance().getYear(endTime);
+        endMonth = (byte) (DateHelper.getInstance().getMonth(endTime) & 0xff);
+        endDay = (byte) (DateHelper.getInstance().getMonth(endTime) & 0xff);
+        endHour = (byte) (DateHelper.getInstance().getHour(endTime) & 0xff);
+        endMin = (byte) (DateHelper.getInstance().getMin(endTime) & 0xff);
     }
 
     /*deep copy of template to confConfig*/
@@ -251,6 +267,14 @@ public class ConfConfigMessage implements BaseMessage, Serializable {
         int type;  //2 bytes
         long addr; //4 bytes
         int bandwidth; //2 bytes
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
 

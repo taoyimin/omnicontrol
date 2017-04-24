@@ -30,4 +30,12 @@ public class ConfInfoMessage implements BaseMessage{
     public int calcMessageLength() {
         return 1 + 32*confConfig[0].calcMessageLength();
     }
+
+    public byte getConfNum() {
+        return confNum;
+    }
+
+    public ConfConfigMessage[] getConfConfig() {
+        return confConfig;
+    }
 }

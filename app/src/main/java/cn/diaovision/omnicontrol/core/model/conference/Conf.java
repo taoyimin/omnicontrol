@@ -1,17 +1,21 @@
 package cn.diaovision.omnicontrol.core.model.conference;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import cn.diaovision.omnicontrol.core.message.conference.ConfConfigMessage;
+import cn.diaovision.omnicontrol.model.Config;
+import cn.diaovision.omnicontrol.rx.RxMessage;
+import cn.diaovision.omnicontrol.rx.RxSubscriber;
 
 /* Live meeting bean*
  * Created by liulingfeng on 2017/4/5.
  */
 
-public class LiveConf {
+public class Conf {
     byte confFlag; //会议召开标志
     byte speech; //MCU点名发言，1：点名发言，0：取消发言
     byte mixAudio;
@@ -21,7 +25,56 @@ public class LiveConf {
     ConfConfigMessage configTemplate;
     ConfConfigMessage config;
 
+    //application specific
     List<Term> termList;
+    Term chair;
+    Term selectView;
+
+
+    /*召开会议*/
+    public void create(Date start, Date stop){
+    }
+
+    /*邀请终端参见会议*/
+    public void invite(Term term){
+    }
+
+    /*踢出终端*/
+    public void hangup(Term term){
+    }
+
+
+    /*静音*/
+    public void mute(Term term){
+        if (!term.isMuted){
+            //TODO: unmute term
+        }
+    }
+
+    /*取消静音*/
+    public void unmute(Term term){
+        if (term.isMuted){
+            //TODO: unmute term
+        }
+    }
+
+    /*设置主席*/
+    public void chair(Term term){
+        if (term.type != Term.TYPE_CHAIR){
+            this.chair = term;
+        }
+    }
+
+    /*设置选看*/
+    public void selectview(Term term){
+        if (term.type!=Term.TYPE_SELECTVIEW){
+        }
+    }
+
+    public interface ConfListener{
+        void onTermInvited(Term term);
+        void onMcuConnectionChanged(int state);
+    }
 
 //    /*conference configs*/
 //    static public class Config{
