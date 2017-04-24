@@ -10,8 +10,8 @@ import org.reactivestreams.Subscription;
 
 public abstract class RxSubscriber<T> implements Subscriber<T>{
 
-    public abstract  void onRxResult(T t);
-    public abstract  void onRxError(Throwable e);
+    public abstract void onRxResult(T t);
+    public abstract void onRxError(Throwable e);
 
     @Override
     public void onSubscribe(Subscription s) {
