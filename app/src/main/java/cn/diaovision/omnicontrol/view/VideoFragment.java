@@ -2,25 +2,23 @@ package cn.diaovision.omnicontrol.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.R;
-import cn.diaovision.omnicontrol.conn.TcpClient;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
-import cn.diaovision.omnicontrol.BaseFragment;
-import cn.diaovision.omnicontrol.rx.RxBus;
 import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
+import cn.diaovision.omnicontrol.widget.adapter.AuxiliaryPanelItemAdapter;
 
 /**
  * Created by liulingfeng on 2017/2/24.
@@ -35,8 +33,11 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
     @BindView(R.id.output)
     PortRadioGroupView outputPorts;
 
-    @BindView(R.id.txt_output)
-    AppCompatTextView txtOutput;
+    @BindView(R.id.auxiliary)
+    RecyclerView auxiliary;
+
+/*    @BindView(R.id.txt_output)
+    AppCompatTextView txtOutput;*/
 
 
     /***********
@@ -111,6 +112,16 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
 
             }
         });
+
+        /*test code*/
+        List<String> list=new ArrayList<>();
+        for(int i=0;i<20;i++){
+            list.add("第"+i+"项");
+        }
+
+        AuxiliaryPanelItemAdapter adapter=new AuxiliaryPanelItemAdapter(list);
+        auxiliary.setAdapter(adapter);
+        auxiliary.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
 
