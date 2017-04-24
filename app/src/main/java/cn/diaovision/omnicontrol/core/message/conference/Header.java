@@ -1,6 +1,9 @@
 package cn.diaovision.omnicontrol.core.message.conference;
 
+import cn.diaovision.omnicontrol.util.ByteUtils;
+
 /**
+ * Header of MCUMessage
  * Created by liulingfeng on 2017/4/13.
  */
 
@@ -30,21 +33,20 @@ public class Header{
 
     public byte[] toBytes(){
         byte[] bytes = new byte[4]; //2+1+1
-        len += 4;
-        bytes[0] = (byte) ((len>>8) & 0xff);
-        bytes[1] = (byte) (len & 0xff);
+
+        //len += 4;
+
+        byte[] lenHex = ByteUtils.int2bytes(len, 2);
+        bytes[0] = lenHex[0];
+        bytes[1] = lenHex[1];
+
         bytes[2] = version;
         bytes[3] = type;
         return bytes;
     }
 
     public boolean verifyHeader(){
-        if (version == McuMessage.VERSION){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return version == McuMessage.VERSION;
     }
 }
 

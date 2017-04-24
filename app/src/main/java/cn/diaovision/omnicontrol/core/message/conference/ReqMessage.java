@@ -86,6 +86,10 @@ public class ReqMessage implements BaseMessage{
         termId = new long[100];
     }
 
+    public byte getType() {
+        return type;
+    }
+
     @Override
     public byte[] toBytes() {
         int msgLen = 403;

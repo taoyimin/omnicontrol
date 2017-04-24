@@ -91,6 +91,26 @@ public class RxExecutor {
     }
 
 
+    /* *****************************************************
+     * a standard rx call: with rxsubscriber and timeout
+     * *****************************************************/
+    public void post(final RxReq req, RxSubscriber subscriber, int subsribeOn, int observeOn, int timeout){
+        Flowable.create(new FlowableOnSubscribe<Object>() {
+            @Override
+            public void subscribe(FlowableEmitter<Object> e) throws Exception {
+                RxMessage res = req.request();
+                if (res == null){
+                    e.onError(new RuntimeException());
+                }
+                e.onNext(res);
+            }
+        }, BackpressureStrategy.BUFFER)
+                .subscribeOn(getScheduler(subsribeOn))
+                .observeOn(getScheduler(observeOn))
+                .timeout(timeout, TimeUnit.MILLISECONDS)
+        .subscribe(subscriber);
+    }
+
     /* **********************************
      * build a flowable
      * @return: a flowable to subscribe
