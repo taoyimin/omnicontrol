@@ -1,6 +1,7 @@
 package cn.diaovision.omnicontrol.core.message.conference;
 
 import java.nio.BufferUnderflowException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -60,23 +61,23 @@ public class McuMessage implements BaseMessage{
     public final static byte TYPE_RES_CANCELFLOOR = 0x6C; //取消发言
     //Ended
 
-    //定义发给WEB页面的错误字
-    public final static int ERROR_WEB_CONF_ID = 0x1000; //会议ID错误
-    public final static int ERROR_WEB_ACCESS = 0x1003;	//权限
-    public final static int ERROR_WEB_LOGIN = 0x1004;	//登录
-    public final static int ERROR_WEB_CONF_NUM = 0x1006; //会议超过最大数
-    public final static int ERROR_WEB_TERM_NUM = 0x1007; //终端超过最大数
-    public final static int ERROR_WEB_CONF_NAME = 0x1008; //会议重名
-    public final static int ERROR_WEB_TERM_NAME = 0x1009; //终端重名
-    public final static int ERROR_WEB_USER_NAME = 0x100a;	//该用户存在
-    public final static int ERROR_WEB_USER_NO = 0x100b;//没有找到此用户
-    public final static int ERROR_WEB_CONF_TIME = 0x100c;	//预约会议时间错误
-    public final static int ERROR_WEB_CONF_MIX = 0x100d;	//只能有一个媒体混合的会议
-    public final static int ERROR_WEB_DELDEF = 0x100e;	//不能删除默认会议
-    public final static int ERROR_WEB_CONF_STR = 0x100f;	//流媒体端口冲突
-    public final static int ERROR_WEB_TERM_ADDR = 0x1010;	//终端地址冲突
-    public final static int ERROR_WEB_TERM_NOTFOUND = 0x1011;	//终端没有找到
-    public final static int ERROR_WEB_INVALID_PASSWORD = 0x1012;	//密码不对
+//    //定义发给WEB页面的错误字
+//    public final static int ERROR_WEB_CONF_ID = 0x1000; //会议ID错误
+//    public final static int ERROR_WEB_ACCESS = 0x1003;	//权限
+//    public final static int ERROR_WEB_LOGIN = 0x1004;	//登录
+//    public final static int ERROR_WEB_CONF_NUM = 0x1006; //会议超过最大数
+//    public final static int ERROR_WEB_TERM_NUM = 0x1007; //终端超过最大数
+//    public final static int ERROR_WEB_CONF_NAME = 0x1008; //会议重名
+//    public final static int ERROR_WEB_TERM_NAME = 0x1009; //终端重名
+//    public final static int ERROR_WEB_USER_NAME = 0x100a;	//该用户存在
+//    public final static int ERROR_WEB_USER_NO = 0x100b;//没有找到此用户
+//    public final static int ERROR_WEB_CONF_TIME = 0x100c;	//预约会议时间错误
+//    public final static int ERROR_WEB_CONF_MIX = 0x100d;	//只能有一个媒体混合的会议
+//    public final static int ERROR_WEB_DELDEF = 0x100e;	//不能删除默认会议
+//    public final static int ERROR_WEB_CONF_STR = 0x100f;	//流媒体端口冲突
+//    public final static int ERROR_WEB_TERM_ADDR = 0x1010;	//终端地址冲突
+//    public final static int ERROR_WEB_TERM_NOTFOUND = 0x1011;	//终端没有找到
+//    public final static int ERROR_WEB_INVALID_PASSWORD = 0x1012;	//密码不对
 
     private Header header;
     private BaseMessage submsg;
@@ -560,7 +561,7 @@ public class McuMessage implements BaseMessage{
 
         int msgLen = ByteUtils.bytes2int(headerBytes, 0, 2);
 
-        if (msgLen > buffer.getContentLen() - 4){
+        if (msgLen+4 > buffer.getContentLen()){
             //if buffer is insufficient
             return null;
         }
@@ -568,31 +569,68 @@ public class McuMessage implements BaseMessage{
             msgBytes = new byte[msgLen + 4];
             buffer.read(msgBytes, msgLen + 4);
             BaseMessage msg = null;
-            switch (msgBytes[4]){
-                case ResMessage.USER:
-                    msg = parseLogin(msgBytes);
-                    break;
-                case ResMessage.CONF_ALL:
-                    msg = parseConfAll(msgBytes);
-                    break;
-                case ResMessage.TERM_ALL:
-                    msg = parseTermAll(msgBytes);
-                    break;
-                case ResMessage.CONF:
-                    msg = parseConf(msgBytes);
-                    break;
-                case ResMessage.CONF_CONFIG:
-                    msg = parseConfConfig(msgBytes);
-                    break;
-            }
-            if (msg != null){
-                buffer.pop(msgBytes, msgLen+4);
+            if (msgBytes[5] == 0){
+                //REQ failed
                 Header header = new Header(msgLen, TYPE_RES);
-                return new McuMessage(header, msg);
+                ResMessage submsg = new ResMessage();
+                submsg.type = msgBytes[4];
+                submsg.status = msgBytes[5];
+                submsg.error = ByteUtils.bytes2int(msgBytes, 6, 2);
+                submsg.infoType = msgBytes[8];
+                buffer.pop(msgBytes, 9); //remove the global header and res msg header in the buffer
+                return new McuMessage(header, submsg);
             }
             else {
-                buffer.pop(headerBytes, 1);
-                return null;
+                boolean hasInfo = true;
+                switch (msgBytes[4]) {
+                    case ResMessage.USER:
+                        msg = parseLogin(msgBytes);
+                        break;
+                    case ResMessage.CONF_ALL:
+                        msg = parseConfAll(msgBytes, 9, msgLen - 9);
+                        break;
+                    case ResMessage.TERM_ALL:
+                        msg = parseTermAll(msgBytes, 9, msgLen - 9);
+                        break;
+                    case ResMessage.CONF:
+                        msg = parseConfInfo(msgBytes, 9, msgLen - 9);
+                        break;
+                    case ResMessage.CONF_CONFIG:
+                        msg = parseConfTemplate(msgBytes, 9, msgLen - 9);
+                        break;
+                    default:
+                        msg = null;
+                        hasInfo = false;
+                        break;
+                }
+                if (msg != null) {
+                    buffer.pop(msgBytes, msgLen + 4);
+                    Header header = new Header(msgLen, TYPE_RES);
+                    ResMessage submsg = new ResMessage();
+                    submsg.type = msgBytes[4];
+                    submsg.status = msgBytes[5];
+                    submsg.error = ByteUtils.bytes2int(msgBytes, 6, 2);
+                    submsg.infoType = msgBytes[8];
+                    submsg.infoMsg = msg;
+                    return new McuMessage(header, submsg);
+                } else {
+                    if (!hasInfo){
+                        //if ACK msg do not contain info
+                        Header header = new Header(msgLen, TYPE_RES);
+                        ResMessage submsg = new ResMessage();
+                        submsg.type = msgBytes[4];
+                        submsg.status = msgBytes[5];
+                        submsg.error = ByteUtils.bytes2int(msgBytes, 6, 2);
+                        submsg.infoType = msgBytes[8];
+                        buffer.pop(msgBytes, 9); //remove the global header and res msg header in the buffer
+                        return new McuMessage(header, submsg);
+                    }
+                    else {
+                        //read error, dump 1 byte
+                        buffer.pop(headerBytes, 1);
+                        return null;
+                    }
+                }
             }
         }
     }
@@ -601,30 +639,107 @@ public class McuMessage implements BaseMessage{
         return new UserMessage();
     }
 
-    static private ConfInfoMessage parseConfAll(byte[] buffer){
-        return null;
-    }
-    static private ConfInfoMessage parseConf(byte[] buffer){
-        return null;
-    }
+    /*return a list of all conferences*/
+    static private ConfInfoMessage parseConfAll(byte[] buffer, int offset, int msgLen){
 
-    static private ConfConfigMessage parseConfConfig(byte[] buffer){
-        return null;
-    }
-
-    static private TermInfoMessage parseTermAll(byte[] buffer){
-        return null;
-    }
+        ConfInfoMessage confInfoMessage = new ConfInfoMessage();
+        confInfoMessage.confNum = buffer[offset];
+        if (confInfoMessage.confNum > 32){
+           return null;
+        }
 
 
-    /*TODO: check if this is used*/
-    static public class ResInfoMessage{
-        public final static int CONFINFO = 1;
-        public final static int TERMINFO = 2;
-        public final static int CONFDATA = 3;
-        public final static int TERMDATA = 4;
-        public final static int USERLIST = 5;
+        ConfConfigMessage  confConfigMessage = new ConfConfigMessage();
+        int len = confConfigMessage.calcMessageLength(); //length of every confInfoMessage byte arrays
+
+
+        //1 as the length of confNum
+        if (confInfoMessage.confNum*len +1 != msgLen){
+            return null;
+        }
+
+        int d = 1;
+        for (int m = 0; m < confInfoMessage.confNum; m ++){
+            confInfoMessage.confConfig[m].dumpBytes(buffer, offset+d);
+            d += len;
+        }
+        return confInfoMessage;
     }
+
+    /*return a list of certain conference*/
+    static private ConfInfoMessage parseConfInfo(byte[] buffer, int offset, int msgLen){
+
+        ConfInfoMessage confInfoMessage = new ConfInfoMessage();
+        confInfoMessage.confNum = buffer[offset];
+        if (confInfoMessage.confNum > 32){
+           return null;
+        }
+
+        ConfConfigMessage confConfigMessage = new ConfConfigMessage();
+        int d = 1;
+        int len = confConfigMessage.calcMessageLength(); //length of every confInfoMessage byte arrays
+
+        //1 as the length of confNum
+        if (confInfoMessage.confNum*len +1 != msgLen){
+            return null;
+        }
+
+        int  cnt = 0;
+        while(d < buffer.length - offset){
+            confInfoMessage.confConfig[cnt].dumpBytes(buffer, offset+d);
+            d += len;
+            cnt ++;
+        }
+        return confInfoMessage;
+    }
+
+    /* **************************************************
+     * parse conf template for all conf in the server
+     * **************************************************/
+    static private ConfInfoMessage parseConfTemplate(byte[] buffer, int offset, int msgLen){
+        ConfConfigMessage confConfigMessage = new ConfConfigMessage();
+        confConfigMessage.dumpBytes(buffer, offset+1);
+        if (confConfigMessage.id == 0xff){
+            //服务端有时会将正在召开的会议信息发到会议模板中，此地预处理过滤此异常
+            return null;
+        }
+
+        ConfInfoMessage confInfoMessage = parseConfInfo(buffer, offset, msgLen);
+
+        return confInfoMessage;
+    }
+
+    static private TermInfoMessage parseTermAll(byte[] buffer, int offset, int msgLen){
+        TermConfigMessage termConfigMessage = new TermConfigMessage();
+        int len = termConfigMessage.calcMessageLength();
+        TermInfoMessage termInfoMessage = new TermInfoMessage();
+        termInfoMessage.termNum = buffer[offset];
+
+        if (termInfoMessage.termNum > 256){
+           return null;
+        }
+
+        //1 as the length of termNum
+        if (termInfoMessage.termNum*len +1 != msgLen){
+            return null;
+        }
+
+        int d = 1;
+        for (int m = 0; m < termInfoMessage.termNum; m ++){
+            termInfoMessage.termConfig[m].dumpBytes(buffer, offset+d);
+            d += msgLen;
+        }
+
+        return termInfoMessage;
+    }
+
+//    static public class ResInfoMessage{
+//        public final static int CONFINFO = 1;
+//        public final static int TERMINFO = 2;
+//        public final static int CONFDATA = 3;
+//        public final static int TERMDATA = 4;
+//        public final static int USERLIST = 5;
+//    }
 
 //            //Added by jinyuhe，2012.8.9
 //            //定义发给终端的主席功能申请应答结果字
