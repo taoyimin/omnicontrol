@@ -1,102 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent" >
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/panel_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentTop="true"
+    android:layout_centerHorizontal="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
-    <cn.diaovision.omnicontrol.widget.CircleCharView
-        android:layout_centerInParent="true"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:text="12"
-        android:id="@+id/test"/>
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/txt_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/login_title_margin_top"
+        android:text="@string/product_title"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/login_title_text_size"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/icon_logo"
+        android:layout_width="@dimen/login_logo_image_width"
+        android:layout_height="@dimen/login_logo_image_height"
+        android:layout_below="@+id/txt_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/diaoshi_logo"/>
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/panel_login"
-        android:layout_alignParentTop="true"
+        android:background="@color/white"
         android:layout_centerHorizontal="true"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:layout_below="@id/icon_logo"
+        android:layout_marginTop="8dp">
 
         <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/txt_title"
-            android:text="@string/product_title"
-            android:textSize="@dimen/txt_title_size"
-            android:layout_marginTop="@dimen/widget_margin"
-            android:layout_marginBottom="@dimen/widget_margin" />
-
-        <android.support.v7.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/diaoshi_logo"
-            android:id="@+id/icon_logo"
-            android:layout_below="@+id/txt_title"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="80dp"/>
-
-        <android.support.v7.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/icon_logo"
-            android:textSize="@dimen/txt_body_size"
-            android:text="用户名"
             android:id="@+id/txt_name"
-            android:layout_alignStart="@+id/input_name"
-            android:layout_marginTop="@dimen/widget_margin"
-            android:layout_marginBottom="@dimen/widget_margin"/>
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/login_edit_height"
+            android:gravity="center"
+            android:text="@string/login_name"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="40dp"
+            android:textSize="@dimen/login_text_size"/>
 
         <android.support.v7.widget.AppCompatEditText
-            android:layout_width="300dp"
-            android:layout_height="42sp"
             android:id="@+id/input_name"
+            android:layout_width="@dimen/login_edit_width"
+            android:layout_height="@dimen/login_edit_height"
+            android:layout_toRightOf="@id/txt_name"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="40dp"
+            android:layout_alignTop="@id/txt_name"
             android:background="@drawable/border_input"
-            android:textSize="@dimen/txt_body_size"
             android:maxLines="1"
-            android:layout_below="@+id/txt_name"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/widget_margin"
-            android:layout_marginBottom="@dimen/widget_margin"/>
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:textSize="@dimen/login_text_size"/>
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/txt_password"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/txt_body_size"
-            android:text="密码"
-            android:layout_alignStart="@+id/input_password"
-            android:id="@+id/txt_pasword"
-            android:layout_below="@+id/input_name"
-            android:layout_marginTop="@dimen/widget_margin"
-            android:layout_marginBottom="@dimen/widget_margin"/>
+            android:layout_height="@dimen/login_edit_height"
+            android:gravity="center"
+            android:text="@string/login_password"
+            android:layout_marginTop="20dp"
+            android:layout_below="@id/txt_name"
+            android:layout_alignLeft="@id/txt_name"
+            android:textSize="@dimen/login_text_size"/>
 
         <android.support.v7.widget.AppCompatEditText
-            android:layout_width="300dp"
-            android:layout_height="42sp"
             android:id="@+id/input_password"
-            android:layout_below="@+id/txt_pasword"
+            android:layout_width="@dimen/login_edit_width"
+            android:layout_height="@dimen/login_edit_height"
+            android:layout_toRightOf="@id/txt_password"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="40dp"
+            android:layout_alignTop="@id/txt_password"
             android:background="@drawable/border_input"
-            android:inputType="textPassword"
-            android:textSize="@dimen/txt_body_size"
-            android:shadowColor="@android:color/black"
-            android:shadowDx="6"
-            android:shadowDy="6"
             android:maxLines="1"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/widget_margin"
-            android:layout_marginBottom="@dimen/widget_margin"/>
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:inputType="textPassword"
+            android:textSize="@dimen/login_text_size"/>
 
         <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_bg"
-            android:text="登录"
-            android:id="@+id/btn_login"
-            android:textSize="@dimen/txt_body_size"
-            android:textColor="@color/btn_light_txt"
-            android:layout_below="@+id/input_password"
             android:layout_alignEnd="@+id/input_password"
-            android:layout_marginTop="@dimen/widget_margin"
-            android:layout_marginBottom="@dimen/widget_margin"/>
+            android:layout_below="@+id/input_password"
+            android:layout_marginBottom="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/btn_bg"
+            android:text="@string/login_login"
+            android:textColor="@color/btn_light_txt"
+            android:textSize="@dimen/login_text_size"/>
     </RelativeLayout>
 </RelativeLayout>

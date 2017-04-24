@@ -2,73 +2,80 @@ package cn.diaovision.omnicontrol;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.AppCompatEditText;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTouch;
-import cn.diaovision.omnicontrol.widget.CircleCharView;
+import cn.diaovision.omnicontrol.view.LoginContract;
+import cn.diaovision.omnicontrol.view.LoginPresenter;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements LoginContract.View, View.OnKeyListener {
 
     @BindView(R.id.input_name)
     AppCompatEditText input_name;
     @BindView(R.id.input_password)
     AppCompatEditText input_password;
+    @BindView(R.id.btn_login)
+    AppCompatButton btn_login;
 
-    @BindView(R.id.test)
-    CircleCharView cView;
+
+    LoginContract.Presenter presenter = new LoginPresenter(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        input_name.setOnKeyListener(this);
+        input_password.setOnKeyListener(this);
+    }
 
+    @OnClick(R.id.btn_login)
+    public void login(){
+        presenter.login();
+    }
 
-        input_password.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                switch (event.getAction()) {
-                    case KeyEvent.ACTION_DOWN:
-                        switch (keyCode) {
-                            case KeyEvent.KEYCODE_ENTER:
-                                login();
-                                break;
-                            default:
-                                break;
-                        }
+    @Override
+    public void showToast(String content) {
+        Toast.makeText(this,content,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void toMainActivity() {
+        startActivity(new Intent(LoginActivity.this, MainControlActivity.class));
+        this.finish();
+    }
+
+    @Override
+    public String getName() {
+        return input_name.getText().toString().trim();
+    }
+
+    @Override
+    public String getPassword() {
+        return input_password.getText().toString().trim();
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        switch (event.getAction()) {
+            case KeyEvent.ACTION_DOWN:
+                switch (keyCode) {
+                    case KeyEvent.KEYCODE_ENTER:
+                        presenter.login();
                         break;
                     default:
                         break;
                 }
-                return false;
-            }
-        });
-    }
-
-    /*login handle*/
-    private void login() {
-        String name = input_name.getText().toString().trim();
-        String password = input_password.getText().toString().trim();
-
-        if (name.length() == 0) {
-            input_name.requestFocus();
-            return;
+                break;
+            default:
+                break;
         }
-
-        if (password.length() == 0) {
-            input_password.requestFocus();
-            return;
-        }
-
-        //TODO: verify name and password
-        startActivity(new Intent(LoginActivity.this, MainControlActivity.class));
-        this.finish();
-//        overridePendingTransition();
+        return false;
     }
 }
