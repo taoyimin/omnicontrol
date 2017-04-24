@@ -127,20 +127,123 @@ public class ConfConfigMessage implements BaseMessage, Serializable {
         bytes[153] = fps;
         bytes[154] = mixMode;
         System.arraycopy(ByteUtils.int2bytes((int) streamAddr, 4), 0, bytes, 155, 4);
-        System.arraycopy(ByteUtils.int2bytes((int) streamAddr, 4), 0, bytes, 155, 4);
+        System.arraycopy(ByteUtils.int2bytes(streamAudioPort, 2), 0, bytes, 159, 2);
+        System.arraycopy(ByteUtils.int2bytes(streamVideoPort, 2), 0, bytes, 161, 2);
+        System.arraycopy(ByteUtils.int2bytes((int) autoTime, 4), 0, bytes, 163, 4);
+        bytes[167] = termNameFlag;
+        bytes[168] = autoInvite;
+        bytes[169] = selectViewSync;
+        bytes[170] = autoOperator;
+        System.arraycopy(ByteUtils.int2bytes((int) autoOperatorTime, 4), 0, bytes, 171, 4);
+        System.arraycopy(ByteUtils.int2bytes((int) calloverTermId, 4), 0, bytes, 175, 4);
+        bytes[179] = operatorMode;
+        bytes[180] = continuousMode;
+        System.arraycopy(ByteUtils.int2bytes(termAttrNum, 2), 0, bytes, 181, 2);
 
+        for (int m = 0; m < termAttrNum; m ++){
+            int offset = 183+ 10*m;
+            System.arraycopy(ByteUtils.int2bytes(termAttrs[m].id, 2), 0, bytes, offset, 2);
+            System.arraycopy(ByteUtils.int2bytes(termAttrs[m].type, 2), 0, bytes, offset+2, 2);
+            System.arraycopy(ByteUtils.int2bytes((int) termAttrs[m].addr, 4), 0, bytes, offset+4, 4);
+            System.arraycopy(ByteUtils.int2bytes(termAttrs[m].bandwidth, 2), 0, bytes, offset+8, 2);
+        }
 
+        int offset = 183+256*10;
 
-        System.arraycopy(ByteUtils.int2bytes(videoMode, 2), 0, bytes, 101, 2);
+        bytes[offset] = dsVideoMode;
+        bytes[offset+1] = dsImageMode;
+        System.arraycopy(ByteUtils.int2bytes(dsBandwidth, 2), 0, bytes, offset+2, 2);
+        bytes[offset+4] = dsStatus;
+        bytes[offset+5] = dsReserved;
+        System.arraycopy(ByteUtils.int2bytes(bandwithMulti[0], 2), 0, bytes, offset+6, 2);
+        System.arraycopy(ByteUtils.int2bytes(bandwithMulti[1], 2), 0, bytes, offset+8, 2);
+        System.arraycopy(ByteUtils.int2bytes(bandwithMulti[2], 2), 0, bytes, offset+10, 2);
+
         return bytes;
+    }
+
+    /*dump byte arrays into the data data, (memcpy)*/
+    public int dumpBytes(byte[] bytes, int offset){
+        if (this.calcMessageLength() > bytes.length - offset){
+            return -1;
+        }
+
+        byte[] nameBytes = new byte[32];
+        System.arraycopy(bytes, offset, nameBytes, 0, 32);
+        name = String.valueOf(nameBytes);
+
+        byte[] descripBytes = new byte[32];
+        System.arraycopy(bytes, offset+32, descripBytes, 0, 64);
+        descrip = String.valueOf(descripBytes);
+
+        id = ByteUtils.bytes2int(bytes, offset+96, 2);
+        type = bytes[98];
+        audioMode = ByteUtils.bytes2int(bytes, offset+99, 2);
+        videoMode = ByteUtils.bytes2int(bytes, offset+101, 2);
+        mode = bytes[offset+103];
+        maxTermNum = bytes[offset+104];
+        termNum = bytes[offset+105];
+        status = bytes[offset+106];
+        startYear = ByteUtils.bytes2int(bytes, offset+107, 2);
+        startMonth = bytes[offset+109];
+        startDay = bytes[offset+110];
+        startHour = bytes[offset+111];
+        startMin = bytes[offset+112];
+        endYear = ByteUtils.bytes2int(bytes, offset+113, 2);
+        endMonth = bytes[offset+115];
+        endDay = bytes[offset+116];
+        endHour = bytes[offset+117];
+        endMin = bytes[offset+118];
+
+        byte[] creatorNameBytes =  new byte[32];
+        System.arraycopy(bytes, offset+119, creatorNameBytes, 0, 32);
+        creatorName = String.valueOf(creatorNameBytes);
+
+        bandwidth = ByteUtils.bytes2int(bytes, offset+151, 2);
+        fps = bytes[offset+153];
+        mixMode = bytes[offset+154];
+        streamAddr = ByteUtils.bytes2int(bytes, offset+155, 4);
+        streamAudioPort = ByteUtils.bytes2int(bytes, offset+159, 2);
+        streamVideoPort =  ByteUtils.bytes2int(bytes, offset+161, 2);
+        autoTime =  ByteUtils.bytes2int(bytes, offset+163, 4);
+        termNameFlag = bytes[offset+167];
+        autoInvite = bytes[offset+168];
+        selectViewSync = bytes[offset+169];
+        autoOperator = bytes[offset+170];
+        autoOperatorTime = ByteUtils.bytes2int(bytes, offset+171, 4);
+        calloverTermId = ByteUtils.bytes2int(bytes, offset+175, 4);
+        operatorMode = bytes[offset+179];
+        continuousMode = bytes[offset+180];
+        termAttrNum = ByteUtils.bytes2int(bytes, offset+181, 2);
+
+        for (int m = 0; m < termAttrNum; m ++){
+            int d = offset+183 + 10*m;
+            termAttrs[m].id = ByteUtils.bytes2int(bytes, d, 2);
+            termAttrs[m].type = ByteUtils.bytes2int(bytes, d+2, 2);
+            termAttrs[m].addr = ByteUtils.bytes2int(bytes, d+4, 4);
+            termAttrs[m].bandwidth = ByteUtils.bytes2int(bytes, d+8, 2);
+        }
+
+        int dNew = offset+183+256*10;
+
+        dsVideoMode = bytes[dNew];
+        dsImageMode = bytes[dNew+1];
+        dsBandwidth = ByteUtils.bytes2int(bytes, dNew+2, 2);
+        dsStatus = bytes[dNew+4];
+        dsReserved = bytes[dNew+5];
+        bandwithMulti[0] = ByteUtils.bytes2int(bytes, dNew+6, 2);
+        bandwithMulti[1] = ByteUtils.bytes2int(bytes, dNew+8, 2);
+        bandwithMulti[2] = ByteUtils.bytes2int(bytes, dNew+10, 2);
+
+        return calcMessageLength();
     }
 
 
 
     @Override
     public int calcMessageLength() {
-        return 2785;
-//            return 32+64+2+1+2*2+1*4+2+1*4+2+1*4+32+2+1+1+4+2*2+4+1*4+4*2+1*2+x*256+1*4+2*3
+        return 2755;
+//            return 32+64+2+1+2*2+1*4+2+1*4+2+1*4+32+2+1+1+4+2*2+4+1*4+4*2+1*2+10*256+1*4+2*3
     }
 
     static public class TermAttr{
