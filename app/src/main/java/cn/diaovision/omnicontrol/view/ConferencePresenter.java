@@ -14,7 +14,7 @@ import io.reactivex.subjects.Subject;
  * Created by liulingfeng on 2017/4/3.
  */
 
-public class ConferencePresenter implements PowerContract.Presenter {
+public class ConferencePresenter implements ConferenceContract.Presenter {
 
     //通过Subject实现ViewModel的双向绑定
     Subject bus = PublishSubject.create();
@@ -72,6 +72,11 @@ public class ConferencePresenter implements PowerContract.Presenter {
         if (subscription != null){
             subscription.dispose();
         }
+    }
+
+    @Override
+    public boolean login(String name, String passwd) {
+        return true;
     }
 
     //TODO: add viewmodel operations if needed

@@ -18,9 +18,12 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import cn.diaovision.omnicontrol.BaseCyclicThread;
 import cn.diaovision.omnicontrol.conn.TcpClient;
+import cn.diaovision.omnicontrol.core.message.conference.BaseMessage;
+import cn.diaovision.omnicontrol.core.message.conference.ConfConfigMessage;
 import cn.diaovision.omnicontrol.core.message.conference.McuMessage;
 import cn.diaovision.omnicontrol.core.message.conference.ReqMessage;
 import cn.diaovision.omnicontrol.core.message.conference.ResMessage;
+import cn.diaovision.omnicontrol.core.message.conference.UserMessage;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
@@ -35,13 +38,12 @@ import io.reactivex.schedulers.Schedulers;
  * Created by liulingfeng on 2017/4/17.
  */
 
-public class McuCommMgr {
+public class McuCommManager {
     private final static int RECV_BUFF_LEN = 65535; //buffer length for receiving
-    private final static int ACK_TIMEOUT = 3000; //ACK timeout
+    private final static int ACK_TIMEOUT = 5000; //ACK timeout (in ms)
     private final static int QUEUE_LEN = 10;
-    private final static int COMM_TIMEOUT = 5000; //Rx timeout
 
-    private BlockingQueue<McuBundle> txQueue;
+//    private BlockingQueue<McuBundle> txQueue;
 
     private LinkedList<McuBundle> ackList;
     private ReentrantLock ackListLock;
@@ -54,10 +56,10 @@ public class McuCommMgr {
 
     CommListener commListener;
 
-    public McuCommMgr(String ip, int port){
-        client = new TcpClient(ip, port);
+    public McuCommManager(Mcu mcu){
+        client = new TcpClient(mcu.ip, mcu.port);
 
-        txQueue = new ArrayBlockingQueue<>(QUEUE_LEN);
+//        txQueue = new ArrayBlockingQueue<>(QUEUE_LEN);
 
         recvBuff = new ByteBuffer(RECV_BUFF_LEN);
 
@@ -127,7 +129,7 @@ public class McuCommMgr {
                             return new RxMessage(RxMessage.DONE);
                         }
                         while(true){
-                            McuMessage ackMsg = findAndPopAck((ReqMessage) mcuMessage.getSubmsg());
+                            McuMessage ackMsg = findAndPopAck(mcuMessage);
                             if (ackMsg != null){
                                 return new RxMessage(RxMessage.ACK, ackMsg.getSubmsg());
                             }
@@ -137,7 +139,7 @@ public class McuCommMgr {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .timeout(5000, TimeUnit.MILLISECONDS)
+                .timeout(ACK_TIMEOUT, TimeUnit.MILLISECONDS)
                 .subscribe(subscriber);
     }
 
@@ -180,7 +182,7 @@ public class McuCommMgr {
 
     private void threadInit(){
 
-        txQueue.clear();
+//        txQueue.clear();
 
         ackListLock.lock();
         try {
@@ -298,7 +300,7 @@ public class McuCommMgr {
         };
         threadList.add(recvThread);
 
-        //a single thread to reclaim
+        //a single thread to pulse
         BaseCyclicThread pulseThread = new BaseCyclicThread() {
             @Override
             public void work() {
@@ -307,12 +309,16 @@ public class McuCommMgr {
                     McuBundle bundle = new McuBundle();
                     bundle.msg = McuMessage.buildLogin("term", "123456");
                     bundle.subscriber = null;
-                    send(bundle.msg, new RxSubscriber() {
+                    send(bundle.msg, new RxSubscriber<RxMessage>() {
                         @Override
-                        public void onRxResult(Object o) {
+                        public void onRxResult(RxMessage msg) {
+                            BaseMessage resMsg = (BaseMessage) msg.val;
                         }
                         @Override
                         public void onRxError(Throwable e) {
+                            if (commListener != null) {
+                                commListener.onConnectionChanged(client.getState());
+                            }
                         }
                     });
                 } catch (InterruptedException e) {
@@ -352,47 +358,93 @@ public class McuCommMgr {
     /* ************************************************************
      *find ACK given the req message, and pop it from the list
      * ************************************************************/
-    public McuMessage findAndPopAck(ReqMessage reqMsg){
+    public McuMessage findAndPopAck(McuMessage msg) {
         McuBundle bundle = null;
-        ackListLock.lock();
-        try{
-            boolean foundReq = false;
-            int idx = -1;
-            for (int m = 0; m < ackList.size(); m ++){
-                McuBundle bb = ackList.get(m);
-                if (bb.msg.getSubtype() == ResMessage.CONF_ALL && reqMsg.getType() == ReqMessage.REQ_CONF_ALL) {
-                    foundReq = true;
-                    idx = m;
-                    break;
-                }
-                else if (bb.msg.getSubtype() == ResMessage.CONF && reqMsg.getType() == ReqMessage.REQ_CONF) {
-                    foundReq = true;
-                    idx = m;
-                    break;
-                }
-                else if (bb.msg.getSubtype() == ResMessage.TERM_ALL && reqMsg.getType() == ReqMessage.REQ_TERM_ALL) {
-                    foundReq = true;
-                    idx = m;
-                    break;
-                }
-                else if (bb.msg.getSubtype() == ResMessage.CONF_CONFIG && reqMsg.getType() == ReqMessage.REQ_CONF_CONFIGED) {
-                    foundReq = true;
-                    idx = m;
-                    break;
+
+        if (msg.getType() == McuMessage.TYPE_REQ) {
+            ReqMessage reqMsg = (ReqMessage) msg.getSubmsg();
+            ackListLock.lock();
+            try {
+                boolean foundReq = false;
+                int idx = -1;
+                for (int m = 0; m < ackList.size(); m++) {
+                    McuBundle bb = ackList.get(m);
+                    if (bb.msg.getSubtype() == ResMessage.CONF_ALL && reqMsg.getType() == ReqMessage.REQ_CONF_ALL) {
+                        foundReq = true;
+                        idx = m;
+                        break;
+                    } else if (bb.msg.getSubtype() == ResMessage.CONF && reqMsg.getType() == ReqMessage.REQ_CONF) {
+                        foundReq = true;
+                        idx = m;
+                        break;
+                    } else if (bb.msg.getSubtype() == ResMessage.TERM_ALL && reqMsg.getType() == ReqMessage.REQ_TERM_ALL) {
+                        foundReq = true;
+                        idx = m;
+                        break;
+                    } else if (bb.msg.getSubtype() == ResMessage.CONF_CONFIG && reqMsg.getType() == ReqMessage.REQ_CONF_CONFIGED) {
+                        foundReq = true;
+                        idx = m;
+                        break;
+                    }
                 }
 
+                if (foundReq && idx > 0) {
+                    bundle = ackList.get(idx);
+                    ackList.remove(idx);
+                }
+            } finally {
+                ackListLock.unlock();
             }
-
-            if (foundReq && idx > 0) {
-                bundle = ackList.get(idx);
-                ackList.remove(idx);
+        } else if (msg.getType() == McuMessage.TYPE_CREATE_CONF) {
+//            ConfConfigMessage confConfigMessage = (ConfConfigMessage) msg.getSubmsg();
+            ackListLock.lock();
+            try {
+                boolean foundReq = false;
+                int idx = -1;
+                for (int m = 0; m < ackList.size(); m++) {
+                    McuBundle bb = ackList.get(m);
+                    if (bb.msg.getSubtype() == ResMessage.CREATE_CONF) {
+                        foundReq = true;
+                        idx = m;
+                        break;
+                    }
+                }
+                if (foundReq && idx > 0) {
+                    bundle = ackList.get(idx);
+                    ackList.remove(idx);
+                }
+            } finally {
+                ackListLock.unlock();
+            }
+        } else if (msg.getType() == McuMessage.TYPE_USER){
+//            UserMessage userMsg = (UserMessage) msg.getSubmsg();
+            ackListLock.lock();
+            try {
+                boolean foundReq = false;
+                int idx = -1;
+                for (int m = 0; m < ackList.size(); m++) {
+                    McuBundle bb = ackList.get(m);
+                    if (bb.msg.getSubtype() == ResMessage.USER) {
+                        foundReq = true;
+                        idx = m;
+                        break;
+                    }
+                }
+                if (foundReq && idx > 0) {
+                    bundle = ackList.get(idx);
+                    ackList.remove(idx);
+                }
+            } finally {
+                ackListLock.unlock();
             }
         }
-        finally {
-            ackListLock.unlock();
+
+        if (bundle != null) {
+            return bundle.msg;
+        } else {
+            return null;
         }
 
-        return bundle.msg;
     }
 
 //    /* ************************************************************

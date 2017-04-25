@@ -24,4 +24,14 @@ public class ConfigFixed implements Config{
     public String getConfPasswd() {
         return "diaovision";
     }
+
+    @Override
+    public String getMcuIp() {
+        return "192.168.1.1";
+    }
+
+    @Override
+    public int getMcuPort() {
+        return 554;
+    }
 }

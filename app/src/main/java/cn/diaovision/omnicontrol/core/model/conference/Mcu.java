@@ -3,12 +3,16 @@ package cn.diaovision.omnicontrol.core.model.conference;
 import java.net.Socket;
 
 import cn.diaovision.omnicontrol.core.message.conference.ConfConfigMessage;
+import cn.diaovision.omnicontrol.model.Config;
 
 /**
  * Created by liulingfeng on 2017/4/5.
  */
 
 public class Mcu {
+    public static final int STATE_ONLINE = 1;
+    public static final int STATE_OFFLINE = 0;
+
     int id;
     int level; //1 byte, MCU级别，1：1级，段本部MCU，2：2级，车间MCU
     int type; //1 byte, MCU类型，1：广播端所在MCU，2：选看端所在MCU
@@ -19,12 +23,17 @@ public class Mcu {
     int termNum;
     Socket skt;
 
-    ConfConfigMessage confConfigTemplate;
-    ConfConfigMessage confConfig;
+    //application specific
+    int port;
 
-    LiveConf[] conf; //32
+    Conf[] conf; //maximal 32
 
     public Mcu(){
-        conf = new LiveConf[32];
+        conf = new Conf[32];
+    }
+
+    public void init(Config cfg){
+        ip = cfg.getMcuIp();
+        port = cfg.getMcuPort();
     }
 }

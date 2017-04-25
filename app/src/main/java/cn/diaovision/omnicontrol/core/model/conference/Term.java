@@ -5,9 +5,9 @@ package cn.diaovision.omnicontrol.core.model.conference;
  */
 
 public class Term {
-    public static final int STAT_OFF = 0;
-    public static final int STAT_ON = 1;
-    public static final int STAT_CONNECTED = 2;
+    public static final int TYPE_NORMAL = 0;
+    public static final int TYPE_CHAIR = 1;
+    public static final int TYPE_SELECTVIEW = 2;
 
     long id;
     int type; //终端类型，1：广播端，即主会场，2：选看端，0：其他
@@ -31,5 +31,4 @@ public class Term {
     boolean isMuted; //是否静音
     boolean isSpeaking; //是否发言
     boolean videoEnabled; //是否传输画面
-    boolean isChair; //是否是主席
 }

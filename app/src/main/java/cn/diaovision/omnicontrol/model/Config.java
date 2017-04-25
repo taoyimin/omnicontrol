@@ -10,4 +10,7 @@ public interface Config {
 
     String getConfName();
     String getConfPasswd();
+
+    String getMcuIp();
+    int getMcuPort();
 }

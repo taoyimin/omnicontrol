@@ -6,22 +6,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-
-import cn.diaovision.omnicontrol.conn.TcpClient;
-import cn.diaovision.omnicontrol.core.message.conference.McuMessage;
-import cn.diaovision.omnicontrol.core.model.conference.McuCommMgr;
-import cn.diaovision.omnicontrol.rx.RxExecutor;
-import cn.diaovision.omnicontrol.rx.RxMessage;
-import cn.diaovision.omnicontrol.rx.RxReq;
-import io.reactivex.functions.Consumer;
+import cn.diaovision.omnicontrol.core.model.conference.McuCommManager;
 
 /**
  * 通信类服务
@@ -29,12 +14,12 @@ import io.reactivex.functions.Consumer;
  */
 
 public class ConferenceService extends Service {
-    private McuCommMgr mgr;
+    private McuCommManager mgr;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        mgr = new McuCommMgr("192.168.2.1", 6000);
+        mgr = new McuCommManager("192.168.2.1", 6000);
     }
 
     @Nullable

@@ -38,7 +38,7 @@ public class TcpClient {
     }
 
     //synchronously connect (for rxjava)
-    public void connect(){
+    synchronized public void connect(){
         if (ip == null || port < 1024){
             onDisconnected();
             return;
@@ -75,7 +75,7 @@ public class TcpClient {
         }
     }
 
-    public void disconnect(){
+    synchronized public void disconnect(){
         try{
 
             if (state.get() == STATE_CONNECTING){
@@ -97,7 +97,7 @@ public class TcpClient {
         }
     }
 
-    public int send(byte data[]){
+    synchronized public int send(byte data[]){
         if (state.get() == STATE_CONNECTED && output != null) {
             try {
                 output.write(data);
@@ -118,7 +118,7 @@ public class TcpClient {
     /*
      * receive from tcp socket synchronously
      */
-    public int recv(byte data[]){
+    synchronized public int recv(byte data[]){
         if (state.get() == STATE_CONNECTED && input != null) {
             try {
                 byte buff[] = new byte[1024];
@@ -142,7 +142,7 @@ public class TcpClient {
         }
     }
 
-    public void onDisconnected(){
+    private void onDisconnected(){
         try{
             state.set(STATE_DISCONNECTED);
             if (input != null){

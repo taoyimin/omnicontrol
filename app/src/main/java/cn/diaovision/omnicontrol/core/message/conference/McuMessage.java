@@ -1,13 +1,8 @@
 package cn.diaovision.omnicontrol.core.message.conference;
 
-import java.nio.BufferUnderflowException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import cn.diaovision.omnicontrol.core.model.conference.LiveConf;
-import cn.diaovision.omnicontrol.core.model.conference.Term;
-import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.util.ByteBuffer;
 import cn.diaovision.omnicontrol.util.ByteUtils;
 import cn.diaovision.omnicontrol.util.DateHelper;
@@ -23,6 +18,9 @@ import cn.diaovision.omnicontrol.util.DateHelper;
  ****************************************************************/
 
 public class McuMessage implements BaseMessage{
+    public final static int LOCAL_AUDIO_PORT = 6000;
+    public final static int LOCAL_VIDEO_PORT = 6002;
+
     public final static byte VERSION = 0x01;
 
     public final static byte TYPE_REQ = 1;
@@ -261,14 +259,15 @@ public class McuMessage implements BaseMessage{
 
     /* **********************************
      * 请求发送会议视频流到本地端口
+     * 该请求不用响应，只需要检测本地端口是否有数据发送过来
      * **********************************/
     static public McuMessage buildReqStream(int confId, byte type, String localIp){
 
         StreamMediaMessage streamMediaMessage = new StreamMediaMessage();
         streamMediaMessage.type = type;
         streamMediaMessage.ipAddr = ByteUtils.ip2num(localIp); //本机IP
-        streamMediaMessage.videoPort = 6002;
-        streamMediaMessage.audioPort = 6000;
+        streamMediaMessage.videoPort = LOCAL_VIDEO_PORT;
+        streamMediaMessage.audioPort = LOCAL_AUDIO_PORT;
 
 
         int payloadLen = streamMediaMessage.calcMessageLength();
@@ -280,7 +279,7 @@ public class McuMessage implements BaseMessage{
     /* **********************************
      * 请求静音参会者 (with confId and termId)
      * **********************************/
-    static public McuMessage buildReqMute(int confId, int termId){
+    static public McuMessage buildReqMute(int confId, long termId){
         ReqMessage reqMessage = new ReqMessage(ReqMessage.DISABLE_INPUT);
         reqMessage.confId =  confId;
         reqMessage.termId[0] = termId;
@@ -291,7 +290,7 @@ public class McuMessage implements BaseMessage{
     /* **********************************
      * 请求开启声音参会者 (with mcu and confConfig)
      * **********************************/
-     static public McuMessage buildReqUnmute(int confId, int termId){
+     static public McuMessage buildReqUnmute(int confId, long termId){
         ReqMessage reqMessage = new ReqMessage(ReqMessage.ENABLE_INPUT);
         reqMessage.confId =  confId;
         reqMessage.termId[0] = termId;
@@ -349,7 +348,7 @@ public class McuMessage implements BaseMessage{
     /* **********************************
      * 请求控制参会者
      * **********************************/
-    public McuMessage buildReqAttendCtrl(int confId, int termId, long termIp, byte msgType, long ctrlVal){
+    static public McuMessage buildReqAttendCtrl(int confId, int termId, long termIp, byte msgType, long ctrlVal){
         TermCtrlMessage termCtrlMessage = new TermCtrlMessage(msgType);
         termCtrlMessage.confId = confId;
         termCtrlMessage.termId = termId;
@@ -364,7 +363,7 @@ public class McuMessage implements BaseMessage{
     /* **********************************
      * 请求邀请参会者
      * **********************************/
-    public McuMessage buildReqInviteTerm(int confId, long termId){
+    static public McuMessage buildReqInviteTerm(int confId, long termId){
         TermConfigMessage termConfigMessage = new TermConfigMessage();
         termConfigMessage.id = termId;
         termConfigMessage.port = confId;
@@ -379,7 +378,7 @@ public class McuMessage implements BaseMessage{
     /* **********************************
      * 请求挂断参会者
      * **********************************/
-    public McuMessage buildReqHangupTerm(int confId, long termId){
+    static public McuMessage buildReqHangupTerm(int confId, long termId){
         ReqMessage reqMessage = new ReqMessage(ReqMessage.HANGUP_TERM);
         reqMessage.confId = confId;
         reqMessage.termId[0] = termId;
@@ -400,7 +399,7 @@ public class McuMessage implements BaseMessage{
     /* **********************************
      * 请求改变会议模式（修改多画面轮训间隔）
      * **********************************/
-    public McuMessage buildReqChangeConfConfig(int confId, byte confType, int interval){
+    static public McuMessage buildReqChangeConfConfig(int confId, byte confType, int interval){
         ReqMessage reqMessage = new ReqMessage(confType);
         reqMessage.confId = confId;
         reqMessage.termId[0] = interval;
@@ -412,7 +411,7 @@ public class McuMessage implements BaseMessage{
     /* **********************************
      * 启动或停止双流(需要明确一下功能)
      * **********************************/
-    public McuMessage buildReqDS(int confId, boolean enabled){
+    static public McuMessage buildReqDS(int confId, boolean enabled){
         ReqMessage reqMessage = new ReqMessage(ReqMessage.MIX_AUDIO);
         reqMessage.confId = confId;
         if (enabled) {
@@ -430,7 +429,7 @@ public class McuMessage implements BaseMessage{
     /* **********************************
      * 启动混音(最多4个终端)
      * **********************************/
-    public McuMessage buildReqConfAudioMix(int confId, List<Integer> termIdList){
+    static public McuMessage buildReqConfAudioMix(int confId, List<Integer> termIdList){
         ReqMessage reqMessage = new ReqMessage(ReqMessage.MIX_AUDIO);
         reqMessage.confId = confId;
 
@@ -453,7 +452,7 @@ public class McuMessage implements BaseMessage{
     /* **********************************
      * 取消混音 (所有的termid置零)
      * **********************************/
-    public McuMessage buildReqCancelConfAudioMix(int confId) {
+    static public McuMessage buildReqCancelConfAudioMix(int confId) {
         ReqMessage reqMessage = new ReqMessage(ReqMessage.REQ_DS);
         reqMessage.confId = confId;
 
@@ -466,7 +465,7 @@ public class McuMessage implements BaseMessage{
     /* **********************************
      * 终端主席操作应答消息
      * **********************************/
-    public McuMessage buildReqChairResponse(int confId, long termId, byte msgType, long msgVal) {
+    static public McuMessage buildReqChairResponse(int confId, long termId, byte msgType, long msgVal) {
         ReqMessage reqMessage = new ReqMessage(msgType);
         reqMessage.confId = confId;
         reqMessage.termId[0] = termId;
@@ -477,7 +476,7 @@ public class McuMessage implements BaseMessage{
         return new McuMessage(header, reqMessage);
     }
 
-    public McuMessage buildReqConfVideoMix(int confId, List<Integer> termIdList){
+    static public McuMessage buildReqConfVideoMix(int confId, List<Integer> termIdList){
         ReqMessage reqMessage = new ReqMessage(ReqMessage.MIX_VIDEO);
         reqMessage.confId = confId;
 
@@ -498,7 +497,7 @@ public class McuMessage implements BaseMessage{
     }
 
 
-    public McuMessage buildReqCancelConfVideoMix(int confId){
+    static public McuMessage buildReqCancelConfVideoMix(int confId){
         ReqMessage reqMessage = new ReqMessage(ReqMessage.MIX_VIDEO);
         reqMessage.confId = confId;
 
@@ -527,21 +526,13 @@ public class McuMessage implements BaseMessage{
         return submsg;
     }
 
-    public void setSubmsg(BaseMessage submsg) {
-        this.submsg = submsg;
-    }
 
     public boolean requiresAck(){
-        if (getType() == TYPE_REQ && getSubtype() == ReqMessage.REQ_TERM_ALL)
+        if (getType() == TYPE_REQ || getType() == TYPE_USER || getType() == TYPE_CREATE_CONF)
             return true;
-        else if (getType() == TYPE_REQ && getSubtype() == ReqMessage.REQ_CONF_ALL)
-            return true;
-        else if (getType() == TYPE_REQ && getSubtype() == ReqMessage.REQ_CONF)
-            return true;
-        else if (getType() == TYPE_REQ && getSubtype() == ReqMessage.REQ_CONF_CONFIGED)
-            return true;
-        else
+        else {
             return false;
+        }
     }
 
     static public McuMessage parse(ByteBuffer buffer){

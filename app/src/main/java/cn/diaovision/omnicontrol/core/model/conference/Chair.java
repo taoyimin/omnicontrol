@@ -6,6 +6,8 @@ import io.realm.RealmModel;
 import io.realm.annotations.RealmClass;
 
 /**
+ * 主席
+ * TODO: remove it
  * Created by liulingfeng on 2017/4/4.
  */
 
@@ -27,9 +29,9 @@ public class Chair {
     public void unmute(Term term){
     }
 
-    public void start(LiveConf conf){
+    public void start(Conf conf){
     }
 
-    public void stop(LiveConf conf){
+    public void stop(Conf conf){
     }
 }
