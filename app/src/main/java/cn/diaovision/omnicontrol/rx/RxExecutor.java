@@ -1,7 +1,14 @@
 package cn.diaovision.omnicontrol.rx;
 
-import org.reactivestreams.Subscriber;
+import android.util.Log;
 
+import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
+import java.nio.Buffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.BackpressureStrategy;
@@ -163,19 +170,41 @@ public class RxExecutor {
         }
     }
 
-    /*chained calling using map*/
-    public RxExecutor startChain(RxThen rxThen){
-        chainedFlow = Flowable.just("")
-                .map(rxThen);
-        return this;
-    }
+    public void testChain(){
+        List<String> stringList = new ArrayList<>();
+        for (int m = 0; m < 100; m ++){
+            stringList.add(String.valueOf(m));
+        }
 
-    public RxExecutor then(RxThen rxThen){
-        chainedFlow.map(rxThen);
-        return this;
-    }
-
-    public void doneThen(RxSubscriber rxSubscriber){
-        chainedFlow.subscribe(rxSubscriber);
+        Flowable.fromIterable(stringList)
+                .flatMap(new Function<String, Publisher<?>>() {
+                    @Override
+                    public Publisher<?> apply(final String s) throws Exception {
+                        return Flowable.create(new FlowableOnSubscribe<String>() {
+                            @Override
+                            public void subscribe(FlowableEmitter<String> e) throws Exception {
+                                        Log.i("U", "RX apply: " + s);
+                                        Thread.sleep((long)(Math.random()*20));
+                                        e.onNext(s);
+                            }
+                        }, BackpressureStrategy.BUFFER);
+//                                .map(new Function<String, String>() {
+//                                    @Override
+//                                    public String apply(String s) throws Exception {
+//                                        Log.i("U", "RX apply: " + s);
+//                                        Thread.sleep((long)(Math.random()*20));
+//                                        return s;
+//                                    }
+//                                });
+                    }
+                })
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        Log.i("U", "RX output: " + o);
+                    }
+                });
     }
 }
