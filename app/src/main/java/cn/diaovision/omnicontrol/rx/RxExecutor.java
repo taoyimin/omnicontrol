@@ -27,6 +27,8 @@ public class RxExecutor {
 
     static private RxExecutor instance;
 
+    private Flowable chainedFlow;
+
     private RxExecutor(){
     }
 
@@ -159,5 +161,21 @@ public class RxExecutor {
             default:
                 return Schedulers.newThread();
         }
+    }
+
+    /*chained calling using map*/
+    public RxExecutor startChain(RxThen rxThen){
+        chainedFlow = Flowable.just("")
+                .map(rxThen);
+        return this;
+    }
+
+    public RxExecutor then(RxThen rxThen){
+        chainedFlow.map(rxThen);
+        return this;
+    }
+
+    public void doneThen(RxSubscriber rxSubscriber){
+        chainedFlow.subscribe(rxSubscriber);
     }
 }
