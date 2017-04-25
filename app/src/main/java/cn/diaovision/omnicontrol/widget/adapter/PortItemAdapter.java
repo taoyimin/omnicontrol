@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import cn.bingoogolapple.badgeview.BGABadgeImageView;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.widget.CircleCharView;
@@ -97,6 +98,20 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
             }
         });
 
+        holder.getV().setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(itemClickListener!=null){
+                    itemClickListener.onLongClick(v,position);
+                }
+                return true;
+            }
+        });
+
+        //设置badgeview
+        holder.image.showTextBadge(ports.get(position).idx+"");
+        holder.image.isShowBadge();
+
         //bind view here
         if (ports != null){
             Port p = ports.get(position);
@@ -155,6 +170,7 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
         View v;
         AppCompatTextView alias;
         CircleCharView cView;
+        BGABadgeImageView image;
         int pos;
 
         public PortItemViewHolder(View itemView) {
@@ -169,6 +185,7 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
 
             alias = (AppCompatTextView) v.findViewById(R.id.port_alias);
             cView = (CircleCharView) v.findViewById(R.id.port_circle);
+            image= (BGABadgeImageView) v.findViewById(R.id.port_image);
             cView.unselect(0);
         }
 

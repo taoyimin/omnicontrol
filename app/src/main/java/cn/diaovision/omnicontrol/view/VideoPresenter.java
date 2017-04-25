@@ -2,6 +2,9 @@ package cn.diaovision.omnicontrol.view;
 
 import android.support.annotation.NonNull;
 
+import java.util.List;
+
+import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
@@ -72,6 +75,24 @@ public class VideoPresenter implements VideoContract.Presenter {
         if (subscription != null){
             subscription.dispose();
         }
+    }
+
+    @Override
+    public Port getOutput(Port input) {
+        //获取系统配置的通道输出端，同步调用
+        return null;
+    }
+
+    @Override
+    public Port getInput(Port output) {
+        //获取系统配置的通道输入端，同步调用
+        return null;
+    }
+
+    @Override
+    public void setChannel(Port input, List<Port> output) {
+        //配置系统，异步调用
+
     }
 
     //TODO: add viewmodel operations if needed

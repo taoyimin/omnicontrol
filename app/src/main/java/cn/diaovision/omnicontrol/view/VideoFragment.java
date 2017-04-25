@@ -72,6 +72,11 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
         /* test code */
         final List<Port> ports = new ArrayList<>();
         final List<Port> outports = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            Port port = new Port(i, i, i, i);
+            ports.add(port);
+            outports.add(port);
+        }
 
         //RecyclerView config
         inputPorts.config(ports, R.layout.item_port);
@@ -95,10 +100,6 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
             }
         });
 
-
-
-
-
         outputPorts.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
             @Override
             public void onSelected(int pos) {
@@ -118,7 +119,7 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
         for(int i=0;i<20;i++){
             list.add("第"+i+"项");
         }
-
+        //辅助屏
         AuxiliaryPanelItemAdapter adapter=new AuxiliaryPanelItemAdapter(list);
         auxiliary.setAdapter(adapter);
         auxiliary.setLayoutManager(new LinearLayoutManager(getContext()));
