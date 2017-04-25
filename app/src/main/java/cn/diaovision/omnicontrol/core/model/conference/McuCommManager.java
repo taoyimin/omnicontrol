@@ -1,6 +1,7 @@
 package cn.diaovision.omnicontrol.core.model.conference;
 
 
+import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
 
@@ -28,8 +29,12 @@ import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
 import cn.diaovision.omnicontrol.rx.RxSubscriber;
+import cn.diaovision.omnicontrol.rx.RxThen;
 import cn.diaovision.omnicontrol.util.ByteBuffer;
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -58,8 +63,6 @@ public class McuCommManager {
 
     public McuCommManager(Mcu mcu){
         client = new TcpClient(mcu.ip, mcu.port);
-
-//        txQueue = new ArrayBlockingQueue<>(QUEUE_LEN);
 
         recvBuff = new ByteBuffer(RECV_BUFF_LEN);
 
@@ -105,42 +108,111 @@ public class McuCommManager {
         threadStop();
     }
 
-    public void send(final McuMessage msg, final RxSubscriber subscriber){
-
-        Flowable.just("")
-                //send
-                .map(new Function<String, McuMessage>() {
-                    @Override
-                    public McuMessage apply(String s) throws Exception {
-                        int res = client.send(msg.toBytes());
-                        if (res > 0){
-                            return msg;
+    public void sendSequential(final List<McuBundle> bundleList, final RxSubscriber subscriber){
+        if (client.getState() == TcpClient.STATE_CONNECTED) {
+            Flowable.fromIterable(bundleList)
+                    .concatMap(new Function<McuBundle, Publisher<?>>() {
+                        @Override
+                        public Publisher<?> apply(McuBundle mcuBundle) throws Exception {
+                            final McuMessage msg = mcuBundle.msg;
+                            final RxReq req = mcuBundle.req;
+                            return Flowable.create(new FlowableOnSubscribe<McuMessage>() {
+                                @Override
+                                public void subscribe(FlowableEmitter<McuMessage> e) throws Exception {
+                                    int res = client.send(msg.toBytes());
+                                    if (res > 0) {
+//                                    e.onNext(msg);
+                                    } else {
+                                        e.onError(new IOException());
+                                    }
+                                }
+                            }, BackpressureStrategy.BUFFER)
+                                    .map(new Function<McuMessage, RxMessage>() {
+                                        @Override
+                                        public RxMessage apply(McuMessage mcuMessage) throws Exception {
+                                            if (!mcuMessage.requiresAck()) {
+                                                return new RxMessage(RxMessage.DONE);
+                                            }
+                                            while (true) {
+                                                McuMessage ackMsg = findAndPopAck(mcuMessage);
+                                                if (ackMsg != null) {
+                                                    req.request(); //work after done
+                                                    return new RxMessage(RxMessage.ACK, ackMsg.getSubmsg());
+                                                }
+                                                Thread.sleep(20);
+                                            }
+                                        }
+                                    })
+                                    .timeout(ACK_TIMEOUT, TimeUnit.MILLISECONDS);
                         }
-                        else {
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(subscriber);
+        }
+        else {
+            Flowable.just("")
+                    .map(new Function<String, RxMessage>() {
+                        @Override
+                        public RxMessage apply(String s) throws Exception {
                             throw new IOException();
                         }
-                    }
-                })
-                //wait ack
-                .map(new Function<McuMessage, RxMessage>() {
-                    @Override
-                    public RxMessage apply(McuMessage mcuMessage) throws Exception {
-                        if (!mcuMessage.requiresAck()){
-                            return new RxMessage(RxMessage.DONE);
-                        }
-                        while(true){
-                            McuMessage ackMsg = findAndPopAck(mcuMessage);
-                            if (ackMsg != null){
-                                return new RxMessage(RxMessage.ACK, ackMsg.getSubmsg());
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(subscriber);
+        }
+
+    }
+
+    public void send(final McuMessage msg, final RxSubscriber subscriber) {
+        if (client.getState() == TcpClient.STATE_CONNECTED) {
+            Flowable.just("")
+                    //send
+                    .map(new Function<String, McuMessage>() {
+                        @Override
+                        public McuMessage apply(String s) throws Exception {
+                            int res = client.send(msg.toBytes());
+                            if (res > 0) {
+                                return msg;
+                            } else {
+                                throw new IOException();
                             }
-                            Thread.sleep(20);
                         }
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .timeout(ACK_TIMEOUT, TimeUnit.MILLISECONDS)
-                .subscribe(subscriber);
+                    })
+                    //wait ack
+                    .map(new Function<McuMessage, RxMessage>() {
+                        @Override
+                        public RxMessage apply(McuMessage mcuMessage) throws Exception {
+                            if (!mcuMessage.requiresAck()) {
+                                return new RxMessage(RxMessage.DONE);
+                            }
+                            while (true) {
+                                McuMessage ackMsg = findAndPopAck(mcuMessage);
+                                if (ackMsg != null) {
+                                    return new RxMessage(RxMessage.ACK, ackMsg.getSubmsg());
+                                }
+                                Thread.sleep(20);
+                            }
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .timeout(ACK_TIMEOUT, TimeUnit.MILLISECONDS)
+                    .subscribe(subscriber);
+        }
+        else {
+            Flowable.just("")
+                    .map(new Function<String, RxMessage>() {
+                        @Override
+                        public RxMessage apply(String s) throws Exception {
+                            throw new IOException();
+                        }
+                    })
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(subscriber);
+        }
     }
 
 
@@ -182,8 +254,6 @@ public class McuCommManager {
 
     private void threadInit(){
 
-//        txQueue.clear();
-
         ackListLock.lock();
         try {
             ackList.clear();
@@ -214,49 +284,6 @@ public class McuCommManager {
             }
         };
         threadList.add(checkConnectThread);
-
-//         //send thread output message+consumer(callback) to socket
-//        BaseCyclicThread sendThread = new BaseCyclicThread() {
-//            @Override
-//            public void work() {
-//                try {
-//                    final McuBundle bundle = txQueue.take();
-//
-//                    Flowable flowable = RxExecutor.getInstance().buildFlow(new RxReq() {
-//                        @Override
-//                        public RxMessage request() {
-//                            int res = client.send(bundle.msg.toBytes());
-//                            if (res > 0){
-//                                bundle.timeSend = System.currentTimeMillis();
-//
-//                                //lock list
-//                                txSendWithAckLock.lock();
-//                                try {
-//                                    txSendWithAckList.add(bundle);
-//                                }
-//                                finally {
-//                                    txSendWithAckLock.unlock();
-//                                }
-//
-//                                return new RxMessage(RxMessage.DONE, bundle.msg);
-//                            }
-//                            else {
-//                                return null;
-//                            }
-//                        }
-//                    }, 2000, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN);
-//
-//                    if (bundle.subscriber != null){
-//                        flowable.subscribe(bundle.subscriber);
-//                    }
-//
-//                    Thread.sleep(10);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-//        threadList.add(sendThread);
 
         //client receive thread
         BaseCyclicThread recvThread = new BaseCyclicThread() {
@@ -447,51 +474,6 @@ public class McuCommManager {
 
     }
 
-//    /* ************************************************************
-//     *find request given the ACK message, and pop it from the list
-//     * ************************************************************/
-//    public McuBundle findAndPopRequest(ResMessage resMessage){
-//        McuBundle bundle = null;
-//        txSendWithAckLock.lock();
-//        try{
-//            boolean foundReq = false;
-//            int idx = -1;
-//
-//            for (int m = 0; m < txSendWithAckList.size(); m ++){
-//                McuBundle bb = txSendWithAckList.get(m);
-//                if (resMessage.type == ResMessage.CONF_ALL && bb.msg.getSubtype() == ReqMessage.REQ_CONF_ALL) {
-//                    foundReq = true;
-//                    idx = m;
-//                    break;
-//                }
-//                else if (resMessage.type == ResMessage.CONF && bb.msg.getSubtype() == ReqMessage.REQ_CONF){
-//                    foundReq = true;
-//                    idx = m;
-//                    break;
-//                }
-//                else if (resMessage.type == ResMessage.TERM_ALL && bb.msg.getSubtype() == ReqMessage.REQ_TERM_ALL){
-//                    foundReq = true;
-//                    idx = m;
-//                    break;
-//                }
-//                else if (resMessage.type == ResMessage.CONF_CONFIG && bb.msg.getSubtype() == ReqMessage.REQ_CONF_CONFIGED){
-//                    foundReq = true;
-//                    idx = m;
-//                    break;
-//                }
-//            }
-//
-//            if (foundReq && idx > 0) {
-//                bundle = txSendWithAckList.get(idx);
-//                txSendWithAckList.remove(idx);
-//            }
-//        }
-//        finally {
-//            txSendWithAckLock.unlock();
-//        }
-//        return bundle;
-//    }
-
     public void setCommListener(CommListener listener) {
         this.commListener = listener;
         McuBundle bundle = new McuBundle();
@@ -509,10 +491,11 @@ public class McuCommManager {
         void onRecv(McuMessage rxMessage);
     }
 
-    private class McuBundle{
+    static public class McuBundle{
         long timeRecv;
         McuMessage msg;
         RxSubscriber subscriber;
+        RxReq req;
     }
 
 }
