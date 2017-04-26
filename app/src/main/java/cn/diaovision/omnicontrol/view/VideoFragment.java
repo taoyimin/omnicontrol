@@ -1,12 +1,17 @@
 package cn.diaovision.omnicontrol.view;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +24,7 @@ import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
 import cn.diaovision.omnicontrol.widget.adapter.AuxiliaryPanelItemAdapter;
+import cn.diaovision.omnicontrol.widget.adapter.PortItemAdapter;
 
 /**
  * Created by liulingfeng on 2017/2/24.
@@ -35,6 +41,9 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
 
     @BindView(R.id.auxiliary)
     RecyclerView auxiliary;
+
+    boolean canEdit = false;
+    boolean editing=false;
 
 /*    @BindView(R.id.txt_output)
     AppCompatTextView txtOutput;*/
@@ -84,9 +93,98 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
         inputPorts.updateData();
         outputPorts.updateData();
 
+        inputPorts.adapter.setOnItemTouchListener(new PortItemAdapter.OnItemTouchListener() {
+            @Override
+            public void onItemTouchEvent(MotionEvent e, int position) {
+                switch (e.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        //手指按下只会触发item的down事件
+                        canEdit=true;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        //recyclerview没有移动，则手指抬起时触发item的up事件
+                        canEdit=false;
+                        if(editing){
+                            editing=false;
+                            //完成编辑的操作
+                            Toast.makeText(getContext(),"完成编辑",Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                }
+            }
+        });
 
+        inputPorts.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        //recyclerview移动了，则手指抬起时触发recyclerview的up事件
+                        canEdit=false;
+                        if(editing){
+                            editing=false;
+                            //完成编辑的操作
+                            Toast.makeText(getContext(),"完成编辑",Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                }
+                return false;
+            }
+        });
 
         inputPorts.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
+            @Override
+            public void onSelected(int pos) {
+
+            }
+
+            @Override
+            public void onUnselected(int pos) {
+            }
+        });
+
+        outputPorts.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
+            @Override
+            public void onSelected(int pos) {
+                if(canEdit&&!editing){
+                    editing=true;
+                    Toast.makeText(getContext(),"进入编辑模式",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onUnselected(int pos) {
+
+            }
+        });
+
+        inputPorts.setOnItemLongClickListener(new PortRadioGroupView.OnItemLongClickListener() {
+            @Override
+            public void onLongClick(View v, int pos) {
+                if(!editing) {
+                    canEdit=false;
+                    popupDialog(outports.get(pos));
+                }
+            }
+        });
+
+        outputPorts.setOnItemLongClickListener(new PortRadioGroupView.OnItemLongClickListener() {
+            @Override
+            public void onLongClick(View v, int pos) {
+                if(!editing) {
+                    canEdit=false;
+                    popupDialog(outports.get(pos));
+                }
+            }
+        });
+
+/*        inputPorts.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
             @Override
             public void onSelected(int pos) {
                 outputPorts.select(pos);
@@ -112,7 +210,7 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
             public void onUnselected(int pos) {
 
             }
-        });
+        });*/
 
         /*test code*/
         List<String> list=new ArrayList<>();
@@ -129,5 +227,31 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
     @Override
     public void bindPresenter() {
         presenter = new VideoPresenter(this);
+    }
+
+    /**
+     * 弹出对话框
+     * @param port
+     */
+    void popupDialog(Port port){
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_port, null);
+        TextView textView= (TextView) view.findViewById(R.id.dialog_text);
+        textView.setText("这是"+port.idx+"号端口");
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(view);
+        builder.setTitle("编辑端口信息");
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 提交端口修改信息
+            }
+        });
+        builder.setNegativeButton("取消",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 取消修改端口信息
+            }
+        });
+        builder.show();
     }
 }
