@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -108,6 +109,16 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
             }
         });
 
+        holder.getV().setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(onItemTouchListener!=null){
+                    onItemTouchListener.onItemTouchEvent(event,position);
+                }
+                return false;
+            }
+        });
+
         //设置badgeview
         holder.image.showTextBadge(ports.get(position).idx+"");
         holder.image.isShowBadge();
@@ -202,5 +213,15 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
         void onLongClick(View v, int position);
         void onSelect(View v, int position);
         void onUnselect(View v, int position);
+    }
+
+    OnItemTouchListener onItemTouchListener;
+
+    public interface OnItemTouchListener{
+        void onItemTouchEvent(MotionEvent e, int position);
+    }
+
+    public void setOnItemTouchListener(OnItemTouchListener onItemTouchListener) {
+        this.onItemTouchListener = onItemTouchListener;
     }
 }
