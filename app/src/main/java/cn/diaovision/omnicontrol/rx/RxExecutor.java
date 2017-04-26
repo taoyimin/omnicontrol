@@ -1,7 +1,14 @@
 package cn.diaovision.omnicontrol.rx;
 
-import org.reactivestreams.Subscriber;
+import android.util.Log;
 
+import org.reactivestreams.Publisher;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
+import java.nio.Buffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.BackpressureStrategy;
@@ -26,6 +33,8 @@ public class RxExecutor {
     public final static int SCH_ANDROID_MAIN = 4;
 
     static private RxExecutor instance;
+
+    private Flowable chainedFlow;
 
     private RxExecutor(){
     }
@@ -111,41 +120,6 @@ public class RxExecutor {
         .subscribe(subscriber);
     }
 
-    /* **********************************
-     * build a flowable
-     * @return: a flowable to subscribe
-     * **********************************/
-    public Flowable<RxMessage> buildFlow(final RxReq req, int subsribeOn, int observeOn){
-        return Flowable.just("")
-                .map(new Function<String, RxMessage>() {
-                    @Override
-                    public RxMessage apply(String s) throws Exception {
-                        RxMessage res = req.request();
-                        return res;
-                    }
-                })
-                .subscribeOn(getScheduler(subsribeOn))
-                .observeOn(getScheduler(observeOn));
-    }
-
-    /* **********************************
-     * build a flowable with timeout
-     * @return: a flowable to subscribe
-     * **********************************/
-    public Flowable<RxMessage> buildFlow(final RxReq req, int timeout, int subsribeOn, int observeOn){
-        return Flowable.just("")
-                .map(new Function<String, RxMessage>() {
-                    @Override
-                    public RxMessage apply(String s) throws Exception {
-                        RxMessage res = req.request();
-                        return res;
-                    }
-                })
-                .timeout(timeout, TimeUnit.MILLISECONDS)
-                .subscribeOn(getScheduler(subsribeOn))
-                .observeOn(getScheduler(observeOn));
-    }
-
     private Scheduler getScheduler(int type){
         switch (type){
             case SCH_IO:
@@ -159,5 +133,29 @@ public class RxExecutor {
             default:
                 return Schedulers.newThread();
         }
+    }
+
+    /*post serial of request returning a flowable for future calling*/
+    public Flowable<RxMessage> post(List<RxReq> req, final int subscribeType, final int observeType){
+        return Flowable.fromIterable(req)
+                .flatMap(new Function<RxReq, Publisher<RxMessage>>() {
+                    @Override
+                    public Publisher<RxMessage> apply(final RxReq rxReq) throws Exception {
+                        return Flowable.create(new FlowableOnSubscribe<RxMessage>() {
+                            @Override
+                            public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
+                                RxMessage rxMsg = rxReq.request();
+                                if (rxMsg != null){
+                                    e.onNext(rxMsg);
+                                }
+                                else {
+                                    e.onError(new Exception());
+                                }
+                            }
+                        }, BackpressureStrategy.BUFFER)
+                                .subscribeOn(getScheduler(subscribeType))
+                                .observeOn(getScheduler(observeType));
+                    }
+                });
     }
 }

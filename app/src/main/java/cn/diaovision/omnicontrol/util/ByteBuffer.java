@@ -10,8 +10,8 @@ public class ByteBuffer {
     byte buff[];
     int h;
     int t;
-    int c;
-    int rw;
+    int c; //next available pos to put byte
+    int rw; //next readable pos
     boolean overflow;
     volatile int contentLen;
 
@@ -21,29 +21,28 @@ public class ByteBuffer {
     }
 
     public ByteBuffer(int len){
-        buff = new byte[DEFAULT_SIZE];
+        buff = new byte[len];
         reset();
     }
 
-    public void push(byte buff[], int len){
-        len = buff.length > len ? len : buff.length;
+    public void push(byte[] bs, int len){
+        len = bs.length > len ? len : bs.length;
         for (int m = 0; m < len; m ++){
-            buff[c] = buff[m];
-            c++;
-            if (c>t && !overflow){
+            buff[c] = bs[m];
+            c++; //to the next empty position
+            if (c > t && !overflow){
                 c = h;
                 overflow = true;
             }
             else if (c > t && overflow){
                 c = h;
-                if (rw == t){
+                if (rw == t){ //move p_rw to p_c
                     rw = c;
                 }
             }
 
             //push the p_rw so p_c < = p_rw and is overflowed
-            if (c > rw && overflow)
-            {
+            if (c > rw && overflow) {
                 rw = c;
             }
         }
@@ -51,15 +50,17 @@ public class ByteBuffer {
         contentLen = getContentLen();
     }
 
-    public void read(byte buff[], int len){
-        if (!(contentLen < len || len == 0)) {
-            for (int m = 0; m < len; m ++){
-                if (rw + m <= t){
-                    buff[m] = this.buff[rw + m];
-                }
-                else {
-                    buff[m] = this.buff[h + m - (t - rw) - 1];
-                }
+    public void read(byte bs[], int len){
+        if (len > getContentLen() || len == 0){
+            return;
+        }
+
+        for (int m = 0; m < len; m ++){
+            if (rw + m <= t){
+                bs[m] = this.buff[rw + m];
+            }
+            else {
+                bs[m] = this.buff[h + m - (t - rw) - 1];
             }
         }
     }

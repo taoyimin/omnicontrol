@@ -10,30 +10,27 @@ import cn.diaovision.omnicontrol.model.Config;
  */
 
 public class Mcu {
-    public static final int STATE_ONLINE = 1;
-    public static final int STATE_OFFLINE = 0;
+    public static final byte STATE_ONLINE = 1;
+    public static final byte STATE_OFFLINE = 0;
 
     int id;
-    int level; //1 byte, MCU级别，1：1级，段本部MCU，2：2级，车间MCU
-    int type; //1 byte, MCU类型，1：广播端所在MCU，2：选看端所在MCU
-    int state; //1 byte, MCU状态，0：不在线，1：在线
+    byte level; //1 byte, MCU级别，1：1级，段本部MCU，2：2级，车间MCU
+    byte type; //1 byte, MCU类型，1：广播端所在MCU，2：选看端所在MCU
+    byte state; //1 byte, MCU状态，0：不在线，1：在线
     String name;
-    String ip;
     String descrip;
     int termNum;
     Socket skt;
 
     //application specific
+    String ip;
     int port;
 
     Conf[] conf; //maximal 32
 
-    public Mcu(){
+    public Mcu(String ip, int port){
         conf = new Conf[32];
-    }
-
-    public void init(Config cfg){
-        ip = cfg.getMcuIp();
-        port = cfg.getMcuPort();
+        this.ip = ip;
+        this.port = port;
     }
 }

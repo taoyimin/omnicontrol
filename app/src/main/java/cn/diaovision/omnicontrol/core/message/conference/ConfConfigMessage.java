@@ -263,10 +263,10 @@ public class ConfConfigMessage implements BaseMessage, Serializable {
     }
 
     static public class TermAttr{
-        int id; //2 bytes
-        int type;  //2 bytes
-        long addr; //4 bytes
-        int bandwidth; //2 bytes
+        public int id; //2 bytes
+        public  int type;  //2 bytes
+        public long addr; //4 bytes
+        public int bandwidth; //2 bytes
     }
 
     public int getId() {
@@ -275,6 +275,22 @@ public class ConfConfigMessage implements BaseMessage, Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getTermAttrNum() {
+        return termAttrNum;
+    }
+
+    public void setTermAttrNum(int termAttrNum) {
+        this.termAttrNum = termAttrNum;
+    }
+
+    public TermAttr[] getTermAttrs() {
+        return termAttrs;
+    }
+
+    public void setTermAttrs(TermAttr[] termAttrs) {
+        this.termAttrs = termAttrs;
     }
 }
 

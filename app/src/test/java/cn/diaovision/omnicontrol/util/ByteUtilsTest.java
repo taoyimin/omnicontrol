@@ -11,6 +11,27 @@ import static org.junit.Assert.*;
  */
 public class ByteUtilsTest {
     @Test
+    public void ip2num() throws Exception {
+        String ip = "192.168.31.211";
+
+        int num = ByteUtils.ip2num(ip);
+        byte[] bytes = ByteUtils.int2bytes(num, 4);
+        assertEquals(bytes[0]&0xff, 192);
+        assertEquals(bytes[1]&0xff, 168);
+        assertEquals(bytes[2]&0xff, 31);
+        assertEquals(bytes[3]&0xff, 211);
+    }
+
+    @Test
+    public void num2ip() throws Exception {
+        String ip = "192.168.31.211";
+
+        int num = ByteUtils.ip2num(ip);
+        byte[] bytes = ByteUtils.int2bytes(num, 4);
+        assertEquals(ip, ByteUtils.num2ip(num));
+    }
+
+    @Test
     public void int2bytes() throws Exception {
         int a = 0x12345678;
         byte[] bytes = ByteUtils.int2bytes(a, 4);
