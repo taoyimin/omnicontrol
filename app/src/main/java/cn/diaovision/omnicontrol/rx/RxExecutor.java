@@ -120,41 +120,6 @@ public class RxExecutor {
         .subscribe(subscriber);
     }
 
-    /* **********************************
-     * build a flowable
-     * @return: a flowable to subscribe
-     * **********************************/
-    public Flowable<RxMessage> buildFlow(final RxReq req, int subsribeOn, int observeOn){
-        return Flowable.just("")
-                .map(new Function<String, RxMessage>() {
-                    @Override
-                    public RxMessage apply(String s) throws Exception {
-                        RxMessage res = req.request();
-                        return res;
-                    }
-                })
-                .subscribeOn(getScheduler(subsribeOn))
-                .observeOn(getScheduler(observeOn));
-    }
-
-    /* **********************************
-     * build a flowable with timeout
-     * @return: a flowable to subscribe
-     * **********************************/
-    public Flowable<RxMessage> buildFlow(final RxReq req, int timeout, int subsribeOn, int observeOn){
-        return Flowable.just("")
-                .map(new Function<String, RxMessage>() {
-                    @Override
-                    public RxMessage apply(String s) throws Exception {
-                        RxMessage res = req.request();
-                        return res;
-                    }
-                })
-                .timeout(timeout, TimeUnit.MILLISECONDS)
-                .subscribeOn(getScheduler(subsribeOn))
-                .observeOn(getScheduler(observeOn));
-    }
-
     private Scheduler getScheduler(int type){
         switch (type){
             case SCH_IO:
@@ -170,40 +135,26 @@ public class RxExecutor {
         }
     }
 
-    public void testChain(){
-        List<String> stringList = new ArrayList<>();
-        for (int m = 0; m < 100; m ++){
-            stringList.add(String.valueOf(m));
-        }
-
-        Flowable.fromIterable(stringList)
-                .flatMap(new Function<String, Publisher<?>>() {
+    /*post serial of request returning a flowable for future calling*/
+    public Flowable<RxMessage> post(List<RxReq> req, final int subscribeType, final int observeType){
+        return Flowable.fromIterable(req)
+                .flatMap(new Function<RxReq, Publisher<RxMessage>>() {
                     @Override
-                    public Publisher<?> apply(final String s) throws Exception {
-                        return Flowable.create(new FlowableOnSubscribe<String>() {
+                    public Publisher<RxMessage> apply(final RxReq rxReq) throws Exception {
+                        return Flowable.create(new FlowableOnSubscribe<RxMessage>() {
                             @Override
-                            public void subscribe(FlowableEmitter<String> e) throws Exception {
-                                        Log.i("U", "RX apply: " + s);
-                                        Thread.sleep((long)(Math.random()*20));
-                                        e.onNext(s);
+                            public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
+                                RxMessage rxMsg = rxReq.request();
+                                if (rxMsg != null){
+                                    e.onNext(rxMsg);
+                                }
+                                else {
+                                    e.onError(new Exception());
+                                }
                             }
-                        }, BackpressureStrategy.BUFFER);
-//                                .map(new Function<String, String>() {
-//                                    @Override
-//                                    public String apply(String s) throws Exception {
-//                                        Log.i("U", "RX apply: " + s);
-//                                        Thread.sleep((long)(Math.random()*20));
-//                                        return s;
-//                                    }
-//                                });
-                    }
-                })
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Object>() {
-                    @Override
-                    public void accept(Object o) throws Exception {
-                        Log.i("U", "RX output: " + o);
+                        }, BackpressureStrategy.BUFFER)
+                                .subscribeOn(getScheduler(subscribeType))
+                                .observeOn(getScheduler(observeType));
                     }
                 });
     }
