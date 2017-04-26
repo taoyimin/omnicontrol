@@ -23,8 +23,12 @@ import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
 import cn.diaovision.omnicontrol.rx.RxSubscriber;
 import cn.diaovision.omnicontrol.util.ByteUtils;
+import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
+import io.reactivex.FlowableEmitter;
+import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -123,6 +127,12 @@ public class ConfManager {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(3) //retry initialize 3 times before it really calls to the onError
+                .doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        state.set(STATE_READY);
+                    }
+                })
                 .subscribe(subscriber);
     }
 
