@@ -35,6 +35,7 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
     private AtomicBoolean isBinding;
 
     private OnItemClickListener itemClickListener;
+    OnItemTouchListener onItemTouchListener;
 
     public PortItemAdapter(List<Port> ports, int layout){
         this.ports = ports;
@@ -113,7 +114,7 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if(onItemTouchListener!=null){
-                    onItemTouchListener.onItemTouchEvent(event,position);
+                    onItemTouchListener.onItemTouchEvent(v,position);
                 }
                 return false;
             }
@@ -215,10 +216,8 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
         void onUnselect(View v, int position);
     }
 
-    OnItemTouchListener onItemTouchListener;
-
     public interface OnItemTouchListener{
-        void onItemTouchEvent(MotionEvent e, int position);
+        void onItemTouchEvent(View v, int position);
     }
 
     public void setOnItemTouchListener(OnItemTouchListener onItemTouchListener) {
