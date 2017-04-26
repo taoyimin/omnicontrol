@@ -24,11 +24,11 @@ public class ResMessage implements BaseMessage, Serializable{
     public final static int CONF_CONFIG = 17;
     public final static int ADDRBOOK = 19;
     public final static int CREATE_CONF = 20;
-    public final static int INVITE_ATTEND = 31;
+    public final static int INVITE_TERM = 31;
     public final static int USER = 32;
     public final static int USERLIST = 33;
     public final static int ADD_CONF = 34;
-    public final static int ADD_ATTEND = 35;
+    public final static int ADD_TERM = 35;
     public final static int SPEAKER = 36; //发言申请
     public final static int CHAIRUSER = 0x25; //发言申请
 
@@ -50,6 +50,18 @@ public class ResMessage implements BaseMessage, Serializable{
     public final static int ERROR_WEB_TERM_NOTFOUND = 0x1011;	//终端没有找到
     public final static int ERROR_WEB_INVALID_PASSWORD = 0x1012;	//密码不对
 
+    // 响应包含的信息 0 == NULL 1 == ConfInfo 2== TermInfo
+    // 3 ==ConfData  4==TermData
+    // 5 == UserList
+    public final static int INFO_CONFINFO = 1;
+    public final static int INFO_TERMINFO = 2;
+    public final static int INFO_CONFDATA = 3;
+    public final static int INFO_TERMDATA = 4;
+    public final static int INFO_USERLIST = 5;
+
+    public final static int STATUS_SUCCESS = 1;
+    public final static int STATUS_FAIL = 0;
+
     //1.所有会议信息响应;2.指定会议响应;
     //3.会议中所有终端信息响应; 4.指定终端信息响应;
     //5.删除终端响应; 6.混音响应; 7.多画面响应; 8.释放主席响应;
@@ -64,17 +76,11 @@ public class ResMessage implements BaseMessage, Serializable{
     public byte status; //响应状态 1 == 成功 0 == 失败
     public int error; //错误字(包含失败的原因)	在添加会议成功时此位代表会议ID
 
-    // 响应包含的信息 0 == NULL 1 == ConfInfo 2== TermInfo
-    // 3 ==ConfData  4==TermData
-    // 5 == UserList
-    public final static int INFO_CONFINFO = 1;
-    public final static int INFO_TERMINFO = 2;
-    public final static int INFO_CONFDATA = 3;
-    public final static int INFO_TERMDATA = 4;
-    public final static int INFO_USERLIST = 5;
-    byte infoType;
+    public byte infoType;
 
-    BaseMessage infoMsg;
+    public BaseMessage infoMsg;
+
+
 
     @Override
     public byte[] toBytes() {
@@ -89,5 +95,6 @@ public class ResMessage implements BaseMessage, Serializable{
     public int calcMessageLength() {
         return 5+infoMsg.calcMessageLength();
     }
+
 }
 
