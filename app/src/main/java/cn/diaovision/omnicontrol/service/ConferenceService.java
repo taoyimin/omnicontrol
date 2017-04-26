@@ -19,7 +19,7 @@ public class ConferenceService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mgr = new McuCommManager("192.168.2.1", 6000);
+//        mgr = new McuCommManager("192.168.2.1", 6000);
     }
 
     @Nullable
