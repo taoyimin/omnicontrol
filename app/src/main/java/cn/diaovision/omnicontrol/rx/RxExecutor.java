@@ -17,6 +17,7 @@ import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -26,7 +27,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by liulingfeng on 2017/4/3.
  */
 
-public class RxExecutor {
+public class RxExecutor{
     public final static int SCH_IO = 1;
     public final static int SCH_COMPUTATION = 2;
     public final static int SCH_NEW = 3;
@@ -34,7 +35,8 @@ public class RxExecutor {
 
     static private RxExecutor instance;
 
-    private Flowable chainedFlow;
+    private Flowable flow;
+    private List<RxReq> reqChain;
 
     private RxExecutor(){
     }
@@ -164,6 +166,79 @@ public class RxExecutor {
                                 .observeOn(getScheduler(observeType));
                     }
                 });
+    }
+
+
+    /*************************************************************************
+     * Rx chained calling: start a chain
+     * @param req
+     * @return
+     *************************************************************************/
+    public RxExecutor startRxChain(final RxReq req){
+        reqChain = new ArrayList<>();
+        reqChain.add(req);
+        return this;
+    }
+
+    /*************************************************************************
+     * Rx chained calling: add then request
+     * @param req
+     * @return
+     *************************************************************************/
+    public RxExecutor then(final RxReq req){
+        if (reqChain == null) return null;
+        reqChain.add(req);
+        return this;
+    }
+
+    /*************************************************************************
+     * Rx chained calling: finish chain
+     * @param
+     * @return
+     *************************************************************************/
+    public void finishRxChain(RxSubscriber<RxMessage> subscriber, int subscribeType, int observeType){
+        if (reqChain == null){
+            Flowable.create(new FlowableOnSubscribe<RxMessage>() {
+                @Override
+                public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
+                    e.onError(new Exception());
+                }
+            }, BackpressureStrategy.BUFFER)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(subscriber);
+        }
+        else {
+            if (reqChain.size() == 0){
+                Flowable.create(new FlowableOnSubscribe<RxMessage>() {
+                    @Override
+                    public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
+                        e.onComplete();
+                    }
+                }, BackpressureStrategy.BUFFER)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(subscriber);
+            }
+            else {
+                Flowable.fromIterable(reqChain)
+                        .flatMap(new Function<RxReq, Publisher<RxMessage>>() {
+                            @Override
+                            public Publisher<RxMessage> apply(RxReq rxReq) throws Exception {
+                                return Flowable.just(rxReq)
+                                        .map(new Function<RxReq, RxMessage>() {
+                                            @Override
+                                            public RxMessage apply(RxReq rxReq) throws Exception {
+                                                return rxReq.request();
+                                            }
+                                        });
+                            }
+                        })
+                        .subscribeOn(getScheduler(subscribeType))
+                        .observeOn(getScheduler(observeType))
+                        .subscribe(subscriber);
+            }
+        }
     }
 
     private Scheduler getScheduler(int type){
