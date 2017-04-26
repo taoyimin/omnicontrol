@@ -120,22 +120,29 @@ public class RxExecutor {
         .subscribe(subscriber);
     }
 
-    private Scheduler getScheduler(int type){
-        switch (type){
-            case SCH_IO:
-                return Schedulers.io();
-            case SCH_COMPUTATION:
-                return Schedulers.computation();
-            case SCH_NEW:
-                return Schedulers.newThread();
-            case SCH_ANDROID_MAIN:
-                return AndroidSchedulers.mainThread();
-            default:
-                return Schedulers.newThread();
-        }
+
+    /* **********************************************************
+     * a standard rx call: with rxsubscriber, timeout, and repeat
+     * *********************************************************/
+    public void post(final RxReq req, RxSubscriber subscriber, int subsribeOn, int observeOn, int timeout, int repeat){
+        Flowable.create(new FlowableOnSubscribe<Object>() {
+            @Override
+            public void subscribe(FlowableEmitter<Object> e) throws Exception {
+                RxMessage res = req.request();
+                if (res == null){
+                    e.onError(new RuntimeException());
+                }
+                e.onNext(res);
+            }
+        }, BackpressureStrategy.BUFFER)
+                .subscribeOn(getScheduler(subsribeOn))
+                .observeOn(getScheduler(observeOn))
+                .timeout(timeout, TimeUnit.MILLISECONDS)
+                .repeat(repeat)
+                .subscribe(subscriber);
     }
 
-    /*post serial of request returning a flowable for future calling*/
+    /*post serial of request returning a flowable for future subscribing*/
     public Flowable<RxMessage> post(List<RxReq> req, final int subscribeType, final int observeType){
         return Flowable.fromIterable(req)
                 .flatMap(new Function<RxReq, Publisher<RxMessage>>() {
@@ -157,5 +164,20 @@ public class RxExecutor {
                                 .observeOn(getScheduler(observeType));
                     }
                 });
+    }
+
+    private Scheduler getScheduler(int type){
+        switch (type){
+            case SCH_IO:
+                return Schedulers.io();
+            case SCH_COMPUTATION:
+                return Schedulers.computation();
+            case SCH_NEW:
+                return Schedulers.newThread();
+            case SCH_ANDROID_MAIN:
+                return AndroidSchedulers.mainThread();
+            default:
+                return Schedulers.newThread();
+        }
     }
 }

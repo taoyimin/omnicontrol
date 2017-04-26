@@ -29,7 +29,6 @@ import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
 import cn.diaovision.omnicontrol.rx.RxSubscriber;
-import cn.diaovision.omnicontrol.rx.RxThen;
 import cn.diaovision.omnicontrol.util.ByteBuffer;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
