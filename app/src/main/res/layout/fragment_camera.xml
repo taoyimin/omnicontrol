@@ -1,50 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:appCompat="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:id="@+id/panel_display">
-    </RelativeLayout>
-   
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
 
-    <android.support.percent.PercentRelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/panel_display">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-        <RelativeLayout
-            android:id="@+id/channel_list_wrapper"
-            android:layout_height="300dp"
-            appCompat:layout_widthPercent="50%">
+        </LinearLayout>
 
-            <cn.diaovision.omnicontrol.widget.PortRadioGroupView
-                android:id="@+id/channel_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true" />
-        </RelativeLayout>
+        <cn.diaovision.omnicontrol.widget.PortRadioGroupView
+            android:id="@+id/channel_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-        <cn.diaovision.omnicontrol.widget.PlayerControllerView
-            appCompat:layout_widthPercent="25%"
-            android:layout_height="300dp"
-            android:layout_toRightOf="@id/channel_list_wrapper"
-            android:id="@+id/play_controller"/>
+        </cn.diaovision.omnicontrol.widget.PortRadioGroupView>
+    </LinearLayout>
 
-        <RelativeLayout
-            android:layout_height="300dp"
-            android:layout_toRightOf="@+id/play_controller"
-            appCompat:layout_widthPercent="25%">
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
 
-            <cn.diaovision.omnicontrol.widget.CameraPresetRadioGroupView
-                android:id="@+id/preset_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="24dp" />
-        </RelativeLayout>
-    </android.support.percent.PercentRelativeLayout>
-</RelativeLayout>
+        <VideoView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <cn.diaovision.omnicontrol.widget.DirectionPad
+                android:id="@+id/pad_direction"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_margin="10dp"
+                android:layout_gravity="center_vertical"
+                android:layout_height="match_parent">
+
+            </cn.diaovision.omnicontrol.widget.DirectionPad>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:orientation="vertical"
+                android:gravity="center_vertical"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <Button
+                        android:layout_width="@dimen/camera_control_button_width"
+                        android:layout_height="@dimen/camera_control_button_height"
+                        android:text="@string/camera_zoomin"/>
+
+                    <Button
+                        android:layout_width="@dimen/camera_control_button_width"
+                        android:layout_height="@dimen/camera_control_button_height"
+                        android:text="@string/camera_zoomout"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal">
+
+                    <Button
+                        android:layout_width="@dimen/camera_control_button_width"
+                        android:layout_height="@dimen/camera_control_button_height"
+                        android:text="@string/camera_fast"/>
+
+                    <Button
+                        android:layout_width="@dimen/camera_control_button_width"
+                        android:layout_height="@dimen/camera_control_button_height"
+                        android:text="@string/camera_stop"/>
+
+                    <Button
+                        android:layout_width="@dimen/camera_control_button_width"
+                        android:layout_height="@dimen/camera_control_button_height"
+                        android:text="@string/camera_slow"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:orientation="vertical"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+        </LinearLayout>
+
+        <cn.diaovision.omnicontrol.widget.CameraPresetRadioGroupView
+            android:id="@+id/preset_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+        </cn.diaovision.omnicontrol.widget.CameraPresetRadioGroupView>
+
+    </LinearLayout>
+
+</LinearLayout>
