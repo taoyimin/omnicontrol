@@ -21,7 +21,7 @@ public class CameraPresetRadioGroupView extends RecyclerView {
     List<HiCamera.Preset> presetList;
     int layout;
     GridLayoutManager layoutMgr;
-    CameraPresetItemAdapter adapter;
+    public CameraPresetItemAdapter adapter;
 
     OnItemSelectListener onItemSelectListener;
 
@@ -33,9 +33,10 @@ public class CameraPresetRadioGroupView extends RecyclerView {
 
     public CameraPresetRadioGroupView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        ctx = context;
     }
 
-    public void config(List<HiCamera.Preset> presetList, int layout){
+    public void config(final List<HiCamera.Preset> presetList, int layout){
         this.presetList = presetList;
         this.layout = layout;
 
@@ -49,7 +50,6 @@ public class CameraPresetRadioGroupView extends RecyclerView {
         adapter.setOnItemClickedListener(new CameraPresetItemAdapter.OnItemClickListener() {
             @Override
             public void onLongClick(View v, int position) {
-
             }
 
             @Override
@@ -155,6 +155,4 @@ public class CameraPresetRadioGroupView extends RecyclerView {
         layoutMgr = new GridLayoutManager(ctx, spancount, direction, false);
         this.setLayoutManager(layoutMgr);
     }
-
-
 }
