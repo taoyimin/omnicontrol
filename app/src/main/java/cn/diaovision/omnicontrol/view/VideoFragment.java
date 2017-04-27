@@ -1,16 +1,13 @@
 package cn.diaovision.omnicontrol.view;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -92,7 +89,6 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
             public void dispatchTouchEvent(View v, MotionEvent e, int position) {
                 switch (e.getAction()){
                     case MotionEvent.ACTION_DOWN:
-                        //手指按下只会触发item的down事件
                         canEdit=true;
                         break;
                     case MotionEvent.ACTION_MOVE:
@@ -115,7 +111,7 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
                 //没有在编辑状态则弹出对话框
                 canEdit=false;
                 if(!editing)
-                    popupDialog(ports.get(position));
+                    inputPorts.popupDialog(ports.get(position));
             }
         });
 
@@ -131,6 +127,16 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
             @Override
             public void onUnselected(int pos) {
 
+            }
+        });
+
+        outputPorts.setOnItemLongClickListener(new PortRadioGroupView.OnItemLongClickListener() {
+            @Override
+            public void onLongClick(View v, int position) {
+                //没有在编辑状态则弹出对话框
+                canEdit=false;
+                if(!editing)
+                    outputPorts.popupDialog(outports.get(position));
             }
         });
 
@@ -174,35 +180,6 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
         AuxiliaryPanelItemAdapter adapter=new AuxiliaryPanelItemAdapter(list);
         auxiliary.setLayoutManager(new LinearLayoutManager(getContext()));
         auxiliary.setAdapter(adapter);
-    }
-
-    /**
-     * 弹出对话框
-     * @param port
-     */
-    void popupDialog(Port port){
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_port, null);
-        TextView textView= (TextView) view.findViewById(R.id.dialog_text);
-        textView.setText("这是"+port.idx+"号端口");
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        builder.setView(view);
-        builder.setTitle("编辑端口信息");
-        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // 提交端口修改信息
-
-            }
-        });
-        builder.setNegativeButton("取消",new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // 取消修改端口信息
-
-            }
-        });
-        builder.show();
     }
 
     @Override
