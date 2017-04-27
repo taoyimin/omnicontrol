@@ -1,15 +1,20 @@
 package cn.diaovision.omnicontrol.widget;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.List;
 
+import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.widget.adapter.PortItemAdapter;
 
@@ -188,5 +193,32 @@ public class PortRadioGroupView extends RecyclerView {
             });
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    /**
+     * 弹出对话框
+     * @param port
+     */
+    public void popupDialog(final Port port){
+        View view = LayoutInflater.from(ctx).inflate(R.layout.dialog_port, null);
+        TextView textView= (TextView) view.findViewById(R.id.dialog_text);
+        textView.setText("这是"+port.idx+"号端口");
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+
+        builder.setView(view);
+        builder.setTitle("编辑端口信息");
+        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 提交端口修改信息
+            }
+        });
+        builder.setNegativeButton("取消",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // 取消修改端口信息
+            }
+        });
+        builder.show();
     }
 }
