@@ -10,4 +10,11 @@
     <string name="txt_input">输入</string>
     <string name="txt_output">输出</string>
     <string name="txt_channel">通道</string>
+    
+    <!--camera-->
+    <string name="camera_zoomin">放大</string>
+    <string name="camera_zoomout">缩小</string>
+    <string name="camera_stop">停止</string>
+    <string name="camera_fast">快速</string>
+    <string name="camera_slow">慢速</string>
 </resources>

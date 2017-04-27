@@ -37,4 +37,8 @@
     <dimen name="login_text_size">20sp</dimen>
     <dimen name="login_edit_width">300dp</dimen>
     <dimen name="login_edit_height">40dp</dimen>
+    
+    <!--camera fragment-->
+    <dimen name="camera_control_button_width">60dp</dimen>
+    <dimen name="camera_control_button_height">60dp</dimen>
 </resources>
