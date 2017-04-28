@@ -17,6 +17,7 @@ import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -26,7 +27,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by liulingfeng on 2017/4/3.
  */
 
-public class RxExecutor {
+public class RxExecutor{
     public final static int SCH_IO = 1;
     public final static int SCH_COMPUTATION = 2;
     public final static int SCH_NEW = 3;
@@ -34,7 +35,8 @@ public class RxExecutor {
 
     static private RxExecutor instance;
 
-    private Flowable chainedFlow;
+    private Flowable flow;
+    private List<RxReq> reqChain;
 
     private RxExecutor(){
     }
@@ -120,22 +122,29 @@ public class RxExecutor {
         .subscribe(subscriber);
     }
 
-    private Scheduler getScheduler(int type){
-        switch (type){
-            case SCH_IO:
-                return Schedulers.io();
-            case SCH_COMPUTATION:
-                return Schedulers.computation();
-            case SCH_NEW:
-                return Schedulers.newThread();
-            case SCH_ANDROID_MAIN:
-                return AndroidSchedulers.mainThread();
-            default:
-                return Schedulers.newThread();
-        }
+
+    /* **********************************************************
+     * a standard rx call: with rxsubscriber, timeout, and repeat
+     * *********************************************************/
+    public void post(final RxReq req, RxSubscriber subscriber, int subsribeOn, int observeOn, int timeout, int repeat){
+        Flowable.create(new FlowableOnSubscribe<Object>() {
+            @Override
+            public void subscribe(FlowableEmitter<Object> e) throws Exception {
+                RxMessage res = req.request();
+                if (res == null){
+                    e.onError(new RuntimeException());
+                }
+                e.onNext(res);
+            }
+        }, BackpressureStrategy.BUFFER)
+                .subscribeOn(getScheduler(subsribeOn))
+                .observeOn(getScheduler(observeOn))
+                .timeout(timeout, TimeUnit.MILLISECONDS)
+                .repeat(repeat)
+                .subscribe(subscriber);
     }
 
-    /*post serial of request returning a flowable for future calling*/
+    /*post serial of request returning a flowable for future subscribing*/
     public Flowable<RxMessage> post(List<RxReq> req, final int subscribeType, final int observeType){
         return Flowable.fromIterable(req)
                 .flatMap(new Function<RxReq, Publisher<RxMessage>>() {
@@ -157,5 +166,93 @@ public class RxExecutor {
                                 .observeOn(getScheduler(observeType));
                     }
                 });
+    }
+
+
+    /*************************************************************************
+     * Rx chained calling: start a chain
+     * @param req
+     * @return
+     *************************************************************************/
+    public RxExecutor startRxChain(final RxReq req){
+        reqChain = new ArrayList<>();
+        reqChain.add(req);
+        return this;
+    }
+
+    /*************************************************************************
+     * Rx chained calling: add then request
+     * @param req
+     * @return
+     *************************************************************************/
+    public RxExecutor then(final RxReq req){
+        if (reqChain == null) return null;
+        reqChain.add(req);
+        return this;
+    }
+
+    /*************************************************************************
+     * Rx chained calling: finish chain
+     * @param
+     * @return
+     *************************************************************************/
+    public void finishRxChain(RxSubscriber<RxMessage> subscriber, int subscribeType, int observeType){
+        if (reqChain == null){
+            Flowable.create(new FlowableOnSubscribe<RxMessage>() {
+                @Override
+                public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
+                    e.onError(new Exception());
+                }
+            }, BackpressureStrategy.BUFFER)
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(subscriber);
+        }
+        else {
+            if (reqChain.size() == 0){
+                Flowable.create(new FlowableOnSubscribe<RxMessage>() {
+                    @Override
+                    public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
+                        e.onComplete();
+                    }
+                }, BackpressureStrategy.BUFFER)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(subscriber);
+            }
+            else {
+                Flowable.fromIterable(reqChain)
+                        .flatMap(new Function<RxReq, Publisher<RxMessage>>() {
+                            @Override
+                            public Publisher<RxMessage> apply(RxReq rxReq) throws Exception {
+                                return Flowable.just(rxReq)
+                                        .map(new Function<RxReq, RxMessage>() {
+                                            @Override
+                                            public RxMessage apply(RxReq rxReq) throws Exception {
+                                                return rxReq.request();
+                                            }
+                                        });
+                            }
+                        })
+                        .subscribeOn(getScheduler(subscribeType))
+                        .observeOn(getScheduler(observeType))
+                        .subscribe(subscriber);
+            }
+        }
+    }
+
+    private Scheduler getScheduler(int type){
+        switch (type){
+            case SCH_IO:
+                return Schedulers.io();
+            case SCH_COMPUTATION:
+                return Schedulers.computation();
+            case SCH_NEW:
+                return Schedulers.newThread();
+            case SCH_ANDROID_MAIN:
+                return AndroidSchedulers.mainThread();
+            default:
+                return Schedulers.newThread();
+        }
     }
 }

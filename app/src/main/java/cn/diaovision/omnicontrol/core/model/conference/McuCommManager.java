@@ -20,23 +20,19 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import cn.diaovision.omnicontrol.BaseCyclicThread;
 import cn.diaovision.omnicontrol.conn.TcpClient;
 import cn.diaovision.omnicontrol.core.message.conference.BaseMessage;
-import cn.diaovision.omnicontrol.core.message.conference.ConfConfigMessage;
 import cn.diaovision.omnicontrol.core.message.conference.McuMessage;
 import cn.diaovision.omnicontrol.core.message.conference.ReqMessage;
 import cn.diaovision.omnicontrol.core.message.conference.ResMessage;
-import cn.diaovision.omnicontrol.core.message.conference.UserMessage;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
 import cn.diaovision.omnicontrol.rx.RxSubscriber;
-import cn.diaovision.omnicontrol.rx.RxThen;
 import cn.diaovision.omnicontrol.util.ByteBuffer;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -48,7 +44,6 @@ import io.reactivex.schedulers.Schedulers;
 public class McuCommManager {
     private final static int RECV_BUFF_LEN = 65535; //buffer length for receiving
     private final static int ACK_TIMEOUT = 5000; //ACK timeout (in ms)
-    private final static int QUEUE_LEN = 10;
 
     private LinkedList<McuBundle> ackList;
     private ReentrantLock ackListLock;
@@ -240,7 +235,6 @@ public class McuCommManager {
         }
     }
 
-//    public void send(final McuMessage msg, )
     public void send(final McuMessage msg, final RxSubscriber subscriber, final ConfEditor confEditor) {
         if (client.getState() == TcpClient.STATE_CONNECTED) {
             Flowable.just(msg)
