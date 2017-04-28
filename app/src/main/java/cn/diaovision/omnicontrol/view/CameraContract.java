@@ -15,5 +15,10 @@ public interface CameraContract {
     }
 
     interface Presenter extends BasePresenter{
+        void cameraCtrlGo();
+        void addPreset();
+        void delPreset();
+        void updataPreset();
+        void loadPreset();
     }
 }

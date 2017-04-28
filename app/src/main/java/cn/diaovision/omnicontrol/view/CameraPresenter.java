@@ -74,6 +74,31 @@ public class CameraPresenter implements CameraContract.Presenter {
         }
     }
 
+    @Override
+    public void cameraCtrlGo() {
+
+    }
+
+    @Override
+    public void addPreset() {
+
+    }
+
+    @Override
+    public void delPreset() {
+
+    }
+
+    @Override
+    public void updataPreset() {
+
+    }
+
+    @Override
+    public void loadPreset() {
+
+    }
+
     //TODO: add viewmodel operations if needed
 //    public void onTitleChanged(String str){
 //    }

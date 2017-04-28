@@ -22,6 +22,7 @@ import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.widget.CameraPresetRadioGroupView;
 import cn.diaovision.omnicontrol.widget.DirectionPad;
 import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
+import cn.diaovision.omnicontrol.widget.VideoLayout;
 
 /**
  * Created by liulingfeng on 2017/2/24.
@@ -38,6 +39,9 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
 
     @BindView(R.id.pad_direction)
     DirectionPad padDirection;
+
+    @BindView(R.id.video_layout)
+    VideoLayout videoLayout;
 
     CameraPresenter presenter;
 
@@ -98,46 +102,16 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
             public void onMove(int deg, int velo) {
             }
         });
+
+        //设置播放路径
+        videoLayout.setVideoPath("http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8");
     }
 
     @Override
     public void bindPresenter() {
         this.presenter = new CameraPresenter(this);
-
     }
 
-/*    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        menu.clear();
-      //  if (R.id.tv == v.getId()) {
-            *//** 增加标题栏图标 *//*
-            menu.setHeaderIcon(R.mipmap.ic_launcher);
-            *//** 增加标题栏文字 *//*
-            menu.setHeaderTitle("上下文");
-            menu.add(1, 1, 1, "我是上下文菜单1111");
-            menu.add(1, 2, 2, "我是上下文菜单2222");
-     //   }
-    }*/
-
-/*    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        //获取上下文菜单适配器
-        AdapterView.AdapterContextMenuInfo cmi=(AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        //获取被选择的菜单位置
-        int posMenu=cmi.position;
-        //将菜单项与列表视图的条目相关联
-        items=(BlackNumber) mListAdapter.getItem(posMenu);
-        switch(item.getItemId()){
-            case MENU_UPDATE://执行该菜单条目的业务逻辑
-                break;
-            case MENU_ADD:
-                //执行该菜单条目的业务逻辑
-
-                break;
-        }
-        return super.onContextItemSelected(item);
-    }*/
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getOrder()){
@@ -149,5 +123,12 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
                 break;
         }
         return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public void onDestroyView() {
+        //停止视频播放，并释放资源
+        videoLayout.screenShot();
+        super.onDestroyView();
     }
 }
