@@ -4,10 +4,9 @@ import android.app.Application;
 import android.content.SharedPreferences;
 
 import cn.diaovision.omnicontrol.conn.TcpClient;
-import cn.diaovision.omnicontrol.conn.UdpClient;
-import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.rx.RxBus;
+import io.vov.vitamio.Vitamio;
 
 /**
  * Created by liulingfeng on 2017/3/2.
@@ -42,6 +41,8 @@ public class OmniControlApplication extends Application {
         if (camporto >= 0) {
             mediaMatrix.addCamera(camporto, camport, cam_baudrate, cam_proto);
         }
+        //初始化加载库文件
+        Vitamio.isInitialized(getApplicationContext());
     }
 
     @Override

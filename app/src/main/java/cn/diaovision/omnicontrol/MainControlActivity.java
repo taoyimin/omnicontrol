@@ -92,6 +92,9 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         app = (OmniControlApplication) getApplication();
+        //添加解码监听判断
+        if (!io.vov.vitamio.LibsChecker.checkVitamioLibs(this))
+            return;
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
