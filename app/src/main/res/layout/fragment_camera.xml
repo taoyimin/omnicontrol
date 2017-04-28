@@ -6,9 +6,9 @@
 
     <LinearLayout
         android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="3"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,14 +28,17 @@
 
     <LinearLayout
         android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="3"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
+        android:orientation="vertical">
 
-        <VideoView
+        <cn.diaovision.omnicontrol.widget.VideoLayout
+            android:id="@+id/video_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_weight="1">
+
+        </cn.diaovision.omnicontrol.widget.VideoLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -46,25 +49,25 @@
             <cn.diaovision.omnicontrol.widget.DirectionPad
                 android:id="@+id/pad_direction"
                 android:layout_width="0dp"
-                android:layout_weight="2"
-                android:layout_margin="10dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_vertical"
-                android:layout_height="match_parent">
+                android:layout_margin="10dp"
+                android:layout_weight="2">
 
             </cn.diaovision.omnicontrol.widget.DirectionPad>
 
             <LinearLayout
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="3"
-                android:orientation="vertical"
                 android:gravity="center_vertical"
-                android:layout_height="match_parent">
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal">
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
 
                     <Button
                         android:layout_width="@dimen/camera_control_button_width"
@@ -79,9 +82,9 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
                     android:layout_height="wrap_content"
-                    android:gravity="center_horizontal">
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
 
                     <Button
                         android:layout_width="@dimen/camera_control_button_width"
@@ -105,9 +108,9 @@
 
     <LinearLayout
         android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="2"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
