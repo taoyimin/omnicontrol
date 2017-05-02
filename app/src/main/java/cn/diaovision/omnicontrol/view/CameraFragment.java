@@ -104,7 +104,10 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
         });
 
         //设置播放路径
-        videoLayout.setVideoPath("http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8");
+        videoLayout.setVideoPath("rtsp://192.168.1.117:8554/test");
+        //videoLayout.setVideoPath("http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8");
+        //videoLayout.setVideoPath("http://live.3gv.ifeng.com/live/zixun.m3u8");
+        //videoLayout.setVideoPath("rtsp://218.204.223.237:554/live/1/66251FC11353191F/e7ooqwcfbqjoo80j.sdp");
     }
 
     @Override
@@ -128,7 +131,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
     @Override
     public void onDestroyView() {
         //停止视频播放，并释放资源
-        videoLayout.screenShot();
+        videoLayout.stopPlayback();
         super.onDestroyView();
     }
 }
