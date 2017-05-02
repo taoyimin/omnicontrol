@@ -8,16 +8,36 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="通道名称"
+        android:padding="5dp"
+        android:textSize="15sp"
+        android:textColor="#ffffff"/>
+
+    <ImageView
+        android:id="@+id/statue"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_play"
+        android:tint="#ffffff"
+        android:visibility="gone"/>
+
     <Button
         android:id="@+id/pause"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="暂停"/>
+        android:text="暂停"
+        android:layout_alignParentBottom="true"/>
 
     <Button
         android:id="@+id/screen_shot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="截屏"
-        android:layout_toRightOf="@+id/pause"/>
+        android:layout_toRightOf="@+id/pause"
+        android:layout_alignBottom="@id/pause"/>
 </RelativeLayout>
