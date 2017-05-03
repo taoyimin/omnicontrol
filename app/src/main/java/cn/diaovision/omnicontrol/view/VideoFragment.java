@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,7 +40,6 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
     RecyclerView auxiliary;
 
     boolean canEdit = false;
-    boolean editing=false;
 
     /***********
      *Datum
@@ -89,17 +89,38 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
             public void dispatchTouchEvent(View v, MotionEvent e, int position) {
                 switch (e.getAction()){
                     case MotionEvent.ACTION_DOWN:
+                        Log.i("info","ACTION_DOWN");
                         canEdit=true;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        Log.i("info","ACTION_MOVE");
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        Log.i("info","ACTION_UP");
+                        canEdit=false;
+                        if(outputPorts.isEditing()){
+                            outputPorts.setEditing(false);
+                            //完成编辑的操作
+                            Toast.makeText(getContext(),"完成编辑",Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                }
+            }
+        });
+
+        outputPorts.setDispatchTouchEventListener(new PortRadioGroupView.DispatchTouchEventListener() {
+            @Override
+            public void dispatchTouchEvent(View v, MotionEvent e, int position) {
+                switch (e.getAction()){
+                    case MotionEvent.ACTION_DOWN:
+                        if(canEdit&&!outputPorts.isEditing()){
+                            outputPorts.setEditing(true);
+                            Toast.makeText(getContext(),"进入编辑模式",Toast.LENGTH_SHORT).show();
+                        }
                         break;
                     case MotionEvent.ACTION_MOVE:
                         break;
                     case MotionEvent.ACTION_UP:
-                        canEdit=false;
-                        if(editing){
-                            editing=false;
-                            //完成编辑的操作
-                            Toast.makeText(getContext(),"完成编辑",Toast.LENGTH_SHORT).show();
-                        }
                         break;
                 }
             }
@@ -110,7 +131,7 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
             public void onLongClick(View v, int position) {
                 //没有在编辑状态则弹出对话框
                 canEdit=false;
-                if(!editing)
+                if(!outputPorts.isEditing())
                     inputPorts.popupDialog(ports.get(position));
             }
         });
@@ -118,10 +139,7 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
         outputPorts.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
             @Override
             public void onSelected(int pos) {
-                if(canEdit&&!editing){
-                    editing=true;
-                    Toast.makeText(getContext(),"进入编辑模式",Toast.LENGTH_SHORT).show();
-                }
+
             }
 
             @Override
@@ -135,7 +153,7 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
             public void onLongClick(View v, int position) {
                 //没有在编辑状态则弹出对话框
                 canEdit=false;
-                if(!editing)
+                if(!outputPorts.isEditing())
                     outputPorts.popupDialog(outports.get(position));
             }
         });

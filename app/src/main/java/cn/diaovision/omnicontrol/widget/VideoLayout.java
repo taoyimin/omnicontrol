@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.format.DateFormat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -47,9 +46,8 @@ public class VideoLayout extends RelativeLayout {
     ImageView image_statue;
 
     Context context;
-    MediaPlayer mediaPlayer;
 
-    boolean needResume;
+    //boolean needResume;
 
     public VideoLayout(@NonNull Context context) {
         this(context, null);
@@ -70,42 +68,39 @@ public class VideoLayout extends RelativeLayout {
         ButterKnife.bind(this, view);
 
         videoView.setVideoQuality(MediaPlayer.VIDEOQUALITY_LOW);//设置播放画质
-        videoView.setBufferSize(1024*10); //设置视频缓冲大小
+        videoView.setBufferSize(1024 * 10); //设置视频缓冲大小
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
-            public void onPrepared(MediaPlayer mp) {
-                mediaPlayer=mp;
-                mp.setPlaybackSpeed(1.0f);
-                mp.start();
-                Log.i("info","准备好了");
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mediaPlayer.setPlaybackSpeed(1.0f);
+                mediaPlayer.start();
             }
         });
         videoView.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
             @Override
             public void onBufferingUpdate(MediaPlayer mp, int percent) {
-                Log.i("info","百分之"+percent);
             }
         });
-        videoView.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+ /*       videoView.setOnInfoListener(new MediaPlayer.OnInfoListener() {
             @Override
             public boolean onInfo(MediaPlayer mp, int what, int extra) {
                 switch (what) {
                     case MediaPlayer.MEDIA_INFO_BUFFERING_START:
                         //开始缓存，暂停播放
-                        Log.i("info","开始缓存，暂停播放");
+                        //Log.i("info","开始缓存，暂停播放");
                         if (mp.isPlaying()) {
                             mp.pause();
                             needResume = true;
-                            Log.i("info","开始缓存，暂停播放执行了");
+                            //Log.i("info","开始缓存，暂停播放执行了");
                         }
                         //mLoadingView.setVisibility(View.VISIBLE);
                         break;
                     case MediaPlayer.MEDIA_INFO_BUFFERING_END:
                         //缓存完成，继续播放
-                        Log.i("info","缓存完成，继续播放");
+                        //Log.i("info","缓存完成，继续播放");
                         if (needResume) {
                             mp.start();
-                            Log.i("info","缓存完成，继续播放执行了");
+                            //Log.i("info","缓存完成，继续播放执行了");
                         }
                        //mLoadingView.setVisibility(View.GONE);
                         break;
@@ -116,7 +111,7 @@ public class VideoLayout extends RelativeLayout {
                 }
                 return true;
             }
-        });
+        });*/
         videoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
             @Override
             public boolean onError(MediaPlayer mp, int what, int extra) {
@@ -140,11 +135,12 @@ public class VideoLayout extends RelativeLayout {
 
     @OnClick(R.id.screen_shot)
     void screenShot() {
-        if (mediaPlayer == null) {
+        if (videoView == null)
             return;
-        }
-        Bitmap bitmap = mediaPlayer.getCurrentFrame();//截图方法
-        if (mediaPlayer.isPlaying()) {
+        Bitmap bitmap = videoView.getCurrentFrame();//截图方法
+        if (bitmap == null)
+            return;
+        if (videoView.isPlaying()) {
             try {
                 String name = new DateFormat().format("yyyyMMdd_hhmmss", Calendar.getInstance(Locale.CHINA)) + ".jpg";
                 String fileName = FileHelper.getSrceenShotPath() + "/" + name;

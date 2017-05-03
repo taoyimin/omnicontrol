@@ -27,7 +27,7 @@ public class PortRadioGroupView extends RecyclerView {
     List<Port> portList;
     int layout;
     GridLayoutManager layoutMgr;
-    public PortItemAdapter adapter;
+    private PortItemAdapter adapter;
 
     OnItemSelectListener onItemSelectListener;
     OnItemLongClickListener onItemLongClickListener;
@@ -175,6 +175,14 @@ public class PortRadioGroupView extends RecyclerView {
 
     public void setPortList(List<Port> portList) {
         this.portList = portList;
+    }
+
+    public boolean isEditing(){
+        return adapter.isEditing();
+    }
+
+    public void setEditing(boolean editing){
+        adapter.setEditing(editing);
     }
 
     public void configLayout(int direction, int spancount) {

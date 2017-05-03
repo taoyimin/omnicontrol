@@ -48,7 +48,6 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View v = inflater.inflate(R.layout.fragment_camera, container, false);
         ButterKnife.bind(this, v);
 
