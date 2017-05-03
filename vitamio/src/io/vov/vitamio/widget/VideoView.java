@@ -22,6 +22,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -743,5 +744,11 @@ public class VideoView extends SurfaceView implements MediaController.MediaPlaye
 
   protected boolean isInPlaybackState() {
     return (mMediaPlayer != null && mCurrentState != STATE_ERROR && mCurrentState != STATE_IDLE && mCurrentState != STATE_PREPARING);
+  }
+
+  public Bitmap getCurrentFrame(){
+    if(mMediaPlayer!=null)
+      return mMediaPlayer.getCurrentFrame();
+    return null;
   }
 }
