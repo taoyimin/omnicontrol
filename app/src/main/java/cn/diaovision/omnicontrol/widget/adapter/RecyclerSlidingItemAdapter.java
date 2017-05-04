@@ -1,4 +1,4 @@
-package cn.diaovision.omnicontrol.widget;
+package cn.diaovision.omnicontrol.widget.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +13,7 @@ import java.util.List;
 
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.conference.Term;
+import cn.diaovision.omnicontrol.widget.SlidingItemView;
 
 
 /**
