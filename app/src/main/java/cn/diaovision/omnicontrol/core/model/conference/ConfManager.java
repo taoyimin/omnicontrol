@@ -143,7 +143,7 @@ public class ConfManager {
 
     public Term getTerm(long termId){
         if (conf!= null) {
-            return getTerm(termId);
+            return conf.getTerm(termId);
         }
         else {
             return null;

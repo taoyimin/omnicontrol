@@ -12,6 +12,7 @@ import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
  */
 
 public class HiCamera {
+    //摄像头的控制协议类型
     public static int PROTO_FELICA_D = 0;
     public static int PROTO_FELICA_A = 1;
     public static int PROTO_PILSA = 2;
