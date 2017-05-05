@@ -8,9 +8,6 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Scroller;
 
@@ -40,8 +37,6 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
 
     private List<Term> list;
 
-    private int hideViewMode;
-
     public OnHideViewClickListener onHideViewClickListener;
 
     //手指是否up
@@ -54,47 +49,16 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
         mScroller = new Scroller(context);
     }
 
-    public void setHideView(int hideViewMode) {
-        this.hideViewMode = hideViewMode;
+    public void setHideView() {
         if (hideView == null) {
             createHideView();
-            switch (hideViewMode) {
-                case HideViewMode.MODE_HIDE_BOTTOM:
-                    if (convertView instanceof RelativeLayout) {
-                        ((RelativeLayout) convertView).addView(hideView);
-                        LayoutParams params = (LayoutParams) hideView
-                                .getLayoutParams();
-                        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                        hideView.setLayoutParams(params);
-                        bringToFront();
-                    }
-                    break;
-                case HideViewMode.MODE_HIDE_RIGHT:
-                    View container = getChildAt(0);
-                    addView(hideView);
-                    LayoutParams params = (LayoutParams) hideView
-                            .getLayoutParams();
-                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                    hideView.setLayoutParams(params);
-
-                    params = (LayoutParams) container.getLayoutParams();
-                    params.rightMargin = hideViewWidth;
-                    container.setLayoutParams(params);
-
-                    ViewGroup.LayoutParams viewGroupLp = getLayoutParams();
-                    if (viewGroupLp instanceof LinearLayout.LayoutParams) {
-                        ((LinearLayout.LayoutParams) viewGroupLp).rightMargin = -hideViewWidth;
-                        setLayoutParams(viewGroupLp);
-                    }
-                    if (viewGroupLp instanceof LayoutParams) {
-                        ((LayoutParams) viewGroupLp).rightMargin = -hideViewWidth;
-                        setLayoutParams(viewGroupLp);
-                    }
-                    if (viewGroupLp instanceof FrameLayout.LayoutParams) {
-                        ((FrameLayout.LayoutParams) viewGroupLp).rightMargin = -hideViewWidth;
-                        setLayoutParams(viewGroupLp);
-                    }
-                    break;
+            if (convertView instanceof RelativeLayout) {
+                ((RelativeLayout) convertView).addView(hideView);
+                LayoutParams params = (LayoutParams) hideView
+                        .getLayoutParams();
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                hideView.setLayoutParams(params);
+                bringToFront();
             }
         }
     }
@@ -116,11 +80,6 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
                     View parent = (View) convertView.getParent();
                     if (canRemove()) {
                         int width = hideViewWidth;
-                        if (hideViewMode == HideViewMode.MODE_HIDE_RIGHT) {
-                            width = hideViewWidth * 2;
-                        } else if (hideViewMode == HideViewMode.MODE_HIDE_BOTTOM) {
-                            width = hideViewWidth;
-                        }
                         if (dispatchDownX < getWidth() - width) {
                             ViewGroup viewGroup = (ViewGroup) parent;
                             int count = viewGroup.getChildCount();
@@ -150,12 +109,7 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
                         }
                     }
                     if (!isExistOpenItem) {
-                        if (viewGroup instanceof ListView) {
-                            ((ListView) viewGroup).performItemClick(convertView,
-                                    position, 0);
-                        } else if (viewGroup instanceof RecyclerView) {
-                            convertView.performClick();
-                        }
+                        convertView.performClick();
                     }
                     return false;
                 }
@@ -204,13 +158,13 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
         return true;
     }
 
-    public void bindViewAndData(final View convertView, int hideViewMode,
+    public void bindViewAndData(final View convertView,
                                 final List list, final int position) {
         scrollTo(0, 0);
         this.list = list;
         this.convertView = convertView;
         this.convertView.setTag(convertView.getId(), this);
-        setHideView(hideViewMode);
+        setHideView();
         this.position = position;
         this.hideView.findViewById(R.id.button1).setOnClickListener(this);
         this.hideView.findViewById(R.id.button2).setOnClickListener(this);
@@ -293,11 +247,6 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
         return false;
     }
 
-    /**
-     * Called when a view has been clicked.
-     *
-     * @param v The view that was clicked.
-     */
     @Override
     public void onClick(View v) {
         try {
@@ -315,16 +264,16 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
                             .getLayoutPosition();
                     // 执行按钮的点击事件
                     if (slidingItemView.onHideViewClickListener != null) {
-                        switch (v.getId()){
+                        switch (v.getId()) {
                             case R.id.button1:
                                 slidingItemView.onHideViewClickListener
                                         .onClick1(slidingItemView, pos);
-                                slidingItemView.scrollToEnd(null,0,200);
+                                slidingItemView.scrollToEnd(null, 0, 200);
                                 break;
                             case R.id.button2:
                                 slidingItemView.onHideViewClickListener
                                         .onClick2(slidingItemView, pos);
-                                slidingItemView.scrollToEnd(null,0,200);
+                                slidingItemView.scrollToEnd(null, 0, 200);
                                 break;
                             case R.id.button3:
                                 slidingItemView.onHideViewClickListener
@@ -340,12 +289,6 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public interface HideViewMode {
-        int MODE_HIDE_BOTTOM = 0;
-
-        int MODE_HIDE_RIGHT = 1;
     }
 
     public interface OnHideViewClickListener {
