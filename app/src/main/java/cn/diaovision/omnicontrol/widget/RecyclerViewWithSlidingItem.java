@@ -13,37 +13,8 @@ public class RecyclerViewWithSlidingItem extends RecyclerView {
 
     private boolean isFirst;
 
-    private DefaultItemTouchHelper mDefaultItemTouchHelper;
-
     public RecyclerViewWithSlidingItem(Context context, AttributeSet attrs) {
         super(context, attrs);
-    }
-
-    /**
-     * Set can long press drag.
-     *
-     * @param canDrag drag true, otherwise is can't.
-     */
-    public void setLongPressDragEnabled(boolean canDrag) {
-        initializeItemTouchHelper();
-        mDefaultItemTouchHelper.setLongPressDragEnabled(canDrag);
-    }
-
-    private void initializeItemTouchHelper() {
-        if (mDefaultItemTouchHelper == null) {
-            mDefaultItemTouchHelper = new DefaultItemTouchHelper();
-            mDefaultItemTouchHelper.attachToRecyclerView(this);
-        }
-    }
-
-    /**
-     * Set OnItemMoveListener.
-     *
-     * @param onItemMoveListener {@link OnItemMoveListener}.
-     */
-    public void setOnItemMoveListener(OnItemMoveListener onItemMoveListener) {
-        initializeItemTouchHelper();
-        mDefaultItemTouchHelper.setOnItemMoveListener(onItemMoveListener);
     }
 
     @Override
