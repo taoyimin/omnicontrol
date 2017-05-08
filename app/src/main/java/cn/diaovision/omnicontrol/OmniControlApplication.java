@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 
 import cn.diaovision.omnicontrol.conn.TcpClient;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
+import cn.diaovision.omnicontrol.model.Config;
+import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.rx.RxBus;
 import io.vov.vitamio.Vitamio;
 

@@ -34,10 +34,14 @@ import cn.diaovision.omnicontrol.conn.UdpClient;
 import cn.diaovision.omnicontrol.core.message.MatrixMessage;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
+import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
+import cn.diaovision.omnicontrol.model.Config;
+import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
+import cn.diaovision.omnicontrol.rx.RxSubscriber;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
@@ -52,6 +56,18 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class DvdFragment extends BaseFragment implements DvdContract.View{
+
+    Config cfg = new ConfigFixed();
+    MediaMatrix matrix = new MediaMatrix.Builder()
+            .id(cfg.getMatrixId())
+            .ip(cfg.getMatrixIp())
+            .port(cfg.getMatrixUdpIpPort())
+            .localPreviewVideo(cfg.getMatrixPreviewIp(), cfg.getMatrixPreviewPort())
+            .videoInInit(32)
+            .videoOutInit(32)
+            .build();
+
+    MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
 
     @BindView(R.id.ip)
     AppCompatEditText ipEdit;
@@ -150,7 +166,6 @@ public class DvdFragment extends BaseFragment implements DvdContract.View{
         proto = getApp().getAppPreferences().getInt("cam_proto", MatrixMessage.CAM_PROTO_PELCO_D);
         int protoIdx = getApp().getAppPreferences().getInt("cam_proto_spin", 0);
         camProtoSpin.setSelection(protoIdx);
-
 
         btnGoUp.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -307,33 +322,24 @@ public class DvdFragment extends BaseFragment implements DvdContract.View{
 
     @OnClick(R.id.btn_switch)
     void switchChannel(){
-        if (getApp().getMediaMatrix().isReachable()){
 
-            final int in = inportSpin.getSelectedItemPosition();
-            final int[] outs = {outportSpin.getSelectedItemPosition()};
+        final int in = inportSpin.getSelectedItemPosition();
+        final int[] outs = {outportSpin.getSelectedItemPosition()};
 
-            RxExecutor.getInstance().post(new RxReq() {
-                @Override
-                public RxMessage request() {
-                    int res = getApp().getMediaMatrix().switchVideo(in, outs);
-                    if (res >= 0) {
-                        return new RxMessage("success");
-                    }
-                    else {
-                        return new RxMessage("failed");
-                    }
-                }
-            }, new Consumer<RxMessage>() {
-                @Override
-                public void accept(RxMessage msg) throws Exception {
-                    if (msg.what.equals("success")){
-                        Toast.makeText(getContext(), "Switch succeed", Toast.LENGTH_SHORT).show();
-                    }
-                    else if (msg.what.equals("failed")){
-                        Toast.makeText(getContext(), "Switch failed", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN);
+        int res = matrixRemoter.switchVideo(in, outs, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Toast.makeText(getContext(), "Switch succeed", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Toast.makeText(getContext(), "Switch failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        if (res < 0){
+            Toast.makeText(getContext(), "invalid switch", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -365,7 +371,7 @@ public class DvdFragment extends BaseFragment implements DvdContract.View{
             return;
 
         HiCamera camera = new HiCamera(camportoIdx, camportIdx, baudrate, p);
-        getApp().getMediaMatrix().getCameras().put(camportoIdx, camera);
+        matrix.getCameras().put(camportoIdx, camera);
         getApp().saveAppPreference("cam_porto", camportoIdx);
         getApp().saveAppPreference("cam_port", camportIdx);
         getApp().saveAppPreference("cam_baudrate", baudrate);
@@ -376,153 +382,73 @@ public class DvdFragment extends BaseFragment implements DvdContract.View{
 
     void startGo(final int cmd, final int speed){
         final MediaMatrix mediaMatrix = getApp().getMediaMatrix();
-        if (mediaMatrix.isReachable()){
-            Flowable.just("")
-                    .map(new Function<String, String>() {
-                        @Override
-                        public String apply(String s) throws Exception {
-                            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
-                            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
-                            if (camera != null){
-                                int res = mediaMatrix.startCameraGo(camPorto, cmd, speed);
-                                if (res >= 0){
-                                    return "success";
-                                }
-                                else {
-                                    return "failed";
-                                }
-                            }
-                            else {
-                                return "none";
-                            }
-                        }
-                    })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<String>() {
-                        @Override
-                        public void accept(String s) throws Exception {
-                            if (s == "success"){
-                            }
-                            else if (s == "failed"){
-                            }
-                            else if (s == "none"){
-                            }
-                        }
-                    });
+        int res = matrixRemoter.startCameraGo(camPorto, cmd, speed, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Toast.makeText(getContext(), "Start GO", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Toast.makeText(getContext(), "Camera go failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+        if (res < 0){
+            Toast.makeText(getContext(), "invalid go", Toast.LENGTH_SHORT).show();
         }
     }
 
 
     void stopGo(){
-        final MediaMatrix mediaMatrix = getApp().getMediaMatrix();
-        if (mediaMatrix.isReachable()){
-            Flowable.just("")
-                    .map(new Function<String, String>() {
-                        @Override
-                        public String apply(String s) throws Exception {
-                            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
-                            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
-                            if (camera != null){
-                                int res = mediaMatrix.stopCameraGo(camPorto);
-                                if (res >= 0){
-                                    return "success";
-                                }
-                                else {
-                                    return "failed";
-                                }
-                            }
-                            else {
-                                return "none";
-                            }
-                        }
-                    })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<String>() {
-                        @Override
-                        public void accept(String s) throws Exception {
-                            if (s == "success"){
-                            }
-                            else if (s == "failed"){
-                            }
-                            else if (s == "none"){
-                            }
-                        }
-                    });
+        int res = matrixRemoter.stopCameraGo(camPorto, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Toast.makeText(getContext(), "Camera go stopped", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Toast.makeText(getContext(), "Stop camera go failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+        if (res < 0){
+            Toast.makeText(getContext(), "invalid camera stop go", Toast.LENGTH_SHORT).show();
         }
     }
 
     @OnClick(R.id.btn_preset_save)
     void savePreset(){
-        final MediaMatrix mediaMatrix = getApp().getMediaMatrix();
-        if (mediaMatrix.isReachable()){
-            Flowable.just("")
-                    .map(new Function<String, String>() {
-                        @Override
-                        public String apply(String s) throws Exception {
-                            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
-                            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
-                            if (camera != null){
-                                int res = mediaMatrix.setCameraPreset(camPorto, 1, "预置");
-                                if (res >= 0){
-                                    getApp().saveAppPreference("cam_preset_porto", camPorto);
-                                    return "success";
-                                }
-                                else {
-                                    return "failed";
-                                }
-                            }
-                            else{
-                                return "none";
-                            }
-                        }
-                    })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<String>() {
-                        @Override
-                        public void accept(String s) throws Exception {
+        int res = matrixRemoter.storeCameraPreset(camPorto, 1, "预置", new RxSubscriber() {
+            @Override
+            public void onRxResult(Object o) {
 
-                        }
-                    });
+            }
 
+            @Override
+            public void onRxError(Throwable e) {
+                Toast.makeText(getContext(), "failed to store preset", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        if (res < 0){
+            Toast.makeText(getContext(), "invalid store preset", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     @OnClick(R.id.btn_preset_load)
     void loadPreset(){
-        final MediaMatrix mediaMatrix = getApp().getMediaMatrix();
-        if (mediaMatrix.isReachable()){
-            Flowable.just("")
-                    .map(new Function<String, String>() {
-                        @Override
-                        public String apply(String s) throws Exception {
-                            int camPorto = getApp().getAppPreferences().getInt("cam_porto", 0);
-                            HiCamera camera = mediaMatrix.getCameras().get(camPorto);
-                            if (camera != null){
-                                int res = mediaMatrix.loadCameraPreset(camPorto, 1);
-                                if (res >= 0){
-                                    return "success";
-                                }
-                                else {
-                                    return "failed";
-                                }
-                            }
-                            else {
-                                return "none";
-                            }
-                        }
-                    })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Consumer<String>() {
-                        @Override
-                        public void accept(String s) throws Exception {
+        int res = matrixRemoter.loadCameraPreset(camPorto, 1, new RxSubscriber() {
+            @Override
+            public void onRxResult(Object o) {
 
-                        }
-                    });
-        }
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Toast.makeText(getContext(), "failed to load preset", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

@@ -31,7 +31,6 @@ public class MediaMatrix {
 
     int id;
 
-
     //ip control
     String ip;
     int port;
@@ -55,6 +54,7 @@ public class MediaMatrix {
 
     //preview channel
     PreviewVideo localPreviewVideo;
+
     //meeting channel
     PreviewVideo meetingPreviewVideo;
 
@@ -176,220 +176,221 @@ public class MediaMatrix {
         }
     }
 
-    public int switchVideo(int in, int[] outs){
-        //format check
-        boolean formatGood = true;
-        for (int out : outs){
-            if (out >= videoOutPort.size() || out < 0){
-                formatGood = false;
-                break;
-            }
-        }
+//    public int switchVideo(int in, int[] outs){
+//        //format check
+//        boolean formatGood = true;
+//        for (int out : outs){
+//            if (out >= videoOutPort.size() || out < 0){
+//                formatGood = false;
+//                break;
+//            }
+//        }
+//
+//        if (in < videoInPort.size() && in >= 0 && formatGood){
+//            byte[] bytes;
+//            if (outs.length == 1) {
+//                bytes = MatrixMessage.buildSwitchMessage(id, in, outs[0]).toBytes();
+//            }
+//            else {
+//                bytes = MatrixMessage.buildMultiSwitchMessage(id, in, outs).toBytes();
+//            }
+//            byte[] recv = getController().send(bytes, bytes.length);
+//            if (recv.length > 0){
+//                updateChannel(in, outs, Channel.MOD_NORMAL);
+//                return 0; //switch successful
+//            }
+//            else {
+//                return -1; //failed to switch
+//            }
+//        }
+//        else {
+//            return -1;
+//        }
+//    }
 
-        if (in < videoInPort.size() && in >= 0 && formatGood){
-            byte[] bytes;
-            if (outs.length == 1) {
-                bytes = MatrixMessage.buildSwitchMessage(id, in, outs[0]).toBytes();
-            }
-            else {
-                bytes = MatrixMessage.buildMultiSwitchMessage(id, in, outs).toBytes();
-            }
-            byte[] recv = getController().send(bytes, bytes.length);
-            if (recv.length > 0){
-                updateChannel(in, outs, Channel.MOD_NORMAL);
-                return 0; //switch successful
-            }
-            else {
-                return -1; //failed to switch
-            }
-        }
-        else {
-            return -1;
-        }
-    }
+//    public int stitchVideo(int in, int[] outs, int colCnt, int rowCnt){
+//        //format check
+//        boolean formatGood = true;
+//        for (int out : outs){
+//            if (out >= videoOutPort.size() || out < 0){
+//                formatGood = false;
+//                break;
+//            }
+//        }
+//
+//        if (in < videoInPort.size() && in > 0 && formatGood && colCnt > 0 && rowCnt > 0){
+//            byte[] bytes;
+//            bytes = MatrixMessage.buildMultiSwitchMessage(id, in, outs).toBytes();
+//            byte[] recv = getController().send(bytes, bytes.length);
+//            if (recv.length > 0){
+//                updateChannel(in, outs, Channel.MOD_NORMAL);
+//
+//                bytes = MatrixMessage.buildStitchMessage(id, colCnt, rowCnt, outs).toBytes();
+//                recv = getController().send(bytes, bytes.length);
+//
+//                if (recv.length > 0){
+//                    updateChannel(in, outs, Channel.MOD_STITCH);
+//                    return in;
+//                }
+//                else {
+//                    return -1; //failed to switch
+//                }
+//            }
+//            else {
+//                return -1; //failed to switch
+//            }
+//        }
+//        else {
+//            return -1;
+//        }
+//    }
 
-    public int stitchVideo(int in, int[] outs, int colCnt, int rowCnt){
-        //format check
-        boolean formatGood = true;
-        for (int out : outs){
-            if (out >= videoOutPort.size() || out < 0){
-                formatGood = false;
-                break;
-            }
-        }
-
-        if (in < videoInPort.size() && in > 0 && formatGood && colCnt > 0 && rowCnt > 0){
-            byte[] bytes;
-            bytes = MatrixMessage.buildMultiSwitchMessage(id, in, outs).toBytes();
-            byte[] recv = getController().send(bytes, bytes.length);
-            if (recv.length > 0){
-                updateChannel(in, outs, Channel.MOD_NORMAL);
-
-                bytes = MatrixMessage.buildStitchMessage(id, colCnt, rowCnt, outs).toBytes();
-                recv = getController().send(bytes, bytes.length);
-
-                if (recv.length > 0){
-                    updateChannel(in, outs, Channel.MOD_STITCH);
-                    return in;
-                }
-                else {
-                    return -1; //failed to switch
-                }
-            }
-            else {
-                return -1; //failed to switch
-            }
-        }
-        else {
-            return -1;
-        }
-    }
-
-    public int getCameraIdx(int portIdx){
-        byte[] bytes = MatrixMessage.buildGetCameraInfoMessage(id, portIdx).toBytes();
-        byte[] recv = getController().send(bytes, bytes.length);
-        if (recv.length > 0){
-            int idx = 0;
-            if (recv[5] >= '9'){
-                idx += (recv[5] - 0x30-7)<<4;
-            }
-            else {
-                idx += (recv[5] - 0x30)<<4;
-            }
-
-            if (recv[6] >= '9'){
-                idx += (recv[6] - 0x30-7);
-            }
-            else {
-                idx += (recv[6] - 0x30);
-            }
-
-            return idx;
-        }
-        else {
-            return -1;
-        }
-    }
+//    public int getCameraIdx(int portIdx){
+//        byte[] bytes = MatrixMessage.buildGetCameraInfoMessage(id, portIdx).toBytes();
+//        byte[] recv = getController().send(bytes, bytes.length);
+//        if (recv.length > 0){
+//            int idx = 0;
+//            if (recv[5] >= '9'){
+//                idx += (recv[5] - 0x30-7)<<4;
+//            }
+//            else {
+//                idx += (recv[5] - 0x30)<<4;
+//            }
+//
+//            if (recv[6] >= '9'){
+//                idx += (recv[6] - 0x30-7);
+//            }
+//            else {
+//                idx += (recv[6] - 0x30);
+//            }
+//
+//            return idx;
+//        }
+//        else {
+//            return -1;
+//        }
+//    }
 
     public void addCamera(int portIdx, int camIdx, int baudrate, int proto){
         cameras.put(portIdx, new HiCamera(portIdx, camIdx, baudrate, proto));
     }
 
-    public int startCameraGo(int portIdx, int cmd, int speed){
-        HiCamera cam = cameras.get(portIdx);
-        if (cam == null){
-            return -1;
-        }
-        final byte[] bytes = MatrixMessage.buildStartCameraGoMessage(id, cam.getBaudrate(), cam.getProto(), cam.getPortIdx(), cmd, speed).toBytes();
-        byte[] recv = getController().send(bytes, bytes.length);
-        if (recv.length > 0){
-            return 0;
-        }
-        else {
-            return -1;
-        }
-    }
+//    public int startCameraGo(int portIdx, int cmd, int speed){
+//        HiCamera cam = cameras.get(portIdx);
+//        if (cam == null){
+//            return -1;
+//        }
+//        final byte[] bytes = MatrixMessage.buildStartCameraGoMessage(id, cam.getBaudrate(), cam.getProto(), cam.getPortIdx(), cmd, speed).toBytes();
+//        byte[] recv = getController().send(bytes, bytes.length);
+//        if (recv.length > 0){
+//            return 0;
+//        }
+//        else {
+//            return -1;
+//        }
+//    }
 
-    public int stopCameraGo(int portIdx){
-        HiCamera cam = cameras.get(portIdx);
-        if (cam == null){
-            return -1;
-        }
-        byte[] bytes = MatrixMessage.buildStopCameraGoMessage(id, cam.getBaudrate(), cam.getProto(), cam.getPortIdx()).toBytes();
-        byte[] recv = getController().send(bytes, bytes.length);
-        if (recv.length > 0){
-            return recv.length;
-        }
-        else {
-            return -1;
-        }
-    }
+//    public int stopCameraGo(int portIdx){
+//        HiCamera cam = cameras.get(portIdx);
+//        if (cam == null){
+//            return -1;
+//        }
+//        byte[] bytes = MatrixMessage.buildStopCameraGoMessage(id, cam.getBaudrate(), cam.getProto(), cam.getPortIdx()).toBytes();
+//        byte[] recv = getController().send(bytes, bytes.length);
+//        if (recv.length > 0){
+//            return recv.length;
+//        }
+//        else {
+//            return -1;
+//        }
+//    }
 
-    public int setCameraPreset(int portIdx, int presetIdx, String name){
-        HiCamera cam = cameras.get(portIdx);
-        if (cam == null){
-            return -1;
-        }
+//    public int setCameraPreset(int portIdx, int presetIdx, String name){
+//        HiCamera cam = cameras.get(portIdx);
+//        if (cam == null){
+//            return -1;
+//        }
+//
+//        byte[] bytes = MatrixMessage.buildSetCameraPresetMessgae(id, cam.getBaudrate(), cam.getProto(), portIdx, presetIdx).toBytes();
+//        byte[] recv = getController().send(bytes, bytes.length);
+//        if (recv.length > 0){
+//            //Clear previous preset
+//            boolean containPreset = false;
+//            List<HiCamera.Preset> presetList = cam.getPresetList();
+//            for (HiCamera.Preset preset : presetList){
+//                if(preset.getIdx() == presetIdx){
+//                    containPreset = true;
+//                    preset.setName(name);
+//                    break;
+//                }
+//            }
+//            if (!containPreset) {
+//                cam.getPresetList().add(new HiCamera.Preset(name, presetIdx));
+//            }
+//            return 0;
+//        }
+//        else {
+//            return -1;
+//        }
+//    }
 
-        byte[] bytes = MatrixMessage.buildSetCameraPresetMessgae(id, cam.getBaudrate(), cam.getProto(), portIdx, presetIdx).toBytes();
-        byte[] recv = getController().send(bytes, bytes.length);
-        if (recv.length > 0){
-            //Clear previous preset
-            boolean containPreset = false;
-            List<HiCamera.Preset> presetList = cam.getPresetList();
-            for (HiCamera.Preset preset : presetList){
-                if(preset.getIdx() == presetIdx){
-                    containPreset = true;
-                    preset.setName(name);
-                    break;
-                }
-            }
-            if (!containPreset) {
-                cam.getPresetList().add(new HiCamera.Preset(name, presetIdx));
-            }
-            return 0;
-        }
-        else {
-            return -1;
-        }
-    }
+//    public int loadCameraPreset(int portIdx, int presetIdx){
+//        HiCamera cam = cameras.get(portIdx);
+//        if (cam == null){
+//            return -1;
+//        }
+//
+//        HiCamera.Preset preset = null;
+//        for (HiCamera.Preset p : cam.getPresetList()){
+//            if (p.getIdx() == presetIdx){
+//                preset = p;
+//                break;
+//            }
+//        }
+//
+//        if (preset == null){
+//            return -1;
+//        }
+//
+//        byte[] bytes = MatrixMessage.buildLoadCameraPresetMessgae(id, cam.getBaudrate(), cam.getProto(), portIdx, presetIdx).toBytes();
+//        byte[] recv = getController().send(bytes, bytes.length);
+//        if (recv.length > 0){
+//            return recv.length;
+//        }
+//        else {
+//            return -1;
+//        }
+//    }
 
-    public int loadCameraPreset(int portIdx, int presetIdx){
-        HiCamera cam = cameras.get(portIdx);
-        if (cam == null){
-            return -1;
-        }
+//    public int clearCameraPreset(int portIdx, int presetIdx, String name){
+//        HiCamera cam = cameras.get(portIdx);
+//        if (cam == null){
+//            return -1;
+//        }
+//
+//        HiCamera.Preset preset = null;
+//        for (HiCamera.Preset p : cam.getPresetList()){
+//            if (p.getIdx() == presetIdx){
+//                preset = p;
+//                break;
+//            }
+//        }
+//
+//        if (preset == null){
+//            return -1;
+//        }
+//
+//        byte[] bytes = MatrixMessage.buildClearCameraPresetMessgae(id, cam.getBaudrate(), cam.getProto(), portIdx, presetIdx).toBytes();
+//        byte[] recv = getController().send(bytes, bytes.length);
+//        if (recv.length > 0){
+//            cam.getPresetList().add(new HiCamera.Preset(name, presetIdx));
+//            return recv.length;
+//        }
+//        else {
+//            return -1;
+//        }
+//    }
 
-        HiCamera.Preset preset = null;
-        for (HiCamera.Preset p : cam.getPresetList()){
-            if (p.getIdx() == presetIdx){
-                preset = p;
-                break;
-            }
-        }
-
-        if (preset == null){
-            return -1;
-        }
-
-        byte[] bytes = MatrixMessage.buildLoadCameraPresetMessgae(id, cam.getBaudrate(), cam.getProto(), portIdx, presetIdx).toBytes();
-        byte[] recv = getController().send(bytes, bytes.length);
-        if (recv.length > 0){
-            return recv.length;
-        }
-        else {
-            return -1;
-        }
-    }
-
-    public int clearCameraPreset(int portIdx, int presetIdx, String name){
-        HiCamera cam = cameras.get(portIdx);
-        if (cam == null){
-            return -1;
-        }
-
-        HiCamera.Preset preset = null;
-        for (HiCamera.Preset p : cam.getPresetList()){
-            if (p.getIdx() == presetIdx){
-                preset = p;
-                break;
-            }
-        }
-
-        if (preset == null){
-            return -1;
-        }
-
-        byte[] bytes = MatrixMessage.buildClearCameraPresetMessgae(id, cam.getBaudrate(), cam.getProto(), portIdx, presetIdx).toBytes();
-        byte[] recv = getController().send(bytes, bytes.length);
-        if (recv.length > 0){
-            cam.getPresetList().add(new HiCamera.Preset(name, presetIdx));
-            return recv.length;
-        }
-        else {
-            return -1;
-        }
-    }
     //update channel in two cases: switch or stitch
     public void updateChannel(int in, int[] outs, int mode){
         //clear channels with outs or in

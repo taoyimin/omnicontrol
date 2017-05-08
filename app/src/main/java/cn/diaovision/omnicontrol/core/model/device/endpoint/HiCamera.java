@@ -74,6 +74,40 @@ public class HiCamera {
         this.presetList = presetList;
     }
 
+    public void updatePreset(Preset preset){
+        int idx = -1;
+        for (int m = 0; m < presetList.size(); m ++){
+            if (presetList.get(m).getIdx() == preset.getIdx()){
+                idx = m;
+            }
+        }
+
+        //new preset
+        if (idx < 0){
+            presetList.add(preset);
+        }
+        //old preset
+        else {
+            presetList.remove(idx);
+            presetList.add(preset);
+        }
+    }
+
+    public int getPreset(int idx){
+        for (int m = 0; m < presetList.size(); m ++){
+            if (presetList.get(m).getIdx() == idx){
+                return m;
+            }
+        }
+        return -1;
+    }
+
+    public void deletePreset(int pos){
+        if (pos >= 0 && pos < presetList.size()) {
+            presetList.remove(pos);
+        }
+    }
+
     static public class Preset{
         private int idx; //idx of the preset
         private String name;
