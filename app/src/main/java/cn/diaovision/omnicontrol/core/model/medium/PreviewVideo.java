@@ -4,6 +4,7 @@ import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 
 /**
  * 这里是预览视频的类，目前包括数据：ip/port
+ * 目前仅作为pojo使用
  * Created by liulingfeng on 2017/3/21.
  */
 
