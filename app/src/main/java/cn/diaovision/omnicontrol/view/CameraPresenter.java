@@ -1,10 +1,16 @@
 package cn.diaovision.omnicontrol.view;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
+import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
+import cn.diaovision.omnicontrol.model.Config;
+import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
+import cn.diaovision.omnicontrol.rx.RxSubscriber;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
@@ -15,6 +21,18 @@ import io.reactivex.subjects.Subject;
  */
 
 public class CameraPresenter implements CameraContract.Presenter {
+
+    Config cfg = new ConfigFixed();
+    MediaMatrix matrix = new MediaMatrix.Builder()
+            .id(cfg.getMatrixId())
+            .ip(cfg.getMatrixIp())
+            .port(cfg.getMatrixUdpIpPort())
+            .localPreviewVideo(cfg.getMatrixPreviewIp(), cfg.getMatrixPreviewPort())
+            .videoInInit(cfg.getMatrixInputVideoNum())
+            .videoOutInit(cfg.getMatrixOutputVideoNum())
+            .build();
+
+    MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
 
     //通过Subject实现ViewModel的双向绑定
     Subject bus = PublishSubject.create();
@@ -75,8 +93,40 @@ public class CameraPresenter implements CameraContract.Presenter {
     }
 
     @Override
-    public void cameraCtrlGo() {
+    public void cameraCtrlGo(int portIdx, final int cmd, final int speed) {
+        int res = matrixRemoter.startCameraGo(portIdx, cmd, speed, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i("info","cmd="+cmd+"speed="+speed);
+            }
 
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i("info","Camera go failed");
+                e.printStackTrace();
+            }
+        });
+        if (res < 0){
+            Log.i("info","invalid go");
+        }
+    }
+
+    @Override
+    public void cameraStopGo(int portIdx) {
+        int res = matrixRemoter.stopCameraGo(portIdx,new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i("info","Camera go stopped");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i("info","Stop camera go failed");
+            }
+        });
+        if (res < 0){
+            Log.i("info","invalid camera stop go");
+        }
     }
 
     @Override
@@ -90,7 +140,7 @@ public class CameraPresenter implements CameraContract.Presenter {
     }
 
     @Override
-    public void updataPreset() {
+    public void updatePreset() {
 
     }
 
