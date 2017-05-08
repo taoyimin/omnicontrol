@@ -460,14 +460,14 @@ public class MediaMatrix {
 
         public Builder videoInInit(int num){
             for (int m = 0; m < num; m ++){
-                videoInPort.add(new Port(id, num, Port.TYPE_VIDEO, Port.DIR_IN));
+                videoInPort.add(new Port(id, m, Port.TYPE_VIDEO, Port.DIR_IN));
             }
             return this;
         }
 
         public Builder videoOutInit(int num){
             for (int m = 0; m < num; m ++){
-                videoOutPort.add(new Port(id, num, Port.TYPE_VIDEO, Port.DIR_OUT));
+                videoOutPort.add(new Port(id, m, Port.TYPE_VIDEO, Port.DIR_OUT));
             }
             return this;
         }

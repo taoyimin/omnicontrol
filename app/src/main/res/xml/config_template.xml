@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <matrix>
+        <ip>192.168.1.1</ip>
+        <port>5000</port>
+        <preview_video>
+            <ip>192.168.10.31</ip>
+            <port>554</port>
+        </preview_video>
+
+        <camera_list>
+            <camera>
+                <port>1</port>
+                <index>1</index>
+                <baudrate>2400</baudrate>
+                <proctocol>PELCO-D</proctocol>
+            </camera>
+            <camera>
+                <port>2</port>
+                <index>2</index>
+                <baudrate>2400</baudrate>
+                <proctocol>PELCO-D</proctocol>
+            </camera>
+        </camera_list>
+
+        <channel_list>
+            <channel name="1" mode="normal">
+                <input>1</input>
+                <output_list>
+                    <output>2</output>
+                    <output>3</output>
+                    <output>4</output>
+                </output_list>
+            </channel>
+        </channel_list>
+    </matrix>
+
+    <mcu>
+        <ip>192.168.30.31</ip>
+        <port_config>554</port_config>
+    </mcu>
+
+</config>

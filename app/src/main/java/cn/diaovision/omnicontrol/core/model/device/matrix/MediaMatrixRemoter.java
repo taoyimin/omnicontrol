@@ -15,6 +15,7 @@ import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
 import cn.diaovision.omnicontrol.rx.RxSubscriber;
+import cn.diaovision.omnicontrol.util.ByteUtils;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.CompletableSource;
 import io.reactivex.Flowable;
@@ -321,6 +322,69 @@ public class MediaMatrixRemoter {
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(subscriber);
+
+        return 0;
+    }
+
+    public int setSubtitle(final int portIdx, final String str, RxSubscriber<RxMessage> subscriber){
+        if (matrix == null || !matrix.isReachable()) {
+            return -1;
+        }
+
+        Flowable.just(str)
+                .map(new Function<String, RxMessage>() {
+                    @Override
+                    public RxMessage apply(String s) throws Exception {
+                        byte[] bytes = MatrixMessage.buildSetSubtitleMessage(matrix.id, portIdx, str).toBytes();
+                        byte[] recv = matrix.getController().send(bytes, bytes.length);
+                        if (recv.length > 0){
+                            return new RxMessage(RxMessage.DONE);
+                        }
+                        else {
+                            throw new IOException();
+                        }
+                    }
+                })
+                .doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //TODO: subtitle setup
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+
+        return -1;
+    }
+
+    public int setSubtitleFormat(final int portIdx, final byte fontSize, final byte fontColor, RxSubscriber<RxMessage> subscriber){
+        if (matrix == null || !matrix.isReachable()) {
+            return -1;
+        }
+
+        Flowable.create(new FlowableOnSubscribe<RxMessage>() {
+            @Override
+            public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
+                byte[] bytes = MatrixMessage.buildSetSubtitleFormatMessage(matrix.id, portIdx, fontSize, fontColor).toBytes();
+                byte[] recv = matrix.getController().send(bytes, bytes.length);
+                if (recv.length > 0){
+                    e.onNext(new RxMessage(RxMessage.DONE));
+                }
+                else {
+                    throw new IOException();
+                }
+            }
+        }, BackpressureStrategy.BUFFER)
+                .doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        //TODO: subtitle setup
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
 
         return 0;
     }

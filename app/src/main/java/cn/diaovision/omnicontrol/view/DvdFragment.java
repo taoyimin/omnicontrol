@@ -63,8 +63,8 @@ public class DvdFragment extends BaseFragment implements DvdContract.View{
             .ip(cfg.getMatrixIp())
             .port(cfg.getMatrixUdpIpPort())
             .localPreviewVideo(cfg.getMatrixPreviewIp(), cfg.getMatrixPreviewPort())
-            .videoInInit(32)
-            .videoOutInit(32)
+            .videoInInit(cfg.getMatrixInputVideoNum())
+            .videoOutInit(cfg.getMatrixOutputVideoNum())
             .build();
 
     MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);

@@ -11,7 +11,6 @@ import cn.diaovision.omnicontrol.core.model.device.State;
  * Created by liulingfeng on 2017/3/2.
  */
 
-//TODO: port, channel, check
 public class Channel {
     public static final int CHN_VIDEO = 0;
 
