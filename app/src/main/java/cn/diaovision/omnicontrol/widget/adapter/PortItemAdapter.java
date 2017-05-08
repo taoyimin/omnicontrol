@@ -124,6 +124,9 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
                                     ((CircleCharView) lastSelectedView.findViewById(R.id.port_circle)).unselect();
                                 }
                                 ((CircleCharView) view.findViewById(R.id.port_circle)).select();
+                                if (itemClickListener != null) {
+                                    itemClickListener.onSelect(view, (int) view.getTag());
+                                }
                                 lastSelectedPos = holder.pos;
                                 lastSelectedView = view;
                             }
@@ -131,6 +134,9 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
                             //选中的和之前相同
                             selects.remove(0);
                             ((CircleCharView) view.findViewById(R.id.port_circle)).unselect();
+                            if (itemClickListener != null) {
+                                itemClickListener.onUnselect(view, (int) view.getTag());
+                            }
                         }
                         break;
                     default:
@@ -299,5 +305,9 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
             selects.clear();
         }
         isEditing = editing;
+    }
+
+    public List<Integer> getSelects() {
+        return selects;
     }
 }

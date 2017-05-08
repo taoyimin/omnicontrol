@@ -38,6 +38,7 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
     RecyclerView auxiliary;
 
     boolean canEdit = false;
+    int currentEditPosition=-1;
 
     /***********
      *Datum
@@ -100,6 +101,9 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
                             outputPorts.setEditing(false);
                             //完成编辑的操作
                             Toast.makeText(getContext(),"完成编辑",Toast.LENGTH_SHORT).show();
+                            for(Integer integer:outputPorts.getAdapter().getSelects()){
+                                Log.i("info","选中了"+integer);
+                            }
                         }
                         break;
                 }
@@ -109,6 +113,9 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
         outputPorts.setDispatchTouchEventListener(new PortRadioGroupView.DispatchTouchEventListener() {
             @Override
             public void dispatchTouchEvent(View v, MotionEvent e, int position) {
+                if(currentEditPosition==-1){
+                    return;
+                }
                 switch (e.getAction()){
                     case MotionEvent.ACTION_DOWN:
                         if(canEdit&&!outputPorts.isEditing()){
@@ -134,18 +141,6 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
             }
         });
 
-        outputPorts.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
-            @Override
-            public void onSelected(int pos) {
-
-            }
-
-            @Override
-            public void onUnselected(int pos) {
-
-            }
-        });
-
         outputPorts.setOnItemLongClickListener(new PortRadioGroupView.OnItemLongClickListener() {
             @Override
             public void onLongClick(View v, int position) {
@@ -156,17 +151,17 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
             }
         });
 
-/*        inputPorts.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
+        inputPorts.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
             @Override
             public void onSelected(int pos) {
-                outputPorts.select(pos);
                 //TODO: send udp packet to server
 //                getRxBus().post(new String("Message matrix"));
+                currentEditPosition=pos;
             }
 
             @Override
             public void onUnselected(int pos) {
-
+                currentEditPosition=-1;
             }
         });
 
@@ -177,16 +172,12 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
         outputPorts.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
             @Override
             public void onSelected(int pos) {
-                inputPorts.select(pos);
-
-                String str = "hello";
             }
 
             @Override
             public void onUnselected(int pos) {
-
             }
-        });*/
+        });
 
         /*test code*/
 /*        List<term> list=new ArrayList<>();
