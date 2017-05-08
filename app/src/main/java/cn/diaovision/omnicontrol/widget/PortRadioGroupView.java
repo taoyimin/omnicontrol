@@ -69,6 +69,7 @@ public class PortRadioGroupView extends RecyclerView {
                 if (onItemSelectListener != null) {
                     onItemSelectListener.onSelected(position);
                 }
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -76,7 +77,7 @@ public class PortRadioGroupView extends RecyclerView {
                 if (onItemSelectListener != null) {
                     onItemSelectListener.onUnselected(position);
                 }
-
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -132,6 +133,7 @@ public class PortRadioGroupView extends RecyclerView {
             //a hotfix for layoutmanager.getChildAt
             adapter.changeSelectedItem(position, layoutMgr.getChildAt(position - (int) layoutMgr.getChildAt(0).getTag()));
         }
+        adapter.notifyDataSetChanged();
     }
 
     public interface OnItemSelectListener {
@@ -183,6 +185,11 @@ public class PortRadioGroupView extends RecyclerView {
 
     public void setEditing(boolean editing){
         adapter.setEditing(editing);
+    }
+
+    @Override
+    public PortItemAdapter getAdapter() {
+        return adapter;
     }
 
     public void configLayout(int direction, int spancount) {
