@@ -30,6 +30,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class MediaMatrixRemoter {
+    int a;
     private MediaMatrix matrix;
 
     public MediaMatrixRemoter(MediaMatrix matrix) {
