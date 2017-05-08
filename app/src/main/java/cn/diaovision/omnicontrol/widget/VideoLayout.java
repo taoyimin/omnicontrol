@@ -67,7 +67,7 @@ public class VideoLayout extends RelativeLayout {
         View view = View.inflate(context, R.layout.layout_video, this);
         ButterKnife.bind(this, view);
 
-        videoView.setVideoQuality(MediaPlayer.VIDEOQUALITY_LOW);//设置播放画质
+        videoView.setVideoQuality(MediaPlayer.VIDEOQUALITY_HIGH);//设置播放画质
         videoView.setBufferSize(1024 * 10); //设置视频缓冲大小
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override

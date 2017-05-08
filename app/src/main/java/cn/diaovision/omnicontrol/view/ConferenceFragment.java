@@ -1,13 +1,16 @@
 package cn.diaovision.omnicontrol.view;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,6 +26,7 @@ import cn.diaovision.omnicontrol.widget.MyItemTouchCallback;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
 import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
 import cn.diaovision.omnicontrol.widget.RecyclerViewWithSlidingItem;
+import cn.diaovision.omnicontrol.widget.SlidingItemView;
 import cn.diaovision.omnicontrol.widget.adapter.AuxiliaryPanelItemAdapter;
 
 /**
@@ -34,9 +38,13 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
     PortRadioGroupView portRadioGroupView;
     @BindView(R.id.auxiliary_recycler)
     RecyclerViewWithSlidingItem auxiliaryRecycler;
+    @BindView(R.id.video_layout)
+    RelativeLayout videoLayout;
 
     AuxiliaryPanelItemAdapter adapter;
     List<Term> list;
+    Term currentTerm;
+    Rect rect = new Rect();
 
     ConferencePresenter presenter;
     private ItemTouchHelper itemTouchHelper;
@@ -64,6 +72,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
         portRadioGroupView.updateData();
 
         /*test code*/
+        currentTerm = new Term(666);
         list = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             Term term = new Term(i);
@@ -74,23 +83,38 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
         auxiliaryRecycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
         auxiliaryRecycler.setHasFixedSize(true);
         auxiliaryRecycler.setAdapter(adapter);
-        auxiliaryRecycler.addOnItemTouchListener(new OnRecyclerItemClickListener(auxiliaryRecycler){
+        auxiliaryRecycler.addOnItemTouchListener(new OnRecyclerItemClickListener(auxiliaryRecycler) {
             @Override
             public void onLongClick(RecyclerView.ViewHolder vh) {
-                if (vh.getLayoutPosition()!=list.size()-1) {
-                    Toast.makeText(getContext(),"长按了",Toast.LENGTH_SHORT).show();
+                SlidingItemView slidingItemView = ((AuxiliaryPanelItemAdapter.MyViewHolder) vh).getSlidingItemView();
+                if (!slidingItemView.isCanDrag()) {
+                    slidingItemView.setCanDrag(true);
+                    return;
+                }
+                if (vh.getLayoutPosition() != list.size() - 1) {
+                    Toast.makeText(getContext(), "开始拖拽", Toast.LENGTH_SHORT).show();
                     itemTouchHelper.startDrag(vh);
-                    //VibratorUtil.Vibrate(getActivity(), 70);   //震动70ms
                 }
             }
         });
         itemTouchHelper = new ItemTouchHelper(new MyItemTouchCallback(adapter));
         //和RecyclerView进行关联
         itemTouchHelper.attachToRecyclerView(auxiliaryRecycler);
+
+        //videoLayout.getWindowVisibleDisplayFrame(rect);
     }
 
     @Override
     public void bindPresenter() {
         presenter = new ConferencePresenter(this);
+    }
+
+    public void getDispatchTouchEvent(MotionEvent event) {
+/*        if (event.getAction() == MotionEvent.ACTION_UP) {
+            boolean flag = rect.contains((int) event.getRawX(), (int) event.getRawY());
+            Log.i("info", "flag=" + flag);
+            Log.i("info", "getRawX=" + event.getRawX());
+            Log.i("info", "getRawY=" + event.getRawY());
+        }*/
     }
 }
