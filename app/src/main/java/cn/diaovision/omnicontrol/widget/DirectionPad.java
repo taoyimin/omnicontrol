@@ -1,11 +1,8 @@
 package cn.diaovision.omnicontrol.widget;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -155,6 +152,9 @@ public class DirectionPad extends RelativeLayout {
                         preY = 0;
                         handler.setTranslationX(0);
                         handler.setTranslationY(0);
+                        if (onMoveListener != null){
+                            onMoveListener.onMoveFinish();
+                        }
                         break;
                 }
                 return false;
@@ -231,5 +231,6 @@ public class DirectionPad extends RelativeLayout {
 
     public interface OnMoveListener{
         void onMove(int deg, int velo);
+        void onMoveFinish();
     }
 }
