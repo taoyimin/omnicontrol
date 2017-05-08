@@ -64,7 +64,7 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
         holder.getV().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*if (lastSelectedPos < 0) {
+/*                if (lastSelectedPos < 0) {
                     //new select
                     lastSelectedPos = holder.pos;
                     ((CircleCharView) view.findViewById(R.id.port_circle)).select();
@@ -137,6 +137,8 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
                             if (itemClickListener != null) {
                                 itemClickListener.onUnselect(view, (int) view.getTag());
                             }
+                            lastSelectedPos=-1;
+                            lastSelectedView = null;
                         }
                         break;
                     default:

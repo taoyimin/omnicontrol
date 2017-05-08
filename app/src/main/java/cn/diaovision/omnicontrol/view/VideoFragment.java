@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -18,7 +17,10 @@ import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
+import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
+import cn.diaovision.omnicontrol.model.Config;
+import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
 
 /**
@@ -43,7 +45,17 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
     /***********
      *Datum
      ************/
-    MediaMatrix mediaMatrix = new MediaMatrix();
+    Config cfg = new ConfigFixed();
+    MediaMatrix matrix = new MediaMatrix.Builder()
+            .id(cfg.getMatrixId())
+            .ip(cfg.getMatrixIp())
+            .port(cfg.getMatrixUdpIpPort())
+            .localPreviewVideo(cfg.getMatrixPreviewIp(), cfg.getMatrixPreviewPort())
+            .videoInInit(cfg.getMatrixInputVideoNum())
+            .videoOutInit(cfg.getMatrixOutputVideoNum())
+            .build();
+
+    MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
 
     VideoContract.Presenter presenter;
 //    RxBus.RxSubscription rxSubscription = new RxBus.RxSubscription() {
@@ -70,13 +82,15 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
         super.onViewCreated(view, savedInstanceState);
 
         /* test code */
-        final List<Port> ports = new ArrayList<>();
-        final List<Port> outports = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
+        //final List<Port> ports = new ArrayList<>();
+        //final List<Port> outports = new ArrayList<>();
+        final List<Port> ports=matrix.getVideoInPort();
+        final List<Port> outports = matrix.getVideoOutPort();
+/*        for (int i = 0; i < 30; i++) {
             Port port = new Port(i, i, i, i);
             ports.add(port);
             outports.add(port);
-        }
+        }*/
         //RecyclerView config
         inputPorts.config(ports, R.layout.item_port);
         outputPorts.config(outports, R.layout.item_port);
@@ -157,6 +171,9 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
                 //TODO: send udp packet to server
 //                getRxBus().post(new String("Message matrix"));
                 currentEditPosition=pos;
+
+
+
             }
 
             @Override

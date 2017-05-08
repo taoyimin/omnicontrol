@@ -106,4 +106,14 @@ public class ConfigXml implements Config{
     public List<HiCamera> getHiCameraInfo() {
         return null;
     }
+
+    @Override
+    public int getMatrixInputVideoNum() {
+        return 0;
+    }
+
+    @Override
+    public int getMatrixOutputVideoNum() {
+        return 0;
+    }
 }

@@ -1,7 +1,5 @@
 package cn.diaovision.omnicontrol.core.model.device.matrix;
 
-import org.reactivestreams.Publisher;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,15 +7,9 @@ import java.util.List;
 import cn.diaovision.omnicontrol.core.message.MatrixMessage;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
-import cn.diaovision.omnicontrol.model.Config;
-import cn.diaovision.omnicontrol.model.ConfigFixed;
-import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
-import cn.diaovision.omnicontrol.rx.RxReq;
 import cn.diaovision.omnicontrol.rx.RxSubscriber;
-import cn.diaovision.omnicontrol.util.ByteUtils;
 import io.reactivex.BackpressureStrategy;
-import io.reactivex.CompletableSource;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
 import io.reactivex.FlowableOnSubscribe;
@@ -156,7 +148,8 @@ public class MediaMatrixRemoter {
         if (matrix == null || !matrix.isReachable()) {
             return -1;
         }
-        final HiCamera cam = matrix.getCameras().get(portIdx);
+        //final HiCamera cam = matrix.getCameras().get(portIdx);
+        final HiCamera cam =  new HiCamera(4, 1, 2400, HiCamera.PROTO_FELICA_D);
         if (cam == null){
             return -1;
         }
