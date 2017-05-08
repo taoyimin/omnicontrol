@@ -26,6 +26,9 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
     private float downX, dispatchDownX, dispatchDownY;
 
     private boolean isOpen;
+    private boolean canDrag = true;
+    private boolean open = false;
+    private boolean lastOpen = false;
 
     private VelocityTracker mVelocityTracker;
 
@@ -191,7 +194,36 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
         }
         mScroller.startScroll(scrollX, 0, distance, 0, duration);
         // 此时需要手动刷新View 否则没效果
+        if (distance < 0) {
+            if (open) {
+                canDrag = false;
+            } else {
+                canDrag = true;
+            }
+            lastOpen = open;
+            open = false;
+        } else if (distance > 0) {
+            canDrag = false;
+            lastOpen = open;
+            open = true;
+        } else {
+            lastOpen = open;
+            open = !open;
+            canDrag = false;
+        }
+        if (distance == -hideView.getWidth()) {
+            canDrag = true;
+        }
+        //Log.i("info","distance="+distance+"上一次状态："+lastOpen+"这次状态:"+open+"能否拖拽："+canDrag);
         invalidate();
+    }
+
+    public boolean isCanDrag() {
+        return canDrag;
+    }
+
+    public void setCanDrag(boolean canDrag) {
+        this.canDrag = canDrag;
     }
 
     @Override

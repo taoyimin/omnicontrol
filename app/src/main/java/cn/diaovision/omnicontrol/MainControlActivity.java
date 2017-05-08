@@ -175,6 +175,8 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         //handle at this layer if needed
+        if(FRAGMENTS[6]!=null)
+            ((ConferenceFragment)FRAGMENTS[6]).getDispatchTouchEvent(ev);
         gestureDetector.onTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
     }

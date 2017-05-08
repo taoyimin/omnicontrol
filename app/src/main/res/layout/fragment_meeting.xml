@@ -18,6 +18,21 @@
             android:layout_height="0dp"
             android:orientation="horizontal">
 
+            <RelativeLayout
+                android:id="@+id/video_layout"
+                android:layout_width="400dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="#0ff">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:text="position=666"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
         </RelativeLayout>
 
         <cn.diaovision.omnicontrol.widget.PortRadioGroupView
