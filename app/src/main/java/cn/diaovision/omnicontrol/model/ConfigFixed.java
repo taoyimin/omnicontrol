@@ -85,4 +85,15 @@ public class ConfigFixed implements Config{
         return cameraList;
     }
 
+    @Override
+    public int getMatrixInputVideoNum() {
+        return 32;
+    }
+
+    @Override
+    public int getMatrixOutputVideoNum() {
+        return 32;
+    }
+
+
 }

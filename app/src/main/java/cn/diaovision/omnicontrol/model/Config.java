@@ -30,4 +30,7 @@ public interface Config {
     int getMatrixPreviewPort();
 
     List<HiCamera> getHiCameraInfo();
+
+    int getMatrixInputVideoNum();
+    int getMatrixOutputVideoNum();
 }
