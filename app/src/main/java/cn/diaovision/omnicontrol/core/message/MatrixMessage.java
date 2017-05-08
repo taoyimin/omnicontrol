@@ -449,12 +449,14 @@ public class MatrixMessage {
         return new MatrixMessage(hex2char(id, 2), MSG_SUBTITLE, payload, true);
     }
 
-    static public MatrixMessage buildSetSubtitleFormatMessage(int id, int port, String str, byte size, byte color){
-        byte[] strBytes = toGBK(str);
+    static public MatrixMessage buildSetSubtitleFormatMessage(int id, int port, byte size, byte color){
         byte[] payload = new byte[3 + 2 + 1 + 1 + 2 + 1];
         System.arraycopy(hex2char(port,3), 0, payload, 0, 3);
-        //TODO: confirm the format
-        System.arraycopy(hex2char(strBytes.length/2, 2), 0, payload, 3, 2);
+
+        //fixed content
+        payload[3] = '0';
+        payload[4] = '1';
+
         payload[5] = size;
         payload[6] = color;
 
