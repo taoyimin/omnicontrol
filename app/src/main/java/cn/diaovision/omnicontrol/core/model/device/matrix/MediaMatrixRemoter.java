@@ -148,8 +148,7 @@ public class MediaMatrixRemoter {
         if (matrix == null || !matrix.isReachable()) {
             return -1;
         }
-        //final HiCamera cam = matrix.getCameras().get(portIdx);
-        final HiCamera cam =  new HiCamera(4, 1, 2400, HiCamera.PROTO_FELICA_D);
+        final HiCamera cam = matrix.getCameras().get(portIdx);
         if (cam == null){
             return -1;
         }
