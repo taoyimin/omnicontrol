@@ -1,13 +1,19 @@
 package cn.diaovision.omnicontrol.view;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.List;
 
+import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
+import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
+import cn.diaovision.omnicontrol.model.Config;
+import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
+import cn.diaovision.omnicontrol.rx.RxSubscriber;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
@@ -18,6 +24,17 @@ import io.reactivex.subjects.Subject;
  */
 
 public class VideoPresenter implements VideoContract.Presenter {
+    Config cfg = new ConfigFixed();
+    MediaMatrix matrix = new MediaMatrix.Builder()
+            .id(cfg.getMatrixId())
+            .ip(cfg.getMatrixIp())
+            .port(cfg.getMatrixUdpIpPort())
+            .localPreviewVideo(cfg.getMatrixPreviewIp(), cfg.getMatrixPreviewPort())
+            .videoInInit(cfg.getMatrixInputVideoNum())
+            .videoOutInit(cfg.getMatrixOutputVideoNum())
+            .build();
+
+    MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
 
     //通过Subject实现ViewModel的双向绑定
     Subject bus = PublishSubject.create();
@@ -37,7 +54,7 @@ public class VideoPresenter implements VideoContract.Presenter {
     @NonNull
     private final VideoContract.View view;
 
-    public VideoPresenter(VideoContract.View view){
+    public VideoPresenter(VideoContract.View view) {
         this.view = view;
 
         bus.subscribe(subscriber);
@@ -71,8 +88,8 @@ public class VideoPresenter implements VideoContract.Presenter {
 
 
     //TODO: (optional) remove all subscriber before the presenter is destroyed
-    public void stopObserve(){
-        if (subscription != null){
+    public void stopObserve() {
+        if (subscription != null) {
             subscription.dispose();
         }
     }
@@ -95,7 +112,31 @@ public class VideoPresenter implements VideoContract.Presenter {
 
     }
 
+    @Override
+    public void switchChannel(int portIn, int[] portOut) {
+        int res = matrixRemoter.switchVideo(portIn, portOut, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i("info", "Switch succeed");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i("info", "Switch failed");
+            }
+        });
+        if (res < 0) {
+            Log.i("info", "invalid switch");
+        }
+    }
+
+    @Override
+    public MediaMatrix getMediaMatrix() {
+        return matrix;
+    }
+
+
     //TODO: add viewmodel operations if needed
-//    public void onTitleChanged(String str){
-//    }
+    //    public void onTitleChanged(String str){
+    //    }
 }

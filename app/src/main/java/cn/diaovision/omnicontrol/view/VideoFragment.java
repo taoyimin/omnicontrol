@@ -3,25 +3,22 @@ package cn.diaovision.omnicontrol.view;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.R;
-import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
-import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
-import cn.diaovision.omnicontrol.model.Config;
-import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
+import cn.diaovision.omnicontrol.widget.VideoLayout;
 
 /**
  * Created by liulingfeng on 2017/2/24.
@@ -39,23 +36,15 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
     @BindView(R.id.auxiliary)
     RecyclerView auxiliary;
 
+    @BindView(R.id.video_layout)
+    VideoLayout videoLayout;
+
     boolean canEdit = false;
     int currentEditPosition=-1;
 
     /***********
      *Datum
      ************/
-    Config cfg = new ConfigFixed();
-    MediaMatrix matrix = new MediaMatrix.Builder()
-            .id(cfg.getMatrixId())
-            .ip(cfg.getMatrixIp())
-            .port(cfg.getMatrixUdpIpPort())
-            .localPreviewVideo(cfg.getMatrixPreviewIp(), cfg.getMatrixPreviewPort())
-            .videoInInit(cfg.getMatrixInputVideoNum())
-            .videoOutInit(cfg.getMatrixOutputVideoNum())
-            .build();
-
-    MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
 
     VideoContract.Presenter presenter;
 //    RxBus.RxSubscription rxSubscription = new RxBus.RxSubscription() {
@@ -82,15 +71,15 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
         super.onViewCreated(view, savedInstanceState);
 
         /* test code */
-        //final List<Port> ports = new ArrayList<>();
-        //final List<Port> outports = new ArrayList<>();
-        final List<Port> ports=matrix.getVideoInPort();
-        final List<Port> outports = matrix.getVideoOutPort();
-/*        for (int i = 0; i < 30; i++) {
-            Port port = new Port(i, i, i, i);
+        final List<Port> ports = new ArrayList<>();
+        final List<Port> outports = new ArrayList<>();
+        //final List<Port> ports=presenter.getMediaMatrix().getVideoInPort();
+        //final List<Port> outports = presenter.getMediaMatrix().getVideoOutPort();
+        for (int i = 0; i < 32; i++) {
+            Port port = new Port(1, i, Port.TYPE_VIDEO, Port.DIR_IN);
             ports.add(port);
             outports.add(port);
-        }*/
+        }
         //RecyclerView config
         inputPorts.config(ports, R.layout.item_port);
         outputPorts.config(outports, R.layout.item_port);
@@ -102,22 +91,22 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
             public void dispatchTouchEvent(View v, MotionEvent e, int position) {
                 switch (e.getAction()){
                     case MotionEvent.ACTION_DOWN:
-                        Log.i("info","ACTION_DOWN");
                         canEdit=true;
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        Log.i("info","ACTION_MOVE");
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.i("info","ACTION_UP");
                         canEdit=false;
                         if(outputPorts.isEditing()){
                             outputPorts.setEditing(false);
                             //完成编辑的操作
                             Toast.makeText(getContext(),"完成编辑",Toast.LENGTH_SHORT).show();
-                            for(Integer integer:outputPorts.getAdapter().getSelects()){
-                                Log.i("info","选中了"+integer);
+                            List<Integer> list=outputPorts.getAdapter().getSelects();
+                            int[] outPorts=new int[list.size()];
+                            for(int i=0;i<list.size();i++){
+                                outPorts[i]=list.get(i);
                             }
+                            presenter.switchChannel(currentEditPosition,outPorts);
                         }
                         break;
                 }
@@ -171,9 +160,6 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
                 //TODO: send udp packet to server
 //                getRxBus().post(new String("Message matrix"));
                 currentEditPosition=pos;
-
-
-
             }
 
             @Override
