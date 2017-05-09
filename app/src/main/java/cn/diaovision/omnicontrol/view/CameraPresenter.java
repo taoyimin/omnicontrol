@@ -3,6 +3,9 @@ package cn.diaovision.omnicontrol.view;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.Map;
+
+import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
 import cn.diaovision.omnicontrol.model.Config;
@@ -33,6 +36,7 @@ public class CameraPresenter implements CameraContract.Presenter {
             .build();
 
     MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
+    Map<Integer,HiCamera> cameras;
 
     //通过Subject实现ViewModel的双向绑定
     Subject bus = PublishSubject.create();
@@ -56,6 +60,8 @@ public class CameraPresenter implements CameraContract.Presenter {
         this.view = view;
 
         bus.subscribe(subscriber);
+        matrix.setCameras(cfg.getHiCameraInfo());
+
     }
 
     //TODO: remove if no preprocessing is needed
@@ -97,13 +103,13 @@ public class CameraPresenter implements CameraContract.Presenter {
         int res = matrixRemoter.startCameraGo(portIdx, cmd, speed, new RxSubscriber<RxMessage>() {
             @Override
             public void onRxResult(RxMessage rxMessage) {
-                Log.i("info","cmd="+cmd+"speed="+speed);
+                Log.i("info","Camera go success");
             }
 
             @Override
             public void onRxError(Throwable e) {
                 Log.i("info","Camera go failed");
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         });
         if (res < 0){
@@ -130,23 +136,62 @@ public class CameraPresenter implements CameraContract.Presenter {
     }
 
     @Override
-    public void addPreset() {
+    public void addPreset(int portIdx,int presetIdx, String name) {
+        int res = matrixRemoter.storeCameraPreset(portIdx, presetIdx, name, new RxSubscriber() {
+            @Override
+            public void onRxResult(Object o) {
+                Log.i("info","store preset success");
+            }
 
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i("info","store preset failed");
+            }
+        });
+        if (res < 0){
+            Log.i("info","invalid store preset");
+        }
     }
 
     @Override
-    public void delPreset() {
+    public void delPreset(int portIdx, int presetIdx) {
+        int res=matrixRemoter.removeCameraPreset(portIdx,presetIdx, new RxSubscriber() {
+            @Override
+            public void onRxResult(Object o) {
+                Log.i("info","success to delete preset");
+            }
 
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i("info","failed to delete preset");
+            }
+        });
+        if (res < 0){
+            Log.i("info","invalid delete preset");
+        }
     }
 
-    @Override
+/*    @Override
     public void updatePreset() {
 
-    }
+    }*/
 
     @Override
-    public void loadPreset() {
+    public void loadPreset(int portIdx,int presetIdx) {
+        int res = matrixRemoter.loadCameraPreset(portIdx, presetIdx, new RxSubscriber() {
+            @Override
+            public void onRxResult(Object o) {
+                Log.i("info","success to load preset");
+            }
 
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i("info","failed to load preset");
+            }
+        });
+        if (res < 0){
+            Log.i("info","invalid load preset");
+        }
     }
 
     //TODO: add viewmodel operations if needed

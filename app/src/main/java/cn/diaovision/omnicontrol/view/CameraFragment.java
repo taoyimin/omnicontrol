@@ -51,7 +51,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
 
     int lastDeg;
     int lastVelo;
-    HiCamera currentCamera= new ConfigFixed().getHiCameraInfo().get(0);
+    HiCamera currentCamera= new ConfigFixed().getHiCameraInfo().get(2);
 
     @Nullable
     @Override
@@ -157,7 +157,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
         });
 
         //设置播放路径
-        //videoLayout.setVideoPath("rtsp://192.168.1.117:8554/test");
+        //videoLayout.setVideoPath("rtsp://192.168.10.108:8554/test.mov");
         videoLayout.setVideoPath("rtsp://192.168.10.31:554/test1.MP4");
         //videoLayout.setVideoPath("http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8");
         //videoLayout.setVideoPath("http://live.3gv.ifeng.com/live/zixun.m3u8");
