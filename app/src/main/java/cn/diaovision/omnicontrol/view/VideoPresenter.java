@@ -113,7 +113,7 @@ public class VideoPresenter implements VideoContract.Presenter {
     }
 
     @Override
-    public void switchChannel(int portIn, int[] portOut) {
+    public void switchVideo(int portIn, int[] portOut) {
         int res = matrixRemoter.switchVideo(portIn, portOut, new RxSubscriber<RxMessage>() {
             @Override
             public void onRxResult(RxMessage rxMessage) {
@@ -131,10 +131,22 @@ public class VideoPresenter implements VideoContract.Presenter {
     }
 
     @Override
-    public MediaMatrix getMediaMatrix() {
-        return matrix;
-    }
+    public void stitchVideo( int portIn,  int columnCnt,  int rowCnt,  int[] portOut) {
+        int res = matrixRemoter.stitchVideo( portIn,   columnCnt,   rowCnt, portOut, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i("info", "Stitch succeed");
+            }
 
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i("info", "Stitch failed");
+            }
+        });
+        if (res < 0) {
+            Log.i("info", "invalid stitch");
+        }
+    }
 
     //TODO: add viewmodel operations if needed
     //    public void onTitleChanged(String str){
