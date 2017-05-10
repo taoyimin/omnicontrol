@@ -3,7 +3,7 @@ package cn.diaovision.omnicontrol.view;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
@@ -11,7 +11,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +43,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
     AuxiliaryPanelItemAdapter adapter;
     List<Term> list;
     Term currentTerm;
+    int dragPosition=-1;
     Rect rect = new Rect();
 
     ConferencePresenter presenter;
@@ -73,6 +73,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
 
         /*test code*/
         currentTerm = new Term(666);
+        currentTerm.setName("position=666");
         list = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             Term term = new Term(i);
@@ -80,7 +81,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
             list.add(term);
         }
         adapter = new AuxiliaryPanelItemAdapter(getContext(), list);
-        auxiliaryRecycler.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        auxiliaryRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         auxiliaryRecycler.setHasFixedSize(true);
         auxiliaryRecycler.setAdapter(adapter);
         auxiliaryRecycler.addOnItemTouchListener(new OnRecyclerItemClickListener(auxiliaryRecycler) {
@@ -91,17 +92,22 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
                     slidingItemView.setCanDrag(true);
                     return;
                 }
+                //最后一个是加添按钮,不能拖拽
                 if (vh.getLayoutPosition() != list.size() - 1) {
-                    Toast.makeText(getContext(), "开始拖拽", Toast.LENGTH_SHORT).show();
                     itemTouchHelper.startDrag(vh);
+                    dragPosition=vh.getLayoutPosition();
                 }
             }
         });
-        itemTouchHelper = new ItemTouchHelper(new MyItemTouchCallback(adapter));
+        itemTouchHelper = new ItemTouchHelper(new MyItemTouchCallback(adapter).setOnDragListener(new MyItemTouchCallback.OnDragListener() {
+            @Override
+            public void onFinishDrag() {
+                //拖拽完成的回掉
+                dragPosition=-1;
+            }
+        }));
         //和RecyclerView进行关联
         itemTouchHelper.attachToRecyclerView(auxiliaryRecycler);
-
-        //videoLayout.getWindowVisibleDisplayFrame(rect);
     }
 
     @Override
@@ -109,12 +115,20 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
         presenter = new ConferencePresenter(this);
     }
 
-    public void getDispatchTouchEvent(MotionEvent event) {
-/*        if (event.getAction() == MotionEvent.ACTION_UP) {
-            boolean flag = rect.contains((int) event.getRawX(), (int) event.getRawY());
-            Log.i("info", "flag=" + flag);
-            Log.i("info", "getRawX=" + event.getRawX());
-            Log.i("info", "getRawY=" + event.getRawY());
-        }*/
+    public void getActivityDispatchTouchEvent(MotionEvent event) {
+        if(event.getAction()==MotionEvent.ACTION_UP){
+            if(dragPosition<0||videoLayout==null)
+                return ;
+            videoLayout.getGlobalVisibleRect(rect);
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                boolean flag = rect.contains((int) event.getRawX(), (int) event.getRawY());
+                if(flag){
+                    Term temp=currentTerm;
+                    currentTerm=list.get(dragPosition);
+                    list.set(dragPosition,temp);
+                    auxiliaryRecycler.getAdapter().notifyDataSetChanged();
+                }
+            }
+        }
     }
 }
