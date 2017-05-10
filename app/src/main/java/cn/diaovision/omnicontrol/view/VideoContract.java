@@ -4,7 +4,6 @@ import java.util.List;
 
 import cn.diaovision.omnicontrol.BasePresenter;
 import cn.diaovision.omnicontrol.BaseView;
-import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 
 /* *
@@ -22,8 +21,8 @@ public interface VideoContract {
         Port getOutput(Port input);
         Port getInput(Port output);
         void setChannel(Port input, List<Port> output/*,Mode*/);
-        void switchChannel(int portIn, int[] portOut);
-        MediaMatrix getMediaMatrix();
+        void switchVideo(int portIn, int[] portOut);
+        void stitchVideo(int portIn,  int columnCnt,  int rowCnt,  int[] portOut);
 
         interface PortStateListener{
             void onPreviewDisconnected();

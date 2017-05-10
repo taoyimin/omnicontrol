@@ -3,9 +3,6 @@ package cn.diaovision.omnicontrol.view;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import java.util.Map;
-
-import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
 import cn.diaovision.omnicontrol.model.Config;
@@ -36,7 +33,6 @@ public class CameraPresenter implements CameraContract.Presenter {
             .build();
 
     MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
-    Map<Integer,HiCamera> cameras;
 
     //通过Subject实现ViewModel的双向绑定
     Subject bus = PublishSubject.create();
@@ -109,7 +105,6 @@ public class CameraPresenter implements CameraContract.Presenter {
             @Override
             public void onRxError(Throwable e) {
                 Log.i("info","Camera go failed");
-                //e.printStackTrace();
             }
         });
         if (res < 0){

@@ -62,7 +62,7 @@ public class ConfigFixed implements Config{
 
     @Override
     public String getMatrixPreviewIp() {
-        return "192.168.10.1";
+        return "192.168.10.31";
     }
 
     @Override
@@ -78,7 +78,7 @@ public class ConfigFixed implements Config{
     @Override
     public Map<Integer,HiCamera> getHiCameraInfo() {
         Map<Integer,HiCamera> cameras = new HashMap<>();
-        cameras.put(2,new HiCamera(2, 255, 9600, HiCamera.PROTO_FELICA_D));
+        cameras.put(2,new HiCamera(2, 1, 2400, HiCamera.PROTO_FELICA_D));
         return cameras;
     }
 

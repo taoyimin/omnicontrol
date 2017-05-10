@@ -106,7 +106,7 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
                             for(int i=0;i<list.size();i++){
                                 outPorts[i]=list.get(i);
                             }
-                            presenter.switchChannel(currentEditPosition,outPorts);
+                            presenter.switchVideo(currentEditPosition,outPorts);
                         }
                         break;
                 }

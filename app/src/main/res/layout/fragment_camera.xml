@@ -70,11 +70,13 @@
                     android:orientation="horizontal">
 
                     <Button
+                        android:id="@+id/btn_zoomin"
                         android:layout_width="@dimen/camera_control_button_width"
                         android:layout_height="@dimen/camera_control_button_height"
                         android:text="@string/camera_zoomin"/>
 
                     <Button
+                        android:id="@+id/btn_zoomout"
                         android:layout_width="@dimen/camera_control_button_width"
                         android:layout_height="@dimen/camera_control_button_height"
                         android:text="@string/camera_zoomout"/>
@@ -87,16 +89,19 @@
                     android:orientation="horizontal">
 
                     <Button
+                        android:id="@+id/btn_fast"
                         android:layout_width="@dimen/camera_control_button_width"
                         android:layout_height="@dimen/camera_control_button_height"
                         android:text="@string/camera_fast"/>
 
                     <Button
+                        android:id="@+id/btn_stop"
                         android:layout_width="@dimen/camera_control_button_width"
                         android:layout_height="@dimen/camera_control_button_height"
                         android:text="@string/camera_stop"/>
 
                     <Button
+                        android:id="@+id/btn_slow"
                         android:layout_width="@dimen/camera_control_button_width"
                         android:layout_height="@dimen/camera_control_button_height"
                         android:text="@string/camera_slow"/>
