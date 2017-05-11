@@ -97,6 +97,22 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
                 popupDialog();
             }
         });
+        adapter.setOnHideViewClickListener(new AuxiliaryPanelItemAdapter.OnHideViewClickListener() {
+            @Override
+            public void onClick1(View view, int pos) {
+                //发言与取消发言
+            }
+
+            @Override
+            public void onClick2(View view, int pos) {
+                //静音与取消静音
+            }
+
+            @Override
+            public void onClick3(View view, int pos) {
+                //踢除终端
+            }
+        });
         auxiliaryRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         auxiliaryRecycler.setHasFixedSize(true);
         auxiliaryRecycler.setAdapter(adapter);

@@ -3,7 +3,6 @@ package cn.diaovision.omnicontrol.view;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -122,7 +121,6 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
                 }
                 lastDeg=deg;
                 lastVelo=velo;
-                Log.i("info","deg="+deg+"velo="+velo);
                 switch (deg){
                     case 0:
                         //摄像头右移
@@ -145,7 +143,6 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
 
             @Override
             public void onMoveFinish() {
-                Log.i("info","移动结束");
                 if(currentCamera!=null) {
                     presenter.cameraStopGo(currentCamera.getPortIdx());
                 }
