@@ -26,6 +26,7 @@ public class AuxiliaryPanelItemAdapter extends RecyclerView.Adapter<AuxiliaryPan
     public static final int TYPE_NORMAL = 0;  //说明是不带有footer的
     public static final int TYPE_FOOTER = 1;  //说明是带有footer的
     private View mFooterView;
+    OnHideViewClickListener onHideViewClickListener;
 
     public AuxiliaryPanelItemAdapter(Context context, List<Term> list) {
         this.context = context;
@@ -56,17 +57,23 @@ public class AuxiliaryPanelItemAdapter extends RecyclerView.Adapter<AuxiliaryPan
                 holder.slidingItemView.setOnHideViewClickListener(new SlidingItemView.OnHideViewClickListener() {
                     @Override
                     public void onClick1(View view, int pos) {
-                        Toast.makeText(context, "position=" + pos + "操作1", Toast.LENGTH_SHORT).show();
+                        if(onHideViewClickListener!=null){
+                            onHideViewClickListener.onClick1(view,pos);
+                        }
                     }
 
                     @Override
                     public void onClick2(View view, int pos) {
-                        Toast.makeText(context, "position=" + pos + "操作2", Toast.LENGTH_SHORT).show();
+                        if(onHideViewClickListener!=null){
+                            onHideViewClickListener.onClick2(view,pos);
+                        }
                     }
 
                     @Override
                     public void onClick3(View view, int pos) {
-                        Toast.makeText(context, "position=" + pos + "操作3", Toast.LENGTH_SHORT).show();
+                        if(onHideViewClickListener!=null){
+                            onHideViewClickListener.onClick3(view,pos);
+                        }
                     }
                 });
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -137,5 +144,15 @@ public class AuxiliaryPanelItemAdapter extends RecyclerView.Adapter<AuxiliaryPan
     public void setFooterView(View footerView) {
         mFooterView = footerView;
         notifyItemInserted(getItemCount() - 1);
+    }
+
+    public void setOnHideViewClickListener(OnHideViewClickListener onHideViewClickListener) {
+        this.onHideViewClickListener = onHideViewClickListener;
+    }
+
+    public interface OnHideViewClickListener{
+        void onClick1(View view, int pos);
+        void onClick2(View view, int pos);
+        void onClick3(View view, int pos);
     }
 }
