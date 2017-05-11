@@ -3,7 +3,11 @@ package cn.diaovision.omnicontrol.view;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.Date;
+
 import cn.diaovision.omnicontrol.core.model.conference.ConfManager;
+import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
+import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
 import cn.diaovision.omnicontrol.model.Config;
 import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
@@ -20,8 +24,19 @@ import io.reactivex.subjects.Subject;
  */
 
 public class ConferencePresenter implements ConferenceContract.Presenter {
+    static final String TAG="conf";
     ConfManager confManager;
-    Config cfg=new ConfigFixed();
+    Config cfg = new ConfigFixed();
+    MediaMatrix matrix = new MediaMatrix.Builder()
+            .id(cfg.getMatrixId())
+            .ip(cfg.getMatrixIp())
+            .port(cfg.getMatrixUdpIpPort())
+            .localPreviewVideo(cfg.getMatrixPreviewIp(), cfg.getMatrixPreviewPort())
+            .videoInInit(cfg.getMatrixInputVideoNum())
+            .videoOutInit(cfg.getMatrixOutputVideoNum())
+            .build();
+
+    MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
 
     //通过Subject实现ViewModel的双向绑定
     Subject bus = PublishSubject.create();
@@ -46,17 +61,17 @@ public class ConferencePresenter implements ConferenceContract.Presenter {
 
         bus.subscribe(subscriber);
         confManager=new ConfManager();
-        confManager.init(cfg, new RxSubscriber<RxMessage>() {
+/*        confManager.init(cfg, new RxSubscriber<RxMessage>() {
             @Override
             public void onRxResult(RxMessage rxMessage) {
-                Log.i("info","ConfManager init success");
+                Log.i(TAG,"ConfManager init success");
             }
 
             @Override
             public void onRxError(Throwable e) {
-                Log.i("info","ConfManager init failed");
+                Log.i(TAG,"ConfManager init failed");
             }
-        });
+        });*/
     }
 
     //TODO: remove if no preprocessing is needed
@@ -96,6 +111,232 @@ public class ConferencePresenter implements ConferenceContract.Presenter {
     @Override
     public boolean login(String name, String passwd) {
         return true;
+    }
+
+    @Override
+    public void setSubtitle(int portIdx, String str) {
+        int res=matrixRemoter.setSubtitle(portIdx, str, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG,"set subtitle success");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG,"set subtitle failed");
+            }
+        });
+        if(res<0){
+            Log.i(TAG,"invalid set subtitle");
+        }
+    }
+
+    @Override
+    public void setSubtitleFormat(int portIdx, byte fontSize, byte fontColor) {
+        int res=matrixRemoter.setSubtitleFormat(portIdx, fontSize, fontColor, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG,"set subtitle format success");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG,"set subtitle format failed");
+            }
+        });
+        if(res<0){
+            Log.i(TAG,"invalid set subtitle format");
+        }
+    }
+
+    @Override
+    public void reqConfTemplate() {
+
+    }
+
+    @Override
+    public void reqConfInfo() {
+
+    }
+
+    @Override
+    public void startConf(Date startTime, Date endTime, int confId) {
+        int res=confManager.startConf(startTime, endTime, confId, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG,"start conf success");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG,"start conf failed");
+            }
+        });
+        if(res<0){
+            Log.i(TAG,"invalid start conf");
+        }
+    }
+
+    @Override
+    public void endConf(int confId) {
+        int res=confManager.endConf(confId, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG,"end conf success");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG,"end conf failed");
+            }
+        });
+        if(res<0){
+            Log.i(TAG,"invalid end conf");
+        }
+    }
+
+    @Override
+    public void inviteTerm(int confId, long termId) {
+        int res=confManager.inviteTerm(confId, termId, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG,"invite term success");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG,"invite term failed");
+            }
+        });
+        if(res<0){
+            Log.i(TAG,"invalid invite term");
+        }
+    }
+
+    @Override
+    public void hangupTerm(int confId, long termId) {
+        int res=confManager.inviteTerm(confId, termId, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG,"hangup term success");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG,"hangup term failed");
+            }
+        });
+        if(res<0){
+            Log.i(TAG,"invalid hangup term");
+        }
+    }
+
+    @Override
+    public void muteTerm(int confId, long termId) {
+        int res=confManager.muteTerm(confId, termId, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG,"mute term success");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG,"mute term failed");
+            }
+        });
+        if(res<0){
+            Log.i(TAG,"invalid mute term");
+        }
+    }
+
+    @Override
+    public void unmuteTerm(int confId, long termId) {
+        int res=confManager.unmuteTerm(confId, termId, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG,"unmute term success");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG,"unmute term failed");
+            }
+        });
+        if(res<0){
+            Log.i(TAG,"invalid unmute term");
+        }
+    }
+
+    @Override
+    public void speechTerm(int confId, long termId) {
+        int res=confManager.speechTerm(confId, termId, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG,"speech term success");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG,"speech term failed");
+            }
+        });
+        if(res<0){
+            Log.i(TAG,"invalid speech term");
+        }
+    }
+
+    @Override
+    public void cancelSpeechTerm(int confId, long termId) {
+        int res=confManager.cancelSpeechTerm(confId, termId, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG,"cancel speech term success");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG,"cancel speech term failed");
+            }
+        });
+        if(res<0){
+            Log.i(TAG,"invalid cancel speech term");
+        }
+    }
+
+    @Override
+    public void makeChair(int confId, long termId) {
+        int res=confManager.makeChair(confId, termId, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG,"make chair success");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG,"make chair failed");
+            }
+        });
+        if(res<0){
+            Log.i(TAG,"invalid make chair");
+        }
+    }
+
+    @Override
+    public void makeSelectview(int confId, long termId) {
+        int res=confManager.makeSelectview(confId, termId, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG,"make selectview success");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG,"make selectview failed");
+            }
+        });
+        if(res<0){
+            Log.i(TAG,"invalid make selectview");
+        }
     }
 
     //TODO: add viewmodel operations if needed
