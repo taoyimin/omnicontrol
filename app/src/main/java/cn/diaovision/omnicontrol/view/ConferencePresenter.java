@@ -1,10 +1,15 @@
 package cn.diaovision.omnicontrol.view;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import cn.diaovision.omnicontrol.core.model.conference.ConfManager;
+import cn.diaovision.omnicontrol.model.Config;
+import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
+import cn.diaovision.omnicontrol.rx.RxSubscriber;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
@@ -15,6 +20,8 @@ import io.reactivex.subjects.Subject;
  */
 
 public class ConferencePresenter implements ConferenceContract.Presenter {
+    ConfManager confManager;
+    Config cfg=new ConfigFixed();
 
     //通过Subject实现ViewModel的双向绑定
     Subject bus = PublishSubject.create();
@@ -38,6 +45,18 @@ public class ConferencePresenter implements ConferenceContract.Presenter {
         this.view = view;
 
         bus.subscribe(subscriber);
+        confManager=new ConfManager();
+        confManager.init(cfg, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i("info","ConfManager init success");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i("info","ConfManager init failed");
+            }
+        });
     }
 
     //TODO: remove if no preprocessing is needed

@@ -11,14 +11,19 @@ import cn.diaovision.omnicontrol.BaseView;
  * */
 
 public interface CameraContract {
-    interface View extends BaseView<Presenter>{
+    interface View extends BaseView<Presenter> {
     }
 
-    interface Presenter extends BasePresenter{
-        void cameraCtrlGo();
-        void addPreset();
-        void delPreset();
-        void updataPreset();
-        void loadPreset();
+    interface Presenter extends BasePresenter {
+        void cameraCtrlGo(int portIdx, int cmd, int speed);
+
+        void cameraStopGo(int portIdx);
+
+        void addPreset(int portIdx, int presetIdx, String name);
+
+        void delPreset(int portIdx, int presetIdx);
+
+        //void updatePreset();
+        void loadPreset(int portIdx, int presetIdx);
     }
 }

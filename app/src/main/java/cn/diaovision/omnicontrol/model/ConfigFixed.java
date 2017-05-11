@@ -1,7 +1,7 @@
 package cn.diaovision.omnicontrol.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 
@@ -52,7 +52,7 @@ public class ConfigFixed implements Config{
 
     @Override
     public String getMatrixIp() {
-        return "192.168.10.31";
+        return "192.168.10.11";
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ConfigFixed implements Config{
 
     @Override
     public String getMatrixPreviewIp() {
-        return "192.168.10.1";
+        return "192.168.10.31";
     }
 
     @Override
@@ -76,13 +76,10 @@ public class ConfigFixed implements Config{
     }
 
     @Override
-    public List<HiCamera> getHiCameraInfo() {
-        List<HiCamera> cameraList = new ArrayList<>();
-
-        HiCamera cam = new HiCamera(1, 1, 2400, HiCamera.PROTO_FELICA_D);
-        cameraList.add(cam);
-
-        return cameraList;
+    public Map<Integer,HiCamera> getHiCameraInfo() {
+        Map<Integer,HiCamera> cameras = new HashMap<>();
+        cameras.put(2,new HiCamera(2, 1, 2400, HiCamera.PROTO_FELICA_D));
+        return cameras;
     }
 
     @Override

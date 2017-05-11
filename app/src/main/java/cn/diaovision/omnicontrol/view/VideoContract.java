@@ -21,6 +21,8 @@ public interface VideoContract {
         Port getOutput(Port input);
         Port getInput(Port output);
         void setChannel(Port input, List<Port> output/*,Mode*/);
+        void switchVideo(int portIn, int[] portOut);
+        void stitchVideo(int portIn,  int columnCnt,  int rowCnt,  int[] portOut);
 
         interface PortStateListener{
             void onPreviewDisconnected();

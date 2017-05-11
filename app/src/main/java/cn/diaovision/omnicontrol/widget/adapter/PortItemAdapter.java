@@ -3,6 +3,7 @@ package cn.diaovision.omnicontrol.widget.adapter;
 import android.content.Context;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -66,8 +67,9 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
             public void onClick(View view) {
                 /*if (lastSelectedPos < 0) {
                     //new select
-                    lastSelectedPos = holder.pos;
+                    Log.i("info","holder.pos"+holder.pos);
                     ((CircleCharView) view.findViewById(R.id.port_circle)).select();
+                    lastSelectedPos = holder.pos;
                     lastSelectedView = view;
                     if (itemClickListener != null) {
                         itemClickListener.onSelect(view, (int) view.getTag());
@@ -137,6 +139,8 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
                             if (itemClickListener != null) {
                                 itemClickListener.onUnselect(view, (int) view.getTag());
                             }
+                            lastSelectedPos=-1;
+                            lastSelectedView = null;
                         }
                         break;
                     default:
@@ -198,6 +202,7 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
 
             //reset the view click state
 /*            if (lastSelectedPos == position) {
+                Log.i("info","lastSelectedPos="+lastSelectedPos+"holder.pos="+holder.pos);
                 holder.cView.select(0);
                 lastSelectedView = holder.getV(); //reset selectedView here (old one may be recycled)
             } else {
@@ -205,14 +210,13 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
             }*/
 
             if (selects.contains(position)) {
-                holder.cView.select(0);
+                holder.cView.select();
                 lastSelectedView = holder.getV();
             } else {
-                holder.cView.unselect(0);
+                holder.cView.unselect();
             }
             holder.v.setTag(position); //view position
         }
-
         isBinding.set(false);
     }
 
@@ -258,17 +262,17 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
         public PortItemViewHolder(View itemView) {
             super(itemView);
             v = itemView;
-            v.setOnClickListener(new View.OnClickListener() {
+/*            v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     cView.click();
                 }
-            });
+            });*/
 
             alias = (AppCompatTextView) v.findViewById(R.id.port_alias);
             cView = (CircleCharView) v.findViewById(R.id.port_circle);
             image = (BGABadgeImageView) v.findViewById(R.id.port_image);
-            cView.unselect(0);
+            //cView.unselect(0);
         }
 
         public View getV() {
@@ -309,5 +313,9 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
 
     public List<Integer> getSelects() {
         return selects;
+    }
+
+    public void setSelects(List<Integer> selects) {
+        this.selects = selects;
     }
 }

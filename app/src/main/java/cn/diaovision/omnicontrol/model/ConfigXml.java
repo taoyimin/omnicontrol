@@ -9,6 +9,7 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -119,7 +120,7 @@ public class ConfigXml implements Config{
     }
 
     @Override
-    public List<HiCamera> getHiCameraInfo() {
+    public Map<Integer,HiCamera> getHiCameraInfo() {
         return null;
     }
 

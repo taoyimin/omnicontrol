@@ -3,7 +3,6 @@ package cn.diaovision.omnicontrol.view;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,9 +16,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.R;
-import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
+import cn.diaovision.omnicontrol.widget.VideoLayout;
 
 /**
  * Created by liulingfeng on 2017/2/24.
@@ -37,13 +36,15 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
     @BindView(R.id.auxiliary)
     RecyclerView auxiliary;
 
+    @BindView(R.id.video_layout)
+    VideoLayout videoLayout;
+
     boolean canEdit = false;
     int currentEditPosition=-1;
 
     /***********
      *Datum
      ************/
-    MediaMatrix mediaMatrix = new MediaMatrix();
 
     VideoContract.Presenter presenter;
 //    RxBus.RxSubscription rxSubscription = new RxBus.RxSubscription() {
@@ -72,8 +73,10 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
         /* test code */
         final List<Port> ports = new ArrayList<>();
         final List<Port> outports = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            Port port = new Port(i, i, i, i);
+        //final List<Port> ports=presenter.getMediaMatrix().getVideoInPort();
+        //final List<Port> outports = presenter.getMediaMatrix().getVideoOutPort();
+        for (int i = 0; i < 32; i++) {
+            Port port = new Port(1, i, Port.TYPE_VIDEO, Port.DIR_IN);
             ports.add(port);
             outports.add(port);
         }
@@ -88,22 +91,22 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
             public void dispatchTouchEvent(View v, MotionEvent e, int position) {
                 switch (e.getAction()){
                     case MotionEvent.ACTION_DOWN:
-                        Log.i("info","ACTION_DOWN");
                         canEdit=true;
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        Log.i("info","ACTION_MOVE");
                         break;
                     case MotionEvent.ACTION_UP:
-                        Log.i("info","ACTION_UP");
                         canEdit=false;
                         if(outputPorts.isEditing()){
                             outputPorts.setEditing(false);
                             //完成编辑的操作
                             Toast.makeText(getContext(),"完成编辑",Toast.LENGTH_SHORT).show();
-                            for(Integer integer:outputPorts.getAdapter().getSelects()){
-                                Log.i("info","选中了"+integer);
+                            List<Integer> list=outputPorts.getAdapter().getSelects();
+                            int[] outPorts=new int[list.size()];
+                            for(int i=0;i<list.size();i++){
+                                outPorts[i]=list.get(i);
                             }
+                            presenter.switchVideo(currentEditPosition,outPorts);
                         }
                         break;
                 }

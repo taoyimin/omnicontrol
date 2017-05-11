@@ -19,7 +19,8 @@
             android:background="#fff"
             android:textSize="@dimen/login_text_size"/>
 
-        <VideoView
+        <cn.diaovision.omnicontrol.widget.VideoLayout
+            android:id="@+id/video_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="5"/>

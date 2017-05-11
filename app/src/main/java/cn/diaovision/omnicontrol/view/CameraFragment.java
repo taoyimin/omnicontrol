@@ -3,22 +3,29 @@ package cn.diaovision.omnicontrol.view;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.R;
+import cn.diaovision.omnicontrol.core.message.MatrixMessage;
 import cn.diaovision.omnicontrol.core.model.device.State;
+import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera.Preset;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
+import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.widget.CameraPresetRadioGroupView;
 import cn.diaovision.omnicontrol.widget.DirectionPad;
 import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
@@ -43,7 +50,14 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
     @BindView(R.id.video_layout)
     VideoLayout videoLayout;
 
+    @BindViews({R.id.btn_zoomin,R.id.btn_zoomout,R.id.btn_fast,R.id.btn_slow,R.id.btn_stop})
+    List<Button> btnList;
+
     CameraPresenter presenter;
+
+    int lastDeg;
+    int lastVelo;
+    HiCamera currentCamera= new ConfigFixed().getHiCameraInfo().get(2);
 
     @Nullable
     @Override
@@ -62,6 +76,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
         presenter = new CameraPresenter(this);
         /* test code */
         final List<Preset> presetList = new ArrayList<>();
+        //final List<Preset> presetList = currentCamera.getPresetList();
         final List<Port> portList = new ArrayList<>();
 
         for (int m = 0; m < 12; m ++){
@@ -99,12 +114,92 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
         padDirection.setOnMoveListener(new DirectionPad.OnMoveListener() {
             @Override
             public void onMove(int deg, int velo) {
+                if(currentCamera==null){
+                    return;
+                }
+                if(deg==lastDeg&&velo==lastVelo){
+                    return;
+                }
+                lastDeg=deg;
+                lastVelo=velo;
+                Log.i("info","deg="+deg+"velo="+velo);
+                switch (deg){
+                    case 0:
+                        //摄像头右移
+                        presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_RIGHT,velo);
+                        break;
+                    case 90:
+                        //摄像头上移
+                        presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_UP,velo);
+                        break;
+                    case 180:
+                        //摄像头左移
+                        presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_LEFT,velo);
+                        break;
+                    case 270:
+                        //摄像头下移
+                        presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_DOWN,velo);
+                        break;
+                }
+            }
+
+            @Override
+            public void onMoveFinish() {
+                Log.i("info","移动结束");
+                if(currentCamera!=null) {
+                    presenter.cameraStopGo(currentCamera.getPortIdx());
+                }
             }
         });
 
+        cameraList.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
+            @Override
+            public void onSelected(int pos) {
+            }
+
+            @Override
+            public void onUnselected(int pos) {
+
+            }
+        });
+
+        for(Button btn:btnList){
+            btn.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch(event.getAction()){
+                        case MotionEvent.ACTION_DOWN:
+                            switch (v.getId()){
+                                case R.id.btn_zoomin:
+                                    presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_ZOOMIN, 63);
+                                    break;
+                                case R.id.btn_zoomout:
+                                    presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_ZOOMOUT, 63);
+                                    break;
+                                case R.id.btn_fast:
+                                    break;
+                                case R.id.btn_slow:
+                                    break;
+                                case R.id.btn_stop:
+                                    break;
+                            }
+                            break;
+                        case MotionEvent.ACTION_UP:
+                        case MotionEvent.ACTION_CANCEL:
+                        case MotionEvent.ACTION_HOVER_EXIT:
+                            presenter.cameraStopGo(currentCamera.getPortIdx());
+                            break;
+                        default:
+                            break;
+                    }
+                    return false;
+                }
+            });
+        }
+
         //设置播放路径
-        //videoLayout.setVideoPath("rtsp://192.168.1.117:8554/test");
-        videoLayout.setVideoPath("rtsp://192.168.10.31:554/test1.MP4");
+        //videoLayout.setVideoPath("rtsp://192.168.10.108:8554/test.mov");
+        //videoLayout.setVideoPath("rtsp://192.168.10.31:554/test1.MP4");
         //videoLayout.setVideoPath("http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8");
         //videoLayout.setVideoPath("http://live.3gv.ifeng.com/live/zixun.m3u8");
         //videoLayout.setVideoPath("rtsp://218.204.223.237:554/live/1/66251FC11353191F/e7ooqwcfbqjoo80j.sdp");

@@ -1,10 +1,7 @@
 package cn.diaovision.omnicontrol.widget;
 
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-
-import java.util.Collections;
 
 import cn.diaovision.omnicontrol.widget.adapter.AuxiliaryPanelItemAdapter;
 
@@ -21,21 +18,15 @@ public class MyItemTouchCallback extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
         final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
         final int swipeFlags = 0;
         return makeMovementFlags(dragFlags, swipeFlags);
-        } else {
-            final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-            final int swipeFlags = 0;
-            return makeMovementFlags(dragFlags, swipeFlags);
-        }
     }
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
                           RecyclerView.ViewHolder target) {
-        viewHolder.itemView.bringToFront();
+/*        viewHolder.itemView.bringToFront();
         int fromPosition = viewHolder.getAdapterPosition();//得到拖动ViewHolder的position
         int toPosition = target.getAdapterPosition();//得到目标ViewHolder的position
         if (fromPosition < toPosition) {
@@ -47,7 +38,7 @@ public class MyItemTouchCallback extends ItemTouchHelper.Callback {
                 Collections.swap(adapter.getList(), i, i - 1);
             }
         }
-        adapter.notifyItemMoved(fromPosition, toPosition);
+        adapter.notifyItemMoved(fromPosition, toPosition);*/
         return true;
     }
 
@@ -59,5 +50,24 @@ public class MyItemTouchCallback extends ItemTouchHelper.Callback {
     @Override
     public boolean isLongPressDragEnabled() {
         return false;
+    }
+
+    @Override
+    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        super.clearView(recyclerView, viewHolder);
+        if (onDragListener != null) {
+            onDragListener.onFinishDrag();
+        }
+    }
+
+    private OnDragListener onDragListener;
+
+    public MyItemTouchCallback setOnDragListener(OnDragListener onDragListener) {
+        this.onDragListener = onDragListener;
+        return this;
+    }
+
+    public interface OnDragListener {
+        void onFinishDrag();
     }
 }

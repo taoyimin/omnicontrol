@@ -1,6 +1,5 @@
 package cn.diaovision.omnicontrol.widget;
 
-import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,22 +7,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.support.v4.view.ViewPropertyAnimatorCompat;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewDebug;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.Transformation;
-import android.widget.Toast;
-
-import java.lang.reflect.Field;
-import java.text.AttributedCharacterIterator;
-
-import cn.diaovision.omnicontrol.R;
 
 /**
  * Created by liulingfeng on 2017/3/3.
@@ -151,6 +137,7 @@ public class CircleCharView extends View {
     }
 
     public void unselect(){
+        Log.i("info","unselect");
         clicked = false;
         clickIndicatorColor = Color.parseColor("#57d2f7");
 
@@ -158,11 +145,12 @@ public class CircleCharView extends View {
         int clickIndicatorAlphaStart = 255;
         int clickIndicatorAlphaStop = 0;
         ObjectAnimator anime = ObjectAnimator.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
-        anime.setDuration(200);
+        anime.setDuration(0);
         anime.start();
     }
 
     public void unselect(long duration){
+        Log.i("info","unselectduration");
         clicked = false;
 
         int clickIndicatorAlphaStop = 0;
@@ -178,6 +166,7 @@ public class CircleCharView extends View {
         anime.start();
     }
     public void select(){
+        Log.i("info","select");
         clicked = true;
 
         int clickIndicatorAlphaStop = 0;
@@ -189,11 +178,12 @@ public class CircleCharView extends View {
         clickIndicatorColor = Color.parseColor("#57d2f7");
 
         ObjectAnimator anime = ObjectAnimator.ofInt(this, "clickIndicatorAlpha", clickIndicatorAlphaStart, clickIndicatorAlphaStop);
-        anime.setDuration(200);
+        anime.setDuration(0);
         anime.start();
     }
 
     public void select(long duration){
+        Log.i("info","selectduration");
         clicked = true;
 
         int clickIndicatorAlphaStop = 0;
