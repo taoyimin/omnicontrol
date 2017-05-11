@@ -57,7 +57,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
 
     int lastDeg;
     int lastVelo;
-    HiCamera currentCamera= new ConfigFixed().getHiCameraInfo().get(2);
+    HiCamera currentCamera= new ConfigFixed().getHiCameraInfo().get(1);
 
     @Nullable
     @Override
@@ -79,7 +79,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
         //final List<Preset> presetList = currentCamera.getPresetList();
         final List<Port> portList = new ArrayList<>();
 
-        for (int m = 0; m < 12; m ++){
+        for (int m = 0; m < 10; m ++){
             Preset preset = new Preset(String.valueOf(m*30), m);
             presetList.add(preset);
         }
@@ -95,8 +95,8 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
         cameraList.configLayout(GridLayoutManager.VERTICAL, 4);
         camerPresetView.config(presetList, R.layout.item_preset);
 
-        View view=LayoutInflater.from(getContext()).inflate(R.layout.footer_preset,null,false);
-        camerPresetView.adapter.setFooterView(view);
+        View footerview=LayoutInflater.from(getContext()).inflate(R.layout.footer_preset,null,false);
+        camerPresetView.adapter.setFooterView(footerview);
         camerPresetView.adapter.getFooterView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -85,7 +85,8 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
                         int width = hideViewWidth;
                         if (dispatchDownX < getWidth() - width) {
                             ViewGroup viewGroup = (ViewGroup) parent;
-                            int count = viewGroup.getChildCount();
+                            //int count = viewGroup.getChildCount();
+                            int count = viewGroup.getChildCount()-1;
                             for (int i = 0; i < count; i++) {
                                 View convertView = viewGroup.getChildAt(i);
                                 SlidingItemView slidingItemView = (SlidingItemView) convertView
@@ -100,7 +101,8 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
                     }
 
                     ViewGroup viewGroup = (ViewGroup) parent;
-                    int count = viewGroup.getChildCount();
+                    //int count = viewGroup.getChildCount();
+                    int count = viewGroup.getChildCount()-1;
                     boolean isExistOpenItem = false;
                     for (int i = 0; i < count; i++) {
                         View convertView = viewGroup.getChildAt(i);
@@ -193,7 +195,6 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
             distance = end - scrollX;
         }
         mScroller.startScroll(scrollX, 0, distance, 0, duration);
-        // 此时需要手动刷新View 否则没效果
         if (distance < 0) {
             if (open) {
                 canDrag = false;
@@ -215,6 +216,7 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
             canDrag = true;
         }
         //Log.i("info","distance="+distance+"上一次状态："+lastOpen+"这次状态:"+open+"能否拖拽："+canDrag);
+        // 此时需要手动刷新View 否则没效果
         invalidate();
     }
 
@@ -284,7 +286,8 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
         try {
             List<View> views = new ArrayList<>();
             ViewGroup parent = (ViewGroup) convertView.getParent();
-            int count = parent.getChildCount();
+            //int count = parent.getChildCount();
+            int count = parent.getChildCount()-1;
             for (int i = count - 1; i >= 0; i--) {
                 View childView = parent.getChildAt(i);
                 SlidingItemView slidingItemView = (SlidingItemView) childView

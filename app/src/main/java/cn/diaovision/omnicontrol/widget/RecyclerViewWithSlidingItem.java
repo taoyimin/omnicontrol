@@ -22,7 +22,8 @@ public class RecyclerViewWithSlidingItem extends RecyclerView {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             isFirst = true;
         }
-        int count = getChildCount();
+        //int count = getChildCount();
+        int count = getChildCount()-1;
         for (int i = 0; i < count; i++) {
             ViewGroup convertView = (ViewGroup) getChildAt(i);
             SlidingItemView itemview = (SlidingItemView) convertView.getTag(convertView.getId());

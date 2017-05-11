@@ -1,5 +1,7 @@
 package cn.diaovision.omnicontrol.model;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,7 +80,7 @@ public class ConfigFixed implements Config{
     @Override
     public Map<Integer,HiCamera> getHiCameraInfo() {
         Map<Integer,HiCamera> cameras = new HashMap<>();
-        cameras.put(2,new HiCamera(2, 1, 2400, HiCamera.PROTO_FELICA_D));
+        cameras.put(1,new HiCamera(1, 1, 9600, HiCamera.PROTO_PILSA));
         return cameras;
     }
 
@@ -90,6 +92,30 @@ public class ConfigFixed implements Config{
     @Override
     public int getMatrixOutputVideoNum() {
         return 32;
+    }
+
+    @Override
+    public byte getSubtitleFontSize() {
+        return 13;
+    }
+
+    @Override
+    public byte getSubtitleFontColor() {
+        return 10;
+    }
+
+    @Override
+    public Date getConfStartDate() {
+        return new Date();
+    }
+
+    @Override
+    public Date getConfEndDate() {
+        Date date = new Date();
+        Calendar calendar = Calendar. getInstance();
+        calendar.setTime(date);
+        calendar. add(Calendar.HOUR, 1);
+        return date;
     }
 
 

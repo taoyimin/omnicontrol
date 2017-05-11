@@ -30,7 +30,7 @@ public class CameraPresetItemAdapter extends RecyclerView.Adapter<CameraPresetIt
     View lastSelectedView = null;
 
     public static final int TYPE_NORMAL = 0;  //说明是不带有footer的
-    public static final int TYPE_FOOTER = 1;  //说明是带有Footer的
+    public static final int TYPE_FOOTER = 1;  //说明是带有footer的
     private View mFooterView;
 
     Context ctx;

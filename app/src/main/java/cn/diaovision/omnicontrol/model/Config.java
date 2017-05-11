@@ -1,5 +1,6 @@
 package cn.diaovision.omnicontrol.model;
 
+import java.util.Date;
 import java.util.Map;
 
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
@@ -33,4 +34,10 @@ public interface Config {
 
     int getMatrixInputVideoNum();
     int getMatrixOutputVideoNum();
+
+    byte getSubtitleFontSize();
+    byte getSubtitleFontColor();
+
+    Date getConfStartDate();
+    Date getConfEndDate();
 }
