@@ -20,9 +20,12 @@ import cn.diaovision.omnicontrol.widget.SlidingItemView;
  * 辅助屏列表适配器(可拖拽侧滑)
  */
 
-public class AuxiliaryPanelItemAdapter extends RecyclerView.Adapter<AuxiliaryPanelItemAdapter.MyViewHolder>{
+public class AuxiliaryPanelItemAdapter extends RecyclerView.Adapter<AuxiliaryPanelItemAdapter.MyViewHolder> {
     Context context;
     List<Term> list;
+    public static final int TYPE_NORMAL = 0;  //说明是不带有footer的
+    public static final int TYPE_FOOTER = 1;  //说明是带有footer的
+    private View mFooterView;
 
     public AuxiliaryPanelItemAdapter(Context context, List<Term> list) {
         this.context = context;
@@ -31,44 +34,75 @@ public class AuxiliaryPanelItemAdapter extends RecyclerView.Adapter<AuxiliaryPan
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sliding,
-                parent, false);
+        View itemView = null;
+        switch (viewType) {
+            case TYPE_NORMAL:
+                itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sliding,
+                        parent, false);
+                break;
+            case TYPE_FOOTER:
+                itemView = mFooterView;
+                break;
+        }
         MyViewHolder viewHolder = new MyViewHolder(itemView);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        holder.title.setText(list.get(position).getName());
-        holder.slidingItemView.setOnHideViewClickListener(new SlidingItemView.OnHideViewClickListener() {
-            @Override
-            public void onClick1(View view, int pos) {
-                Toast.makeText(context,"position="+pos+"操作1",Toast.LENGTH_SHORT).show();
-            }
+        switch (getItemViewType(position)) {
+            case TYPE_NORMAL:
+                holder.title.setText(list.get(position).getName());
+                holder.slidingItemView.setOnHideViewClickListener(new SlidingItemView.OnHideViewClickListener() {
+                    @Override
+                    public void onClick1(View view, int pos) {
+                        Toast.makeText(context, "position=" + pos + "操作1", Toast.LENGTH_SHORT).show();
+                    }
 
-            @Override
-            public void onClick2(View view, int pos) {
-                Toast.makeText(context,"position="+pos+"操作2",Toast.LENGTH_SHORT).show();
-            }
+                    @Override
+                    public void onClick2(View view, int pos) {
+                        Toast.makeText(context, "position=" + pos + "操作2", Toast.LENGTH_SHORT).show();
+                    }
 
-            @Override
-            public void onClick3(View view, int pos) {
-                Toast.makeText(context,"position="+pos+"操作3",Toast.LENGTH_SHORT).show();
-            }
-        });
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int pos=holder.getLayoutPosition();
-                Toast.makeText(context,"name="+list.get(pos).getName()+"position="+pos,Toast.LENGTH_SHORT).show();
-            }
-        });
-        holder.slidingItemView.bindViewAndData(holder.itemView, list, holder.getLayoutPosition());
+                    @Override
+                    public void onClick3(View view, int pos) {
+                        Toast.makeText(context, "position=" + pos + "操作3", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int pos = holder.getLayoutPosition();
+                        Toast.makeText(context, "name=" + list.get(pos).getName() + "position=" + pos, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                holder.slidingItemView.bindViewAndData(holder.itemView, list, holder.getLayoutPosition());
+                break;
+            case TYPE_FOOTER:
+                holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                break;
+        }
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        if (mFooterView == null) {
+            return list.size();
+        } else {
+            return list.size() + 1;
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (mFooterView == null) {
+            return TYPE_NORMAL;
+        }
+        if (position == getItemCount() - 1) {
+            //最后一个,应该加载Footer
+            return TYPE_FOOTER;
+        }
+        return TYPE_NORMAL;
     }
 
 
@@ -79,17 +113,29 @@ public class AuxiliaryPanelItemAdapter extends RecyclerView.Adapter<AuxiliaryPan
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            if (itemView == mFooterView){
+                return;
+            }
             title = (TextView) itemView.findViewById(R.id.title);
             image = (ImageView) itemView.findViewById(R.id.image);
-            slidingItemView= (SlidingItemView) itemView.findViewById(R.id.item_view);
+            slidingItemView = (SlidingItemView) itemView.findViewById(R.id.item_view);
         }
 
-        public SlidingItemView getSlidingItemView(){
+        public SlidingItemView getSlidingItemView() {
             return slidingItemView;
         }
     }
 
     public List<Term> getList() {
         return list;
+    }
+
+    public View getFooterView() {
+        return mFooterView;
+    }
+
+    public void setFooterView(View footerView) {
+        mFooterView = footerView;
+        notifyItemInserted(getItemCount() - 1);
     }
 }
