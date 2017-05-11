@@ -18,6 +18,19 @@
             android:layout_height="0dp"
             android:orientation="horizontal">
 
+            <Button
+                android:id="@+id/start_conf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="开始会议"/>
+
+            <Button
+                android:id="@+id/end_conf"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="结束会议"
+                android:layout_below="@id/start_conf"/>
+
             <RelativeLayout
                 android:id="@+id/video_layout"
                 android:layout_width="400dp"
