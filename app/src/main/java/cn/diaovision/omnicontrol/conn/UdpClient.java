@@ -26,7 +26,7 @@ public class UdpClient {
     public byte[] send(final byte[] bytes, final int len) {
         final String ip = this.ip;
         byte[] recvBuff = new byte[1024];
-        byte[] recv = new byte[0];
+        byte[] recv = null;
         try {
             DatagramSocket udpSkt = new DatagramSocket();
             udpSkt.setSoTimeout(5000); //set timeout 5 sec

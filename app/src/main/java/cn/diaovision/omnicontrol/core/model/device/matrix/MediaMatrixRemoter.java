@@ -159,7 +159,8 @@ public class MediaMatrixRemoter {
 
                 final byte[] bytes = MatrixMessage.buildStartCameraGoMessage(matrix.id, cam.getBaudrate(), cam.getProto(), cam.getPortIdx(), cmd, speed).toBytes();
                 byte[] recv = matrix.getController().send(bytes, bytes.length);
-                if (recv.length > 0){
+                if (recv!= null && recv.length >= 0){
+                    e.onNext(new RxMessage(RxMessage.DONE));
                     e.onComplete();
                 }
                 else {
@@ -189,7 +190,8 @@ public class MediaMatrixRemoter {
 
                 byte[] bytes = MatrixMessage.buildStopCameraGoMessage(matrix.id, cam.getBaudrate(), cam.getProto(), cam.getPortIdx()).toBytes();
                 byte[] recv = matrix.getController().send(bytes, bytes.length);
-                if (recv.length > 0){
+                if (recv!= null && recv.length >= 0){
+                    e.onNext(new RxMessage(RxMessage.DONE));
                     e.onComplete();
                 }
                 else {
