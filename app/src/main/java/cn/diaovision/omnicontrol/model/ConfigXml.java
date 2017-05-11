@@ -1,7 +1,13 @@
 package cn.diaovision.omnicontrol.model;
 
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 import org.xml.sax.SAXException;
 
+import java.io.File;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -26,15 +32,25 @@ public class ConfigXml implements Config{
     List<Channel> matrixChannelList;
 
     private ConfigXml(String xmlFile){
-        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         try {
-            SAXParser parser = parserFactory.newSAXParser();
-//            parser.parse(is, );
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
+            Document doc = new SAXReader().read(new File(xmlFile));
+            Element rootEle = doc.getRootElement();
+            for (Iterator ite = rootEle.elementIterator(); ite.hasNext();){
+                Element ele = (Element) ite.next();
+                String name = ele.getName();
+                switch (name){
+                    case "matrix":
+                        break;
+                    case "mcu":
+                        break;
+                    default:
+                        break;
+                }
+            }
+        } catch (DocumentException e) {
             e.printStackTrace();
         }
+
 
     }
 
@@ -105,5 +121,15 @@ public class ConfigXml implements Config{
     @Override
     public List<HiCamera> getHiCameraInfo() {
         return null;
+    }
+
+    @Override
+    public int getMatrixInputVideoNum() {
+        return 0;
+    }
+
+    @Override
+    public int getMatrixOutputVideoNum() {
+        return 0;
     }
 }
