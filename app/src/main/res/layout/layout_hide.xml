@@ -12,21 +12,21 @@
         <TextView
             android:id="@+id/button1"
             android:layout_width="60dp"
-            android:text="发言"
+            android:text="点名\n发言"
             android:gravity="center"
             android:background="#00f"
             android:layout_height="match_parent"/>
         <TextView
             android:id="@+id/button2"
             android:layout_width="60dp"
-            android:text="静音"
+            android:text="设置\n静音"
             android:gravity="center"
             android:background="#0f0"
             android:layout_height="match_parent"/>
         <TextView
             android:id="@+id/button3"
             android:layout_width="60dp"
-            android:text="踢除"
+            android:text="踢除\n终端"
             android:gravity="center"
             android:background="#f00"
             android:layout_height="match_parent"/>
