@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Scroller;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,16 +165,30 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
     }
 
     public void bindViewAndData(final View convertView,
-                                final List list, final int position) {
+                                final List<Term> list, final int position) {
         scrollTo(0, 0);
         this.list = list;
         this.convertView = convertView;
         this.convertView.setTag(convertView.getId(), this);
         setHideView();
         this.position = position;
-        this.hideView.findViewById(R.id.button1).setOnClickListener(this);
-        this.hideView.findViewById(R.id.button2).setOnClickListener(this);
-        this.hideView.findViewById(R.id.button3).setOnClickListener(this);
+        TextView btn1= (TextView) this.hideView.findViewById(R.id.button1);
+        TextView btn2= (TextView) this.hideView.findViewById(R.id.button2);
+        TextView btn3= (TextView) this.hideView.findViewById(R.id.button3);
+        Term term=list.get(position);
+        if(term.isSpeaking()){
+            btn1.setText("取消\n发言");
+        }else{
+            btn1.setText("点名\n发言");
+        }
+        if(term.isMuted()){
+            btn2.setText("取消\n静音");
+        }else{
+            btn2.setText("设置\n静音");
+        }
+        btn1.setOnClickListener(this);
+        btn2.setOnClickListener(this);
+        btn3.setOnClickListener(this);
     }
 
     public void scrollToEnd(VelocityTracker velocityTracker, int end,
@@ -195,6 +210,7 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
             distance = end - scrollX;
         }
         mScroller.startScroll(scrollX, 0, distance, 0, duration);
+
         if (distance < 0) {
             if (open) {
                 canDrag = false;
@@ -304,11 +320,15 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
                                 slidingItemView.onHideViewClickListener
                                         .onClick1(slidingItemView, pos);
                                 slidingItemView.scrollToEnd(null, 0, 200);
+                                (((RecyclerView) parent).getAdapter())
+                                        .notifyItemChanged(pos);
                                 break;
                             case R.id.button2:
                                 slidingItemView.onHideViewClickListener
                                         .onClick2(slidingItemView, pos);
                                 slidingItemView.scrollToEnd(null, 0, 200);
+                                (((RecyclerView) parent).getAdapter())
+                                        .notifyItemChanged(pos);
                                 break;
                             case R.id.button3:
                                 slidingItemView.onHideViewClickListener
@@ -339,9 +359,9 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
         this.onHideViewClickListener = onHideViewClickListener;
     }
 
-    public class DoNotRemoveDataException extends RuntimeException {
+/*    public class DoNotRemoveDataException extends RuntimeException {
         public DoNotRemoveDataException(String detailMessage) {
             super(detailMessage);
         }
-    }
+    }*/
 }

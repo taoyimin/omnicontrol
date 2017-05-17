@@ -20,7 +20,7 @@ import cn.diaovision.omnicontrol.widget.SlidingItemView;
  * 辅助屏列表适配器(可拖拽侧滑)
  */
 
-public class AuxiliaryPanelItemAdapter extends RecyclerView.Adapter<AuxiliaryPanelItemAdapter.MyViewHolder> {
+public class TermItemAdapter extends RecyclerView.Adapter<TermItemAdapter.MyViewHolder> {
     Context context;
     List<Term> list;
     public static final int TYPE_NORMAL = 0;  //说明是不带有footer的
@@ -28,7 +28,7 @@ public class AuxiliaryPanelItemAdapter extends RecyclerView.Adapter<AuxiliaryPan
     private View mFooterView;
     OnHideViewClickListener onHideViewClickListener;
 
-    public AuxiliaryPanelItemAdapter(Context context, List<Term> list) {
+    public TermItemAdapter(Context context, List<Term> list) {
         this.context = context;
         this.list = list;
     }
@@ -38,7 +38,7 @@ public class AuxiliaryPanelItemAdapter extends RecyclerView.Adapter<AuxiliaryPan
         View itemView = null;
         switch (viewType) {
             case TYPE_NORMAL:
-                itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sliding,
+                itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_term,
                         parent, false);
                 break;
             case TYPE_FOOTER:
@@ -53,7 +53,10 @@ public class AuxiliaryPanelItemAdapter extends RecyclerView.Adapter<AuxiliaryPan
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         switch (getItemViewType(position)) {
             case TYPE_NORMAL:
-                holder.title.setText(list.get(position).getName());
+                Term term=list.get(position);
+                holder.title.setText(term.getName());
+                holder.speech.setText("发言："+term.isSpeaking());
+                holder.mute.setText("静音："+term.isMuted());
                 holder.slidingItemView.setOnHideViewClickListener(new SlidingItemView.OnHideViewClickListener() {
                     @Override
                     public void onClick1(View view, int pos) {
@@ -115,6 +118,8 @@ public class AuxiliaryPanelItemAdapter extends RecyclerView.Adapter<AuxiliaryPan
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView title;
+        TextView mute;
+        TextView speech;
         ImageView image;
         SlidingItemView slidingItemView;
 
@@ -124,6 +129,8 @@ public class AuxiliaryPanelItemAdapter extends RecyclerView.Adapter<AuxiliaryPan
                 return;
             }
             title = (TextView) itemView.findViewById(R.id.title);
+            mute= (TextView) itemView.findViewById(R.id.mute);
+            speech= (TextView) itemView.findViewById(R.id.speech);
             image = (ImageView) itemView.findViewById(R.id.image);
             slidingItemView = (SlidingItemView) itemView.findViewById(R.id.item_view);
         }
