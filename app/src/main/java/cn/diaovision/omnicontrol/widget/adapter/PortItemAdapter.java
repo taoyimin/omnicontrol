@@ -3,7 +3,6 @@ package cn.diaovision.omnicontrol.widget.adapter;
 import android.content.Context;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,6 +39,7 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
     OnItemTouchListener onItemTouchListener;
 
     private boolean isEditing = false;
+    private boolean itemClickable = true;
     //存放选中item的position
     List<Integer> selects = new ArrayList<>();
 
@@ -99,74 +99,77 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
                     }
                 }*/
 
-                switch (selects.size()) {
-                    case 0:
-                        //之前没有选中
-                        selects.add(position);
-                        ((CircleCharView) view.findViewById(R.id.port_circle)).select();
-                        lastSelectedPos = holder.pos;
-                        lastSelectedView = view;
-                        if (itemClickListener != null) {
-                            itemClickListener.onSelect(view, (int) view.getTag());
-                        }
-                        break;
-                    case 1:
-                        //之前选中一个
-                        if (selects.get(0) != holder.pos) {
-                            //选中的和之前不同
-                            if (isEditing) {
-                                selects.add(position);
-                                ((CircleCharView) view.findViewById(R.id.port_circle)).select();
-                                lastSelectedPos = holder.pos;
-                                lastSelectedView = view;
-                            } else {
-                                selects.remove(0);
-                                selects.add(position);
-                                if ((int) lastSelectedView.getTag() == lastSelectedPos) {
-                                    ((CircleCharView) lastSelectedView.findViewById(R.id.port_circle)).unselect();
-                                }
-                                ((CircleCharView) view.findViewById(R.id.port_circle)).select();
-                                if (itemClickListener != null) {
-                                    itemClickListener.onSelect(view, (int) view.getTag());
-                                }
-                                lastSelectedPos = holder.pos;
-                                lastSelectedView = view;
-                            }
-                        } else {
-                            //选中的和之前相同
-                            selects.remove(0);
-                            ((CircleCharView) view.findViewById(R.id.port_circle)).unselect();
-                            if (itemClickListener != null) {
-                                itemClickListener.onUnselect(view, (int) view.getTag());
-                            }
-                            lastSelectedPos=-1;
-                            lastSelectedView = null;
-                        }
-                        break;
-                    default:
-                        //之前选中多个
-                        if (isEditing) {
-                            if (selects.contains(position)) {
-                                selects.remove(selects.indexOf(position));
-                                ((CircleCharView) view.findViewById(R.id.port_circle)).unselect();
-                            } else {
-                                selects.add(position);
-                                ((CircleCharView) view.findViewById(R.id.port_circle)).select();
-                                lastSelectedPos = holder.pos;
-                                lastSelectedView = view;
-                            }
-                        } else {
-                            selects.clear();
-                            notifyDataSetChanged();
+                if (itemClickable) {
+                    switch (selects.size()) {
+                        case 0:
+                            //之前没有选中
                             selects.add(position);
                             ((CircleCharView) view.findViewById(R.id.port_circle)).select();
                             lastSelectedPos = holder.pos;
                             lastSelectedView = view;
-                        }
-                        break;
+                            if (itemClickListener != null) {
+                                itemClickListener.onSelect(view, (int) view.getTag());
+                            }
+                            break;
+                        case 1:
+                            //之前选中一个
+                            if (selects.get(0) != holder.pos) {
+                                //选中的和之前不同
+                                if (isEditing) {
+                                    selects.add(position);
+                                    ((CircleCharView) view.findViewById(R.id.port_circle)).select();
+                                    lastSelectedPos = holder.pos;
+                                    lastSelectedView = view;
+                                } else {
+                                    selects.remove(0);
+                                    selects.add(position);
+                                    if ((int) lastSelectedView.getTag() == lastSelectedPos) {
+                                        ((CircleCharView) lastSelectedView.findViewById(R.id.port_circle)).unselect();
+                                    }
+                                    ((CircleCharView) view.findViewById(R.id.port_circle)).select();
+                                    if (itemClickListener != null) {
+                                        itemClickListener.onSelect(view, (int) view.getTag());
+                                    }
+                                    lastSelectedPos = holder.pos;
+                                    lastSelectedView = view;
+                                }
+                            } else {
+                                //选中的和之前相同
+                                selects.remove(0);
+                                ((CircleCharView) view.findViewById(R.id.port_circle)).unselect();
+                                if (itemClickListener != null) {
+                                    itemClickListener.onUnselect(view, (int) view.getTag());
+                                }
+                                lastSelectedPos = -1;
+                                lastSelectedView = null;
+                            }
+                            break;
+                        default:
+                            //之前选中多个
+                            if (isEditing) {
+                                if (selects.contains(position)) {
+                                    selects.remove(selects.indexOf(position));
+                                    ((CircleCharView) view.findViewById(R.id.port_circle)).unselect();
+                                } else {
+                                    selects.add(position);
+                                    ((CircleCharView) view.findViewById(R.id.port_circle)).select();
+                                    lastSelectedPos = holder.pos;
+                                    lastSelectedView = view;
+                                }
+                            } else {
+                                selects.clear();
+                                notifyDataSetChanged();
+                                selects.add(position);
+                                ((CircleCharView) view.findViewById(R.id.port_circle)).select();
+                                lastSelectedPos = holder.pos;
+                                lastSelectedView = view;
+                            }
+                            break;
+                    }
                 }
             }
         });
+
 
         holder.getV().setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -317,5 +320,9 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
 
     public void setSelects(List<Integer> selects) {
         this.selects = selects;
+    }
+
+    public void setItemClickable(boolean itemClickable) {
+        this.itemClickable = itemClickable;
     }
 }
