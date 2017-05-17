@@ -33,7 +33,7 @@ import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
 import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
 import cn.diaovision.omnicontrol.widget.RecyclerViewWithSlidingItem;
 import cn.diaovision.omnicontrol.widget.SlidingItemView;
-import cn.diaovision.omnicontrol.widget.adapter.AuxiliaryPanelItemAdapter;
+import cn.diaovision.omnicontrol.widget.adapter.TermItemAdapter;
 
 /**
  * Created by liulingfeng on 2017/2/24.
@@ -43,11 +43,11 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
     @BindView(R.id.port)
     PortRadioGroupView portRadioGroupView;
     @BindView(R.id.auxiliary_recycler)
-    RecyclerViewWithSlidingItem auxiliaryRecycler;
+    RecyclerViewWithSlidingItem termRecycler;
     @BindView(R.id.video_layout)
     RelativeLayout videoLayout;
 
-    AuxiliaryPanelItemAdapter adapter;
+    TermItemAdapter adapter;
     List<Term> list;
     Term currentTerm;
     int dragPosition = -1;
@@ -56,6 +56,8 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
     ConferencePresenter presenter;
     private ItemTouchHelper itemTouchHelper;
     Config cfg = new ConfigFixed();
+    //从MUC服务器拿到confId
+    int confId=0;
 
     @Nullable
     @Override
@@ -78,6 +80,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
         portRadioGroupView.config(ports, R.layout.item_port);
         portRadioGroupView.configLayout(RecyclerView.VERTICAL, 9);
         portRadioGroupView.updateData();
+        portRadioGroupView.getAdapter().setItemClickable(false);
 
         /*test code*/
         currentTerm = new Term(666);
@@ -88,7 +91,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
             term.setName("position=" + i);
             list.add(term);
         }
-        adapter = new AuxiliaryPanelItemAdapter(getContext(), list);
+        adapter = new TermItemAdapter(getContext(), list);
         View footerview = LayoutInflater.from(getContext()).inflate(R.layout.footer_auxiliary, null, false);
         adapter.setFooterView(footerview);
         adapter.getFooterView().setOnClickListener(new View.OnClickListener() {
@@ -97,31 +100,49 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
                 popupDialog();
             }
         });
-        adapter.setOnHideViewClickListener(new AuxiliaryPanelItemAdapter.OnHideViewClickListener() {
+        adapter.setOnHideViewClickListener(new TermItemAdapter.OnHideViewClickListener() {
             @Override
             public void onClick1(View view, int pos) {
                 //发言与取消发言
+                Term term=list.get(pos);
+                if(term.isSpeaking()){
+                    term.setSpeaking(false);
+                    presenter.cancelSpeechTerm(confId,term.getId());
+                }else{
+                    term.setSpeaking(true);
+                    presenter.speechTerm(confId,term.getId());
+                }
             }
 
             @Override
             public void onClick2(View view, int pos) {
                 //静音与取消静音
+                Term term=list.get(pos);
+                if(term.isMuted()){
+                    term.setMuted(false);
+                    presenter.unmuteTerm(confId,term.getId());
+                }else{
+                    term.setMuted(true);
+                    presenter.muteTerm(confId,term.getId());
+                }
             }
 
             @Override
             public void onClick3(View view, int pos) {
                 //踢除终端
+                Term term=list.get(pos);
+                presenter.hangupTerm(confId,term.getId());
             }
         });
-        auxiliaryRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        auxiliaryRecycler.setHasFixedSize(true);
-        auxiliaryRecycler.setAdapter(adapter);
-        auxiliaryRecycler.addOnItemTouchListener(new OnRecyclerItemClickListener(auxiliaryRecycler) {
+        termRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        termRecycler.setHasFixedSize(true);
+        termRecycler.setAdapter(adapter);
+        termRecycler.addOnItemTouchListener(new OnRecyclerItemClickListener(termRecycler) {
             @Override
             public void onLongClick(RecyclerView.ViewHolder vh) {
-                //最后一个是加添按钮,不能拖拽
+                //最后一个是添加按钮,不能拖拽
                 if (vh.getLayoutPosition() != adapter.getItemCount() - 1) {
-                    SlidingItemView slidingItemView = ((AuxiliaryPanelItemAdapter.MyViewHolder) vh).getSlidingItemView();
+                    SlidingItemView slidingItemView = ((TermItemAdapter.MyViewHolder) vh).getSlidingItemView();
                     if (!slidingItemView.isCanDrag()) {
                         slidingItemView.setCanDrag(true);
                         return;
@@ -139,7 +160,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
             }
         }));
         //和RecyclerView进行关联
-        itemTouchHelper.attachToRecyclerView(auxiliaryRecycler);
+        itemTouchHelper.attachToRecyclerView(termRecycler);
     }
 
     @Override
@@ -158,7 +179,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
                     Term temp = currentTerm;
                     currentTerm = list.get(dragPosition);
                     list.set(dragPosition, temp);
-                    auxiliaryRecycler.getAdapter().notifyDataSetChanged();
+                    termRecycler.getAdapter().notifyItemChanged(dragPosition);
                 }
             }
         }
@@ -170,12 +191,12 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
             case R.id.start_conf:
                 //开始会议
                 //参数confId需要修改
-                presenter.startConf(cfg.getConfStartDate(), cfg.getConfEndDate(), 0);
+                presenter.startConf(cfg.getConfStartDate(), cfg.getConfEndDate(), confId);
                 break;
             case R.id.end_conf:
                 //结束会议
                 //参数confId需要修改
-                presenter.endConf(0);
+                presenter.endConf(confId);
                 break;
             default:
                 break;
@@ -194,7 +215,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
                 if(!editText.getText().toString().isEmpty()){
                     int termId=Integer.parseInt(editText.getText().toString());
                     //参数confId需要修改
-                    presenter.inviteTerm(0,termId);
+                    presenter.inviteTerm(confId,termId);
                 }
             }
         });

@@ -3,16 +3,16 @@ package cn.diaovision.omnicontrol.widget;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 
-import cn.diaovision.omnicontrol.widget.adapter.AuxiliaryPanelItemAdapter;
+import cn.diaovision.omnicontrol.widget.adapter.TermItemAdapter;
 
 /**
  * Created by TaoYimin on 2017/5/5.
  */
 
 public class MyItemTouchCallback extends ItemTouchHelper.Callback {
-    AuxiliaryPanelItemAdapter adapter;
+    TermItemAdapter adapter;
 
-    public MyItemTouchCallback(AuxiliaryPanelItemAdapter adapter) {
+    public MyItemTouchCallback(TermItemAdapter adapter) {
         this.adapter = adapter;
     }
 

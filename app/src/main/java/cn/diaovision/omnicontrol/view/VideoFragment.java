@@ -187,7 +187,7 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
         for(int i=0;i<20;i++){
             list.add("第"+i+"项");
         }
-        AuxiliaryPanelItemAdapter adapter=new AuxiliaryPanelItemAdapter(list);
+        TermItemAdapter adapter=new TermItemAdapter(list);
         auxiliary.setLayoutManager(new LinearLayoutManager(getContext()));
         auxiliary.setAdapter(adapter);*/
     }
