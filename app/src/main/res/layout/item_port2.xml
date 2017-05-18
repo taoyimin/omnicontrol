@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <cn.bingoogolapple.badgeview.BGABadgeImageView
+        android:id="@+id/port_image"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:scaleType="centerCrop"
+        app:badge_verticalMargin="@dimen/badge_verticalMargin"
+        app:badge_horizontalMargin="@dimen/badge_horizontalMargin"
+        app:badge_textSize="@dimen/badge_textSize"
+        app:badge_padding="@dimen/badge_padding"
+        app:badge_borderWidth="@dimen/badge_borderWidth"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/port_image"
+        android:layout_centerHorizontal="true"
+        android:textAppearance="@style/ItemTitleText"
+        android:textSize="10sp"
+        android:id="@+id/port_alias"/>
+
+    <CheckBox
+        android:id="@+id/port_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:clickable="false"/>
+</RelativeLayout>
