@@ -2,11 +2,11 @@ package cn.diaovision.omnicontrol;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
-import android.os.Bundle;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
@@ -14,18 +14,19 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
-//import com.roughike.bottombar.BottomBar;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.util.CrashHandler;
 import cn.diaovision.omnicontrol.view.CameraFragment;
+import cn.diaovision.omnicontrol.view.ConferenceFragment;
+import cn.diaovision.omnicontrol.view.ConfigFragment;
 import cn.diaovision.omnicontrol.view.DvdFragment;
 import cn.diaovision.omnicontrol.view.LightFragment;
-import cn.diaovision.omnicontrol.view.ConferenceFragment;
 import cn.diaovision.omnicontrol.view.PowerFragment;
-import cn.diaovision.omnicontrol.view.ConfigFragment;
 import cn.diaovision.omnicontrol.view.VideoFragment;
+import cn.diaovision.omnicontrol.view.VideoFragment2;
+
+//import com.roughike.bottombar.BottomBar;
 //import devlight.io.library.ntb.NavigationTabBar;
 
 public class MainControlActivity extends BaseActivity implements GestureDetector.OnGestureListener{
@@ -65,7 +66,7 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
 
     private final Fragment[] FRAGMENTS = {
             new PowerFragment(),
-            new VideoFragment(),
+            new VideoFragment2(),
             new VideoFragment(),
 //            new AudioFragment(),
             new LightFragment(),

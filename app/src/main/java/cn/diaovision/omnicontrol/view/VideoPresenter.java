@@ -107,6 +107,16 @@ public class VideoPresenter implements VideoContract.Presenter {
     }
 
     @Override
+    public List<Port> getInputList() {
+        return matrix.getVideoInPort();
+    }
+
+    @Override
+    public List<Port> getOutputList() {
+        return matrix.getVideoOutPort();
+    }
+
+    @Override
     public void setChannel(Port input, List<Port> output) {
         //配置系统，异步调用
 
