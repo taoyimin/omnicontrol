@@ -416,8 +416,10 @@ public class MatrixMessage {
         payload[1] = (byte) 'W';
         System.arraycopy(hex2char(column,2), 0, payload, 2, 2);
         System.arraycopy(hex2char(row,2), 0, payload, 4, 2);
+        int cnt = 0;
         for (int i : portOuts) {
-            System.arraycopy(hex2char(i, 3), 0, payload, 4, 2);
+            System.arraycopy(hex2char(i, 3), 0, payload, 6+3*cnt, 3);
+            cnt++;
         }
         return new MatrixMessage(hex2char(id, 2), MSG_STITCH, payload, true);
     }
