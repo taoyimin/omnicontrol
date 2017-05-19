@@ -178,6 +178,7 @@ public class ItemSelectionSupport {
                 //取消选中
                 checkedCount--;
             }
+            lastPosition=-1;
             if(mOnItemStatueListener!=null){
                 mOnItemStatueListener.onSelectCountChange(checkedCount);
             }
@@ -207,6 +208,8 @@ public class ItemSelectionSupport {
                     if (lastPosition != -1) {
                         //刷新之前选中的item
                         adapter.notifyItemChanged(lastPosition);
+                    }else{
+                        adapter.notifyDataSetChanged();
                     }
                     //刷新现在选中的item
                     adapter.notifyItemChanged(position);

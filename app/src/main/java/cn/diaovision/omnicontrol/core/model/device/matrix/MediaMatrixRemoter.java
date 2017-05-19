@@ -63,6 +63,8 @@ public class MediaMatrixRemoter {
                 matrix.updateChannel(portIn, portOut, Channel.MOD_NORMAL);
             }
         })
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe(subscriber);
         return 0;
     }

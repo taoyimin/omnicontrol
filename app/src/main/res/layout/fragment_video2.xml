@@ -65,10 +65,16 @@
             android:orientation="vertical"
             android:layout_height="match_parent">
             <Button
-                android:id="@+id/complete_edit"
+                android:id="@+id/btn1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="完成编辑"/>
+                android:text="一对一显示"/>
+
+            <Button
+                android:id="@+id/btn2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="拼接显示"/>
         </LinearLayout>
 
     </LinearLayout>

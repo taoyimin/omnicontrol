@@ -18,11 +18,11 @@ public interface VideoContract {
     }
 
     interface Presenter extends BasePresenter{
-        Port getOutput(Port input);
-        Port getInput(Port output);
+        int[] getOutputIdx(int inputIdx);
+        int getInputIdx(int outputIdx);
         List<Port> getInputList();
         List<Port> getOutputList();
-        void setChannel(Port input, List<Port> output/*,Mode*/);
+        void setChannel(int input, int[] outputs,int mode);
         void switchVideo(int portIn, int[] portOut);
         void stitchVideo(int portIn,  int columnCnt,  int rowCnt,  int[] portOut);
 

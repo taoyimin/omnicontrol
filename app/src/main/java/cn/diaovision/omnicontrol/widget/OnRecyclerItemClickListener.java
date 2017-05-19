@@ -9,13 +9,13 @@ import android.view.View;
 /**
  * Created by Administrator on 2016/4/14.
  */
-public class OnRecyclerItemClickListener implements RecyclerView.OnItemTouchListener{
+public class OnRecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
     private GestureDetectorCompat mGestureDetector;
     private RecyclerView recyclerView;
 
-    public OnRecyclerItemClickListener(RecyclerView recyclerView){
+    public OnRecyclerItemClickListener(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
-        mGestureDetector = new GestureDetectorCompat(recyclerView.getContext(),new ItemTouchHelperGestureListener());
+        mGestureDetector = new GestureDetectorCompat(recyclerView.getContext(), new ItemTouchHelperGestureListener());
     }
 
     @Override
@@ -38,9 +38,10 @@ public class OnRecyclerItemClickListener implements RecyclerView.OnItemTouchList
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-            if (child!=null) {
+            if (child != null) {
                 RecyclerView.ViewHolder vh = recyclerView.getChildViewHolder(child);
-                onItemClick(vh);
+                int position = recyclerView.getChildPosition(child);
+                onItemClick(vh, position);
             }
             return true;
         }
@@ -48,13 +49,17 @@ public class OnRecyclerItemClickListener implements RecyclerView.OnItemTouchList
         @Override
         public void onLongPress(MotionEvent e) {
             View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-            if (child!=null) {
+            if (child != null) {
                 RecyclerView.ViewHolder vh = recyclerView.getChildViewHolder(child);
-                onLongClick(vh);
+                int position = recyclerView.getChildPosition(child);
+                onLongClick(vh, position);
             }
         }
     }
 
-    public void onItemClick(RecyclerView.ViewHolder vh){}
-    public void onLongClick(RecyclerView.ViewHolder vh){}
+    public void onItemClick(RecyclerView.ViewHolder vh, int position) {
+    }
+
+    public void onLongClick(RecyclerView.ViewHolder vh, int position) {
+    }
 }

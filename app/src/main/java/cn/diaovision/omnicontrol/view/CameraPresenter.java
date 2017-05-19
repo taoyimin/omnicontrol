@@ -21,6 +21,7 @@ import io.reactivex.subjects.Subject;
  */
 
 public class CameraPresenter implements CameraContract.Presenter {
+    static final String TAG="camera";
 
     Config cfg = new ConfigFixed();
     MediaMatrix matrix = new MediaMatrix.Builder()
@@ -99,16 +100,16 @@ public class CameraPresenter implements CameraContract.Presenter {
         int res = matrixRemoter.startCameraGo(portIdx, cmd, speed, new RxSubscriber<RxMessage>() {
             @Override
             public void onRxResult(RxMessage rxMessage) {
-                Log.i("info","Camera go success");
+                Log.i(TAG,"Camera go success");
             }
 
             @Override
             public void onRxError(Throwable e) {
-                Log.i("info","Camera go failed");
+                Log.i(TAG,"Camera go failed");
             }
         });
         if (res < 0){
-            Log.i("info","invalid go");
+            Log.i(TAG,"invalid go");
         }
     }
 
@@ -117,16 +118,16 @@ public class CameraPresenter implements CameraContract.Presenter {
         int res = matrixRemoter.stopCameraGo(portIdx,new RxSubscriber<RxMessage>() {
             @Override
             public void onRxResult(RxMessage rxMessage) {
-                Log.i("info","Camera go stopped");
+                Log.i(TAG,"Camera go stopped");
             }
 
             @Override
             public void onRxError(Throwable e) {
-                Log.i("info","Stop camera go failed");
+                Log.i(TAG,"Stop camera go failed");
             }
         });
         if (res < 0){
-            Log.i("info","invalid camera stop go");
+            Log.i(TAG,"invalid camera stop go");
         }
     }
 
@@ -135,16 +136,16 @@ public class CameraPresenter implements CameraContract.Presenter {
         int res = matrixRemoter.storeCameraPreset(portIdx, presetIdx, name, new RxSubscriber() {
             @Override
             public void onRxResult(Object o) {
-                Log.i("info","store preset success");
+                Log.i(TAG,"store preset success");
             }
 
             @Override
             public void onRxError(Throwable e) {
-                Log.i("info","store preset failed");
+                Log.i(TAG,"store preset failed");
             }
         });
         if (res < 0){
-            Log.i("info","invalid store preset");
+            Log.i(TAG,"invalid store preset");
         }
     }
 
@@ -153,16 +154,16 @@ public class CameraPresenter implements CameraContract.Presenter {
         int res=matrixRemoter.removeCameraPreset(portIdx,presetIdx, new RxSubscriber() {
             @Override
             public void onRxResult(Object o) {
-                Log.i("info","success to delete preset");
+                Log.i(TAG,"success to delete preset");
             }
 
             @Override
             public void onRxError(Throwable e) {
-                Log.i("info","failed to delete preset");
+                Log.i(TAG,"failed to delete preset");
             }
         });
         if (res < 0){
-            Log.i("info","invalid delete preset");
+            Log.i(TAG,"invalid delete preset");
         }
     }
 
@@ -176,16 +177,16 @@ public class CameraPresenter implements CameraContract.Presenter {
         int res = matrixRemoter.loadCameraPreset(portIdx, presetIdx, new RxSubscriber() {
             @Override
             public void onRxResult(Object o) {
-                Log.i("info","success to load preset");
+                Log.i(TAG,"success to load preset");
             }
 
             @Override
             public void onRxError(Throwable e) {
-                Log.i("info","failed to load preset");
+                Log.i(TAG,"failed to load preset");
             }
         });
         if (res < 0){
-            Log.i("info","invalid load preset");
+            Log.i(TAG,"invalid load preset");
         }
     }
 
