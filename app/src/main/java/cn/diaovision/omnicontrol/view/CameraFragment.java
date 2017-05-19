@@ -1,7 +1,9 @@
 package cn.diaovision.omnicontrol.view;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -9,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -74,14 +77,14 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
         //set presenter
         presenter = new CameraPresenter(this);
         /* test code */
-        final List<Preset> presetList = new ArrayList<>();
-        //final List<Preset> presetList = currentCamera.getPresetList();
+        //final List<Preset> presetList = new ArrayList<>();
+        final List<Preset> presetList = currentCamera.getPresetList();
         final List<Port> portList = new ArrayList<>();
 
-        for (int m = 0; m < 10; m ++){
+/*        for (int m = 0; m < 10; m ++){
             Preset preset = new Preset(String.valueOf(m*30), m);
             presetList.add(preset);
-        }
+        }*/
         for (int m = 0; m < 8; m ++){
             Port port = new Port(1,1, Port.TYPE_VIDEO, Port.DIR_IN);
             port.alias = "测试"+String.valueOf(m);
@@ -99,7 +102,19 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
         camerPresetView.adapter.getFooterView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(),"点击了增加按钮",Toast.LENGTH_SHORT).show();
+                popupDialog();
+            }
+        });
+
+        camerPresetView.setOnItemSelectListener(new CameraPresetRadioGroupView.OnItemSelectListener() {
+            @Override
+            public void onSelected(int pos) {
+                presenter.loadPreset(currentCamera.getPortIdx(),pos);
+            }
+
+            @Override
+            public void onUnselected(int pos) {
+
             }
         });
 
@@ -214,10 +229,38 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
                 Toast.makeText(getContext(),"修改第"+item.getItemId()+"个预置位",Toast.LENGTH_SHORT).show();
                 break;
             case 2:
-                Toast.makeText(getContext(),"删除第"+item.getItemId()+"个预置位",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(),"删除第"+item.getItemId()+"个预置位",Toast.LENGTH_SHORT).show();
+                presenter.delPreset(currentCamera.getPortIdx(),item.getItemId());
                 break;
         }
         return super.onContextItemSelected(item);
+    }
+
+    public void popupDialog() {
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_preset, null);
+        final EditText editText = (EditText) view.findViewById(R.id.dialog_edit);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(view);
+        builder.setTitle("添加预置位");
+        builder.setPositiveButton("添加", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(!editText.getText().toString().isEmpty()){
+                    String name=editText.getText().toString();
+                    List<Preset> list=currentCamera.getPresetList();
+                    //list.add(new Preset(name,list.size()));
+                    presenter.addPreset(currentCamera.getPortIdx(),list.size(),name);
+                    camerPresetView.adapter.notifyDataSetChanged();
+                }
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        builder.show();
     }
 
     @Override
