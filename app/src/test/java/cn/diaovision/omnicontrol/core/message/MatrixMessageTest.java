@@ -126,10 +126,12 @@ public class MatrixMessageTest {
 
     @Test
     public void buildStitchMessage() throws Exception {
-        int[] ports = {2,3,4,5};
-        byte[] msg = {0x01, '1', '0', 'M', 'S', 'P', 'W', '0', '2', '0', '2', '0', '0', '2', '0', '0', '3', '0', '0', '4', '0', '0', '5', '1', '2', 0x04};
-        byte[] a = MatrixMessage.buildStitchMessage(16, 2, 2, ports).toBytes();
-        assertArrayEquals(a, msg);
+        int[] ports = {2,1,3,4};
+        byte[] msg = {0x01, '0', '1', 'S', 'P', 'P', 'W', '0', '2', '0', '2', '0', '0', '2', '0', '0', '1', '0', '0', '3', '0', '0', '4', '0', '1', 0x04};
+        byte[] a = MatrixMessage.buildStitchMessage(1, 2, 2, ports).toBytes();
+        for (int m = 0; m < msg.length; m ++) {
+            assertEquals(a[m], msg[m]);
+        }
     }
 
     @Test

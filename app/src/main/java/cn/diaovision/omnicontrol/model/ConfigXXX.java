@@ -2,6 +2,7 @@ package cn.diaovision.omnicontrol.model;
 
 import org.xml.sax.SAXException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +17,7 @@ import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
  * Created by liulingfeng on 2017/5/8.
  */
 
-public class ConfigXml implements Config{
+public class ConfigXXX implements Config{
 
     String matrixIp;
     int matrixPort;
@@ -26,7 +27,7 @@ public class ConfigXml implements Config{
     List<HiCamera> matrixCameraList;
     List<Channel> matrixChannelList;
 
-    private ConfigXml(String xmlFile){
+    private ConfigXXX(String xmlFile){
         SAXParserFactory parserFactory = SAXParserFactory.newInstance();
         try {
             SAXParser parser = parserFactory.newSAXParser();
@@ -39,8 +40,8 @@ public class ConfigXml implements Config{
 
     }
 
-    public static ConfigXml fromFile(String xmlFile){
-        return new ConfigXml(xmlFile);
+    public static ConfigXXX fromFile(String xmlFile){
+        return new ConfigXXX(xmlFile);
     }
 
     @Override
@@ -116,5 +117,25 @@ public class ConfigXml implements Config{
     @Override
     public int getMatrixOutputVideoNum() {
         return 0;
+    }
+
+    @Override
+    public byte getSubtitleFontSize() {
+        return 0;
+    }
+
+    @Override
+    public byte getSubtitleFontColor() {
+        return 0;
+    }
+
+    @Override
+    public Date getConfStartDate() {
+        return null;
+    }
+
+    @Override
+    public Date getConfEndDate() {
+        return null;
     }
 }
