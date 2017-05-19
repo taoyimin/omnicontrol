@@ -171,7 +171,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
             public void onClick(View v) {
                 String subtitle=subtitleEdit.getText().toString();
                 if(!subtitle.isEmpty()){
-                    //presenter.setSubtitle();
+                    //presenter.setSubtitle(2,subtitle);
                 }
             }
         });
