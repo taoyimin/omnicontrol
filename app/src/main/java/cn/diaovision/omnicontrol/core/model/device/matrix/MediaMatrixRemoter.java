@@ -1,8 +1,11 @@
 package cn.diaovision.omnicontrol.core.model.device.matrix;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import cn.diaovision.omnicontrol.core.message.MatrixMessage;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
@@ -63,6 +66,8 @@ public class MediaMatrixRemoter {
                 matrix.updateChannel(portIn, portOut, Channel.MOD_NORMAL);
             }
         })
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe(subscriber);
         return 0;
     }
@@ -78,16 +83,20 @@ public class MediaMatrixRemoter {
         msgList.add(multiSwithMsg);
         msgList.add(stitchMsg);
 
-        Flowable.fromIterable(msgList)
+        Flowable.timer(5, TimeUnit.SECONDS)
+                .fromIterable(msgList)
                 .map(new Function<MatrixMessage, RxMessage>() {
                     @Override
                     public RxMessage apply(MatrixMessage matrixMessage) throws Exception {
                         byte[] recv = matrix.getController().send(matrixMessage.toBytes(), matrixMessage.toBytes().length);
+                        Log.i("U", "Message send: "+ matrixMessage.getPayload()[2] + " " + matrixMessage.getPayload()[3]);
+                        Log.i("U", "Recv: "+ recv.length);
                         if (recv.length > 0) {
                             //4. send message
                             return new RxMessage(RxMessage.DONE);
                         }
                         else {
+                            Log.i("U", "Message: "+ matrixMessage.getPayload()[2] + " " + matrixMessage.getPayload()[3]);
                             matrix.setReachable(false);
                             throw new IOException();
                         }
