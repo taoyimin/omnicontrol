@@ -46,6 +46,10 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
     RecyclerViewWithSlidingItem termRecycler;
     @BindView(R.id.video_layout)
     RelativeLayout videoLayout;
+    @BindView(R.id.commit_subtitle)
+    Button commitSubtitle;
+    @BindView(R.id.subtitle_edit)
+    EditText subtitleEdit;
 
     TermItemAdapter adapter;
     List<Term> list;
@@ -139,16 +143,16 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
         termRecycler.setAdapter(adapter);
         termRecycler.addOnItemTouchListener(new OnRecyclerItemClickListener(termRecycler) {
             @Override
-            public void onLongClick(RecyclerView.ViewHolder vh) {
+            public void onLongClick(RecyclerView.ViewHolder vh,int position) {
                 //最后一个是添加按钮,不能拖拽
-                if (vh.getLayoutPosition() != adapter.getItemCount() - 1) {
+                if (position != adapter.getItemCount() - 1) {
                     SlidingItemView slidingItemView = ((TermItemAdapter.MyViewHolder) vh).getSlidingItemView();
                     if (!slidingItemView.isCanDrag()) {
                         slidingItemView.setCanDrag(true);
                         return;
                     }
                     itemTouchHelper.startDrag(vh);
-                    dragPosition = vh.getLayoutPosition();
+                    dragPosition = position;
                 }
             }
         });
@@ -161,6 +165,16 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
         }));
         //和RecyclerView进行关联
         itemTouchHelper.attachToRecyclerView(termRecycler);
+
+        commitSubtitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String subtitle=subtitleEdit.getText().toString();
+                if(!subtitle.isEmpty()){
+                    //presenter.setSubtitle();
+                }
+            }
+        });
     }
 
     @Override
@@ -190,12 +204,10 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
         switch (btn.getId()) {
             case R.id.start_conf:
                 //开始会议
-                //参数confId需要修改
                 presenter.startConf(cfg.getConfStartDate(), cfg.getConfEndDate(), confId);
                 break;
             case R.id.end_conf:
                 //结束会议
-                //参数confId需要修改
                 presenter.endConf(confId);
                 break;
             default:
@@ -214,7 +226,6 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
             public void onClick(DialogInterface dialog, int which) {
                 if(!editText.getText().toString().isEmpty()){
                     int termId=Integer.parseInt(editText.getText().toString());
-                    //参数confId需要修改
                     presenter.inviteTerm(confId,termId);
                 }
             }
