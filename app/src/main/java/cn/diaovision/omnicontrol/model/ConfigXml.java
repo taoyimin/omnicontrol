@@ -2,6 +2,7 @@ package cn.diaovision.omnicontrol.model;
 
 import org.xml.sax.SAXException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -116,5 +117,25 @@ public class ConfigXml implements Config{
     @Override
     public int getMatrixOutputVideoNum() {
         return 0;
+    }
+
+    @Override
+    public byte getSubtitleFontSize() {
+        return 0;
+    }
+
+    @Override
+    public byte getSubtitleFontColor() {
+        return 0;
+    }
+
+    @Override
+    public Date getConfStartDate() {
+        return null;
+    }
+
+    @Override
+    public Date getConfEndDate() {
+        return null;
     }
 }
