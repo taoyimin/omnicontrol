@@ -590,4 +590,8 @@ public class MatrixMessage {
                 return '0';
         }
     }
+
+    public byte[] getPayload() {
+        return payload;
+    }
 }

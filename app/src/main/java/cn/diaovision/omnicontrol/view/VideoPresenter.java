@@ -3,10 +3,13 @@ package cn.diaovision.omnicontrol.view;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
+import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.model.Config;
 import cn.diaovision.omnicontrol.model.ConfigFixed;
@@ -24,6 +27,7 @@ import io.reactivex.subjects.Subject;
  */
 
 public class VideoPresenter implements VideoContract.Presenter {
+    static final String TAG="video";
     Config cfg = new ConfigFixed();
     MediaMatrix matrix = new MediaMatrix.Builder()
             .id(cfg.getMatrixId())
@@ -95,15 +99,30 @@ public class VideoPresenter implements VideoContract.Presenter {
     }
 
     @Override
-    public Port getOutput(Port input) {
+    public int[] getOutputIdx(int inputIdx) {
         //获取系统配置的通道输出端，同步调用
+        Set<Channel> chnSet=matrix.getVideoChnSet();
+        Iterator<Channel> iterator=chnSet.iterator();
+        while (iterator.hasNext()){
+            Channel channel=iterator.next();
+            if(channel.getInputIdx()==inputIdx){
+                return channel.getOutputIdx();
+            }
+        }
         return null;
     }
 
     @Override
-    public Port getInput(Port output) {
-        //获取系统配置的通道输入端，同步调用
-        return null;
+    public int getInputIdx(int outputIdx) {
+        Set<Channel> chnSet=matrix.getVideoChnSet();
+        Iterator<Channel> iterator=chnSet.iterator();
+        while (iterator.hasNext()){
+            Channel channel=iterator.next();
+            if(channel.containOutputIdx(outputIdx)){
+                return channel.getInputIdx();
+            }
+        }
+        return -1;
     }
 
     @Override
@@ -117,9 +136,8 @@ public class VideoPresenter implements VideoContract.Presenter {
     }
 
     @Override
-    public void setChannel(Port input, List<Port> output) {
-        //配置系统，异步调用
-
+    public void setChannel(int input, int[] outputs, int mode) {
+        matrix.updateChannel(input,outputs,Channel.MOD_NORMAL);
     }
 
     @Override
@@ -127,16 +145,16 @@ public class VideoPresenter implements VideoContract.Presenter {
         int res = matrixRemoter.switchVideo(portIn, portOut, new RxSubscriber<RxMessage>() {
             @Override
             public void onRxResult(RxMessage rxMessage) {
-                Log.i("info", "Switch succeed");
+                Log.i(TAG, "Switch succeed");
             }
 
             @Override
             public void onRxError(Throwable e) {
-                Log.i("info", "Switch failed");
+                Log.i(TAG, "Switch failed");
             }
         });
         if (res < 0) {
-            Log.i("info", "invalid switch");
+            Log.i(TAG, "invalid switch");
         }
     }
 
@@ -145,16 +163,16 @@ public class VideoPresenter implements VideoContract.Presenter {
         int res = matrixRemoter.stitchVideo( portIn,   columnCnt,   rowCnt, portOut, new RxSubscriber<RxMessage>() {
             @Override
             public void onRxResult(RxMessage rxMessage) {
-                Log.i("info", "Stitch succeed");
+                Log.i(TAG, "Stitch succeed");
             }
 
             @Override
             public void onRxError(Throwable e) {
-                Log.i("info", "Stitch failed");
+                Log.i(TAG, "Stitch failed");
             }
         });
         if (res < 0) {
-            Log.i("info", "invalid stitch");
+            Log.i(TAG, "invalid stitch");
         }
     }
 
