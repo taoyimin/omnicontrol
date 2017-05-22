@@ -21,7 +21,7 @@ public interface ConferenceContract {
 
         void setSubtitle(int portIdx, String str);
 
-        void setSubtitleFormat(int portIdx, byte fontSize, byte fontColor);
+        void setSubtitleFormat(int portIdx, int sublen, byte fontSize, byte fontColor);
 
         void reqConfTemplate();
 

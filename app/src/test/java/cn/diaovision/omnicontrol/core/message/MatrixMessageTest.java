@@ -8,10 +8,10 @@ import static org.junit.Assert.*;
  * Created by liulingfeng on 2017/3/27.
  */
 public class MatrixMessageTest {
-    int id = 1;
-    int portIn = 1;
-    int portOut = 6;
-    int camIdx = 1;
+//    int id = 1;
+//    int portIn = 1;
+//    int portOut = 6;
+//    int camIdx = 1;
 
     @Test
     public void toBytes() throws Exception {
@@ -19,9 +19,11 @@ public class MatrixMessageTest {
 
     @Test
     public void createSwitchMessage() throws Exception {
-        byte[] msg = {0x01, '1', '0', 'W', 'R', 'M', '0', '0', '1', '0', '0', '6', '4', 'E', 0x04};
-        byte[] a = MatrixMessage.buildSwitchMessage(16, 1, 6).toBytes();
-        assertArrayEquals(a, msg);
+        byte[] msg = {0x01, '0', '1', 'W', 'R', 'M', '0', '0', '6', '0', '0', '1', '4', 'E', 0x04};
+        byte[] a = MatrixMessage.buildSwitchMessage(1, 1, 6).toBytes();
+        for (int m = 0; m < msg.length; m ++) {
+            assertEquals(a[m], msg[m]);
+        }
     }
 
     @Test
@@ -64,8 +66,8 @@ public class MatrixMessageTest {
 
     @Test
     public void buildStartCameraGoMessage() throws Exception {
-        byte[] msg = {0x01, '1', '0', 'C', 'D', '2', '1', '0', '0', '0', '2', '0', '6', '3', '8', '0', '3', 'A', 0x04};
-        byte[] a = MatrixMessage.buildStartCameraGoMessage(16, 2400, MatrixMessage.CAM_PROTO_PELCO_D, 0, MatrixMessage.CAM_LEFT, 63).toBytes();
+        byte[] msg = {0x01, '0', '1', 'C', 'D', '2', '1', '0', '0', '0', '2', '0', '6', '3', '8', '0', '3', 'A', 0x04};
+        byte[] a = MatrixMessage.buildStartCameraGoMessage(1, 2400, MatrixMessage.CAM_PROTO_PELCO_D, 0, MatrixMessage.CAM_LEFT, 99).toBytes();
         assertArrayEquals(a, msg);
     }
 
@@ -141,12 +143,17 @@ public class MatrixMessageTest {
 
     @Test
     public void buildSetSubtitleMessage() throws Exception {
+        byte[] msg = {0x01, '0', '1', 'O', 'S', '0', '0', '2', '0', '0', '4', (byte) 0xB5, (byte) 0xF1, (byte) 0xCA, (byte) 0xD3, (byte) 0xB2, (byte) 0xE2, (byte) 0xCA, (byte) 0xD4, '0', '8', 0x04};
+        byte[] a = MatrixMessage.buildSetSubtitleMessage(1, 2, "雕视测试").toBytes();
+        assertArrayEquals(msg, a);
 
     }
 
     @Test
     public void buildSetSubtitleFormatMessage() throws Exception {
-
+        byte[] msg = {0x01, '0', '1', 'O', 'C', '0', '0', '1', '0', '4', '3', '0', '0', '0', '0', '0', 'B', 0x04};
+        byte[] a = MatrixMessage.buildSetSubtitleFormatMessage(1, 1, 4, (byte) '3', (byte) '0').toBytes();
+        assertArrayEquals(msg, a);
     }
 
     @Test

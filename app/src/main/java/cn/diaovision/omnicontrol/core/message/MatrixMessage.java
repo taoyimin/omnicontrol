@@ -440,24 +440,32 @@ public class MatrixMessage {
     }
 
     static public MatrixMessage buildSetSubtitleMessage(int id, int port, String str){
-        byte[] strBytes = toGBK(str);
-        byte[] payload = new byte[3 + 1 + 2 + strBytes.length];
-        System.arraycopy(hex2char(port, 3), 0, payload, 0, 3);
-        payload[3] = 0x00;
-        //TODO: hex format
-        System.arraycopy(hex2char(strBytes.length/2, 2), 0, payload, 4, 2);
-        System.arraycopy(strBytes, 0, payload, 6, strBytes.length);
+//        byte[] strBytes = toGBK(str);
+        byte[] strBytes; //= new byte[0];
+        try {
+            strBytes = str.getBytes("gb2312");
+            byte[] payload = new byte[3 + 1 + 2 + strBytes.length];
+            System.arraycopy(hex2char(port, 3), 0, payload, 0, 3);
+            payload[3] = '0';
+            //TODO: hex format
+            System.arraycopy(hex2char(strBytes.length/2, 2), 0, payload, 4, 2);
+            System.arraycopy(strBytes, 0, payload, 6, strBytes.length);
 
-        return new MatrixMessage(hex2char(id, 2), MSG_SUBTITLE, payload, true);
+            return new MatrixMessage(hex2char(id, 2), MSG_SUBTITLE, payload, true);
+        } catch (UnsupportedEncodingException e) {
+            return null;
+        }
+
     }
 
-    static public MatrixMessage buildSetSubtitleFormatMessage(int id, int port, byte size, byte color){
+    static public MatrixMessage buildSetSubtitleFormatMessage(int id, int port, int subLen, byte size, byte color){
         byte[] payload = new byte[3 + 2 + 1 + 1 + 2 + 1];
         System.arraycopy(hex2char(port,3), 0, payload, 0, 3);
 
         //fixed content
-        payload[3] = '0';
-        payload[4] = '1';
+        System.arraycopy(hex2char(subLen,2), 0, payload, 3, 2);
+//        payload[3] = '0';
+//        payload[4] = '1';
 
         payload[5] = size;
         payload[6] = color;
@@ -475,7 +483,7 @@ public class MatrixMessage {
      */
     static public byte[] toGBK(String str){
         try {
-            return str.getBytes("GBK");
+            return str.getBytes("gb2312");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             return new byte[0];

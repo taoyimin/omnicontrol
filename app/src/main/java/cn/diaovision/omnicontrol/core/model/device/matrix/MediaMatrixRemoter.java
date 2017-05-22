@@ -352,7 +352,7 @@ public class MediaMatrixRemoter {
         return -1;
     }
 
-    public int setSubtitleFormat(final int portIdx, final byte fontSize, final byte fontColor, RxSubscriber<RxMessage> subscriber){
+    public int setSubtitleFormat(final int portIdx, final int sublen, final byte fontSize, final byte fontColor, RxSubscriber<RxMessage> subscriber){
         if (matrix == null || !matrix.isReachable()) {
             return -1;
         }
@@ -360,7 +360,7 @@ public class MediaMatrixRemoter {
         Flowable.create(new FlowableOnSubscribe<RxMessage>() {
             @Override
             public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
-                byte[] bytes = MatrixMessage.buildSetSubtitleFormatMessage(matrix.id, portIdx, fontSize, fontColor).toBytes();
+                byte[] bytes = MatrixMessage.buildSetSubtitleFormatMessage(matrix.id, sublen, portIdx, fontSize, fontColor).toBytes();
                 byte[] recv = matrix.getController().send(bytes, bytes.length);
                 if (recv.length > 0){
                     e.onNext(new RxMessage(RxMessage.DONE));

@@ -132,8 +132,8 @@ public class ConferencePresenter implements ConferenceContract.Presenter {
     }
 
     @Override
-    public void setSubtitleFormat(int portIdx, byte fontSize, byte fontColor) {
-        int res=matrixRemoter.setSubtitleFormat(portIdx, fontSize, fontColor, new RxSubscriber<RxMessage>() {
+    public void setSubtitleFormat(int portIdx, int sublen, byte fontSize, byte fontColor) {
+        int res=matrixRemoter.setSubtitleFormat(portIdx, sublen, fontSize, fontColor, new RxSubscriber<RxMessage>() {
             @Override
             public void onRxResult(RxMessage rxMessage) {
                 Log.i(TAG,"set subtitle format success");
