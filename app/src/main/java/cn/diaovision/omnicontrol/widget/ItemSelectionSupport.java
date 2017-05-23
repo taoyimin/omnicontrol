@@ -1,10 +1,10 @@
 package cn.diaovision.omnicontrol.widget;
 
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
-import android.util.SparseBooleanArray;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemSelectionSupport {
     public static final int INVALID_POSITION = -1;
@@ -19,16 +19,17 @@ public class ItemSelectionSupport {
     private OnAllSelectedListener mAllSelectedListener;
     private OnItemStatueListener mOnItemStatueListener;
     private int checkedCount=0;
+    private List<Integer> selects;
 
     private ChoiceMode mChoiceMode = ChoiceMode.NONE;
-    private CheckedStates mCheckedStates;
+    //private CheckedStates mCheckedStates;
     private int lastPosition=-1;
 
     public ItemSelectionSupport(RecyclerView recyclerView) {
         mRecyclerView = recyclerView;
     }
 
-    public int getCheckedItemCount() {
+/*    public int getCheckedItemCount() {
         return checkedCount;
     }
 
@@ -239,7 +240,7 @@ public class ItemSelectionSupport {
         if(mChoiceMode== ChoiceMode.SINGLE){
             //如果当前为单选模式，则进入多选模式
             mChoiceMode= ChoiceMode.MULTIPLE;
-            mCheckedStates.clear();
+            selects.clear();
             adapter.notifyDataSetChanged();
             if(position!=-1) {
                 //长按进入编辑模式
@@ -252,6 +253,194 @@ public class ItemSelectionSupport {
             }
             if(mOnItemStatueListener!=null){
                 mOnItemStatueListener.onSelectCountChange(checkedCount);
+            }
+        }else if(mChoiceMode== ChoiceMode.MULTIPLE){
+            //如果当前为多选模式，长按则弹出对话框
+            if(mOnItemStatueListener!=null){
+                mOnItemStatueListener.onPopupDialog(position);
+            }
+        }
+    }
+
+    public interface OnItemStatueListener{
+        void onSelect(int position);
+        void onUnSelect(int position);
+        void onPopupDialog(int position);
+        void onSelectCountChange(int count);
+    }
+
+    public void setOnItemStatueListener(OnItemStatueListener mOnItemStatueListener) {
+        this.mOnItemStatueListener = mOnItemStatueListener;
+    }
+
+    public int getLastPosition() {
+        return lastPosition;
+    }*/
+
+    public int getCheckedItemCount() {
+        return selects.size();
+    }
+
+    public boolean isItemChecked(int position) {
+        if (mChoiceMode != ChoiceMode.NONE && selects != null) {
+            return selects.contains(position);
+        }
+
+        return false;
+    }
+
+    public int getCheckedItemPosition() {
+        if (mChoiceMode == ChoiceMode.SINGLE && selects != null && selects.size() == 1) {
+            return selects.get(0);
+        }
+
+        return INVALID_POSITION;
+    }
+
+    public List<Integer> getCheckedItemPositions() {
+        if (mChoiceMode != ChoiceMode.NONE) {
+            return selects;
+        }
+
+        return null;
+    }
+
+    public void setItemChecked(int position, boolean checked){
+        if(checked) {
+            if(!selects.contains(position)) {
+                //之前为未选中状态
+                selects.add(position);
+                if(mOnItemStatueListener!=null){
+                    mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
+                }
+            }
+        }else{
+            if(selects.contains(position)) {
+                //之前为选中状态
+                selects.remove(selects.indexOf(position));
+                if(mOnItemStatueListener!=null){
+                    mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
+                }
+            }
+        }
+    }
+
+    public void clearChoices() {
+        if (selects != null) {
+            selects.clear();
+            if(mOnItemStatueListener!=null){
+                mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
+            }
+        }
+    }
+
+    public ChoiceMode getChoiceMode() {
+        return mChoiceMode;
+    }
+
+    public void setChoiceModeMultiple(OnAllSelectedListener listener) {
+        mAllSelectedListener = listener;
+        setChoiceMode(ChoiceMode.MULTIPLE);
+    }
+
+    public void setChoiceMode(ChoiceMode choiceMode) {
+        if (mChoiceMode == choiceMode) {
+            return;
+        }
+
+        mChoiceMode = choiceMode;
+
+        if (mChoiceMode != ChoiceMode.NONE) {
+            if (selects == null) {
+                selects = new ArrayList<>();
+            }
+        }
+    }
+
+    public interface OnAllSelectedListener {
+        void onChanged(boolean allSelected);
+    }
+
+    public void itemClick(int position){
+        final Adapter adapter = mRecyclerView.getAdapter();
+        if (mChoiceMode == ChoiceMode.MULTIPLE) {
+            //当前处于多选模式
+            boolean checked = !selects.contains(position);
+            if(checked){
+                //选中
+                selects.add(position);
+            }else{
+                //取消选中
+                selects.remove(selects.indexOf(position));
+            }
+            adapter.notifyItemChanged(position);
+            lastPosition=-1;
+            if(mOnItemStatueListener!=null){
+                mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
+            }
+        } else if (mChoiceMode == ChoiceMode.SINGLE) {
+            //当前处于单选模式
+            if(getCheckedItemCount()>1){
+                //之前有多个item被选中，先全部清空
+                selects.clear();
+                adapter.notifyDataSetChanged();
+                //选中当前
+                selects.add(position);
+                adapter.notifyItemChanged(position);
+                //记录本次选中的position
+                lastPosition = position;
+                if(mOnItemStatueListener!=null){
+                    mOnItemStatueListener.onSelect(position);
+                    mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
+                }
+            }else {
+                //之前有0个或1个item被选中
+                boolean checked = !selects.contains(position);
+                if (checked) {
+                    //之前为未选中状态，本次操作为选中当前
+                    selects.clear();
+                    selects.add(position);
+                    if (lastPosition != -1) {
+                        //刷新之前选中的item
+                        adapter.notifyItemChanged(lastPosition);
+                    }else{
+                        adapter.notifyDataSetChanged();
+                    }
+                    //刷新现在选中的item
+                    adapter.notifyItemChanged(position);
+                    lastPosition = position;
+                    if(mOnItemStatueListener!=null){
+                        mOnItemStatueListener.onSelect(position);
+                        mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
+                    }
+                } else {
+                    //之前为选中状态，本次操作为取消选中
+                    selects.clear();
+                    adapter.notifyItemChanged(position);
+                    lastPosition = -1;
+                    if(mOnItemStatueListener!=null){
+                        mOnItemStatueListener.onUnSelect(position);
+                        mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
+                    }
+                }
+            }
+        }
+    }
+
+    public void itemLongClick(int position){
+        final Adapter adapter = mRecyclerView.getAdapter();
+        if(mChoiceMode== ChoiceMode.SINGLE){
+            //如果当前为单选模式，则进入多选模式
+            mChoiceMode= ChoiceMode.MULTIPLE;
+            selects.clear();
+            adapter.notifyDataSetChanged();
+            if(position!=-1) {
+                //长按进入编辑模式
+                selects.add(position);
+                adapter.notifyItemChanged(position);
+            }
+            if(mOnItemStatueListener!=null){
+                mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
             }
         }else if(mChoiceMode== ChoiceMode.MULTIPLE){
             //如果当前为多选模式，长按则弹出对话框
