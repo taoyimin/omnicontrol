@@ -44,4 +44,7 @@
 
     <!--item bg select color-->
     <color name="item_camera_preset">#189a25</color>
+
+    <!--radio button checked color-->
+    <color name="radio_button_checked">#dfdfdf</color>
 </resources>

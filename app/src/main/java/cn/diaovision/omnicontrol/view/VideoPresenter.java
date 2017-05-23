@@ -100,7 +100,6 @@ public class VideoPresenter implements VideoContract.Presenter {
 
     @Override
     public int[] getOutputIdx(int inputIdx) {
-        //获取系统配置的通道输出端，同步调用
         Set<Channel> chnSet=matrix.getVideoChnSet();
         Iterator<Channel> iterator=chnSet.iterator();
         while (iterator.hasNext()){
@@ -137,7 +136,7 @@ public class VideoPresenter implements VideoContract.Presenter {
 
     @Override
     public void setChannel(int input, int[] outputs, int mode) {
-        matrix.updateChannel(input,outputs,Channel.MOD_NORMAL);
+        matrix.updateChannel(input,outputs,mode);
     }
 
     @Override

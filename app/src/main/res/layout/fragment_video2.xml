@@ -3,49 +3,63 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="6"
-        android:orientation="horizontal"
-        android:paddingLeft="100dp">
-        <LinearLayout
+        android:orientation="horizontal">
+
+        <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:orientation="vertical"
-            android:background="#fff">
+            android:layout_weight="3">
 
-            <TextView
-                android:id="@+id/input_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="100dp"
+                android:background="#fff"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/output_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/input_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-            <TextView
-                android:id="@+id/input_lastposition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/output_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-            <TextView
-                android:id="@+id/output_lastposition"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/input_lastposition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-            <TextView
-                android:id="@+id/input_size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                <TextView
+                    android:id="@+id/output_lastposition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
-            <TextView
-                android:id="@+id/output_size"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/input_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:id="@+id/output_size"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+            <cn.diaovision.omnicontrol.widget.AssistDrawerLayout
+                android:id="@+id/assist_drawer_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </cn.diaovision.omnicontrol.widget.AssistDrawerLayout>
+        </RelativeLayout>
 
         <cn.diaovision.omnicontrol.widget.VideoLayout
             android:id="@+id/video_layout"
@@ -56,14 +70,16 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/auxiliary"
             android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="2">
 
         </android.support.v7.widget.RecyclerView>
+
         <LinearLayout
             android:layout_width="100dp"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
             <Button
                 android:id="@+id/btn1"
                 android:layout_width="match_parent"
@@ -88,18 +104,18 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/input"
             android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/panel_input"
-            android:layout_height="match_parent">
+            android:background="@color/panel_input">
 
         </android.support.v7.widget.RecyclerView>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/output"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="@color/panel_output">
-       </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView>
     </LinearLayout>
 </LinearLayout>
