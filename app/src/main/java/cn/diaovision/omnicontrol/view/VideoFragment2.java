@@ -2,6 +2,8 @@ package cn.diaovision.omnicontrol.view;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.List;
@@ -18,14 +19,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.widget.AssistDrawerLayout;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
-import cn.diaovision.omnicontrol.widget.VerticalViewPager;
 import cn.diaovision.omnicontrol.widget.adapter.SelectableAdapter;
 
 /**
@@ -39,22 +38,30 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     RecyclerView outputRecyclerView;
     @BindViews({R.id.input_count,R.id.output_count,R.id.input_lastposition,R.id.output_lastposition,R.id.input_size,R.id.output_size})
     List<TextView> views;
-    @BindView(R.id.btn1)
-    Button btn1;
-    @BindView(R.id.btn2)
-    Button btn2;
     @BindView(R.id.assist_drawer_layout)
     AssistDrawerLayout drawerLayout;
-    @BindView(R.id.radio_group)
-    RadioGroup radioGroup;
-    @BindView(R.id.view_pager)
-    VerticalViewPager viewPager;
+    @BindView(R.id.set_channel)
+    Button setChannel;
 
     private SelectableAdapter inputAdapter;
     private SelectableAdapter outputAdapter;
     private ItemSelectionSupport inputSelectionSupport;
     private ItemSelectionSupport outputSelectionSupport;
     VideoContract.Presenter presenter;
+
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what){
+                case 0:
+                    drawerLayout.openDrawer();
+                    break;
+                case 1:
+                    drawerLayout.closeDrawer();
+                    break;
+            }
+        }
+    };
 
     @Nullable
     @Override
@@ -81,51 +88,34 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         inputRecyclerView.setAdapter(inputAdapter);
         outputRecyclerView.setAdapter(outputAdapter);
 
-/*        btn1.setOnClickListener(new View.OnClickListener() {
+        drawerLayout.setOnEditCompleteListener(new AssistDrawerLayout.OnEditCompleteListener() {
             @Override
-            public void onClick(View v) {
-                if(inputSelectionSupport.getChoiceMode()== ItemSelectionSupport.ChoiceMode.MULTIPLE){
-                    //输入端列表完成编辑
-                    List<Integer> list=new ArrayList<Integer>();
-                    SparseBooleanArray sba = inputSelectionSupport.getCheckedItemPositions();
-                    for(int i=0;i<sba.size();i++){
-                        if(sba.get(sba.keyAt(i))){
-                            list.add(sba.keyAt(i));
-                            Log.i("info","sba.keyAt(i)="+sba.keyAt(i));
-                        }
-                    }
-                    list.toArray();
-                    inputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
-                    inputAdapter.notifyDataSetChanged();
-                }else{
-                    //输出端列表完成编辑
-                    int in = 0;
-                    SparseBooleanArray inputSba = inputSelectionSupport.getCheckedItemPositions();
-                    for(int i=0;i<inputSba.size();i++){
-                        if(inputSba.get(inputSba.keyAt(i))){
-                            in=inputSba.keyAt(i);
-                            break;
-                        }
-                    }
-                    List<Integer> list=new ArrayList<>();
-                    SparseBooleanArray outputSba = outputSelectionSupport.getCheckedItemPositions();
-                    for(int i=0;i<outputSba.size();i++){
-                        if(outputSba.get(outputSba.keyAt(i))){
-                            list.add(outputSba.keyAt(i));
-                        }
-                    }
-                    int[] outs=new int[list.size()];
-                    for(int i=0;i<list.size();i++){
-                        outs[i]=list.get(i);
-                    }
-                    //Integer[] outs=list.toArray(new Integer[list.size()]);
-                    outputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
-                    outputAdapter.notifyDataSetChanged();
-                    //presenter.setChannel(in,outs, Channel.MOD_NORMAL);
-                    presenter.switchVideo(in,outs);
+            public void onComplete(int mode) {
+                int in = inputSelectionSupport.getCheckedItemPosition();
+                List<Integer> selects= outputSelectionSupport.getCheckedItemPositions();
+                int[] outs=new int[selects.size()];
+                for(int i=0;i<selects.size();i++){
+                    outs[i]=selects.get(i);
                 }
+                switch (mode){
+                    case 0:
+                        presenter.switchVideo(in,outs);
+                        break;
+                    case 1:
+                        presenter.stitchVideo(in,2,1,outs);
+                        break;
+                    case 2:
+                        presenter.stitchVideo(in,2,2,outs);
+                        break;
+                    case 3:
+                        presenter.stitchVideo(in,3,3,outs);
+                        break;
+                }
+                outputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
+                outputAdapter.notifyDataSetChanged();
+                handler.sendEmptyMessage(1);
             }
-        });*/
+        });
 
         inputRecyclerView.addOnItemTouchListener(new OnRecyclerItemClickListener(inputRecyclerView){
             @Override
@@ -136,7 +126,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
             }
 
             @Override
-            public void onLongClick(RecyclerView.ViewHolder vh, int position) {
+            public void onLongClick(RecyclerView.ViewHolder vh, final int position) {
                 updateInfoBefore();
                 if(inputSelectionSupport.getChoiceMode()== ItemSelectionSupport.ChoiceMode.SINGLE&&outputSelectionSupport.getChoiceMode()== ItemSelectionSupport.ChoiceMode.SINGLE){
                     //输入端输出端都为单选模式
@@ -149,6 +139,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                         outputSelectionSupport.itemLongClick(-1);
                         inputSelectionSupport.itemClick(position);
                     }
+                    handler.sendEmptyMessage(0);
                 }else if(inputSelectionSupport.getChoiceMode()== ItemSelectionSupport.ChoiceMode.MULTIPLE){
                     //输入端为多选模式，输出端为单选模式
                     inputSelectionSupport.itemLongClick(position);
@@ -172,7 +163,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
             public void onLongClick(RecyclerView.ViewHolder vh, int position) {
                 updateInfoBefore();
                 if(inputSelectionSupport.getChoiceMode()== ItemSelectionSupport.ChoiceMode.SINGLE&&outputSelectionSupport.getChoiceMode()== ItemSelectionSupport.ChoiceMode.SINGLE){
-                    //输入端输出端都为单选模式
                     if(outputSelectionSupport.isItemChecked(position)){
                         //长按的item已经被选中
                         inputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.MULTIPLE);
@@ -259,81 +249,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     private void updateInfoBefore() {
         views.get(2).setText("输入端LastPosition="+inputSelectionSupport.getLastPosition());
         views.get(3).setText("输出端LastPosition="+outputSelectionSupport.getLastPosition());
-    }
-
-    @OnClick({R.id.btn1,R.id.btn2})
-    public void completeEdit(View view){
-        //if(inputSelectionSupport.getChoiceMode()== ItemSelectionSupport.ChoiceMode.MULTIPLE){
-            //输入端列表完成编辑
-/*            List<Integer> list=new ArrayList<>();
-            SparseBooleanArray sba = inputSelectionSupport.getCheckedItemPositions();
-            for(int i=0;i<sba.size();i++){
-                if(sba.get(sba.keyAt(i))){
-                    list.add(sba.keyAt(i));
-                    Log.i("info","sba.keyAt(i)="+sba.keyAt(i));
-                }
-            }
-            list.toArray();
-            inputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
-            inputAdapter.notifyDataSetChanged();*/
-        //}else{
-            //输出端列表完成编辑
-/*            int in = 0;
-            SparseBooleanArray inputSba = inputSelectionSupport.getCheckedItemPositions();
-            for(int i=0;i<inputSba.size();i++){
-                if(inputSba.get(inputSba.keyAt(i))){
-                    in=inputSba.keyAt(i);
-                    break;
-                }
-            }
-            List<Integer> list=new ArrayList<>();
-            SparseBooleanArray outputSba = outputSelectionSupport.getCheckedItemPositions();
-            for(int i=0;i<outputSba.size();i++){
-                if(outputSba.get(outputSba.keyAt(i))){
-                    list.add(outputSba.keyAt(i));
-                }
-            }
-            int[] outs=new int[list.size()];
-            for(int i=0;i<list.size();i++){
-                outs[i]=list.get(list.size()-1-i);
-            }
-            //Integer[] outs=list.toArray(new Integer[list.size()]);
-            outputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
-            outputAdapter.notifyDataSetChanged();
-            //presenter.setChannel(in,outs, Channel.MOD_NORMAL);
-            switch (view.getId()){
-                case R.id.btn1:
-                    presenter.switchVideo(in,outs);
-                    break;
-                case R.id.btn2:
-                    presenter.stitchVideo(in,2,1,outs);
-                    break;
-            }*/
-/*            int in = inputSelectionSupport.getCheckedItemPosition();
-            List<Integer> selects= outputSelectionSupport.getCheckedItemPositions();
-            int[] outs=new int[selects.size()];
-            for(int i=0;i<selects.size();i++){
-                outs[i]=selects.get(i);
-            }
-            outputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
-            outputAdapter.notifyDataSetChanged();
-            switch (view.getId()){
-                case R.id.btn1:
-                    presenter.switchVideo(in,outs);
-                    break;
-                case R.id.btn2:
-                    presenter.stitchVideo(in,2,1,outs);
-                    break;
-            }*/
-        //}
-        switch (view.getId()){
-            case R.id.btn1:
-                drawerLayout.openDrawer();
-                break;
-            case R.id.btn2:
-                drawerLayout.closeDrawer();
-                break;
-        }
     }
 
     public void popupDialog(final Port port){
