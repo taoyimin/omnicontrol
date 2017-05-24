@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/scene_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/drawer_input"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/scene_item_shape"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/center"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_below="@id/drawer_input"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/output9"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/center"
+        android:gravity="center"
+        android:layout_toLeftOf="@id/center"
+        android:background="@drawable/scene_item_shape"/>
+
+    <TextView
+        android:id="@+id/output8"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/center"
+        android:background="@drawable/scene_item_shape"
+        android:gravity="center"
+        android:layout_toRightOf="@id/center"/>
+
+    <TextView
+        android:id="@+id/output7"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/center"
+        android:gravity="center"
+        android:layout_toLeftOf="@id/center"
+        android:background="@drawable/scene_item_shape"/>
+
+    <TextView
+        android:id="@+id/output6"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/center"
+        android:gravity="center"
+        android:layout_toRightOf="@id/center"
+        android:background="@drawable/scene_item_shape"/>
+
+    <TextView
+        android:id="@+id/output5"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/center"
+        android:gravity="center"
+        android:layout_toLeftOf="@id/center"
+        android:background="@drawable/scene_item_shape"/>
+
+    <TextView
+        android:id="@+id/output4"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/center"
+        android:gravity="center"
+        android:layout_toRightOf="@id/center"
+        android:background="@drawable/scene_item_shape"/>
+
+    <TextView
+        android:id="@+id/output3"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/center"
+        android:gravity="center"
+        android:layout_toLeftOf="@id/center"
+        android:background="@drawable/scene_item_shape"/>
+
+    <TextView
+        android:id="@+id/output2"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/center"
+        android:gravity="center"
+        android:layout_toRightOf="@id/center"
+        android:background="@drawable/scene_item_shape"/>
+
+    <TextView
+        android:id="@+id/output1"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/center"
+        android:gravity="center"
+        android:layout_toLeftOf="@id/center"
+        android:background="@drawable/scene_item_shape"/>
+
+    <Button
+        android:id="@+id/set_channel"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="设置"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"/>
+</RelativeLayout>
