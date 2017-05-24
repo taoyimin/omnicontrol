@@ -3,45 +3,50 @@ package cn.diaovision.omnicontrol.widget;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.IdRes;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.transition.Scene;
+import android.transition.TransitionManager;
 import android.util.AttributeSet;
 import android.view.View;
-import android.widget.RadioButton;
+import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.RadioGroup;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.diaovision.omnicontrol.MainControlActivity;
 import cn.diaovision.omnicontrol.R;
-import cn.diaovision.omnicontrol.view.ViewPagerFragment;
-import cn.diaovision.omnicontrol.widget.adapter.VerticalFragmentPagerAdapter;
 
 /**
  * Created by TaoYimin on 2017/5/23.
  */
 
-public class AssistDrawerLayout extends DrawerLayout{
+public class AssistDrawerLayout extends DrawerLayout {
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
     @BindView(R.id.drawer)
     View drawer;
-    @BindView(R.id.view_pager)
-    VerticalViewPager viewPager;
     @BindView(R.id.radio_group)
     RadioGroup radioGroup;
+    @BindView(R.id.root_view)
+    FrameLayout rootView;
+    @BindView(R.id.set_channel)
+    Button setChannel;
 
-    VerticalFragmentPagerAdapter adapter;
+    OnEditCompleteListener onEditCompleteListener;
+
+    public static final int MODE_1XN = 0; //正常显示
+    public static final int MODE_2X1 = 1; //一行两列拼接显示
+    public static final int MODE_2X2 = 2; //两行两列拼接显示
+    public static final int MODE_3X3 = 3; //三行三列拼接显示
+
+    public int mode=0;
 
     public AssistDrawerLayout(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public AssistDrawerLayout(Context context, AttributeSet attrs) {
-        this(context, attrs,0);
+        this(context, attrs, 0);
     }
 
     public AssistDrawerLayout(Context context, AttributeSet attrs, int defStyle) {
@@ -50,53 +55,55 @@ public class AssistDrawerLayout extends DrawerLayout{
     }
 
     private void init(Context context) {
-        View view = View.inflate(context, R.layout.layout_drawer, this);
+        final View view = View.inflate(context, R.layout.layout_drawer, this);
         ButterKnife.bind(this, view);
         drawerLayout.setScrimColor(Color.TRANSPARENT);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        List<ViewPagerFragment> list=new ArrayList<>();
-        list.add(new ViewPagerFragment());
-        list.add(new ViewPagerFragment());
-        list.add(new ViewPagerFragment());
-        list.add(new ViewPagerFragment());
-        adapter=new VerticalFragmentPagerAdapter(list,((MainControlActivity)context).getSupportFragmentManager());
-        viewPager.setAdapter(adapter);
-        viewPager.setOverScrollMode(OVER_SCROLL_NEVER);
+        setChannel= (Button) view.findViewById(R.id.set_channel);
+        setChannel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onEditCompleteListener!=null){
+                    onEditCompleteListener.onComplete(mode);
+                }
+            }
+        });
+        final Scene scene1 = Scene.getSceneForLayout(rootView, R.layout.layout_scene1, context);
+        final Scene scene2 = Scene.getSceneForLayout(rootView, R.layout.layout_scene2, context);
+        final Scene scene3 = Scene.getSceneForLayout(rootView, R.layout.layout_scene3, context);
+        final Scene scene4 = Scene.getSceneForLayout(rootView, R.layout.layout_scene4, context);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.radio_btn1:
-                        viewPager.setCurrentItem(0);
+                        mode=AssistDrawerLayout.MODE_1XN;
+                        TransitionManager.go(scene1);
                         break;
                     case R.id.radio_btn2:
-                        viewPager.setCurrentItem(1);
+                        mode=AssistDrawerLayout.MODE_2X1;
+                        TransitionManager.go(scene2);
                         break;
                     case R.id.radio_btn3:
-                        viewPager.setCurrentItem(2);
+                        mode=AssistDrawerLayout.MODE_2X2;
+                        TransitionManager.go(scene3);
                         break;
                     case R.id.radio_btn4:
-                        viewPager.setCurrentItem(3);
+                        mode=AssistDrawerLayout.MODE_3X3;
+                        TransitionManager.go(scene4);
                         break;
                     default:
                         break;
                 }
-            }
-        });
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                ((RadioButton)radioGroup.getChildAt(position)).setChecked(true);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
+                setChannel= (Button) view.findViewById(R.id.set_channel);
+                setChannel.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(onEditCompleteListener!=null){
+                            onEditCompleteListener.onComplete(mode);
+                        }
+                    }
+                });
             }
         });
     }
@@ -110,15 +117,36 @@ public class AssistDrawerLayout extends DrawerLayout{
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
-    public void openDrawer(){
-        if(!drawerLayout.isDrawerOpen(drawer)){
+    public void openDrawer() {
+        if (!drawerLayout.isDrawerOpen(drawer)) {
             drawerLayout.openDrawer(drawer);
         }
     }
 
-    public void closeDrawer(){
-        if(drawerLayout.isDrawerOpen(drawer)){
+    public void closeDrawer() {
+        if (drawerLayout.isDrawerOpen(drawer)) {
             drawerLayout.closeDrawer(drawer);
         }
+    }
+
+    public boolean isDrawerOpen(){
+        return drawerLayout.isDrawerOpen(drawer);
+    }
+
+    public int getMode() {
+        return mode;
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
+        radioGroup.getChildAt(mode).performClick();
+    }
+
+    public interface OnEditCompleteListener{
+        void onComplete(int mode);
+    }
+
+    public void setOnEditCompleteListener(OnEditCompleteListener onEditCompleteListener) {
+        this.onEditCompleteListener = onEditCompleteListener;
     }
 }
