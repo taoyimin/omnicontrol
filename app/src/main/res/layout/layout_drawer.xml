@@ -65,12 +65,13 @@
                 android:button="@null"/>
         </RadioGroup>
 
-        <cn.diaovision.omnicontrol.widget.VerticalViewPager
-            android:id="@+id/view_pager"
+        <FrameLayout
+            android:id="@+id/root_view"
             android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="2">
 
-        </cn.diaovision.omnicontrol.widget.VerticalViewPager>
+            <include layout="@layout/layout_scene1"/>
+        </FrameLayout>
     </LinearLayout>
 </android.support.v4.widget.DrawerLayout>
