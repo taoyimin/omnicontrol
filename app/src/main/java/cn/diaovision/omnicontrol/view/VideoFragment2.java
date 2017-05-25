@@ -74,7 +74,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        presenter = new VideoPresenter(this);
         List<Port> inputs=presenter.getInputList();
         final List<Port> outputs=presenter.getOutputList();
         inputSelectionSupport=new ItemSelectionSupport(inputRecyclerView);
@@ -276,6 +275,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
 
     @Override
     public void bindPresenter() {
-        //presenter = new VideoPresenter(this);
+        presenter = new VideoPresenter(this);
     }
 }

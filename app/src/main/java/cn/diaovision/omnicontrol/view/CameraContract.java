@@ -2,6 +2,7 @@ package cn.diaovision.omnicontrol.view;
 
 import cn.diaovision.omnicontrol.BasePresenter;
 import cn.diaovision.omnicontrol.BaseView;
+import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 
 /* *
  * view + presenter统一的接口
@@ -25,5 +26,7 @@ public interface CameraContract {
 
         //void updatePreset();
         void loadPreset(int portIdx, int presetIdx);
+
+        HiCamera getCamera(int port);
     }
 }

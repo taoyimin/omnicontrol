@@ -27,7 +27,6 @@ import cn.diaovision.omnicontrol.core.model.device.State;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera.Preset;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
-import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.widget.CameraPresetRadioGroupView;
 import cn.diaovision.omnicontrol.widget.DirectionPad;
 import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
@@ -59,14 +58,13 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
 
     int lastDeg;
     int lastVelo;
-    HiCamera currentCamera= new ConfigFixed().getHiCameraInfo().get(1);
+    HiCamera currentCamera;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_camera, container, false);
         ButterKnife.bind(this, v);
-
         return v;
     }
 
@@ -75,7 +73,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
         super.onActivityCreated(savedInstanceState);
 
         //set presenter
-        presenter = new CameraPresenter(this);
+        currentCamera=presenter.getCamera(1);
         /* test code */
         //final List<Preset> presetList = new ArrayList<>();
         final List<Preset> presetList = currentCamera.getPresetList();
@@ -139,19 +137,19 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
                 switch (deg){
                     case 0:
                         //摄像头右移
-                        presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_RIGHT,velo);
+                        presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_RIGHT,velo/5);
                         break;
                     case 90:
                         //摄像头上移
-                        presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_UP,velo);
+                        presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_UP,velo/5);
                         break;
                     case 180:
                         //摄像头左移
-                        presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_LEFT,velo);
+                        presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_LEFT,velo/5);
                         break;
                     case 270:
                         //摄像头下移
-                        presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_DOWN,velo);
+                        presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_DOWN,velo/5);
                         break;
                 }
             }
@@ -183,10 +181,10 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
                         case MotionEvent.ACTION_DOWN:
                             switch (v.getId()){
                                 case R.id.btn_zoomin:
-                                    presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_ZOOMIN, 63);
+                                    presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_NARROW, 63);
                                     break;
                                 case R.id.btn_zoomout:
-                                    presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_ZOOMOUT, 63);
+                                    presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_WIDE, 63);
                                     break;
                                 case R.id.btn_fast:
                                     break;
@@ -229,7 +227,6 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
                 Toast.makeText(getContext(),"修改第"+item.getItemId()+"个预置位",Toast.LENGTH_SHORT).show();
                 break;
             case 2:
-                //Toast.makeText(getContext(),"删除第"+item.getItemId()+"个预置位",Toast.LENGTH_SHORT).show();
                 presenter.delPreset(currentCamera.getPortIdx(),item.getItemId());
                 break;
         }
@@ -247,9 +244,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
             public void onClick(DialogInterface dialog, int which) {
                 if(!editText.getText().toString().isEmpty()){
                     String name=editText.getText().toString();
-                    List<Preset> list=currentCamera.getPresetList();
-                    //list.add(new Preset(name,list.size()));
-                    presenter.addPreset(currentCamera.getPortIdx(),list.size(),name);
+                    presenter.addPreset(currentCamera.getPortIdx(),currentCamera.getPresetList().size(),name);
                     camerPresetView.adapter.notifyDataSetChanged();
                 }
             }

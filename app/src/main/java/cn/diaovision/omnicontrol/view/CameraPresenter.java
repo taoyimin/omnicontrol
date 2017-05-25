@@ -3,6 +3,7 @@ package cn.diaovision.omnicontrol.view;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
 import cn.diaovision.omnicontrol.model.Config;
@@ -31,6 +32,7 @@ public class CameraPresenter implements CameraContract.Presenter {
             .localPreviewVideo(cfg.getMatrixPreviewIp(), cfg.getMatrixPreviewPort())
             .videoInInit(cfg.getMatrixInputVideoNum())
             .videoOutInit(cfg.getMatrixOutputVideoNum())
+            .camerasInit()
             .build();
 
     MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
@@ -57,7 +59,6 @@ public class CameraPresenter implements CameraContract.Presenter {
         this.view = view;
 
         bus.subscribe(subscriber);
-        matrix.setCameras(cfg.getHiCameraInfo());
 
     }
 
@@ -142,6 +143,7 @@ public class CameraPresenter implements CameraContract.Presenter {
             @Override
             public void onRxError(Throwable e) {
                 Log.i(TAG,"store preset failed");
+                e.printStackTrace();
             }
         });
         if (res < 0){
@@ -188,6 +190,11 @@ public class CameraPresenter implements CameraContract.Presenter {
         if (res < 0){
             Log.i(TAG,"invalid load preset");
         }
+    }
+
+    @Override
+    public HiCamera getCamera(int port) {
+        return matrix.getCameras().get(port);
     }
 
     //TODO: add viewmodel operations if needed
