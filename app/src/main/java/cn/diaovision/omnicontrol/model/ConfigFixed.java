@@ -2,10 +2,6 @@ package cn.diaovision.omnicontrol.model;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-
-import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 
 /**
  * Created by liulingfeng on 2017/4/24.
@@ -75,13 +71,6 @@ public class ConfigFixed implements Config{
     @Override
     public int getMatrixPreviewPort() {
         return 29;
-    }
-
-    @Override
-    public Map<Integer,HiCamera> getHiCameraInfo() {
-        Map<Integer,HiCamera> cameras = new HashMap<>();
-        cameras.put(1,new HiCamera(1, 1, 9600, HiCamera.PROTO_PILSA));
-        return cameras;
     }
 
     @Override

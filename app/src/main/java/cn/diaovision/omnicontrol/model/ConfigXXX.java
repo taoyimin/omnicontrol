@@ -4,7 +4,6 @@ import org.xml.sax.SAXException;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -102,11 +101,6 @@ public class ConfigXXX implements Config{
     @Override
     public int getMatrixPreviewPort() {
         return 0;
-    }
-
-    @Override
-    public Map<Integer,HiCamera> getHiCameraInfo() {
-        return null;
     }
 
     @Override

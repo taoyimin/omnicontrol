@@ -1,9 +1,6 @@
 package cn.diaovision.omnicontrol.model;
 
 import java.util.Date;
-import java.util.Map;
-
-import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 
 /**
  * Created by liulingfeng on 2017/4/24.
@@ -29,8 +26,6 @@ public interface Config {
 
     //get the port where the preview channel is plugged on to the matrix
     int getMatrixPreviewPort();
-
-    Map<Integer,HiCamera> getHiCameraInfo();
 
     int getMatrixInputVideoNum();
     int getMatrixOutputVideoNum();
