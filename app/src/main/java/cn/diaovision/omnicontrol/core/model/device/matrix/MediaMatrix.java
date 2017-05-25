@@ -1,6 +1,5 @@
 package cn.diaovision.omnicontrol.core.model.device.matrix;
 
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,18 +8,10 @@ import java.util.Map;
 import java.util.Set;
 
 import cn.diaovision.omnicontrol.conn.UdpClient;
-import cn.diaovision.omnicontrol.core.message.MatrixMessage;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.core.model.medium.PreviewVideo;
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by liulingfeng on 2017/2/21.
@@ -430,6 +421,7 @@ public class MediaMatrix {
         List<Port> videoOutPort = new ArrayList<>();
 
         Set<Channel> vChannelSet = new HashSet<>();
+        Map<Integer,HiCamera> cameras=new HashMap<>();
 
         public Builder id(int id){
             this.id = id;
@@ -472,6 +464,11 @@ public class MediaMatrix {
             return this;
         }
 
+        public Builder camerasInit(){
+            cameras.put(1,new HiCamera(1, 1, 9600, HiCamera.PROTO_PILSA));
+            return this;
+        }
+
         public Builder videoChn(int inIdx, int outIdx){
             int[] outs = new int[1];
             outs[0] = outIdx;
@@ -491,6 +488,7 @@ public class MediaMatrix {
             mm.setVideoChnSet(vChannelSet);
             mm.setMeetingPreviewVideo(new PreviewVideo(meetingPreviewIp, meetingPreviewPort));
             mm.setLocalPreviewVideo(new PreviewVideo(meetingPreviewIp, meetingPreviewPort));
+            mm.setCameras(cameras);
 
             return mm;
         }
