@@ -51,7 +51,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
     @BindView(R.id.video_layout)
     VideoLayout videoLayout;
 
-    @BindViews({R.id.btn_zoomin,R.id.btn_zoomout,R.id.btn_fast,R.id.btn_slow,R.id.btn_stop})
+    @BindViews({R.id.btn_narrow,R.id.btn_wide,R.id.btn_fast,R.id.btn_slow,R.id.btn_stop})
     List<Button> btnList;
 
     CameraPresenter presenter;
@@ -180,10 +180,10 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
                     switch(event.getAction()){
                         case MotionEvent.ACTION_DOWN:
                             switch (v.getId()){
-                                case R.id.btn_zoomin:
+                                case R.id.btn_narrow:
                                     presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_NARROW, 63);
                                     break;
-                                case R.id.btn_zoomout:
+                                case R.id.btn_wide:
                                     presenter.cameraCtrlGo(currentCamera.getPortIdx(),MatrixMessage.CAM_WIDE, 63);
                                     break;
                                 case R.id.btn_fast:
@@ -227,7 +227,8 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
                 Toast.makeText(getContext(),"修改第"+item.getItemId()+"个预置位",Toast.LENGTH_SHORT).show();
                 break;
             case 2:
-                presenter.delPreset(currentCamera.getPortIdx(),item.getItemId());
+                //item.getItemId()要加1，因为有一个默认的presetIdx=0的预置位
+                presenter.delPreset(currentCamera.getPortIdx(),item.getItemId()+1);
                 break;
         }
         return super.onContextItemSelected(item);
@@ -244,7 +245,8 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
             public void onClick(DialogInterface dialog, int which) {
                 if(!editText.getText().toString().isEmpty()){
                     String name=editText.getText().toString();
-                    presenter.addPreset(currentCamera.getPortIdx(),currentCamera.getPresetList().size(),name);
+                    //presetIdx从1开始，保留presetIdx=0的预置位作为原始状态（调用presetIdx=0的预置位相当于重置摄像头位置），摄像头每次通电都会调用presetIdx=0的预置位
+                    presenter.addPreset(currentCamera.getPortIdx(),currentCamera.getPresetList().size()+1,name);
                     camerPresetView.adapter.notifyDataSetChanged();
                 }
             }
