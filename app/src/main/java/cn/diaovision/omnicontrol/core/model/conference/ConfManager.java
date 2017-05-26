@@ -211,6 +211,7 @@ public class ConfManager {
         return 0;
     }
 
+    /*结束会议*/
     public int endConf(int confId, RxSubscriber<RxMessage> subscriber){
         if (confIdValid(confId)){
             McuMessage msg = McuMessage.buildReqDeleteConf(confId);
@@ -235,6 +236,7 @@ public class ConfManager {
     }
 
 
+    /*邀请终端入会*/
     public int inviteTerm(int confId, final long termId, RxSubscriber<RxMessage> subscriber){
         if (termIdValid(confId, termId)){
             McuMessage msg = McuMessage.buildReqInviteTerm(confId, termId);
@@ -280,6 +282,7 @@ public class ConfManager {
     }
 
 
+    /*挂断终端*/
     public int hangupTerm(int confId, final long termId, RxSubscriber<RxMessage> subscriber){
         if (termIdValid(confId, termId)) {
             McuMessage msg = McuMessage.buildReqHangupTerm(confId, termId);
@@ -310,6 +313,7 @@ public class ConfManager {
 
     }
 
+    /*静音终端*/
     public int muteTerm(int confId, final long termId, RxSubscriber<RxMessage> subscriber){
         if (termIdValid(confId, termId)) {
             McuMessage msg = McuMessage.buildReqMute(confId, termId);
@@ -454,7 +458,7 @@ public class ConfManager {
         }
     }
 
-    /*打开主席花蜜那*/
+    /*打开主席画面*/
     public int openChairStream(int confId, String localIp, RxSubscriber<RxMessage> subscriber){
         if (confIdValid(confId)) {
             McuMessage msg = McuMessage.buildReqStream(confId, StreamMediaMessage.OPEN_SERVER, localIp);

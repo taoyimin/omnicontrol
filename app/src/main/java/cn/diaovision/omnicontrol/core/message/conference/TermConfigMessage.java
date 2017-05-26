@@ -10,7 +10,7 @@ import java.io.Serializable;
 import cn.diaovision.omnicontrol.util.ByteUtils;
 
 /******************************************
- * TermConfigmessage
+ * TermConfigmessage 终端配置类
  * Created by liulingfeng on 2017/4/13.
  ******************************************/
 public class TermConfigMessage implements BaseMessage, Serializable {

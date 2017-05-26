@@ -287,7 +287,7 @@ public class DvdFragment extends BaseFragment implements DvdContract.View{
                     @Override
                     public String apply(String s) throws Exception {
                         UdpClient udpClient = new UdpClient(newIp, newPort);
-                        byte[] bytes = MatrixMessage.buildGetIdMessage(0).toBytes();
+                        byte[] bytes = MatrixMessage.buildGetIdMessage().toBytes();
                         byte[] recv = udpClient.send(bytes, bytes.length);
                         if (recv.length > 0){
                             return "success";

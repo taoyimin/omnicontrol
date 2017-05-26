@@ -12,7 +12,7 @@ import cn.diaovision.omnicontrol.core.model.conference.Term;
 import cn.diaovision.omnicontrol.util.ByteUtils;
 import cn.diaovision.omnicontrol.util.DateHelper;
 
-/**
+/**会议配置类
  * Created by liulingfeng on 2017/4/13.
  */
 
