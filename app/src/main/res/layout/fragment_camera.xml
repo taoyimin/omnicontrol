@@ -70,13 +70,13 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/btn_zoomin"
+                        android:id="@+id/btn_narrow"
                         android:layout_width="@dimen/camera_control_button_width"
                         android:layout_height="@dimen/camera_control_button_height"
                         android:text="@string/camera_zoomin"/>
 
                     <Button
-                        android:id="@+id/btn_zoomout"
+                        android:id="@+id/btn_wide"
                         android:layout_width="@dimen/camera_control_button_width"
                         android:layout_height="@dimen/camera_control_button_height"
                         android:text="@string/camera_zoomout"/>

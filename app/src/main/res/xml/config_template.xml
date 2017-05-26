@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
-    <matrix>
+    <matrix id="1">
         <ip>192.168.1.1</ip>
         <port>5000</port>
+        <input_number>32</input_number>
+        <output_number>32</output_number>
         <preview_video>
             <ip>192.168.10.31</ip>
             <port>554</port>
@@ -30,6 +32,13 @@
                     <output>2</output>
                     <output>3</output>
                     <output>4</output>
+                </output_list>
+            </channel>
+            <channel name="2" mode="normal">
+                <input>2</input>
+                <output_list>
+                    <output>7</output>
+                    <output>8</output>
                 </output_list>
             </channel>
         </channel_list>
