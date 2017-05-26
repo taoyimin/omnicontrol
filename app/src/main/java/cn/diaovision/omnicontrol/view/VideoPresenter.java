@@ -175,6 +175,24 @@ public class VideoPresenter implements VideoContract.Presenter {
         }
     }
 
+    @Override
+    public void setSubtitle(int portIdx, String str) {
+        int res=matrixRemoter.setSubtitle(portIdx, str, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG,"set subtitle success");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG,"set subtitle failed");
+            }
+        });
+        if(res<0){
+            Log.i(TAG,"invalid set subtitle");
+        }
+    }
+
     //TODO: add viewmodel operations if needed
     //    public void onTitleChanged(String str){
     //    }

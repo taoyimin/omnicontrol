@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -40,14 +42,17 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     List<TextView> views;
     @BindView(R.id.assist_drawer_layout)
     AssistDrawerLayout drawerLayout;
-    @BindView(R.id.set_channel)
-    Button setChannel;
+    @BindView(R.id.set_subtitle)
+    Button setSubtitle;
+    @BindView(R.id.edit_subtitle)
+    EditText editSubtitle;
 
     private SelectableAdapter inputAdapter;
     private SelectableAdapter outputAdapter;
     private ItemSelectionSupport inputSelectionSupport;
     private ItemSelectionSupport outputSelectionSupport;
     VideoContract.Presenter presenter;
+    Port currentPort;
 
     Handler handler=new Handler(){
         @Override
@@ -90,28 +95,32 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         drawerLayout.setOnEditCompleteListener(new AssistDrawerLayout.OnEditCompleteListener() {
             @Override
             public void onComplete(int mode) {
+                //当前选中输入端
                 int in = inputSelectionSupport.getCheckedItemPosition();
+                //当前选中输出端
                 List<Integer> selects= outputSelectionSupport.getCheckedItemPositions();
                 int[] outs=new int[selects.size()];
                 for(int i=0;i<selects.size();i++){
                     outs[i]=selects.get(i);
                 }
                 switch (mode){
-                    case 0:
+                    case AssistDrawerLayout.MODE_1XN:
                         presenter.switchVideo(in,outs);
                         break;
-                    case 1:
+                    case AssistDrawerLayout.MODE_2X1:
                         presenter.stitchVideo(in,2,1,outs);
                         break;
-                    case 2:
+                    case AssistDrawerLayout.MODE_2X2:
                         presenter.stitchVideo(in,2,2,outs);
                         break;
-                    case 3:
+                    case AssistDrawerLayout.MODE_3X3:
                         presenter.stitchVideo(in,3,3,outs);
                         break;
                 }
+                //编辑完成后设为单选模式
                 outputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
                 outputAdapter.notifyDataSetChanged();
+                //关闭抽屉，直接调用drawerLayout.closeDrawer()方法没有收回效果
                 handler.sendEmptyMessage(1);
             }
         });
@@ -138,6 +147,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                         outputSelectionSupport.itemLongClick(-1);
                         inputSelectionSupport.itemClick(position);
                     }
+                    //弹出抽屉，直接调用drawerLayout.openDrawer()方法没有弹出效果
                     handler.sendEmptyMessage(0);
                 }else if(inputSelectionSupport.getChoiceMode()== ItemSelectionSupport.ChoiceMode.MULTIPLE){
                     //输入端为多选模式，输出端为单选模式
@@ -185,10 +195,13 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         inputSelectionSupport.setOnItemStatueListener(new ItemSelectionSupport.OnItemStatueListener() {
             @Override
             public void onSelect(int position) {
+                currentPort=presenter.getInputList().get(position);
+                //获取到选中输入端对应的输出端
                 int[] outsIdx=presenter.getOutputIdx(presenter.getInputList().get(position).idx);
                 outputSelectionSupport.clearChoices();
                 if(outsIdx!=null) {
                     for (int outIdx : outsIdx) {
+                        //将对应的输出端设为选中状态
                         outputSelectionSupport.setItemChecked(outIdx, true);
                     }
                 }
@@ -197,6 +210,8 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
 
             @Override
             public void onUnSelect(int position) {
+                currentPort=null;
+                //清空输出端列表的所有选中状态
                 outputSelectionSupport.clearChoices();
                 outputAdapter.notifyDataSetChanged();
             }
@@ -214,16 +229,34 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         outputSelectionSupport.setOnItemStatueListener(new ItemSelectionSupport.OnItemStatueListener() {
             @Override
             public void onSelect(int position) {
+                currentPort=presenter.getOutputList().get(position);
+                //获取选中输出端对应的输入端
                 int inIdx=presenter.getInputIdx(presenter.getOutputList().get(position).idx);
                 inputSelectionSupport.clearChoices();
+                //将对应的输入端设为选中状态
                 if(inIdx!=-1) {
                     inputSelectionSupport.setItemChecked(inIdx, true);
+                    inputAdapter.notifyDataSetChanged();
+                    //获取对应输入端所对应的所有输出端
+                    int[] outsIdx=presenter.getOutputIdx(inIdx);
+                    outputSelectionSupport.clearChoices();
+                    //将对应的输出端设为选中状态
+                    if(outsIdx!=null) {
+                        for (int outIdx : outsIdx) {
+                            outputSelectionSupport.setItemChecked(outIdx, true);
+                        }
+                    }
+                    outputAdapter.notifyDataSetChanged();
+                }else{
+                    inputAdapter.notifyDataSetChanged();
                 }
-                inputAdapter.notifyDataSetChanged();
+
             }
 
             @Override
             public void onUnSelect(int position) {
+                currentPort=null;
+                //清空输入端列表所有选中状态
                 inputSelectionSupport.clearChoices();
                 inputAdapter.notifyDataSetChanged();
             }
@@ -235,6 +268,22 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
 
             @Override
             public void onSelectCountChange(int count) {
+            }
+        });
+
+        setSubtitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currentPort==null){
+                    Toast.makeText(getContext(),"当前没有选中任何输入输出端!",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String subtitle=editSubtitle.getText().toString();
+                if(subtitle.isEmpty()){
+                    Toast.makeText(getContext(),"标题不能为空!",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                presenter.setSubtitle(currentPort.idx,subtitle);
             }
         });
     }
