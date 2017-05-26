@@ -2,6 +2,11 @@ package cn.diaovision.omnicontrol.model;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
+import java.util.Set;
+
+import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
+import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 
 /**
  * Created by liulingfeng on 2017/4/24.
@@ -64,7 +69,7 @@ public class ConfigFixed implements Config{
     }
 
     @Override
-    public int getMtatrixPreviewIpPort() {
+    public int getMatrixPreviewIpPort() {
         return 554;
     }
 
@@ -91,6 +96,16 @@ public class ConfigFixed implements Config{
     @Override
     public byte getSubtitleFontColor() {
         return 10;
+    }
+
+    @Override
+    public Map<Integer, HiCamera> getMatrixCameras() {
+        return null;
+    }
+
+    @Override
+    public Set<Channel> getMatrixChannels() {
+        return null;
     }
 
     @Override
