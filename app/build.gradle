@@ -62,6 +62,7 @@ dependencies {
 
     //dom4j
     //compile group: 'dom4j', name: 'dom4j', version: '1.6.1'
+    compile 'dom4j:dom4j:20040902.021138'
 
     testCompile 'junit:junit:4.12'
 
