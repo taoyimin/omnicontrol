@@ -1,5 +1,7 @@
 package cn.diaovision.omnicontrol.core.model.device.matrix;
 
+import android.graphics.Matrix;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,7 @@ import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxSubscriber;
+import cn.diaovision.omnicontrol.util.ByteUtils;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
@@ -42,6 +45,32 @@ public class MediaMatrixRemoter {
         this.matrix = matrix;
     }
 
+    /*get the matrix's online status using getId message*/
+    public int getMatrixStatus(RxSubscriber<RxMessage> subscriber){
+         if (matrix == null || !matrix.isReachable())
+            return -1;
+
+        final byte[] bytes = MatrixMessage.buildGetIdMessage().toBytes();
+        Flowable.create(new FlowableOnSubscribe<RxMessage>() {
+            @Override
+            public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
+                byte[] recv = matrix.getController().send(bytes, bytes.length);
+                if (recv.length > 0){
+                    //if server response, then it is online
+                    e.onNext(new RxMessage(RxMessage.DONE));
+                }
+                else {
+                    //matrix is offline if error happens
+                    e.onError(new IOException());
+                }
+            }
+        }, BackpressureStrategy.BUFFER)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return 0;
+    }
+
     public int switchVideo(final int portIn, final int[] portOut, RxSubscriber<RxMessage> subscriber) {
         if (matrix == null || !matrix.isReachable())
             return -1;
@@ -53,7 +82,7 @@ public class MediaMatrixRemoter {
         }
         MatrixMessage multiSwitchMsg = buildMultiSwitchMessage(matrix.id, portIn, portOut);
         msgList.add(multiSwitchMsg);
-        Flowable.timer(1, TimeUnit.SECONDS)
+        Flowable.interval(1, TimeUnit.SECONDS)
                 .fromIterable(msgList)
                 .map(new Function<MatrixMessage, RxMessage>() {
                     @Override
@@ -93,7 +122,7 @@ public class MediaMatrixRemoter {
         }
         msgList.add(multiSwithMsg);
         msgList.add(stitchMsg);
-        Flowable.timer(1, TimeUnit.SECONDS)
+        Flowable.interval(1, TimeUnit.SECONDS)
                 .fromIterable(msgList)
                 .map(new Function<MatrixMessage, RxMessage>() {
                     @Override

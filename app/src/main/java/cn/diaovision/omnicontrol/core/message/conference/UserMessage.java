@@ -1,6 +1,7 @@
 package cn.diaovision.omnicontrol.core.message.conference;
 
 /**
+ * MCU定义的登陆操作用户类
  * Created by liulingfeng on 2017/4/13.
  */
 

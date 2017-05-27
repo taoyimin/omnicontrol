@@ -88,6 +88,7 @@ public class McuCommManager {
        }, subscriber, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN, 2000);
     }
 
+    /*连接服务器，返回一个flowable以便后续的操作*/
     public Flowable<RxMessage> connect(){
         return Flowable.create(new FlowableOnSubscribe<RxMessage>() {
             @Override
@@ -124,6 +125,7 @@ public class McuCommManager {
         threadStop();
     }
 
+    /*发送连续报文*/
     public void sendSequential(final List<McuBundle> bundleList, final RxSubscriber subscriber){
         if (client.getState() == TcpClient.STATE_CONNECTED) {
             Flowable.fromIterable(bundleList)
@@ -149,6 +151,7 @@ public class McuCommManager {
                             if (!msg.requiresAck()) {
                                 return new RxMessage(RxMessage.DONE);
                             }
+                            //从ack消息队列里找对应的返回消息，如果找到了，则返回RxMessage，表示发送成功
                             while (true) {
                                 McuMessage ackMsg = findAndPopAck(msg);
                                 if (ackMsg != null) {
@@ -161,11 +164,13 @@ public class McuCommManager {
                             }
                         }
                     })
+                    //如果超过时限，则表示发送失败
                     .timeout(ACK_TIMEOUT, TimeUnit.MILLISECONDS)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(subscriber);
         }
+        //未连接，则返回连接错误
         else {
             Flowable.just("")
                     .map(new Function<String, RxMessage>() {
@@ -181,6 +186,7 @@ public class McuCommManager {
     }
 
 
+    /*这个方法同上，不同仅仅在于返回一个flowable供进一步的调用*/
     public Flowable<RxMessage> sendSequential(final List<McuBundle> bundleList){
         if (client.getState() == TcpClient.STATE_CONNECTED) {
             return Flowable.fromIterable(bundleList)
@@ -235,6 +241,7 @@ public class McuCommManager {
         }
     }
 
+    /*发送单个消息，如果消息需要返回则处理逻辑同上，confEditor为操作执行成功之后对会议状态的修改器*/
     public void send(final McuMessage msg, final RxSubscriber subscriber, final ConfEditor confEditor) {
         if (client.getState() == TcpClient.STATE_CONNECTED) {
             Flowable.just(msg)
@@ -291,6 +298,7 @@ public class McuCommManager {
         }
     }
 
+    /*同上，不同仅在于没有confEditor*/
     public void send(final McuMessage msg, final RxSubscriber subscriber) {
         if (client.getState() == TcpClient.STATE_CONNECTED) {
             Flowable.just(msg)
@@ -342,6 +350,7 @@ public class McuCommManager {
     }
 
 
+    /*线程启动运行的方法*/
     private void threadStart(){
         boolean hasInited = true;
         for (BaseCyclicThread thread  : threadList){
@@ -361,6 +370,7 @@ public class McuCommManager {
 
     }
 
+    /*线程终止方法*/
     private void threadStop(){
         for (BaseCyclicThread thread : threadList){
             thread.quit();
@@ -378,6 +388,7 @@ public class McuCommManager {
         recvBuff.flush();
     }
 
+    /*线程初始化方法，如果需要添加线程，在这个方法里面添加*/
     private void threadInit(){
 
         ackListLock.lock();
@@ -509,7 +520,9 @@ public class McuCommManager {
     }
 
     /* ************************************************************
-     *find ACK given the req message, and pop it from the list
+     *对于消息分为两种，需要ACK和不需要ACK
+     * 接收和发送分为两个线程，如果一个消息发送之后需要ACK，则到ACK接收队列中找对应的
+     * find ACK given the req message, and pop it from the list
      * ************************************************************/
     public McuMessage findAndPopAck(McuMessage msg) {
         McuBundle bundle = null;
@@ -617,11 +630,12 @@ public class McuCommManager {
         void onRecv(McuMessage rxMessage);
     }
 
+    /*MCU消息体bundle*/
     static public class McuBundle{
-        long timeRecv;
-        McuMessage msg;
-        RxSubscriber subscriber;
-        ConfEditor confEditor;
+        long timeRecv; //接收消息时间
+        McuMessage msg; //消息本体
+        RxSubscriber subscriber; //处理消息发送结果的subscriber
+        ConfEditor confEditor; //处理消息完成之后对会议的编辑器
     }
 
 }

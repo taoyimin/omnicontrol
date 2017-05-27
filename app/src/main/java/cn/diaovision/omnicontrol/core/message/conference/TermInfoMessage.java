@@ -1,6 +1,6 @@
 package cn.diaovision.omnicontrol.core.message.conference;
 
-/**
+/** 终端配置类
  * Created by liulingfeng on 2017/4/14.
  */
 

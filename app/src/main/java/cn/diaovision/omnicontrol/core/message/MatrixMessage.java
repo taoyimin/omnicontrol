@@ -230,7 +230,7 @@ public class MatrixMessage {
         return new MatrixMessage(idByte, MSG_SET_ID, payload, true);
     }
 
-    static public MatrixMessage buildGetIdMessage(int id){
+    static public MatrixMessage buildGetIdMessage(){
         byte[] payload = new byte[2];
         payload[0] = (byte) 'F';
         payload[1] = (byte) 'S';

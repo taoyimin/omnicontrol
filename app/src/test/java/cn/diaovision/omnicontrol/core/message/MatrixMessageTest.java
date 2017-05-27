@@ -60,7 +60,7 @@ public class MatrixMessageTest {
     @Test
     public void buildGetIdMessage() throws Exception {
         byte[] msg = {0x01, 'F', 'S', 'I', 'D', 'F', 'S', '0', 'D', 0x04};
-        byte[] a = MatrixMessage.buildGetIdMessage(16).toBytes();
+        byte[] a = MatrixMessage.buildGetIdMessage().toBytes();
         assertArrayEquals(a, msg);
     }
 

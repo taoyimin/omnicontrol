@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import cn.diaovision.omnicontrol.util.ByteUtils;
 
-/**
+/**返回消息类
  * Created by liulingfeng on 2017/4/13.
  */
 
