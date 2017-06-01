@@ -39,7 +39,7 @@ public class TcpClient {
 
     //synchronously connect (for rxjava)
     synchronized public void connect(){
-        if (ip == null || port < 1024){
+        if (ip == null){
             onDisconnected();
             return;
         }

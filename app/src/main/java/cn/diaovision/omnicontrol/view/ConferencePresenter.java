@@ -61,7 +61,7 @@ public class ConferencePresenter implements ConferenceContract.Presenter {
 
         bus.subscribe(subscriber);
         confManager=new ConfManager();
-/*        confManager.init(cfg, new RxSubscriber<RxMessage>() {
+        confManager.init(cfg, new RxSubscriber<RxMessage>() {
             @Override
             public void onRxResult(RxMessage rxMessage) {
                 Log.i(TAG,"ConfManager init success");
@@ -71,7 +71,7 @@ public class ConferencePresenter implements ConferenceContract.Presenter {
             public void onRxError(Throwable e) {
                 Log.i(TAG,"ConfManager init failed");
             }
-        });*/
+        });
     }
 
     //TODO: remove if no preprocessing is needed

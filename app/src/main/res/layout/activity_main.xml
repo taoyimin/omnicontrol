@@ -12,11 +12,11 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:id="@+id/fragment_container"
-        android:layout_above="@+id/navigation_bar"/>
+        android:layout_above="@+id/navigation_bar0"/>
 
     <android.support.design.widget.TabLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="0dp"
         android:id="@+id/navigation_bar"
         android:layout_alignParentBottom="true"
         app:tabIndicatorColor="@color/white"
@@ -26,5 +26,139 @@
         app:tabGravity="fill"
         app:tabMode="fixed"
         app:tabSelectedTextColor="@color/bb_text_selected"/>
+    
+    <RadioGroup
+        android:id="@+id/navigation_bar0"
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
+        <RadioButton
+            android:id="@+id/navigation_power"
+            android:drawableStart="@drawable/navigation_power_selector"
+            android:textColor="@color/navigation_power_text_selector"
+            android:text="电源控制"
+            android:gravity="center"
+            style="@style/NavigationRadioButton"/>
+
+        <ImageView
+            style="@style/NavigationButtonGap"/>
+
+        <RadioButton
+            android:paddingLeft="12.5dp"
+            android:id="@+id/navigation_video"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/navigation_power_selector"
+            android:textColor="@color/navigation_power_text_selector"
+            android:textSize="9sp"
+            android:text="视频控制"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/navigation_button_bg_selector"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            style="@style/NavigationButtonGap"/>
+
+        <RadioButton
+            android:paddingLeft="12.5dp"
+            android:id="@+id/navigation_audio"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/navigation_power_selector"
+            android:textColor="@color/navigation_power_text_selector"
+            android:textSize="9sp"
+            android:text="音频控制"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/navigation_button_bg_selector"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            style="@style/NavigationButtonGap"/>
+
+        <RadioButton
+            android:paddingLeft="12.5dp"
+            android:id="@+id/navigation_light"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/navigation_power_selector"
+            android:textColor="@color/navigation_power_text_selector"
+            android:textSize="9sp"
+            android:text="灯光控制"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/navigation_button_bg_selector"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            style="@style/NavigationButtonGap"/>
+
+        <RadioButton
+            android:paddingLeft="12.5dp"
+            android:id="@+id/navigation_camera"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/navigation_power_selector"
+            android:textColor="@color/navigation_power_text_selector"
+            android:textSize="9sp"
+            android:text="摄像机"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/navigation_button_bg_selector"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            style="@style/NavigationButtonGap"/>
+
+        <RadioButton
+            android:paddingLeft="12.5dp"
+            android:id="@+id/navigation_dvd"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/navigation_power_selector"
+            android:textColor="@color/navigation_power_text_selector"
+            android:textSize="9sp"
+            android:text="DVD"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/navigation_button_bg_selector"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            style="@style/NavigationButtonGap"/>
+
+        <RadioButton
+            android:paddingLeft="12.5dp"
+            android:id="@+id/navigation_meeting"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/navigation_power_selector"
+            android:textColor="@color/navigation_power_text_selector"
+            android:textSize="9sp"
+            android:text="视频会议"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/navigation_button_bg_selector"
+            android:layout_height="match_parent"/>
+
+        <ImageView
+            style="@style/NavigationButtonGap"/>
+
+        <RadioButton
+            android:paddingLeft="12.5dp"
+            android:id="@+id/navigation_setting"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/navigation_power_selector"
+            android:textColor="@color/navigation_power_text_selector"
+            android:textSize="9sp"
+            android:text="系统设置"
+            android:button="@null"
+            android:gravity="center"
+            android:background="@drawable/navigation_button_bg_selector"
+            android:layout_height="match_parent"/>
+    </RadioGroup>
 </RelativeLayout>

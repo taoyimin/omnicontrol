@@ -40,7 +40,7 @@ public class ConfigFixed implements Config{
 
     @Override
     public String getMcuIp() {
-        return "192.168.1.1";
+        return "192.168.10.100";
     }
 
     @Override

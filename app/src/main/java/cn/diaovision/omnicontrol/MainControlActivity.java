@@ -2,6 +2,7 @@ package cn.diaovision.omnicontrol;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.RadioButton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -86,6 +88,9 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
     @BindView(R.id.navigation_bar)
     TabLayout navigationBar;
 
+    @BindView(R.id.navigation_power)
+    RadioButton radioButton;
+
     //Gesture detector
     GestureDetectorCompat gestureDetector;
 
@@ -103,6 +108,7 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, FRAGMENTS[0], TAG_FRAGMENT[0]);
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         transaction.commit();
+
 
         //init tabs
         for (int m = 0; m < TAB_FRAGMENT_NAME.length; m ++) {
@@ -235,5 +241,17 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
             Log.i("<UI>", "<UI> y swipe");
         }
         return false;
+    }
+
+    @Override
+    protected void onResume() {
+        Log.i("main",convertDIP2PX(this,38)+"px");
+        super.onResume();
+    }
+
+    public static int convertDIP2PX(Context context, int dip) {
+        float scale = context.getResources().getDisplayMetrics().density;
+        Log.i("main","scale="+scale);
+        return (int)(dip*scale + 0.5f*(dip>=0?1:-1));
     }
 }

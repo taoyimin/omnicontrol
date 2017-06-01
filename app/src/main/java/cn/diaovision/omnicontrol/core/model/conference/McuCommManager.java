@@ -1,21 +1,12 @@
 package cn.diaovision.omnicontrol.core.model.conference;
 
 
-import org.reactivestreams.Publisher;
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import cn.diaovision.omnicontrol.BaseCyclicThread;
 import cn.diaovision.omnicontrol.conn.TcpClient;
@@ -37,7 +28,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
-/** MCU communication manager
+/**
+ * MCU communication manager
  * Created by liulingfeng on 2017/4/17.
  */
 
@@ -56,20 +48,21 @@ public class McuCommManager {
 
     CommListener commListener;
 
-    public McuCommManager(Mcu mcu){
+    public McuCommManager(Mcu mcu) {
         client = new TcpClient(mcu.ip, mcu.port);
 
         recvBuff = new ByteBuffer(RECV_BUFF_LEN);
 
         ackList = new LinkedList<>();
         ackListLock = new ReentrantLock();
+        threadList = new ArrayList<>();
         threadInit();
     }
 
     /*
      * connect to mcu server
      */
-    public void connect(RxSubscriber subscriber){
+    public void connect(RxSubscriber subscriber) {
         RxExecutor.getInstance().post(new RxReq() {
             @Override
             public RxMessage request() {
@@ -77,32 +70,28 @@ public class McuCommManager {
                 if (client.getState() == TcpClient.STATE_CONNECTED) {
                     threadStart();
                     return new RxMessage(RxMessage.CONNECTED);
-                }
-                else if (client.getState() == TcpClient.STATE_DISCONNECTED){
+                } else if (client.getState() == TcpClient.STATE_DISCONNECTED) {
                     return new RxMessage(RxMessage.DISCONNECTED);
-                }
-                else {
+                } else {
                     return new RxMessage(RxMessage.DISCONNECTED);
                 }
             }
-       }, subscriber, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN, 2000);
+        }, subscriber, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN, 2000);
     }
 
     /*连接服务器，返回一个flowable以便后续的操作*/
-    public Flowable<RxMessage> connect(){
+    public Flowable<RxMessage> connect() {
         return Flowable.create(new FlowableOnSubscribe<RxMessage>() {
             @Override
             public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
                 client.connect();
-                 if (client.getState() == TcpClient.STATE_CONNECTED) {
+                if (client.getState() == TcpClient.STATE_CONNECTED) {
                     threadStart();
                     e.onNext(new RxMessage(RxMessage.CONNECTED));
-                }
-                else if (client.getState() == TcpClient.STATE_DISCONNECTED){
+                } else if (client.getState() == TcpClient.STATE_DISCONNECTED) {
                     e.onError(new IOException());
-                }
-                else {
-                     e.onError(new IOException());
+                } else {
+                    e.onError(new IOException());
                 }
             }
         }, BackpressureStrategy.BUFFER)
@@ -113,7 +102,7 @@ public class McuCommManager {
     /* ***************************************************
      * disconnect will return immediately
      * ***************************************************/
-    public void disconnect(){
+    public void disconnect() {
         RxExecutor.getInstance().post(new RxReq() {
             @Override
             public RxMessage request() {
@@ -126,7 +115,7 @@ public class McuCommManager {
     }
 
     /*发送连续报文*/
-    public void sendSequential(final List<McuBundle> bundleList, final RxSubscriber subscriber){
+    public void sendSequential(final List<McuBundle> bundleList, final RxSubscriber subscriber) {
         if (client.getState() == TcpClient.STATE_CONNECTED) {
             Flowable.fromIterable(bundleList)
                     .map(new Function<McuBundle, RxMessage>() {
@@ -187,7 +176,7 @@ public class McuCommManager {
 
 
     /*这个方法同上，不同仅仅在于返回一个flowable供进一步的调用*/
-    public Flowable<RxMessage> sendSequential(final List<McuBundle> bundleList){
+    public Flowable<RxMessage> sendSequential(final List<McuBundle> bundleList) {
         if (client.getState() == TcpClient.STATE_CONNECTED) {
             return Flowable.fromIterable(bundleList)
                     .map(new Function<McuBundle, RxMessage>() {
@@ -227,8 +216,7 @@ public class McuCommManager {
                     .timeout(ACK_TIMEOUT, TimeUnit.MILLISECONDS)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
-        }
-        else {
+        } else {
             return Flowable.just("")
                     .map(new Function<String, RxMessage>() {
                         @Override
@@ -283,8 +271,7 @@ public class McuCommManager {
                         }
                     })
                     .subscribe(subscriber);
-        }
-        else {
+        } else {
             Flowable.just("")
                     .map(new Function<String, RxMessage>() {
                         @Override
@@ -334,8 +321,7 @@ public class McuCommManager {
                     .observeOn(AndroidSchedulers.mainThread())
                     .timeout(ACK_TIMEOUT, TimeUnit.MILLISECONDS)
                     .subscribe(subscriber);
-        }
-        else {
+        } else {
             Flowable.just("")
                     .map(new Function<String, RxMessage>() {
                         @Override
@@ -351,28 +337,28 @@ public class McuCommManager {
 
 
     /*线程启动运行的方法*/
-    private void threadStart(){
+    private void threadStart() {
         boolean hasInited = true;
-        for (BaseCyclicThread thread  : threadList){
+        for (BaseCyclicThread thread : threadList) {
             if (thread == null) {
                 hasInited = false;
                 break;
             }
         }
 
-        if (!hasInited){
+        if (!hasInited) {
             threadInit();
         }
 
-        for (BaseCyclicThread thread : threadList){
+        for (BaseCyclicThread thread : threadList) {
             thread.start();
         }
 
     }
 
     /*线程终止方法*/
-    private void threadStop(){
-        for (BaseCyclicThread thread : threadList){
+    private void threadStop() {
+        for (BaseCyclicThread thread : threadList) {
             thread.quit();
         }
         threadList.clear();
@@ -380,8 +366,7 @@ public class McuCommManager {
         ackListLock.lock();
         try {
             ackList.clear();
-        }
-        finally {
+        } finally {
             ackListLock.unlock();
         }
 
@@ -389,13 +374,12 @@ public class McuCommManager {
     }
 
     /*线程初始化方法，如果需要添加线程，在这个方法里面添加*/
-    private void threadInit(){
+    private void threadInit() {
 
         ackListLock.lock();
         try {
             ackList.clear();
-        }
-        finally {
+        } finally {
             ackListLock.unlock();
         }
 
@@ -408,11 +392,11 @@ public class McuCommManager {
             public void work() {
                 try {
                     Thread.sleep(1000);
-                    if (client.getState() != TcpClient.STATE_CONNECTED){
+                    if (client.getState() != TcpClient.STATE_CONNECTED) {
                         disconnect();
                         connect(null);
                     }
-                    if (commListener != null){
+                    if (commListener != null) {
                         commListener.onConnectionChanged(client.getState());
                     }
                 } catch (InterruptedException e) {
@@ -446,10 +430,9 @@ public class McuCommManager {
                         } finally {
                             ackListLock.unlock();
                         }
-                    }
-                    else {
+                    } else {
                         //send other types of messages to listener
-                        if (commListener != null){
+                        if (commListener != null) {
                             commListener.onRecv(msg);
                         }
                     }
@@ -478,6 +461,7 @@ public class McuCommManager {
                         public void onRxResult(RxMessage msg) {
                             BaseMessage resMsg = (BaseMessage) msg.val;
                         }
+
                         @Override
                         public void onRxError(Throwable e) {
                             if (commListener != null) {
@@ -495,7 +479,7 @@ public class McuCommManager {
         //dieout recv ack messages
         BaseCyclicThread msgDieoutThread = new BaseCyclicThread() {
             @Override
-            public void work(){
+            public void work() {
 
                 ackListLock.lock();
                 try {
@@ -503,8 +487,7 @@ public class McuCommManager {
                     if (System.currentTimeMillis() - bundle.timeRecv > ACK_TIMEOUT) {
                         ackList.removeFirst();
                     }
-                }
-                finally {
+                } finally {
                     ackListLock.unlock();
                 }
 
@@ -562,7 +545,7 @@ public class McuCommManager {
                 ackListLock.unlock();
             }
         } else if (msg.getType() == McuMessage.TYPE_CREATE_CONF) {
-//            ConfConfigMessage confConfigMessage = (ConfConfigMessage) msg.getSubmsg();
+            //            ConfConfigMessage confConfigMessage = (ConfConfigMessage) msg.getSubmsg();
             ackListLock.lock();
             try {
                 boolean foundReq = false;
@@ -582,8 +565,8 @@ public class McuCommManager {
             } finally {
                 ackListLock.unlock();
             }
-        } else if (msg.getType() == McuMessage.TYPE_USER){
-//            UserMessage userMsg = (UserMessage) msg.getSubmsg();
+        } else if (msg.getType() == McuMessage.TYPE_USER) {
+            //            UserMessage userMsg = (UserMessage) msg.getSubmsg();
             ackListLock.lock();
             try {
                 boolean foundReq = false;
@@ -621,7 +604,7 @@ public class McuCommManager {
     /*
      * this interface handles non-async calling （返回非异步访问的并发回调接口）
      */
-    public interface CommListener{
+    public interface CommListener {
 
         //tcp连接问题
         void onConnectionChanged(int state);
@@ -631,7 +614,7 @@ public class McuCommManager {
     }
 
     /*MCU消息体bundle*/
-    static public class McuBundle{
+    static public class McuBundle {
         long timeRecv; //接收消息时间
         McuMessage msg; //消息本体
         RxSubscriber subscriber; //处理消息发送结果的subscriber

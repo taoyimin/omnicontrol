@@ -1,15 +1,12 @@
 package cn.diaovision.omnicontrol.core.model.conference;
 
+import android.util.Log;
+
 import org.reactivestreams.Publisher;
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import cn.diaovision.omnicontrol.core.message.conference.ConfConfigMessage;
@@ -17,19 +14,12 @@ import cn.diaovision.omnicontrol.core.message.conference.ConfInfoMessage;
 import cn.diaovision.omnicontrol.core.message.conference.McuMessage;
 import cn.diaovision.omnicontrol.core.message.conference.ResMessage;
 import cn.diaovision.omnicontrol.core.message.conference.StreamMediaMessage;
-import cn.diaovision.omnicontrol.core.message.conference.TermInfoMessage;
 import cn.diaovision.omnicontrol.model.Config;
 import cn.diaovision.omnicontrol.rx.RxMessage;
-import cn.diaovision.omnicontrol.rx.RxReq;
 import cn.diaovision.omnicontrol.rx.RxSubscriber;
 import cn.diaovision.omnicontrol.util.ByteUtils;
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
@@ -79,6 +69,7 @@ public class ConfManager {
                 .flatMap(new Function<RxMessage, Publisher<RxMessage>>() {
                     @Override
                     public Publisher<RxMessage> apply(RxMessage rxMessage) throws Exception {
+                        Log.i("conf","McuMessage.buildReqConfAll()");
                         McuMessage reqConfInfoMsg = McuMessage.buildReqConfAll();
 
                         ConfEditor confInfoEditor = new ConfEditor() {
@@ -108,7 +99,7 @@ public class ConfManager {
                             }
                         };
 
-
+                        Log.i("conf","confInfoTemplate.getConfNum()="+confInfoTemplate.getConfNum());
                         List<McuCommManager.McuBundle> bundleList = new ArrayList<McuCommManager.McuBundle>();
 
                         McuCommManager.McuBundle bundle = new McuCommManager.McuBundle();

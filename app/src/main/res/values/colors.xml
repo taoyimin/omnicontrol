@@ -25,6 +25,9 @@
     <color name="bb_text_selected">#f0f0f0</color>
     <color name="bb_bg_tab_selected">#2ea09c</color>
 
+    <color name="navigation_text_selected">#00def4</color>
+    <color name="navigation_text_normal">#7fa5bf</color>
+
 
     <!--pannel bg color-->
     <color name="panel_title_bg">#3cd2cd</color>

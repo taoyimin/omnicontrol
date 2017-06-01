@@ -34,4 +34,22 @@
         <item name="android:textColor">@color/text_body_light</item>
     </style>
 
+    <!--navigation radio button style-->
+    <style name="NavigationRadioButton">
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:paddingLeft">12.5dp</item>
+        <item name="android:textSize">9sp</item>
+        <item name="android:button">@null</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/navigation_button_bg_selector</item>
+    </style>
+
+    <!--navigation radio button gap-->
+    <style name="NavigationButtonGap">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:src">@mipmap/nav_gap</item>
+        <item name="android:scaleType">fitXY</item>
+    </style>
 </resources>
