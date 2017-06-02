@@ -8,7 +8,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Date;
 
-import cn.diaovision.omnicontrol.core.model.conference.Term;
 import cn.diaovision.omnicontrol.util.ByteUtils;
 import cn.diaovision.omnicontrol.util.DateHelper;
 

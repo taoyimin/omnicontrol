@@ -1,14 +1,11 @@
 package cn.diaovision.omnicontrol.conn;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.concurrent.TimeoutException;
 
 /**
  * Created by liulingfeng on 2017/3/19.
