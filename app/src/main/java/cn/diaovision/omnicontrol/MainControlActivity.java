@@ -1,20 +1,17 @@
 package cn.diaovision.omnicontrol;
 
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
+import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.widget.AppCompatImageView;
-import android.support.v7.widget.AppCompatTextView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
-import android.widget.RadioButton;
+import android.widget.ImageView;
+import android.widget.RadioGroup;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,11 +82,14 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
     int preTab = 0;
 
     //UIs
-    @BindView(R.id.navigation_bar)
-    TabLayout navigationBar;
+/*    @BindView(R.id.navigation_bar)
+    TabLayout navigationBar;*/
 
-    @BindView(R.id.navigation_power)
-    RadioButton radioButton;
+    @BindView(R.id.navigation_bar0)
+    RadioGroup radioGroup;
+
+    @BindView(R.id.image_logo)
+    ImageView logoImage;
 
     //Gesture detector
     GestureDetectorCompat gestureDetector;
@@ -111,7 +111,7 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
 
 
         //init tabs
-        for (int m = 0; m < TAB_FRAGMENT_NAME.length; m ++) {
+/*        for (int m = 0; m < TAB_FRAGMENT_NAME.length; m ++) {
             TabLayout.Tab tab = navigationBar.newTab().setCustomView(R.layout.tab_navi_item);
             View v = tab.getCustomView();
 
@@ -123,9 +123,9 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
             navigationBar.addTab(tab);
 
 
-        }
+        }*/
         //set init tab scale
-        int pos =  navigationBar.getSelectedTabPosition();
+/*        int pos =  navigationBar.getSelectedTabPosition();
         navigationBar.getTabAt(pos).getCustomView().findViewById(R.id.tab_content).setScaleX(1.2f);
         navigationBar.getTabAt(pos).getCustomView().findViewById(R.id.tab_content).setScaleY(1.2f);
 
@@ -159,12 +159,45 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
             public void onTabReselected(TabLayout.Tab tab) {
 
             }
-        });
+        });*/
 
         gestureDetector = new GestureDetectorCompat(this, this);
 
         CrashHandler.getInstance().init(this);
 
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                switch (checkedId){
+                    case R.id.navigation_power:
+                        switchFragment(0);
+                        break;
+                    case R.id.navigation_video:
+                        switchFragment(1);
+                        break;
+                    case R.id.navigation_audio:
+                        switchFragment(2);
+                        break;
+                    case R.id.navigation_light:
+                        switchFragment(3);
+                        break;
+                    case R.id.navigation_camera:
+                        switchFragment(4);
+                        break;
+                    case R.id.navigation_dvd:
+                        switchFragment(5);
+                        break;
+                    case R.id.navigation_meeting:
+                        switchFragment(6);
+                        break;
+                    case R.id.navigation_setting:
+                        switchFragment(7);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     void switchFragment(int i){
@@ -245,13 +278,21 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
 
     @Override
     protected void onResume() {
-        Log.i("main",convertDIP2PX(this,38)+"px");
+        //Log.i("main",convertDIP2PX(this,38)+"px");
+        //getDensity();
         super.onResume();
+        Log.i("main","width="+logoImage.getWidth()+"height"+logoImage.getHeight());
     }
 
     public static int convertDIP2PX(Context context, int dip) {
         float scale = context.getResources().getDisplayMetrics().density;
         Log.i("main","scale="+scale);
         return (int)(dip*scale + 0.5f*(dip>=0?1:-1));
+    }
+
+    private void getDensity() {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        Log.d("main","Density is "+displayMetrics.density+" densityDpi is "+displayMetrics.densityDpi+" height: "+displayMetrics.heightPixels+
+                " width: "+displayMetrics.widthPixels);
     }
 }

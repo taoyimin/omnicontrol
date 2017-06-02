@@ -10,7 +10,24 @@
     <string name="txt_input">输入</string>
     <string name="txt_output">输出</string>
     <string name="txt_channel">通道</string>
-    
+
+    <!--logo-->
+    <string name="logo_text">雕视多媒体可视化信息联动指挥调度系统平台</string>
+
+    <!--navigation-->
+    <string name="navigation_power">电源控制</string>
+    <string name="navigation_video">视频控制</string>
+    <string name="navigation_audio">音频控制</string>
+    <string name="navigation_light">灯光控制</string>
+    <string name="navigation_camera">摄像机</string>
+    <string name="navigation_dvd">DVD</string>
+    <string name="navigation_meeting">视频会议</string>
+    <string name="navigation_setting">系统设置</string>
+
+    <!--video-->
+    <string name="video_input">输入端</string>
+    <string name="video_output">输出端</string>
+
     <!--camera-->
     <string name="camera_zoomin">放大</string>
     <string name="camera_zoomout">缩小</string>

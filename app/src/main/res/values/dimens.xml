@@ -3,8 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="widget_margin">8dp</dimen>
-    <dimen name="widget_padding">8dp</dimen>
+    <dimen name="widget_margin">2.77dp</dimen>
+    <dimen name="widget_padding">2.77dp</dimen>
     <dimen name="txt_body_size">28sp</dimen>
     <dimen name="txt_title_size">48sp</dimen>
 
@@ -28,8 +28,14 @@
     <dimen name="badge_textSize">15sp</dimen>
     <dimen name="badge_padding">7dp</dimen>
     <dimen name="badge_borderWidth">2dp</dimen>
-    
-    <!--login fragment-->
+
+    <!--text size-->
+    <dimen name="text_size_f1">13.83sp</dimen>
+    <dimen name="text_size_f2">12.45sp</dimen>
+    <dimen name="text_size_f3">11.07sp</dimen>
+    <dimen name="text_size_f4">8.99sp</dimen>
+
+    <!--login activity-->
     <dimen name="login_title_margin_top">80dp</dimen>
     <dimen name="login_title_text_size">28sp</dimen>
     <dimen name="login_logo_image_width">200dp</dimen>
@@ -37,7 +43,26 @@
     <dimen name="login_text_size">20sp</dimen>
     <dimen name="login_edit_width">300dp</dimen>
     <dimen name="login_edit_height">40dp</dimen>
-    
+
+    <!--logo layout-->
+    <dimen name="logo_image_height">20.75dp</dimen>
+
+    <!--navigation layout-->
+    <dimen name="navigation_bar_height">52.57dp</dimen>
+    <dimen name="navigation_image_paddingLeft">17.29dp</dimen>
+    <dimen name="navigation_radioGroup_marginTop">2.77dp</dimen>
+
+    <!--video fragment-->
+    <dimen name="video_layoutTop_marginTop">2.77dp</dimen>
+    <dimen name="video_layoutBottom_marginTop">4.15dp</dimen>
+    <dimen name="video_editView_paddingLeft">8dp</dimen>
+    <dimen name="video_port_logo_width">150dp</dimen>
+    <dimen name="video_port_logo_image_margin">32.5dp</dimen>
+    <dimen name="video_port_logo_text_margin">15dp</dimen>
+    <dimen name="video_port_recycler_marginLeft">8.65dp</dimen>
+    <dimen name="video_port_recycler_marginRight">8.65dp</dimen>
+    <dimen name="video_port_recycler_marginTop">9.34dp</dimen>
+
     <!--camera fragment-->
     <dimen name="camera_control_button_width">60dp</dimen>
     <dimen name="camera_control_button_height">60dp</dimen>

@@ -8,6 +8,7 @@
     <color name="transparent">#00000000</color>
     <color name="white">#ffffff</color>
     <color name="grey">#aaaaaa</color>
+    <color name="black">#000000</color>
 
     <!--text color in white themes-->
     <color name="text_body_light">#555555</color>
@@ -18,16 +19,13 @@
 
     <!--edittext colors-->
     <color name="input_light_border">#888888</color>
+    <color name="edit_hint_color">#6d7a83</color>
 
     <!--bottom navigation bar colors-->
     <color name="bb_bg">#1d6966</color>
     <color name="bb_text">#eeeeee</color>
     <color name="bb_text_selected">#f0f0f0</color>
     <color name="bb_bg_tab_selected">#2ea09c</color>
-
-    <color name="navigation_text_selected">#00def4</color>
-    <color name="navigation_text_normal">#7fa5bf</color>
-
 
     <!--pannel bg color-->
     <color name="panel_title_bg">#3cd2cd</color>
@@ -50,4 +48,13 @@
 
     <!--radio button checked color-->
     <color name="radio_button_checked">#dfdfdf</color>
+    
+    <!--standard color-->
+    <color name="color_c1">#20262b</color>
+    <color name="color_c2">#3f484e</color>
+    <color name="color_c3">#c9dde6</color>
+    <color name="color_c4">#fecb56</color>
+    <color name="color_c5">#7fa5bf</color>
+    <color name="color_c6">#00def4</color>
+    <color name="color_c7">#84949f</color>
 </resources>

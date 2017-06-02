@@ -11,10 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -42,8 +40,8 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     List<TextView> views;
     @BindView(R.id.assist_drawer_layout)
     AssistDrawerLayout drawerLayout;
-    @BindView(R.id.set_subtitle)
-    Button setSubtitle;
+/*    @BindView(R.id.set_subtitle)
+    Button setSubtitle;*/
     @BindView(R.id.edit_subtitle)
     EditText editSubtitle;
 
@@ -271,7 +269,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
             }
         });
 
-        setSubtitle.setOnClickListener(new View.OnClickListener() {
+/*        setSubtitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(currentPort==null){
@@ -285,7 +283,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                 }
                 presenter.setSubtitle(currentPort.idx,subtitle);
             }
-        });
+        });*/
     }
 
     private void updateInfoAfter() {
