@@ -84,7 +84,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
             presetList.add(preset);
         }*/
         for (int m = 0; m < 8; m ++){
-            Port port = new Port(1,1, Port.TYPE_VIDEO, Port.DIR_IN);
+            Port port = new Port(1,1, Port.TYPE_VIDEO, Port.DIR_IN,Port.CATEGORY_CAMERA);
             port.alias = "测试"+String.valueOf(m);
             port.idx = m;
             port.state = State.ON;

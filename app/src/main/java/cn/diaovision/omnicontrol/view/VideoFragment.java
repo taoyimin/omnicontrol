@@ -76,7 +76,7 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
         //final List<Port> ports=presenter.getMediaMatrix().getVideoInPort();
         //final List<Port> outports = presenter.getMediaMatrix().getVideoOutPort();
         for (int i = 0; i < 32; i++) {
-            Port port = new Port(1, i, Port.TYPE_VIDEO, Port.DIR_IN);
+            Port port = new Port(1, i, Port.TYPE_VIDEO, Port.DIR_IN,Port.CATEGORY_VIDEO);
             ports.add(port);
             outports.add(port);
         }

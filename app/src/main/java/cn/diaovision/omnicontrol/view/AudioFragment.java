@@ -2,14 +2,10 @@ package cn.diaovision.omnicontrol.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-
-import com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +13,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
-import cn.diaovision.omnicontrol.BasePresenter;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
-import cn.diaovision.omnicontrol.widget.CircleCharView;
 import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
 import cn.diaovision.omnicontrol.widget.VolumeChannelRadioGroupView;
 
@@ -58,7 +52,7 @@ public class AudioFragment extends BaseFragment implements AudioContract.View{
         /* test code */
         List<Port> ports = new ArrayList<>();
         for (int m = 0; m < 32; m ++){
-            Port port = new Port(0, m, Port.TYPE_VIDEO, Port.DIR_IN);
+            Port port = new Port(0, m, Port.TYPE_VIDEO, Port.DIR_IN,Port.CATEGORY_VIDEO);
             port.alias = "测试"+String.valueOf(m);
             port.idx = m;
             port.dir = Port.DIR_IN;
@@ -67,7 +61,7 @@ public class AudioFragment extends BaseFragment implements AudioContract.View{
         }
         final List<Port> outports = new ArrayList<>();
         for (int m = 0; m < 32; m ++){
-            Port port = new Port(0, m, Port.TYPE_VIDEO, Port.DIR_OUT);
+            Port port = new Port(0, m, Port.TYPE_VIDEO, Port.DIR_OUT,Port.CATEGORY_TV);
             port.alias = "测试"+String.valueOf(m);
             port.idx = m;
             port.state = m%4;

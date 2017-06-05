@@ -135,6 +135,11 @@ public class VideoPresenter implements VideoContract.Presenter {
     }
 
     @Override
+    public Set<Channel> getChannelSet(){
+        return matrix.getVideoChnSet();
+    }
+
+    @Override
     public void setChannel(int input, int[] outputs, int mode) {
         matrix.updateChannel(input,outputs,mode);
     }

@@ -77,7 +77,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
         /*test code*/
         final List<Port> ports = new ArrayList<>();
         for (int i = 0; i < 30; i++) {
-            Port port = new Port(i, i, i, i);
+            Port port = new Port(i, i, i, i,Port.CATEGORY_CONFERENCE);
             ports.add(port);
         }
         //RecyclerView config

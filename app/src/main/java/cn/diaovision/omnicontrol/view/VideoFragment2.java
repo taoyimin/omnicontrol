@@ -15,13 +15,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.R;
+import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
+import cn.diaovision.omnicontrol.util.PortHelper;
 import cn.diaovision.omnicontrol.widget.AssistDrawerLayout;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
@@ -77,8 +80,10 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Set<Channel> channelSet=presenter.getChannelSet();
         List<Port> inputs=presenter.getInputList();
         final List<Port> outputs=presenter.getOutputList();
+        PortHelper.getIntance().init(inputs,outputs,channelSet);
         inputSelectionSupport=new ItemSelectionSupport(inputRecyclerView);
         outputSelectionSupport=new ItemSelectionSupport(outputRecyclerView);
         inputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
@@ -101,7 +106,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                 for(int i=0;i<selects.size();i++){
                     outs[i]=selects.get(i);
                 }
-                switch (mode){
+/*                switch (mode){
                     case AssistDrawerLayout.MODE_1XN:
                         presenter.switchVideo(in,outs);
                         break;
@@ -114,7 +119,8 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                     case AssistDrawerLayout.MODE_3X3:
                         presenter.stitchVideo(in,3,3,outs);
                         break;
-                }
+                }*/
+                presenter.setChannel(in,outs,Channel.MOD_NORMAL);
                 //编辑完成后设为单选模式
                 outputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
                 outputAdapter.notifyDataSetChanged();

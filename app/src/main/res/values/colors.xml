@@ -13,6 +13,9 @@
     <!--text color in white themes-->
     <color name="text_body_light">#555555</color>
 
+    <!--login title text color-->
+    <color name="login_title_text">#cad3d7</color>
+
     <!--botton colors-->
     <color name="btn_light_bg">#57d2f7</color>
     <color name="btn_light_txt">#f0f0f0</color>
@@ -48,6 +51,9 @@
 
     <!--radio button checked color-->
     <color name="radio_button_checked">#dfdfdf</color>
+
+    <!--badge normal text color-->
+    <color name="badgeNormalColor">#8496a0</color>
     
     <!--standard color-->
     <color name="color_c1">#20262b</color>
@@ -57,4 +63,9 @@
     <color name="color_c5">#7fa5bf</color>
     <color name="color_c6">#00def4</color>
     <color name="color_c7">#84949f</color>
+
+    <color name="camera_green">#a4ef5f</color>
+    <color name="video_blue">#01dff4</color>
+    <color name="desktop_yellow">#fecd56</color>
+    <color name="output_return_red">#ff5f3b</color>
 </resources>
