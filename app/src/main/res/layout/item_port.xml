@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                xmlns:app="http://schemas.android.com/apk/res-auto">
+                android:layout_height="wrap_content">
+
     <cn.diaovision.omnicontrol.widget.CircleCharView
+        android:id="@+id/port_circle"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/port_circle"/>
+        android:layout_centerHorizontal="true"/>
+
     <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/port_alias"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/port_circle"
         android:layout_centerHorizontal="true"
-        android:textAppearance="@style/ItemTitleText"
-        android:id="@+id/port_alias"/>
+        android:textAppearance="@style/ItemTitleText"/>
+
     <cn.bingoogolapple.badgeview.BGABadgeImageView
         android:id="@+id/port_image"
-        android:layout_width="@dimen/badge_width"
-        android:layout_height="@dimen/badge_height"
-        app:badge_verticalMargin="@dimen/badge_verticalMargin"
-        app:badge_horizontalMargin="@dimen/badge_horizontalMargin"
-        app:badge_textSize="@dimen/badge_textSize"
-        app:badge_padding="@dimen/badge_padding"
-        app:badge_borderWidth="@dimen/badge_borderWidth"/>
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        app:badge_borderWidth="0dp"
+        app:badge_horizontalMargin="0dp"
+        app:badge_padding="0dp"
+        app:badge_textSize="13sp"
+        app:badge_verticalMargin="0dp"/>
 </RelativeLayout>

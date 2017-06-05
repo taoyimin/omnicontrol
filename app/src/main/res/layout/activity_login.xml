@@ -16,24 +16,25 @@
         android:layout_marginTop="@dimen/login_title_margin_top"
         android:text="@string/product_title"
         android:layout_centerHorizontal="true"
+        android:textColor="@color/login_title_text"
         android:textSize="@dimen/login_title_text_size"/>
 
-    <android.support.v7.widget.AppCompatImageView
+<!--    <android.support.v7.widget.AppCompatImageView
         android:id="@+id/icon_logo"
         android:layout_width="@dimen/login_logo_image_width"
         android:layout_height="@dimen/login_logo_image_height"
         android:layout_below="@+id/txt_title"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="8dp"
-        android:src="@drawable/diaoshi_logo"/>
+        android:src="@drawable/diaoshi_logo"/>-->
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="307.12dp"
         android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:background="@color/color_c1"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/icon_logo"
-        android:layout_marginTop="8dp">
+        android:layout_below="@id/txt_title"
+        android:layout_marginTop="49.8dp">
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/txt_name"

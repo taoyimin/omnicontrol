@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/video_layoutTop_marginTop"
-        android:layout_weight="1"
+        android:layout_weight="1.1"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -155,8 +155,8 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -169,19 +169,19 @@
                     android:id="@+id/icon_input"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/video_port_logo_image_margin"
-                    android:src="@mipmap/input"
-                    android:layout_centerVertical="true"/>
+                    android:src="@mipmap/input"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/video_port_logo_text_margin"
                     android:layout_toRightOf="@id/icon_input"
                     android:text="@string/video_input"
-                    android:layout_marginLeft="@dimen/video_port_logo_text_margin"
-                    android:textSize="@dimen/text_size_f2"
                     android:textColor="@color/color_c5"
-                    android:layout_centerVertical="true"/>
+                    android:textSize="@dimen/text_size_f2"/>
             </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView
@@ -189,11 +189,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="10"
+                android:background="@color/color_c2"
+                android:overScrollMode="never"
                 android:paddingLeft="@dimen/video_port_recycler_marginLeft"
                 android:paddingRight="@dimen/video_port_recycler_marginRight"
-                android:paddingTop="@dimen/video_port_recycler_marginTop"
-                android:overScrollMode="never"
-                android:background="@color/color_c2">
+                android:paddingTop="@dimen/video_port_recycler_marginTop">
 
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
@@ -206,35 +206,35 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="@dimen/video_port_logo_width"
                 android:layout_height="0dp"
-                android:layout_weight="1"
                 android:layout_gravity="right"
+                android:layout_weight="1"
                 android:background="@color/color_c2">
 
                 <ImageView
                     android:id="@+id/icon_output"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/video_port_logo_image_margin"
-                    android:src="@mipmap/output"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"/>
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/video_port_logo_image_margin"
+                    android:src="@mipmap/output"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/video_port_logo_text_margin"
                     android:layout_toLeftOf="@id/icon_output"
                     android:text="@string/video_output"
-                    android:layout_marginRight="@dimen/video_port_logo_text_margin"
-                    android:textSize="@dimen/text_size_f2"
                     android:textColor="@color/color_c5"
-                    android:layout_centerVertical="true"/>
+                    android:textSize="@dimen/text_size_f2"/>
             </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView
@@ -242,11 +242,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="10"
+                android:background="@color/color_c2"
+                android:overScrollMode="never"
                 android:paddingLeft="@dimen/video_port_recycler_marginLeft"
                 android:paddingRight="@dimen/video_port_recycler_marginRight"
-                android:paddingTop="@dimen/video_port_recycler_marginTop"
-                android:overScrollMode="never"
-                android:background="@color/color_c2">
+                android:paddingTop="@dimen/video_port_recycler_marginTop">
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </LinearLayout>
