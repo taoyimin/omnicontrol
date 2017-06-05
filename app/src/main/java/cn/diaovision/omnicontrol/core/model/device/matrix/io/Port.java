@@ -14,18 +14,32 @@ public class Port {
     public static final int DIR_OUT = 1; //output
     public static final int DIR_BI = 2; //bidirection
 
+    public static final int CATEGORY_CAMERA=0;
+    public static final int CATEGORY_DESKTOP=1;
+    public static final int CATEGORY_VIDEO=2;
+    public static final int CATEGORY_OUTPUT_RETURN=3;
+    public static final int CATEGORY_PROJECTOR=4;
+    public static final int CATEGORY_DISPLAY=5;
+    public static final int CATEGORY_IP=6;
+    public static final int CATEGORY_COMPUTER=7;
+    public static final int CATEGORY_TV=8;
+    public static final int CATEGORY_CONFERENCE=9;
+    public static final int CATEGORY_SPLIT_SCREEN=10;
+
     public int parentIdx; //matrix's idx
     public int idx;
     public int type;
     public int dir; //direction: in/out/bidirection
     public int state;
+    public int category;
     public String alias;
 
-    public Port(int parentIdx, int idx, int type, int dir) {
+    public Port(int parentIdx, int idx, int type, int dir, int category) {
         this.parentIdx = parentIdx;
         this.idx = idx;
         this.type = type;
         this.dir = dir;
+        this.category=category;
     }
 
     @Override
