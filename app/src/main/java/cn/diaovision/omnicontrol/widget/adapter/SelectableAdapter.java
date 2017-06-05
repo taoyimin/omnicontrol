@@ -1,19 +1,22 @@
 package cn.diaovision.omnicontrol.widget.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.bingoogolapple.badgeview.BGABadgeImageView;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
+import cn.diaovision.omnicontrol.util.PortHelper;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 
 /**
@@ -23,6 +26,7 @@ import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 public class SelectableAdapter extends RecyclerView.Adapter<SelectableAdapter.SelectableViewHolder> {
     private List<Port> data;
     private ItemSelectionSupport mSelectionSupport;
+    Context context;
 
     public SelectableAdapter(List<Port> data, ItemSelectionSupport selectionSupport) {
         this.data = data;
@@ -33,19 +37,296 @@ public class SelectableAdapter extends RecyclerView.Adapter<SelectableAdapter.Se
         return mSelectionSupport;
     }
 
+    public List<Port> getData() {
+        return data;
+    }
+
     @Override
     public SelectableViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new SelectableViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_port2, parent, false), this);
+        context=parent.getContext();
+        return new SelectableViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_port2, parent, false));
     }
 
     @Override
     public void onBindViewHolder(SelectableViewHolder holder, final int position) {
-        holder.bind(position);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.portAlias.setText("端口："+data.get(position).idx);
+        boolean checked = getSelectionSupport().isItemChecked(position);
+        if(data.get(position).dir==Port.DIR_IN) {
+            switch (data.get(position).category){
+                case Port.CATEGORY_CAMERA:
+                    holder.portBg.setBackgroundResource(R.drawable.button_green_selector);
+                    holder.portImage.setImageResource(R.drawable.camera_green_selector);
+                    holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_green_selector));
+                    break;
+                case Port.CATEGORY_DESKTOP:
+                    holder.portBg.setBackgroundResource(R.drawable.button_yellow_selector);
+                    holder.portImage.setImageResource(R.drawable.desktop_yellow_selector);
+                    holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_yellow_selector));
+                    break;
+                case Port.CATEGORY_VIDEO:
+                    holder.portBg.setBackgroundResource(R.drawable.button_blue_selector);
+                    holder.portImage.setImageResource(R.drawable.video_blue_selector);
+                    holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_blue_selector));
+                    break;
+                case Port.CATEGORY_OUTPUT_RETURN:
+                    holder.portBg.setBackgroundResource(R.drawable.button_red_selector);
+                    holder.portImage.setImageResource(R.drawable.output_return_red_selector);
+                    holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_red_selector));
+                    break;
+                default:
+                    break;
             }
-        });
+            holder.portBadge.setText(PortHelper.getIntance().getInputPortBadge(position)+"");
+        }else if(data.get(position).dir==Port.DIR_OUT){
+            int inputCategory=PortHelper.getIntance().getInputPortCategory(position);
+            switch (data.get(position).category){
+                case Port.CATEGORY_PROJECTOR:
+                    switch (inputCategory){
+                        case Port.CATEGORY_CAMERA:
+                            holder.portBg.setBackgroundResource(R.drawable.button_green_selector);
+                            holder.portImage.setImageResource(R.drawable.projector_green_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_green_selector));
+                            break;
+                        case Port.CATEGORY_DESKTOP:
+                            holder.portBg.setBackgroundResource(R.drawable.button_yellow_selector);
+                            holder.portImage.setImageResource(R.drawable.projector_yellow_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_yellow_selector));
+                            break;
+                        case Port.CATEGORY_VIDEO:
+                            holder.portBg.setBackgroundResource(R.drawable.button_blue_selector);
+                            holder.portImage.setImageResource(R.drawable.projector_blue_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_blue_selector));
+                            break;
+                        case Port.CATEGORY_OUTPUT_RETURN:
+                            holder.portBg.setBackgroundResource(R.drawable.button_red_selector);
+                            holder.portImage.setImageResource(R.drawable.projector_red_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_red_selector));
+                            break;
+                        default:
+                         /*   holder.portBg.setBackgroundResource(R.drawable.button_green_selector);
+                            holder.portImage.setImageResource(R.drawable.projector_green_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_green_selector));*/
+                            if(getSelectionSupport().getChoiceColor()== ItemSelectionSupport.ChoiceColor.GREEN) {
+                                holder.portBg.setBackgroundResource(R.drawable.button_green_selector);
+                                holder.portImage.setImageResource(R.drawable.projector_green_selector);
+                                holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_green_selector));
+                            }else if(getSelectionSupport().getChoiceColor()== ItemSelectionSupport.ChoiceColor.YELLOW){
+                                holder.portBg.setBackgroundResource(R.drawable.button_yellow_selector);
+                                holder.portImage.setImageResource(R.drawable.projector_yellow_selector);
+                                holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_yellow_selector));
+                            }else if(getSelectionSupport().getChoiceColor()==ItemSelectionSupport.ChoiceColor.BLUE){
+                                holder.portBg.setBackgroundResource(R.drawable.button_blue_selector);
+                                holder.portImage.setImageResource(R.drawable.projector_blue_selector);
+                                holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_blue_selector));
+                            }else if(getSelectionSupport().getChoiceColor()==ItemSelectionSupport.ChoiceColor.RED){
+                                holder.portBg.setBackgroundResource(R.drawable.button_red_selector);
+                                holder.portImage.setImageResource(R.drawable.projector_red_selector);
+                                holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_red_selector));
+                            }
+                    }
+                    break;
+                case Port.CATEGORY_DISPLAY:
+                    switch (inputCategory){
+                        case Port.CATEGORY_CAMERA:
+                            holder.portBg.setBackgroundResource(R.drawable.button_green_selector);
+                            holder.portImage.setImageResource(R.drawable.display_screen_green_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_green_selector));
+                            break;
+                        case Port.CATEGORY_DESKTOP:
+                            holder.portBg.setBackgroundResource(R.drawable.button_yellow_selector);
+                            holder.portImage.setImageResource(R.drawable.display_screen_yellow_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_yellow_selector));
+                            break;
+                        case Port.CATEGORY_VIDEO:
+                            holder.portBg.setBackgroundResource(R.drawable.button_blue_selector);
+                            holder.portImage.setImageResource(R.drawable.display_screen_blue_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_blue_selector));
+                            break;
+                        case Port.CATEGORY_OUTPUT_RETURN:
+                            holder.portBg.setBackgroundResource(R.drawable.button_red_selector);
+                            holder.portImage.setImageResource(R.drawable.display_screen_red_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_red_selector));
+                            break;
+                        default:
+                        /*    holder.portBg.setBackgroundResource(R.drawable.button_green_selector);
+                            holder.portImage.setImageResource(R.drawable.display_screen_green_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_green_selector));*/
+                            if(getSelectionSupport().getChoiceColor()==ItemSelectionSupport.ChoiceColor.GREEN) {
+                                holder.portBg.setBackgroundResource(R.drawable.button_green_selector);
+                                holder.portImage.setImageResource(R.drawable.display_screen_green_selector);
+                                holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_green_selector));
+                            }else if(getSelectionSupport().getChoiceColor()==ItemSelectionSupport.ChoiceColor.YELLOW){
+                                holder.portBg.setBackgroundResource(R.drawable.button_yellow_selector);
+                                holder.portImage.setImageResource(R.drawable.display_screen_yellow_selector);
+                                holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_yellow_selector));
+                            }else if(getSelectionSupport().getChoiceColor()==ItemSelectionSupport.ChoiceColor.BLUE){
+                                holder.portBg.setBackgroundResource(R.drawable.button_blue_selector);
+                                holder.portImage.setImageResource(R.drawable.display_screen_blue_selector);
+                                holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_blue_selector));
+                            }else if(getSelectionSupport().getChoiceColor()==ItemSelectionSupport.ChoiceColor.RED){
+                                holder.portBg.setBackgroundResource(R.drawable.button_red_selector);
+                                holder.portImage.setImageResource(R.drawable.display_screen_red_selector);
+                                holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_red_selector));
+                            }
+                            break;
+                    }
+                    break;
+                case Port.CATEGORY_IP:
+                    switch (inputCategory){
+                        case Port.CATEGORY_CAMERA:
+                            holder.portBg.setBackgroundResource(R.drawable.button_green_selector);
+                            holder.portImage.setImageResource(R.drawable.ip_green_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_green_selector));
+                            break;
+                        case Port.CATEGORY_DESKTOP:
+                            holder.portBg.setBackgroundResource(R.drawable.button_yellow_selector);
+                            holder.portImage.setImageResource(R.drawable.ip_yellow_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_yellow_selector));
+                            break;
+                        case Port.CATEGORY_VIDEO:
+                            holder.portBg.setBackgroundResource(R.drawable.button_blue_selector);
+                            holder.portImage.setImageResource(R.drawable.ip_blue_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_blue_selector));
+                            break;
+                        case Port.CATEGORY_OUTPUT_RETURN:
+                            holder.portBg.setBackgroundResource(R.drawable.button_red_selector);
+                            holder.portImage.setImageResource(R.drawable.ip_red_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_red_selector));
+                            break;
+                        default:
+                            holder.portBg.setBackgroundResource(R.drawable.button_green_selector);
+                            holder.portImage.setImageResource(R.drawable.ip_green_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_green_selector));
+                            break;
+                    }
+                    break;
+                case Port.CATEGORY_COMPUTER:
+                    switch (inputCategory){
+                        case Port.CATEGORY_CAMERA:
+                            holder.portBg.setBackgroundResource(R.drawable.button_green_selector);
+                            holder.portImage.setImageResource(R.drawable.computer_green_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_green_selector));
+                            break;
+                        case Port.CATEGORY_DESKTOP:
+                            holder.portBg.setBackgroundResource(R.drawable.button_yellow_selector);
+                            holder.portImage.setImageResource(R.drawable.computer_yellow_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_yellow_selector));
+                            break;
+                        case Port.CATEGORY_VIDEO:
+                            holder.portBg.setBackgroundResource(R.drawable.button_blue_selector);
+                            holder.portImage.setImageResource(R.drawable.computer_blue_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_blue_selector));
+                            break;
+                        case Port.CATEGORY_OUTPUT_RETURN:
+                            holder.portBg.setBackgroundResource(R.drawable.button_red_selector);
+                            holder.portImage.setImageResource(R.drawable.computer_red_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_red_selector));
+                            break;
+                        default:
+                            holder.portBg.setBackgroundResource(R.drawable.button_green_selector);
+                            holder.portImage.setImageResource(R.drawable.computer_green_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_green_selector));
+                            break;
+                    }
+                    break;
+                case Port.CATEGORY_TV:
+                    switch (inputCategory){
+                        case Port.CATEGORY_CAMERA:
+                            holder.portBg.setBackgroundResource(R.drawable.button_green_selector);
+                            holder.portImage.setImageResource(R.drawable.tv_green_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_green_selector));
+                            break;
+                        case Port.CATEGORY_DESKTOP:
+                            holder.portBg.setBackgroundResource(R.drawable.button_yellow_selector);
+                            holder.portImage.setImageResource(R.drawable.tv_yellow_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_yellow_selector));
+                            break;
+                        case Port.CATEGORY_VIDEO:
+                            holder.portBg.setBackgroundResource(R.drawable.button_blue_selector);
+                            holder.portImage.setImageResource(R.drawable.tv_blue_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_blue_selector));
+                            break;
+                        case Port.CATEGORY_OUTPUT_RETURN:
+                            holder.portBg.setBackgroundResource(R.drawable.button_red_selector);
+                            holder.portImage.setImageResource(R.drawable.tv_red_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_red_selector));
+                            break;
+                        default:
+                            holder.portBg.setBackgroundResource(R.drawable.button_green_selector);
+                            holder.portImage.setImageResource(R.drawable.tv_green_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_green_selector));
+                            break;
+                    }
+                    break;
+                case Port.CATEGORY_CONFERENCE:
+                    switch (inputCategory){
+                        case Port.CATEGORY_CAMERA:
+                            holder.portBg.setBackgroundResource(R.drawable.button_green_selector);
+                            holder.portImage.setImageResource(R.drawable.conference_green_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_green_selector));
+                            break;
+                        case Port.CATEGORY_DESKTOP:
+                            holder.portBg.setBackgroundResource(R.drawable.button_yellow_selector);
+                            holder.portImage.setImageResource(R.drawable.conference_yellow_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_yellow_selector));
+                            break;
+                        case Port.CATEGORY_VIDEO:
+                            holder.portBg.setBackgroundResource(R.drawable.button_blue_selector);
+                            holder.portImage.setImageResource(R.drawable.conference_blue_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_blue_selector));
+                            break;
+                        case Port.CATEGORY_OUTPUT_RETURN:
+                            holder.portBg.setBackgroundResource(R.drawable.button_red_selector);
+                            holder.portImage.setImageResource(R.drawable.conference_red_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_red_selector));
+                            break;
+                        default:
+                            holder.portBg.setBackgroundResource(R.drawable.button_green_selector);
+                            holder.portImage.setImageResource(R.drawable.conference_green_selector);
+                            holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_green_selector));
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            int outPutBadge=PortHelper.getIntance().getOutPortBadge(position);
+            if(outPutBadge!=-1){
+                holder.portBadge.setText(outPutBadge+"");
+            }else{
+                holder.portBadge.setText("");
+            }
+        }
+        holder.checkBox.setChecked(checked);
+        if(checked){
+            holder.portBg.setSelected(true);
+            holder.portImage.setSelected(true);
+            holder.portBadge.setSelected(true);
+        }else{
+            holder.portBg.setSelected(false);
+            holder.portImage.setSelected(false);
+            holder.portBadge.setSelected(false);
+        }
+        //把系统配置好的端口全部点亮
+        if(data.get(position).dir==Port.DIR_IN){
+            if(PortHelper.getIntance().inputPortIsUsed(position)){
+                holder.portBg.setSelected(true);
+                holder.portImage.setSelected(true);
+                holder.portBadge.setSelected(true);
+            }
+        }else if(data.get(position).dir==Port.DIR_OUT){
+            if(PortHelper.getIntance().outputPortIsUsed(position)){
+                holder.portBg.setSelected(true);
+                holder.portImage.setSelected(true);
+                holder.portBadge.setSelected(true);
+            }
+        }
+        //多选模式下隐藏checkbox
+        if(mSelectionSupport.getChoiceMode()== ItemSelectionSupport.ChoiceMode.MULTIPLE){
+            holder.checkBox.setVisibility(View.VISIBLE);
+        }else{
+            holder.checkBox.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -54,37 +335,20 @@ public class SelectableAdapter extends RecyclerView.Adapter<SelectableAdapter.Se
     }
 
     public class SelectableViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.port_bg)
+        RelativeLayout portBg;
         @BindView(R.id.port_checkbox)
         CheckBox checkBox;
         @BindView(R.id.port_alias)
         TextView portAlias;
         @BindView(R.id.port_image)
-        BGABadgeImageView portImage;
-        private SelectableAdapter mAdapter;
+        ImageView portImage;
+        @BindView(R.id.port_badge)
+        TextView portBadge;
 
-        public SelectableViewHolder(View itemView, SelectableAdapter adapter) {
+        public SelectableViewHolder(View itemView) {
             super(itemView);
-            mAdapter = adapter;
             ButterKnife.bind(this, itemView);
-        }
-
-        public void bind(int position) {
-            portAlias.setText("端口："+data.get(position).idx);
-            //设置badgeview
-            portImage.showTextBadge(data.get(position).idx + "");
-            portImage.isShowBadge();
-            boolean checked = mAdapter.getSelectionSupport().isItemChecked(position);
-            if(data.get(position).dir==0) {
-                portImage.setImageResource(checked ? R.mipmap.camera_light : R.mipmap.camera_normal);
-            }else{
-                portImage.setImageResource(checked ? R.mipmap.screen_light : R.mipmap.screen_normal);
-            }
-            checkBox.setChecked(checked);
-            if(mSelectionSupport.getChoiceMode()== ItemSelectionSupport.ChoiceMode.MULTIPLE){
-                checkBox.setVisibility(View.VISIBLE);
-            }else{
-                checkBox.setVisibility(View.INVISIBLE);
-            }
         }
     }
 }

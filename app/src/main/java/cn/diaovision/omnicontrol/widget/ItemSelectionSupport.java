@@ -15,6 +15,13 @@ public class ItemSelectionSupport {
         MULTIPLE
     }
 
+    public enum ChoiceColor{
+        GREEN,
+        YELLOW,
+        BLUE,
+        RED
+    }
+
     private final RecyclerView mRecyclerView;
     private OnAllSelectedListener mAllSelectedListener;
     private OnItemStatueListener mOnItemStatueListener;
@@ -22,6 +29,7 @@ public class ItemSelectionSupport {
     private List<Integer> selects;
 
     private ChoiceMode mChoiceMode = ChoiceMode.NONE;
+    private ChoiceColor choiceColor;
     //private CheckedStates mCheckedStates;
     private int lastPosition=-1;
 
@@ -332,6 +340,14 @@ public class ItemSelectionSupport {
                 mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
             }
         }
+    }
+
+    public ChoiceColor getChoiceColor() {
+        return choiceColor;
+    }
+
+    public void setChoiceColor(ChoiceColor choiceColor) {
+        this.choiceColor = choiceColor;
     }
 
     public ChoiceMode getChoiceMode() {
