@@ -1,12 +1,10 @@
 package cn.diaovision.omnicontrol;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GestureDetectorCompat;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -274,25 +272,5 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
             Log.i("<UI>", "<UI> y swipe");
         }
         return false;
-    }
-
-    @Override
-    protected void onResume() {
-        //Log.i("main",convertDIP2PX(this,38)+"px");
-        //getDensity();
-        super.onResume();
-        Log.i("main","width="+logoImage.getWidth()+"height"+logoImage.getHeight());
-    }
-
-    public static int convertDIP2PX(Context context, int dip) {
-        float scale = context.getResources().getDisplayMetrics().density;
-        Log.i("main","scale="+scale);
-        return (int)(dip*scale + 0.5f*(dip>=0?1:-1));
-    }
-
-    private void getDensity() {
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        Log.d("main","Density is "+displayMetrics.density+" densityDpi is "+displayMetrics.densityDpi+" height: "+displayMetrics.heightPixels+
-                " width: "+displayMetrics.widthPixels);
     }
 }

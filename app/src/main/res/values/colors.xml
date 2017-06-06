@@ -54,6 +54,9 @@
 
     <!--badge normal text color-->
     <color name="badgeNormalColor">#8496a0</color>
+
+    <!--port recycler view border color-->
+    <color name="port_recycler_border_color">#6d7b84</color>
     
     <!--standard color-->
     <color name="color_c1">#20262b</color>

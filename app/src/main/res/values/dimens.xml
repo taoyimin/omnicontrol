@@ -63,6 +63,7 @@
     <dimen name="video_port_recycler_marginLeft">8.65dp</dimen>
     <dimen name="video_port_recycler_marginRight">8.65dp</dimen>
     <dimen name="video_port_recycler_marginTop">9.34dp</dimen>
+    <dimen name="video_port_recycler_border_width">0.7dp</dimen>
 
     <!--camera fragment-->
     <dimen name="camera_control_button_width">60dp</dimen>

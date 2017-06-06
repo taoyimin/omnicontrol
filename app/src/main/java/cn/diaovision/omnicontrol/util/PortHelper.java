@@ -15,10 +15,11 @@ public class PortHelper {
     Set<Channel> channelSet;
     List<Port> inputList;
     List<Port> outputList;
+    Channel channel;
 
     static private PortHelper instance;
 
-    public static PortHelper getIntance() {
+    public static PortHelper getInstance() {
         if (instance == null) {
             synchronized (PortHelper.class) {
                 if (instance == null) {
@@ -106,5 +107,16 @@ public class PortHelper {
             return inputList.get(inputIdx).category;
         }
         return -1;
+    }
+
+    public void removeChannel(Port port){
+        Iterator<Channel> iterator = channelSet.iterator();
+        while (iterator.hasNext()) {
+            Channel channel = iterator.next();
+            if (channel.getInputIdx() == port.idx) {
+                this.channel=channel;
+                iterator.remove();
+            }
+        }
     }
 }

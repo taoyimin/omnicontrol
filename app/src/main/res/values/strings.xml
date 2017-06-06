@@ -27,6 +27,7 @@
     <!--video-->
     <string name="video_input">输入端</string>
     <string name="video_output">输出端</string>
+    <string name="video_edit_hint">请输入视频标题文字</string>
 
     <!--camera-->
     <string name="camera_zoomin">放大</string>

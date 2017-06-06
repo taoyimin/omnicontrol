@@ -10,7 +10,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
 
 import java.util.List;
 
@@ -216,8 +215,8 @@ public class PortRadioGroupView extends RecyclerView {
      */
     public void popupDialog(final Port port){
         View view = LayoutInflater.from(ctx).inflate(R.layout.dialog_port, null);
-        TextView textView= (TextView) view.findViewById(R.id.dialog_text);
-        textView.setText("这是"+port.idx+"号端口");
+/*        TextView textView= (TextView) view.findViewById(R.id.dialog_text);
+        textView.setText("这是"+port.idx+"号端口");*/
         AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
 
         builder.setView(view);
