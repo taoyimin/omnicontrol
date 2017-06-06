@@ -6,6 +6,9 @@ import android.support.v7.widget.RecyclerView.Adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
+import cn.diaovision.omnicontrol.util.PortHelper;
+
 public class ItemSelectionSupport {
     public static final int INVALID_POSITION = -1;
 
@@ -30,6 +33,7 @@ public class ItemSelectionSupport {
 
     private ChoiceMode mChoiceMode = ChoiceMode.NONE;
     private ChoiceColor choiceColor;
+    private int choiceBadge=-1;
     //private CheckedStates mCheckedStates;
     private int lastPosition=-1;
 
@@ -350,6 +354,14 @@ public class ItemSelectionSupport {
         this.choiceColor = choiceColor;
     }
 
+    public int getChoiceBadge() {
+        return choiceBadge;
+    }
+
+    public void setChoiceBadge(int choiceBadge) {
+        this.choiceBadge = choiceBadge;
+    }
+
     public ChoiceMode getChoiceMode() {
         return mChoiceMode;
     }
@@ -385,9 +397,11 @@ public class ItemSelectionSupport {
             if(checked){
                 //选中
                 selects.add(position);
+                mOnItemStatueListener.onSelectMultiple(position);
             }else{
                 //取消选中
                 selects.remove(selects.indexOf(position));
+                mOnItemStatueListener.onUnSelectMultiple(position);
             }
             adapter.notifyItemChanged(position);
             lastPosition=-1;
@@ -398,17 +412,28 @@ public class ItemSelectionSupport {
             //当前处于单选模式
             if(getCheckedItemCount()>1){
                 //之前有多个item被选中，先全部清空
-                selects.clear();
-                adapter.notifyDataSetChanged();
-                //选中当前
-                selects.add(position);
-                adapter.notifyItemChanged(position);
-                //记录本次选中的position
-                lastPosition = position;
-                if(mOnItemStatueListener!=null){
-                    mOnItemStatueListener.onSelect(position);
-                    mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
+                if(selects.contains(position)){
+                    selects.clear();
+                    adapter.notifyDataSetChanged();
+                    lastPosition = -1;
+                    if(mOnItemStatueListener!=null){
+                        mOnItemStatueListener.onUnSelectSingle(position);
+                        mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
+                    }
+                }else{
+                    selects.clear();
+                    adapter.notifyDataSetChanged();
+                    //选中当前
+                    selects.add(position);
+                    adapter.notifyItemChanged(position);
+                    //记录本次选中的position
+                    lastPosition = position;
+                    if(mOnItemStatueListener!=null){
+                        mOnItemStatueListener.onSelectSingle(position);
+                        mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
+                    }
                 }
+
             }else {
                 //之前有0个或1个item被选中
                 boolean checked = !selects.contains(position);
@@ -426,7 +451,7 @@ public class ItemSelectionSupport {
                     adapter.notifyItemChanged(position);
                     lastPosition = position;
                     if(mOnItemStatueListener!=null){
-                        mOnItemStatueListener.onSelect(position);
+                        mOnItemStatueListener.onSelectSingle(position);
                         mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
                     }
                 } else {
@@ -435,7 +460,7 @@ public class ItemSelectionSupport {
                     adapter.notifyItemChanged(position);
                     lastPosition = -1;
                     if(mOnItemStatueListener!=null){
-                        mOnItemStatueListener.onUnSelect(position);
+                        mOnItemStatueListener.onUnSelectSingle(position);
                         mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
                     }
                 }
@@ -467,8 +492,10 @@ public class ItemSelectionSupport {
     }
 
     public interface OnItemStatueListener{
-        void onSelect(int position);
-        void onUnSelect(int position);
+        void onSelectSingle(int position);
+        void onUnSelectSingle(int position);
+        void onSelectMultiple(int position);
+        void onUnSelectMultiple(int position);
         void onPopupDialog(int position);
         void onSelectCountChange(int count);
     }
@@ -479,5 +506,31 @@ public class ItemSelectionSupport {
 
     public int getLastPosition() {
         return lastPosition;
+    }
+
+    public void initChoiceConfig(Port inputPort){
+        if(inputPort==null){
+            setChoiceColor(ChoiceColor.GREEN);
+            setChoiceBadge(-1);
+            return;
+        }
+        switch (inputPort.category){
+            case Port.CATEGORY_CAMERA:
+                setChoiceColor(ItemSelectionSupport.ChoiceColor.GREEN);
+                break;
+            case Port.CATEGORY_DESKTOP:
+                setChoiceColor(ItemSelectionSupport.ChoiceColor.YELLOW);
+                break;
+            case Port.CATEGORY_VIDEO:
+                setChoiceColor(ItemSelectionSupport.ChoiceColor.BLUE);
+                break;
+            case Port.CATEGORY_OUTPUT_RETURN:
+                setChoiceColor(ItemSelectionSupport.ChoiceColor.RED);
+                break;
+            default:
+                setChoiceColor(ItemSelectionSupport.ChoiceColor.GREEN);
+                break;
+        }
+        setChoiceBadge(PortHelper.getInstance().getInputPortBadge(inputPort.idx));
     }
 }
