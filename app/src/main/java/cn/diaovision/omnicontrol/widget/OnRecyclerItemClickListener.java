@@ -36,7 +36,7 @@ public class OnRecyclerItemClickListener implements RecyclerView.OnItemTouchList
 
     private class ItemTouchHelperGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
-        public boolean onSingleTapUp(MotionEvent e) {
+        public boolean onSingleTapConfirmed(MotionEvent e) {
             View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
             if (child != null) {
                 RecyclerView.ViewHolder vh = recyclerView.getChildViewHolder(child);
@@ -55,11 +55,25 @@ public class OnRecyclerItemClickListener implements RecyclerView.OnItemTouchList
                 onLongClick(vh, position);
             }
         }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+            if (child != null) {
+                RecyclerView.ViewHolder vh = recyclerView.getChildViewHolder(child);
+                int position = recyclerView.getChildPosition(child);
+                onItemDoubleClick(vh, position);
+            }
+            return true;
+        }
     }
 
     public void onItemClick(RecyclerView.ViewHolder vh, int position) {
     }
 
     public void onLongClick(RecyclerView.ViewHolder vh, int position) {
+    }
+
+    public void onItemDoubleClick(RecyclerView.ViewHolder vh, int position){
     }
 }
