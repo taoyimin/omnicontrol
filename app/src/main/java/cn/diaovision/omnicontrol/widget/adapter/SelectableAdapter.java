@@ -363,8 +363,8 @@ public class SelectableAdapter extends RecyclerView.Adapter<SelectableAdapter.Se
                 holder.portBadge.setVisibility(View.INVISIBLE);
             }
         }
-        //设置端口别名
-        holder.portAlias.setText("端口：" + data.get(position).idx);
+        //设置端口别名,这里方便测试直接设置别名
+        holder.portAlias.setText(data.get(position).alias);
         //设置item的选中状态
         boolean checked = getSelectionSupport().isItemChecked(position);
         holder.checkBox.setChecked(checked);
@@ -470,9 +470,9 @@ public class SelectableAdapter extends RecyclerView.Adapter<SelectableAdapter.Se
 
         //多选模式下隐藏checkbox
         //  if (mSelectionSupport.getChoiceMode() == ItemSelectionSupport.ChoiceMode.MULTIPLE) {
-        holder.checkBox.setVisibility(View.VISIBLE);
+        //holder.checkBox.setVisibility(View.VISIBLE);
         //  } else {
-        //     holder.checkBox.setVisibility(View.INVISIBLE);
+             holder.checkBox.setVisibility(View.INVISIBLE);
         // }
     }
 

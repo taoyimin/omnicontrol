@@ -24,6 +24,13 @@
     <string name="navigation_meeting">视频会议</string>
     <string name="navigation_setting">系统设置</string>
 
+    <!--dialog-->
+    <string name="dialog_port_alias">端口名称</string>
+    <string name="dialog_port_category">图标种类</string>
+    <string name="dialog_port_attribute">附加属性</string>
+    <string name="dialog_button_confirm">确&#160;&#160;&#160;&#160;认</string>
+    <string name="dialog_channel_type">一对多分割屏</string>
+
     <!--video-->
     <string name="video_input">输入端</string>
     <string name="video_output">输出端</string>

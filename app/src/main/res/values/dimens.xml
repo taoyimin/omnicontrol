@@ -43,7 +43,7 @@
     <dimen name="navigation_image_paddingLeft">17.29dp</dimen>
     <dimen name="navigation_radioGroup_marginTop">2.77dp</dimen>
 
-    <!--port item-->
+    <!--recycler view port item-->
     <dimen name="port_background_width">60.18dp</dimen>
     <dimen name="port_background_height">60.18dp</dimen>
     <dimen name="port_icon_width">48.12dp</dimen>
@@ -52,6 +52,18 @@
     <dimen name="port_alias_marginTop">6.92dp</dimen>
     <dimen name="port_alias_marginBottom">10.03dp</dimen>
     <dimen name="port_badge_textSize">13sp</dimen>
+
+    <!--port dialog-->
+    <dimen name="dialog_button_back_marginLeft">11.76dp</dimen>
+    <dimen name="dialog_channel_type_marginRight">34.59dp</dimen>
+    <dimen name="dialog_channel_type_paddingLeftRight">5dp</dimen>
+    <dimen name="dialog_channel_type_paddingTopBottom">3dp</dimen>
+    <dimen name="dialog_item_marginLeft">32dp</dimen>
+    <dimen name="dialog_item_marginRight">32dp</dimen>
+    <dimen name="dialog_spinner_marginLeft">11.76dp</dimen>
+    <dimen name="dialog_spinner_height">23.52dp</dimen>
+    <dimen name="dialog_button_select_marginRight">10.38dp</dimen>
+    <dimen name="dialog_icon_category_marginLeft">42.19dp</dimen>
 
     <!--video fragment-->
     <dimen name="video_layoutTop_marginTop">2.77dp</dimen>

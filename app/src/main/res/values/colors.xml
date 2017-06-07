@@ -57,6 +57,9 @@
 
     <!--port recycler view border color-->
     <color name="port_recycler_border_color">#6d7b84</color>
+
+    <!--spinner background and popup windows background color-->
+    <color name="dialog_spinner_background_color">#8496a0</color>
     
     <!--standard color-->
     <color name="color_c1">#20262b</color>

@@ -1,10 +1,10 @@
 package cn.diaovision.omnicontrol.view;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -27,6 +27,7 @@ import cn.diaovision.omnicontrol.util.PortHelper;
 import cn.diaovision.omnicontrol.widget.AssistDrawerLayout;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
+import cn.diaovision.omnicontrol.widget.PortDialog;
 import cn.diaovision.omnicontrol.widget.adapter.SelectableAdapter;
 
 /**
@@ -341,12 +342,12 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     }
 
     public void popupDialog(final Port port){
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_port, null);
+        //View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_port, null);
 /*        TextView textView= (TextView) view.findViewById(R.id.dialog_text);
         textView.setText("这是"+port.idx+"号端口");*/
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        //AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
-        builder.setView(view);
+        //builder.setView(view);
 /*        builder.setTitle("编辑端口信息");
         builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
             @Override
@@ -360,7 +361,18 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                 // 取消修改端口信息
             }
         });*/
-        builder.show();
+        //builder.show();
+        /*PopupWindow popupWindow = new PopupWindow(view,
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);*/
+        PortDialog dialog=new PortDialog(getContext(),port);
+        dialog.show();
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                    inputAdapter.notifyDataSetChanged();
+                    outputAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
 /*    public void changeOutputSelectColor(Port inputPort){

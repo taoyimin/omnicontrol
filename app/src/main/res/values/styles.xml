@@ -54,4 +54,8 @@
         <item name="android:src">@mipmap/nav_gap</item>
         <item name="android:scaleType">fitXY</item>
     </style>
+
+    <!--dialog style-->
+    <style name="dialog" parent="android:Theme.Material.Dialog.NoActionBar">
+    </style>
 </resources>
