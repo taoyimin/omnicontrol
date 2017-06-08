@@ -108,7 +108,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                 for(int i=0;i<selects.size();i++){
                     outs[i]=selects.get(i);
                 }
-/*                switch (mode){
+                switch (mode){
                     case AssistDrawerLayout.MODE_1XN:
                         presenter.switchVideo(in,outs);
                         break;
@@ -121,13 +121,13 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                     case AssistDrawerLayout.MODE_3X3:
                         presenter.stitchVideo(in,3,3,outs);
                         break;
-                }*/
-                presenter.setChannel(in,outs,Channel.MOD_NORMAL);
+                }
+                //presenter.setChannel(in,outs,Channel.MOD_NORMAL);
                 //编辑完成后设为单选模式
                 outputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
+                outputAdapter.notifyDataSetChanged();
                 //还原输出端选择的颜色和角标
                 outputSelectionSupport.initChoiceConfig(null);
-                outputAdapter.notifyDataSetChanged();
                 //关闭抽屉，直接调用drawerLayout.closeDrawer()方法没有收回效果
                 handler.sendEmptyMessage(1);
             }
@@ -342,28 +342,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     }
 
     public void popupDialog(final Port port){
-        //View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_port, null);
-/*        TextView textView= (TextView) view.findViewById(R.id.dialog_text);
-        textView.setText("这是"+port.idx+"号端口");*/
-        //AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-
-        //builder.setView(view);
-/*        builder.setTitle("编辑端口信息");
-        builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // 提交端口修改信息
-            }
-        });
-        builder.setNegativeButton("取消",new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // 取消修改端口信息
-            }
-        });*/
-        //builder.show();
-        /*PopupWindow popupWindow = new PopupWindow(view,
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);*/
         PortDialog dialog=new PortDialog(getContext(),port);
         dialog.show();
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -374,26 +352,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
             }
         });
     }
-
-/*    public void changeOutputSelectColor(Port inputPort){
-        switch (inputPort.category){
-            case Port.CATEGORY_CAMERA:
-                outputSelectionSupport.setChoiceColor(ItemSelectionSupport.ChoiceColor.GREEN);
-                break;
-            case Port.CATEGORY_DESKTOP:
-                outputSelectionSupport.setChoiceColor(ItemSelectionSupport.ChoiceColor.YELLOW);
-                break;
-            case Port.CATEGORY_VIDEO:
-                outputSelectionSupport.setChoiceColor(ItemSelectionSupport.ChoiceColor.BLUE);
-                break;
-            case Port.CATEGORY_OUTPUT_RETURN:
-                outputSelectionSupport.setChoiceColor(ItemSelectionSupport.ChoiceColor.RED);
-                break;
-            default:
-                outputSelectionSupport.setChoiceColor(ItemSelectionSupport.ChoiceColor.GREEN);
-                break;
-        }
-    }*/
 
     @Override
     public void bindPresenter() {

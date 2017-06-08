@@ -55,8 +55,8 @@
     <!--badge normal text color-->
     <color name="badgeNormalColor">#8496a0</color>
 
-    <!--port recycler view border color-->
-    <color name="port_recycler_border_color">#6d7b84</color>
+    <!--recycler view border color-->
+    <color name="recycler_border_color">#6d7b84</color>
 
     <!--spinner background and popup windows background color-->
     <color name="dialog_spinner_background_color">#8496a0</color>

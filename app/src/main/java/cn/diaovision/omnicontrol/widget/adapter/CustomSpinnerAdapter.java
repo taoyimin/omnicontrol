@@ -15,13 +15,13 @@ import cn.diaovision.omnicontrol.R;
  * Created by TaoYimin on 2017/6/7.
  */
 
-public class AdapterForSpinner extends BaseAdapter implements SpinnerAdapter {
+public class CustomSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
     private Context context;
     private LayoutInflater inflater;
     private String[] arrays;
     private int[] images;
 
-    public AdapterForSpinner(Context context, String[] arrays, int[] images) {
+    public CustomSpinnerAdapter(Context context, String[] arrays, int[] images) {
         this.context = context;
         inflater = LayoutInflater.from(context);
         this.arrays = arrays;

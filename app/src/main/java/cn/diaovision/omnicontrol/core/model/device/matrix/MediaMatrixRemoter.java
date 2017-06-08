@@ -1,7 +1,5 @@
 package cn.diaovision.omnicontrol.core.model.device.matrix;
 
-import android.graphics.Matrix;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +10,6 @@ import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxSubscriber;
-import cn.diaovision.omnicontrol.util.ByteUtils;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
@@ -71,7 +68,7 @@ public class MediaMatrixRemoter {
         return 0;
     }
 
-    public int switchVideo(final int portIn, final int[] portOut, RxSubscriber<RxMessage> subscriber) {
+    public int switchVideo(final int portIn, final int[] portOut, final RxSubscriber<RxMessage> subscriber) {
         if (matrix == null || !matrix.isReachable())
             return -1;
         List<MatrixMessage> msgList = new ArrayList<>();
@@ -101,6 +98,7 @@ public class MediaMatrixRemoter {
                     @Override
                     public void run() throws Exception {
                         matrix.updateChannel(portIn, portOut, Channel.MOD_STITCH);
+                        subscriber.onRxResult(new RxMessage("0"));
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -164,13 +162,13 @@ public class MediaMatrixRemoter {
 
                 final byte[] bytes = MatrixMessage.buildStartCameraGoMessage(matrix.id, cam.getBaudrate(), cam.getProto(), cam.getPortIdx(), cmd, speed).toBytes();
                 byte[] recv = matrix.getController().send(bytes, bytes.length);
-                if (recv != null && recv.length >= 0) {
+/*                if (recv != null && recv.length >= 0) {
                     e.onNext(new RxMessage(RxMessage.DONE));
                     e.onComplete();
                 } else {
                     matrix.setReachable(false);
                     e.onError(new IOException());
-                }
+                }*/
             }
         }, BackpressureStrategy.BUFFER)
                 .subscribeOn(Schedulers.io())
@@ -194,13 +192,13 @@ public class MediaMatrixRemoter {
 
                 byte[] bytes = MatrixMessage.buildStopCameraGoMessage(matrix.id, cam.getBaudrate(), cam.getProto(), cam.getPortIdx()).toBytes();
                 byte[] recv = matrix.getController().send(bytes, bytes.length);
-                if (recv != null && recv.length >= 0) {
+/*                if (recv != null && recv.length >= 0) {
                     e.onNext(new RxMessage(RxMessage.DONE));
                     e.onComplete();
                 } else {
                     matrix.setReachable(false);
                     e.onError(new IOException());
-                }
+                }*/
             }
         }, BackpressureStrategy.BUFFER)
                 .subscribeOn(Schedulers.io())
@@ -209,7 +207,7 @@ public class MediaMatrixRemoter {
         return 0;
     }
 
-    public int storeCameraPreset(final int portIdx, final int presetIdx, final String name, RxSubscriber subscriber) {
+    public int storeCameraPreset(final int portIdx, final int presetIdx, final String name, final RxSubscriber subscriber) {
         if (matrix == null || !matrix.isReachable()) {
             return -1;
         }
@@ -226,14 +224,14 @@ public class MediaMatrixRemoter {
             public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
                 byte[] bytes = MatrixMessage.buildSetCameraPresetMessgae(matrix.id, cam.getBaudrate(), cam.getProto(), portIdx, presetIdx).toBytes();
                 byte[] recv = matrix.getController().send(bytes, bytes.length);
-
-                if (recv.length > 0) {
+                e.onComplete();
+/*                if (recv.length > 0) {
                     e.onNext(new RxMessage(RxMessage.DONE));
                     e.onComplete();
                 } else {
                     matrix.setReachable(false);
                     e.onError(new IOException());
-                }
+                }*/
             }
         }, BackpressureStrategy.BUFFER)
                 .doOnComplete(new Action() {
@@ -241,6 +239,7 @@ public class MediaMatrixRemoter {
                     public void run() throws Exception {
                         HiCamera.Preset preset = new HiCamera.Preset(name, presetIdx);
                         cam.updatePreset(preset);
+                        subscriber.onRxResult(preset);
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -265,13 +264,13 @@ public class MediaMatrixRemoter {
                 byte[] bytes = MatrixMessage.buildLoadCameraPresetMessgae(matrix.id, cam.getBaudrate(), cam.getProto(), portIdx, presetIdx).toBytes();
                 byte[] recv = matrix.getController().send(bytes, bytes.length);
 
-                if (recv.length > 0) {
+/*                if (recv.length > 0) {
                     e.onNext(new RxMessage(RxMessage.DONE));
                     e.onComplete();
                 } else {
                     matrix.setReachable(false);
                     e.onError(new IOException());
-                }
+                }*/
             }
         }, BackpressureStrategy.BUFFER)
                 .subscribeOn(Schedulers.io())
@@ -298,13 +297,13 @@ public class MediaMatrixRemoter {
                 byte[] bytes = MatrixMessage.buildClearCameraPresetMessgae(matrix.id, cam.getBaudrate(), cam.getProto(), portIdx, presetIdx).toBytes();
                 byte[] recv = matrix.getController().send(bytes, bytes.length);
 
-                if (recv.length > 0) {
+/*                if (recv.length > 0) {
                     e.onNext(new RxMessage(RxMessage.DONE));
                     e.onComplete();
                 } else {
                     matrix.setReachable(false);
                     e.onError(new IOException());
-                }
+                }*/
             }
         }, BackpressureStrategy.BUFFER)
                 .doOnComplete(new Action() {

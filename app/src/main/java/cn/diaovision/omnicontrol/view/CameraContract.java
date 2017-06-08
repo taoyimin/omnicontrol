@@ -1,5 +1,7 @@
 package cn.diaovision.omnicontrol.view;
 
+import java.util.List;
+
 import cn.diaovision.omnicontrol.BasePresenter;
 import cn.diaovision.omnicontrol.BaseView;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
@@ -13,6 +15,7 @@ import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 
 public interface CameraContract {
     interface View extends BaseView<Presenter> {
+        void addPresetSuccess();
     }
 
     interface Presenter extends BasePresenter {
@@ -28,5 +31,7 @@ public interface CameraContract {
         void loadPreset(int portIdx, int presetIdx);
 
         HiCamera getCamera(int port);
+
+        List<HiCamera> getCameraList();
     }
 }

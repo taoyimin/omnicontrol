@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.MainControlActivity;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
-import cn.diaovision.omnicontrol.widget.adapter.AdapterForSpinner;
+import cn.diaovision.omnicontrol.widget.adapter.CustomSpinnerAdapter;
 
 /**
  * Created by TaoYimin on 2017/6/7.
@@ -40,8 +40,8 @@ public class PortDialog extends Dialog {
 
     Context context;
     Port port;
-    AdapterForSpinner categoryAdapter;
-    AdapterForSpinner attributeAdapter;
+    CustomSpinnerAdapter categoryAdapter;
+    CustomSpinnerAdapter attributeAdapter;
     boolean flag;
 
     public PortDialog(@NonNull Context context, Port port) {
@@ -66,7 +66,7 @@ public class PortDialog extends Dialog {
         if(port.dir==Port.DIR_IN){
             String[] arrays=context.getResources().getStringArray(R.array.input_port_category);
             int[] images=new int[]{R.mipmap.camera_small,R.mipmap.desktop_small,R.mipmap.video_small,R.mipmap.output_return_small};
-            categoryAdapter=new AdapterForSpinner(context,arrays,images);
+            categoryAdapter=new CustomSpinnerAdapter(context,arrays,images);
             categorySpinner.setAdapter(categoryAdapter);
             switch (port.category){
                 case Port.CATEGORY_CAMERA:
@@ -87,7 +87,7 @@ public class PortDialog extends Dialog {
         }else if(port.dir==Port.DIR_OUT){
             String[] arrays=context.getResources().getStringArray(R.array.output_port_category);
             int[] images=new int[]{R.mipmap.projector_small,R.mipmap.display_screen_small,R.mipmap.ip_small,R.mipmap.computer_small,R.mipmap.tv_small,R.mipmap.conference_small};
-            categoryAdapter=new AdapterForSpinner(context,arrays,images);
+            categoryAdapter=new CustomSpinnerAdapter(context,arrays,images);
             categorySpinner.setAdapter(categoryAdapter);
             switch (port.category){
                 case Port.CATEGORY_PROJECTOR:
@@ -113,7 +113,7 @@ public class PortDialog extends Dialog {
             }
         }
         //初始化附加属性spinner
-        attributeAdapter=new AdapterForSpinner(context,new String[3],new int[0]);
+        attributeAdapter=new CustomSpinnerAdapter(context,new String[3],new int[0]);
         attributeSpinner.setAdapter(attributeAdapter);
         //设置端口名称编辑框默认文字
         aliasEdit.setText(port.alias);

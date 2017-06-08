@@ -5,56 +5,57 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
-import butterknife.BindViews;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.R;
-import cn.diaovision.omnicontrol.core.message.MatrixMessage;
-import cn.diaovision.omnicontrol.core.model.device.State;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
-import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera.Preset;
-import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
-import cn.diaovision.omnicontrol.widget.CameraPresetRadioGroupView;
-import cn.diaovision.omnicontrol.widget.DirectionPad;
-import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
-import cn.diaovision.omnicontrol.widget.VideoLayout;
+import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
+import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
+import cn.diaovision.omnicontrol.widget.adapter.CameraAdapter;
+import cn.diaovision.omnicontrol.widget.adapter.PresetAdapter;
 
 /**
  * Created by liulingfeng on 2017/2/24.
  */
 
-public class CameraFragment extends BaseFragment implements CameraContract.View{
+public class CameraFragment extends BaseFragment implements CameraContract.View {
 
 
-    @BindView(R.id.preset_list)
-    CameraPresetRadioGroupView camerPresetView;
+/*    @BindView(R.id.preset_list)
+    CameraPresetRadioGroupView camerPresetView;*/
 
-    @BindView(R.id.channel_list)
-    PortRadioGroupView cameraList;
+/*    @BindView(R.id.channel_list)
+    PortRadioGroupView cameraList;*/
 
-    @BindView(R.id.pad_direction)
-    DirectionPad padDirection;
+/*    @BindView(R.id.pad_direction)
+    DirectionPad padDirection;*/
 
-    @BindView(R.id.video_layout)
-    VideoLayout videoLayout;
+/*    @BindView(R.id.video_layout)
+    VideoLayout videoLayout;*/
 
-    @BindViews({R.id.btn_narrow,R.id.btn_wide,R.id.btn_fast,R.id.btn_slow,R.id.btn_stop})
-    List<Button> btnList;
+/*    @BindViews({R.id.btn_narrow,R.id.btn_wide,R.id.btn_fast,R.id.btn_slow,R.id.btn_stop})
+    List<Button> btnList;*/
+
+    @BindView(R.id.camera)
+    RecyclerView cameraRecyclerView;
+
+    @BindView(R.id.preset)
+    RecyclerView presetRecyclerView;
 
     CameraPresenter presenter;
+    CameraAdapter cameraAdapter;
+    PresetAdapter presetAdapter;
+    ItemSelectionSupport cameraSelectionSupport;
+    ItemSelectionSupport presetSelectionSupport;
 
     int lastDeg;
     int lastVelo;
@@ -73,25 +74,25 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
         super.onActivityCreated(savedInstanceState);
 
         //set presenter
-        currentCamera=presenter.getCamera(1);
+        //currentCamera = presenter.getCamera(1);
         /* test code */
         //final List<Preset> presetList = new ArrayList<>();
-        final List<Preset> presetList = currentCamera.getPresetList();
-        final List<Port> portList = new ArrayList<>();
+        //final List<Preset> presetList = currentCamera.getPresetList();
+        //final List<Port> portList = new ArrayList<>();
 
 /*        for (int m = 0; m < 10; m ++){
             Preset preset = new Preset(String.valueOf(m*30), m);
             presetList.add(preset);
         }*/
-        for (int m = 0; m < 8; m ++){
-            Port port = new Port(1,1, Port.TYPE_VIDEO, Port.DIR_IN,Port.CATEGORY_CAMERA);
-            port.alias = "测试"+String.valueOf(m);
+/*        for (int m = 0; m < 8; m++) {
+            Port port = new Port(1, 1, Port.TYPE_VIDEO, Port.DIR_IN, Port.CATEGORY_CAMERA);
+            port.alias = "测试" + String.valueOf(m);
             port.idx = m;
             port.state = State.ON;
             portList.add(port);
-        }
+        }*/
 
-        cameraList.config(portList, R.layout.item_port);
+/*        cameraList.config(portList, R.layout.item_port);
         cameraList.configLayout(GridLayoutManager.VERTICAL, 4);
         camerPresetView.config(presetList, R.layout.item_preset);
 
@@ -205,7 +206,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
                     return false;
                 }
             });
-        }
+        }*/
 
         //设置播放路径
         //videoLayout.setVideoPath("rtsp://192.168.10.108:8554/test.mov");
@@ -213,6 +214,65 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
         //videoLayout.setVideoPath("http://devimages.apple.com/iphone/samples/bipbop/gear1/prog_index.m3u8");
         //videoLayout.setVideoPath("http://live.3gv.ifeng.com/live/zixun.m3u8");
         //videoLayout.setVideoPath("rtsp://218.204.223.237:554/live/1/66251FC11353191F/e7ooqwcfbqjoo80j.sdp");
+
+        cameraSelectionSupport = new ItemSelectionSupport(cameraRecyclerView);
+        cameraSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
+        cameraAdapter = new CameraAdapter(presenter.getCameraList(), cameraSelectionSupport);
+        cameraRecyclerView.setAdapter(cameraAdapter);
+        cameraRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 4));
+        cameraRecyclerView.addOnItemTouchListener(new OnRecyclerItemClickListener(cameraRecyclerView) {
+            @Override
+            public void onItemClick(RecyclerView.ViewHolder vh, int position) {
+                cameraSelectionSupport.itemClick(position);
+            }
+        });
+
+        cameraSelectionSupport.setOnItemStatueListener(new ItemSelectionSupport.OnItemStatueListener() {
+            @Override
+            public void onSelectSingle(int position) {
+                initPreset(presenter.getCameraList().get(position));
+            }
+
+            @Override
+            public void onUnSelectSingle(int position) {
+                initPreset(null);
+            }
+
+            @Override
+            public void onSelectMultiple(int position) {
+
+            }
+
+            @Override
+            public void onUnSelectMultiple(int position) {
+
+            }
+
+            @Override
+            public void onPopupDialog(int position) {
+
+            }
+
+            @Override
+            public void onSelectCountChange(int count) {
+
+            }
+        });
+
+        presetRecyclerView.addOnItemTouchListener(new OnRecyclerItemClickListener(presetRecyclerView) {
+            @Override
+            public void onItemClick(RecyclerView.ViewHolder vh, int position) {
+                HiCamera camera=presenter.getCameraList().get(cameraSelectionSupport.getCheckedItemPosition());
+                if(position<camera.getPresetList().size()) {
+                    presetSelectionSupport.itemClick(position);
+                }else{
+                    presenter.addPreset(camera.getPortIdx(),camera.getPresetList().size(),"预置位");
+                    //HiCamera.Preset preset = new HiCamera.Preset("预置位", camera.getPresetList().size());
+                    //camera.updatePreset(preset);
+                    //presetAdapter.notifyItemInserted(vh.getLayoutPosition());
+                }
+            }
+        });
     }
 
     @Override
@@ -222,13 +282,13 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        switch (item.getOrder()){
+        switch (item.getOrder()) {
             case 1:
-                Toast.makeText(getContext(),"修改第"+item.getItemId()+"个预置位",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "修改第" + item.getItemId() + "个预置位", Toast.LENGTH_SHORT).show();
                 break;
             case 2:
                 //item.getItemId()要加1，因为有一个默认的presetIdx=0的预置位
-                presenter.delPreset(currentCamera.getPortIdx(),item.getItemId()+1);
+                presenter.delPreset(currentCamera.getPortIdx(), item.getItemId() + 1);
                 break;
         }
         return super.onContextItemSelected(item);
@@ -243,11 +303,11 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
         builder.setPositiveButton("添加", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(!editText.getText().toString().isEmpty()){
-                    String name=editText.getText().toString();
+                if (!editText.getText().toString().isEmpty()) {
+                    String name = editText.getText().toString();
                     //presetIdx从1开始，保留presetIdx=0的预置位作为原始状态（调用presetIdx=0的预置位相当于重置摄像头位置），摄像头每次通电都会调用presetIdx=0的预置位
-                    presenter.addPreset(currentCamera.getPortIdx(),currentCamera.getPresetList().size()+1,name);
-                    camerPresetView.adapter.notifyDataSetChanged();
+                    presenter.addPreset(currentCamera.getPortIdx(), currentCamera.getPresetList().size() + 1, name);
+                    //camerPresetView.adapter.notifyDataSetChanged();
                 }
             }
         });
@@ -260,10 +320,62 @@ public class CameraFragment extends BaseFragment implements CameraContract.View{
         builder.show();
     }
 
+    public void initPreset(final HiCamera camera) {
+        presetSelectionSupport = new ItemSelectionSupport(presetRecyclerView);
+        presetSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
+        if (camera == null) {
+            presetAdapter = new PresetAdapter(null, presetSelectionSupport);
+        } else {
+            presetAdapter = new PresetAdapter(camera.getPresetList(), presetSelectionSupport);
+        }
+        presetRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        presetRecyclerView.setAdapter(presetAdapter);
+        presetAdapter.notifyDataSetChanged();
+        presetSelectionSupport.setOnItemStatueListener(new ItemSelectionSupport.OnItemStatueListener() {
+            @Override
+            public void onSelectSingle(int position) {
+                presenter.loadPreset(camera.getPortIdx(), camera.getPresetList().get(position).getIdx());
+            }
+
+            @Override
+            public void onUnSelectSingle(int position) {
+                presenter.loadPreset(camera.getPortIdx(), 0);
+            }
+
+            @Override
+            public void onSelectMultiple(int position) {
+
+            }
+
+            @Override
+            public void onUnSelectMultiple(int position) {
+
+            }
+
+            @Override
+            public void onPopupDialog(int position) {
+
+            }
+
+            @Override
+            public void onSelectCountChange(int count) {
+
+            }
+        });
+    }
+
+    @Override
+    public void addPresetSuccess(){
+        presetAdapter.notifyItemInserted(presetAdapter.getItemCount()-2);
+        //presetAdapter.notifyDataSetChanged();
+        presetRecyclerView.postInvalidate();
+        Toast.makeText(getContext(),"添加成功",Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onDestroyView() {
         //停止视频播放，并释放资源
-        videoLayout.stopPlayback();
+        //videoLayout.stopPlayback();
         super.onDestroyView();
     }
 }

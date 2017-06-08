@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.diaovision.omnicontrol.core.model.device.State;
-import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 
 /**
  * Hi-definition cameras connected to the matrix, for controlling
@@ -17,6 +16,7 @@ public class HiCamera {
     public static int PROTO_FELICA_A = 1;
     public static int PROTO_PILSA = 2;
 
+    String alias;
     int portIdx; //which port the camera is plugged
     int idx; //camera address
     int baudrate; //baudrate for controlling
@@ -32,6 +32,14 @@ public class HiCamera {
         this.baudrate = baudrate;
         this.proto = proto;
         this.presetList = new ArrayList<>();
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public int getPortIdx() {

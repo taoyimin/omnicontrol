@@ -53,6 +53,9 @@
     <dimen name="port_alias_marginBottom">10.03dp</dimen>
     <dimen name="port_badge_textSize">13sp</dimen>
 
+    <!--recycler border width-->
+    <dimen name="recycler_border_width">0.7dp</dimen>
+
     <!--port dialog-->
     <dimen name="dialog_button_back_marginLeft">11.76dp</dimen>
     <dimen name="dialog_channel_type_marginRight">34.59dp</dimen>
@@ -75,9 +78,17 @@
     <dimen name="video_port_recycler_marginLeft">8.65dp</dimen>
     <dimen name="video_port_recycler_marginRight">8.65dp</dimen>
     <dimen name="video_port_recycler_marginTop">9.34dp</dimen>
-    <dimen name="video_port_recycler_border_width">0.7dp</dimen>
 
     <!--camera fragment-->
     <dimen name="camera_control_button_width">60dp</dimen>
     <dimen name="camera_control_button_height">60dp</dimen>
+    <dimen name="camera_layoutTop_marginTop">2.77dp</dimen>
+    <dimen name="camera_layoutBottom_marginTop">4.15dp</dimen>
+    <dimen name="camera_recycler_logo_width">150dp</dimen>
+    <dimen name="camera_recycler_logo_marginLeft">32.5dp</dimen>
+    <dimen name="camera_recycler_logo_marginRight">32.5dp</dimen>
+    <dimen name="camera_recycler_logo_text_margin">15dp</dimen>
+    <dimen name="camera_recycler_marginLeft">8.65dp</dimen>
+    <dimen name="camera_recycler_marginRight">8.65dp</dimen>
+    <dimen name="camera_recycler_marginTop">9.34dp</dimen>
 </resources>

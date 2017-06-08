@@ -3,6 +3,10 @@ package cn.diaovision.omnicontrol.view;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
@@ -138,6 +142,7 @@ public class CameraPresenter implements CameraContract.Presenter {
             @Override
             public void onRxResult(Object o) {
                 Log.i(TAG,"store preset success");
+                view.addPresetSuccess();
             }
 
             @Override
@@ -195,6 +200,16 @@ public class CameraPresenter implements CameraContract.Presenter {
     @Override
     public HiCamera getCamera(int port) {
         return matrix.getCameras().get(port);
+    }
+
+    @Override
+    public List<HiCamera> getCameraList() {
+        Map<Integer,HiCamera> cameras = matrix.getCameras();
+        List<HiCamera> cameraList=new ArrayList<>();
+        for (HiCamera camera : cameras.values()) {
+            cameraList.add(camera);
+        }
+        return cameraList;
     }
 
     //TODO: add viewmodel operations if needed

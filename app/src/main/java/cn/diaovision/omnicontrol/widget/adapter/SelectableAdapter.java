@@ -363,7 +363,7 @@ public class SelectableAdapter extends RecyclerView.Adapter<SelectableAdapter.Se
                 holder.portBadge.setVisibility(View.INVISIBLE);
             }
         }
-        //设置端口别名,这里方便测试直接设置别名
+        //设置端口别名
         holder.portAlias.setText(data.get(position).alias);
         //设置item的选中状态
         boolean checked = getSelectionSupport().isItemChecked(position);

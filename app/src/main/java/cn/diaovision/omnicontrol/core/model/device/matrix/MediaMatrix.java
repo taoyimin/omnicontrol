@@ -452,16 +452,19 @@ public class MediaMatrix {
 /*            for (int m = 0; m < num; m ++){
                 videoInPort.add(new Port(id, m, Port.TYPE_VIDEO, Port.DIR_IN,Port.CATEGORY_VIDEO));
             }*/
+            Port port;
             for (int m = 0; m < num; m++) {
                 if(m<4){
-                    videoInPort.add(new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_CAMERA));
+                    port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_CAMERA);
                 }else if(m<8){
-                    videoInPort.add(new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_VIDEO));
+                    port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_VIDEO);
                 }else if(m<13){
-                    videoInPort.add(new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_DESKTOP));
+                    port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_DESKTOP);
                 }else{
-                    videoInPort.add(new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_OUTPUT_RETURN));
+                    port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_OUTPUT_RETURN);
                 }
+                port.alias="端口:"+m;
+                videoInPort.add(port);
             }
             return this;
         }
@@ -469,25 +472,37 @@ public class MediaMatrix {
         public Builder videoOutInit(int num) {
             for (int m = 0; m < num; m++) {
                 //videoOutPort.add(new Port(id, m, Port.TYPE_VIDEO, Port.DIR_OUT, Port.CATEGORY_TV));
+                Port port;
                 if(m<2){
-                    videoOutPort.add(new Port(id,m,Port.TYPE_VIDEO,Port.DIR_OUT,Port.CATEGORY_PROJECTOR));
+                    port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_OUT,Port.CATEGORY_PROJECTOR);
                 }else if(m<5){
-                    videoOutPort.add(new Port(id,m,Port.TYPE_VIDEO,Port.DIR_OUT,Port.CATEGORY_DISPLAY));
+                    port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_OUT,Port.CATEGORY_DISPLAY);
                 }else if(m<6){
-                    videoOutPort.add(new Port(id,m,Port.TYPE_VIDEO,Port.DIR_OUT,Port.CATEGORY_IP));
+                    port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_OUT,Port.CATEGORY_IP);
                 }else if(m<9){
-                    videoOutPort.add(new Port(id,m,Port.TYPE_VIDEO,Port.DIR_OUT,Port.CATEGORY_COMPUTER));
+                    port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_OUT,Port.CATEGORY_COMPUTER);
                 }else if(m<11){
-                    videoOutPort.add(new Port(id,m,Port.TYPE_VIDEO,Port.DIR_OUT,Port.CATEGORY_TV));
+                    port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_OUT,Port.CATEGORY_TV);
                 }else{
-                    videoOutPort.add(new Port(id,m,Port.TYPE_VIDEO,Port.DIR_OUT,Port.CATEGORY_CONFERENCE));
+                    port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_OUT,Port.CATEGORY_CONFERENCE);
                 }
+                port.alias="端口："+m;
+                videoOutPort.add(port);
             }
             return this;
         }
 
         public Builder camerasInit() {
             cameras.put(1, new HiCamera(1, 1, 9600, HiCamera.PROTO_PILSA));
+            cameras.put(2, new HiCamera(2, 1, 9600, HiCamera.PROTO_PILSA));
+            cameras.put(3, new HiCamera(3, 1, 9600, HiCamera.PROTO_PILSA));
+            cameras.put(4, new HiCamera(4, 1, 9600, HiCamera.PROTO_PILSA));
+            cameras.put(5, new HiCamera(5, 1, 9600, HiCamera.PROTO_PILSA));
+            cameras.put(6, new HiCamera(6, 1, 9600, HiCamera.PROTO_PILSA));
+            cameras.put(7, new HiCamera(7, 1, 9600, HiCamera.PROTO_PILSA));
+            cameras.put(8, new HiCamera(8, 1, 9600, HiCamera.PROTO_PILSA));
+            cameras.put(9, new HiCamera(9, 1, 9600, HiCamera.PROTO_PILSA));
+            cameras.put(10, new HiCamera(10, 1, 9600, HiCamera.PROTO_PILSA));
             return this;
         }
 

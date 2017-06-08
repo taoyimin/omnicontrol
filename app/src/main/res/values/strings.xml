@@ -42,4 +42,6 @@
     <string name="camera_stop">停止</string>
     <string name="camera_fast">快速</string>
     <string name="camera_slow">慢速</string>
+    <string name="camera_logo">摄像机</string>
+    <string name="preset_logo">预置位</string>
 </resources>
