@@ -42,7 +42,11 @@ public class Channel {
             int val[] = new int[1 + outputIdx.length];
             val[0] = inputIdx;
             System.arraycopy(outputIdx, 0, val, 1, outputIdx.length);
-            return val.hashCode();
+            int hash = 1;
+            for (int v : val){
+                hash += v*31+1;
+            }
+            return hash;
         }
         else {
             return inputIdx;
@@ -97,5 +101,6 @@ public class Channel {
         }
         return containIdx;
     }
+
 }
 
