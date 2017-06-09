@@ -15,7 +15,6 @@ import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 
 public interface CameraContract {
     interface View extends BaseView<Presenter> {
-        void addPresetSuccess();
     }
 
     interface Presenter extends BasePresenter {

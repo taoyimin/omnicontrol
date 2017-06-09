@@ -138,11 +138,10 @@ public class CameraPresenter implements CameraContract.Presenter {
 
     @Override
     public void addPreset(int portIdx,int presetIdx, String name) {
-        int res = matrixRemoter.storeCameraPreset(portIdx, presetIdx, name, new RxSubscriber() {
+        int res = matrixRemoter.storeCameraPreset(portIdx, presetIdx, name, new RxSubscriber<RxMessage>() {
             @Override
-            public void onRxResult(Object o) {
+            public void onRxResult(RxMessage rxMessage) {
                 Log.i(TAG,"store preset success");
-                view.addPresetSuccess();
             }
 
             @Override
@@ -158,9 +157,9 @@ public class CameraPresenter implements CameraContract.Presenter {
 
     @Override
     public void delPreset(int portIdx, int presetIdx) {
-        int res=matrixRemoter.removeCameraPreset(portIdx,presetIdx, new RxSubscriber() {
+        int res=matrixRemoter.removeCameraPreset(portIdx,presetIdx, new RxSubscriber<RxMessage>() {
             @Override
-            public void onRxResult(Object o) {
+            public void onRxResult(RxMessage rxMessage) {
                 Log.i(TAG,"success to delete preset");
             }
 
@@ -174,16 +173,11 @@ public class CameraPresenter implements CameraContract.Presenter {
         }
     }
 
-/*    @Override
-    public void updatePreset() {
-
-    }*/
-
     @Override
     public void loadPreset(int portIdx,int presetIdx) {
-        int res = matrixRemoter.loadCameraPreset(portIdx, presetIdx, new RxSubscriber() {
+        int res = matrixRemoter.loadCameraPreset(portIdx, presetIdx, new RxSubscriber<RxMessage>() {
             @Override
-            public void onRxResult(Object o) {
+            public void onRxResult(RxMessage rxMessage) {
                 Log.i(TAG,"success to load preset");
             }
 

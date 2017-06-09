@@ -1,22 +1,25 @@
 package cn.diaovision.omnicontrol.view;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.List;
+
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.R;
+import cn.diaovision.omnicontrol.core.message.MatrixMessage;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
@@ -50,6 +53,9 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
 
     @BindView(R.id.preset)
     RecyclerView presetRecyclerView;
+
+    @BindViews({R.id.camera_up,R.id.camera_down,R.id.camera_left,R.id.camera_right,R.id.camera_zoom_in,R.id.camera_zoom_out,R.id.camera_rewind,R.id.camera_stop,R.id.camera_fast_forward})
+    List<Button> cameraControlButtons;
 
     CameraPresenter presenter;
     CameraAdapter cameraAdapter;
@@ -267,12 +273,66 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
                     presetSelectionSupport.itemClick(position);
                 }else{
                     presenter.addPreset(camera.getPortIdx(),camera.getPresetList().size(),"预置位");
-                    //HiCamera.Preset preset = new HiCamera.Preset("预置位", camera.getPresetList().size());
-                    //camera.updatePreset(preset);
-                    //presetAdapter.notifyItemInserted(vh.getLayoutPosition());
+                    HiCamera.Preset preset = new HiCamera.Preset("预置位", camera.getPresetList().size());
+                    camera.updatePreset(preset);
+                    presetAdapter.notifyItemInserted(vh.getLayoutPosition());
                 }
             }
         });
+
+        for(final Button button:cameraControlButtons){
+            button.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch(event.getAction()){
+                        case MotionEvent.ACTION_DOWN:
+                            if(cameraSelectionSupport.getCheckedItemPosition()==-1){
+                                Toast.makeText(getContext(),"当前没有选中摄像机",Toast.LENGTH_SHORT).show();
+                                return false;
+                            }
+                            HiCamera camera=presenter.getCameraList().get(cameraSelectionSupport.getCheckedItemPosition());
+                            switch (button.getId()){
+                                case R.id.camera_up:
+                                    presenter.cameraCtrlGo(camera.getPortIdx(), MatrixMessage.CAM_UP,20);
+                                    break;
+                                case R.id.camera_down:
+                                    presenter.cameraCtrlGo(camera.getPortIdx(), MatrixMessage.CAM_DOWN,20);
+                                    break;
+                                case R.id.camera_left:
+                                    presenter.cameraCtrlGo(camera.getPortIdx(), MatrixMessage.CAM_LEFT,20);
+                                    break;
+                                case R.id.camera_right:
+                                    presenter.cameraCtrlGo(camera.getPortIdx(), MatrixMessage.CAM_RIGHT,20);
+                                    break;
+                                case R.id.camera_zoom_in:
+                                    presenter.cameraCtrlGo(camera.getPortIdx(), MatrixMessage.CAM_WIDE,20);
+                                    break;
+                                case R.id.camera_zoom_out:
+                                    presenter.cameraCtrlGo(camera.getPortIdx(), MatrixMessage.CAM_NARROW,20);
+                                    break;
+                                case R.id.camera_rewind:
+                                    //presenter.cameraCtrlGo(camera.getPortIdx(), MatrixMessage,20);
+                                    break;
+                                case R.id.camera_stop:
+                                    //presenter.cameraCtrlGo(camera.getPortIdx(), MatrixMessage,20);
+                                    break;
+                                case R.id.camera_fast_forward:
+                                    //presenter.cameraCtrlGo(camera.getPortIdx(), MatrixMessage,20);
+                                    break;
+                                default:
+                                    break;
+                            }
+                            break;
+                        case MotionEvent.ACTION_UP:
+                        case MotionEvent.ACTION_CANCEL:
+                        case MotionEvent.ACTION_HOVER_EXIT:
+                        default:
+                            break;
+                    }
+                    return false;
+                }
+            });
+        }
     }
 
     @Override
@@ -292,32 +352,6 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
                 break;
         }
         return super.onContextItemSelected(item);
-    }
-
-    public void popupDialog() {
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_preset, null);
-        final EditText editText = (EditText) view.findViewById(R.id.dialog_edit);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setView(view);
-        builder.setTitle("添加预置位");
-        builder.setPositiveButton("添加", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (!editText.getText().toString().isEmpty()) {
-                    String name = editText.getText().toString();
-                    //presetIdx从1开始，保留presetIdx=0的预置位作为原始状态（调用presetIdx=0的预置位相当于重置摄像头位置），摄像头每次通电都会调用presetIdx=0的预置位
-                    presenter.addPreset(currentCamera.getPortIdx(), currentCamera.getPresetList().size() + 1, name);
-                    //camerPresetView.adapter.notifyDataSetChanged();
-                }
-            }
-        });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
-        builder.show();
     }
 
     public void initPreset(final HiCamera camera) {
@@ -362,14 +396,6 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
 
             }
         });
-    }
-
-    @Override
-    public void addPresetSuccess(){
-        presetAdapter.notifyItemInserted(presetAdapter.getItemCount()-2);
-        //presetAdapter.notifyDataSetChanged();
-        presetRecyclerView.postInvalidate();
-        Toast.makeText(getContext(),"添加成功",Toast.LENGTH_SHORT).show();
     }
 
     @Override
