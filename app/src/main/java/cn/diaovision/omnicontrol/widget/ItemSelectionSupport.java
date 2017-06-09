@@ -445,7 +445,7 @@ public class ItemSelectionSupport {
                         //刷新之前选中的item
                         adapter.notifyItemChanged(lastPosition);
                     }else{
-                        adapter.notifyDataSetChanged();
+                        //adapter.notifyDataSetChanged();
                     }
                     //刷新现在选中的item
                     adapter.notifyItemChanged(position);

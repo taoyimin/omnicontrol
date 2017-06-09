@@ -58,4 +58,26 @@
     <!--dialog style-->
     <style name="dialog" parent="android:Theme.Material.Dialog.NoActionBar">
     </style>
+
+    <!--camera direction control button style-->
+    <style name="CameraDirectionButton">
+        <item name="android:layout_width">@dimen/camera_control_direction_width</item>
+        <item name="android:layout_height">@dimen/camera_control_direction_height</item>
+    </style>
+
+    <!--camera play control button style-->
+    <style name="CameraPlayButton">
+        <item name="android:layout_width">@dimen/camera_control_button_width</item>
+        <item name="android:layout_height">@dimen/camera_control_button_height</item>
+    </style>
+
+    <!--camera play control text style-->
+    <style name="CameraPlayText">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textColor">@color/color_c3</item>
+        <item name="android:textSize">@dimen/text_size_f4</item>
+        <item name="android:layout_marginTop">@dimen/camera_control_text_marginTop</item>
+    </style>
 </resources>
