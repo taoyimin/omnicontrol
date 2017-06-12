@@ -9,7 +9,7 @@
         android:layout_height="@dimen/port_background_height"
         android:layout_marginTop="@dimen/port_background_marginTop"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/button_bg">
+        android:background="@mipmap/button_bg">
 
     <ImageView
         android:id="@+id/port_image"
@@ -36,7 +36,9 @@
         android:layout_below="@+id/port_bg"
         android:layout_centerHorizontal="true"
         android:textColor="@color/color_c3"
-        android:textSize="@dimen/text_size_f4"/>
+        android:textSize="@dimen/text_size_f4"
+        android:layout_marginLeft="@dimen/port_alias_marginLeft"
+        android:layout_marginRight="@dimen/port_alias_marginRight"/>
 
     <CheckBox
         android:id="@+id/port_checkbox"

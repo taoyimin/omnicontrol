@@ -125,8 +125,13 @@
 
                 <RelativeLayout
                     android:layout_width="@dimen/camera_recycler_logo_width"
-                    android:layout_height="match_parent"
-                    android:background="@color/color_c2">
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/angle_bg_left"/>
 
                     <ImageView
                         android:id="@+id/icon_camera"
@@ -145,17 +150,7 @@
                         android:text="@string/camera_logo"
                         android:textColor="@color/color_c5"
                         android:textSize="@dimen/text_size_f2"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/recycler_border_width"
-                        android:background="@color/recycler_border_color"/>
                 </RelativeLayout>
-
-                <TextView
-                    android:layout_width="@dimen/recycler_border_width"
-                    android:layout_height="match_parent"
-                    android:background="@color/recycler_border_color"/>
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -229,8 +224,14 @@
                         android:layout_width="@dimen/camera_control_background_width"
                         android:layout_height="@dimen/camera_control_background_height"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:background="@mipmap/button_bg">
+                        android:layout_centerVertical="true">
+
+                        <ImageView
+                            android:id="@+id/camera_button_bg"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@mipmap/camera_button_bg"
+                            android:scaleType="fitXY"/>
 
                         <Button
                             android:id="@+id/camera_up"
@@ -412,19 +413,19 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/recycler_border_width"
-                        android:layout_alignParentBottom="true"
-                        android:background="@color/recycler_border_color"/>
+                        android:background="@color/recycler_border_color"
+                        android:layout_alignParentBottom="true"/>
                 </RelativeLayout>
-
-                <TextView
-                    android:layout_width="@dimen/recycler_border_width"
-                    android:layout_height="match_parent"
-                    android:background="@color/recycler_border_color"/>
 
                 <RelativeLayout
                     android:layout_width="@dimen/video_port_logo_width"
-                    android:layout_height="match_parent"
-                    android:background="@color/color_c2">
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/angle_bg_right"/>
 
                     <TextView
                         android:id="@+id/text_preset"
@@ -446,10 +447,6 @@
                         android:layout_toLeftOf="@id/text_preset"
                         android:src="@mipmap/icons_camera"/>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/recycler_border_width"
-                        android:background="@color/recycler_border_color"/>
                 </RelativeLayout>
             </LinearLayout>
 
