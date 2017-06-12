@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/end_over" android:state_checked="true"/>
-    <item android:drawable="@drawable/end"/>
+    <item android:drawable="@mipmap/end_over" android:state_checked="true"/>
+    <item android:drawable="@mipmap/end"/>
 </selector>

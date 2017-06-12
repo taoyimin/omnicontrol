@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/right_over" android:state_pressed="true"/>
-    <item android:drawable="@drawable/right"/>
+    <item android:drawable="@mipmap/right_over" android:state_pressed="true"/>
+    <item android:drawable="@mipmap/right"/>
 </selector>
