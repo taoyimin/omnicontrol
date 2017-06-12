@@ -398,13 +398,14 @@ public class ItemSelectionSupport {
                 //选中
                 selects.add(position);
                 mOnItemStatueListener.onSelectMultiple(position);
+                lastPosition=position;
             }else{
                 //取消选中
                 selects.remove(selects.indexOf(position));
                 mOnItemStatueListener.onUnSelectMultiple(position);
+                lastPosition=-1;
             }
             adapter.notifyItemChanged(position);
-            lastPosition=-1;
             if(mOnItemStatueListener!=null){
                 mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
             }

@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -53,6 +54,9 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
 
     @BindView(R.id.preset)
     RecyclerView presetRecyclerView;
+
+    @BindView(R.id.camera_button_bg)
+    ImageView cameraButtonBg;
 
     @BindViews({R.id.camera_up,R.id.camera_down,R.id.camera_left,R.id.camera_right,R.id.camera_zoom_in,R.id.camera_zoom_out,R.id.camera_rewind,R.id.camera_stop,R.id.camera_fast_forward})
     List<Button> cameraControlButtons;
@@ -293,15 +297,19 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
                             HiCamera camera=presenter.getCameraList().get(cameraSelectionSupport.getCheckedItemPosition());
                             switch (button.getId()){
                                 case R.id.camera_up:
+                                    cameraButtonBg.setImageResource(R.mipmap.camera_button_bg_up);
                                     presenter.cameraCtrlGo(camera.getPortIdx(), MatrixMessage.CAM_UP,20);
                                     break;
                                 case R.id.camera_down:
+                                    cameraButtonBg.setImageResource(R.mipmap.camera_button_bg_down);
                                     presenter.cameraCtrlGo(camera.getPortIdx(), MatrixMessage.CAM_DOWN,20);
                                     break;
                                 case R.id.camera_left:
+                                    cameraButtonBg.setImageResource(R.mipmap.camera_button_bg_left);
                                     presenter.cameraCtrlGo(camera.getPortIdx(), MatrixMessage.CAM_LEFT,20);
                                     break;
                                 case R.id.camera_right:
+                                    cameraButtonBg.setImageResource(R.mipmap.camera_button_bg_right);
                                     presenter.cameraCtrlGo(camera.getPortIdx(), MatrixMessage.CAM_RIGHT,20);
                                     break;
                                 case R.id.camera_zoom_in:
@@ -326,6 +334,13 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
                         case MotionEvent.ACTION_UP:
                         case MotionEvent.ACTION_CANCEL:
                         case MotionEvent.ACTION_HOVER_EXIT:
+                            if(cameraSelectionSupport.getCheckedItemPosition()==-1){
+                                return false;
+                            }
+                            HiCamera camera2=presenter.getCameraList().get(cameraSelectionSupport.getCheckedItemPosition());
+                            cameraButtonBg.setImageResource(R.mipmap.camera_button_bg);
+                            presenter.cameraStopGo(camera2.getPortIdx());
+                            break;
                         default:
                             break;
                     }

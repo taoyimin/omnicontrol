@@ -463,7 +463,7 @@ public class MediaMatrix {
                 }else{
                     port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_OUTPUT_RETURN);
                 }
-                port.alias="端口:"+m;
+                port.alias="端口:"+(m+1);
                 videoInPort.add(port);
             }
             return this;
@@ -486,7 +486,7 @@ public class MediaMatrix {
                 }else{
                     port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_OUT,Port.CATEGORY_CONFERENCE);
                 }
-                port.alias="端口："+m;
+                port.alias="端口："+(m+1);
                 videoOutPort.add(port);
             }
             return this;

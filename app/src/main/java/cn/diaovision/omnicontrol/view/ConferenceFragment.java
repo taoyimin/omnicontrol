@@ -1,8 +1,10 @@
 package cn.diaovision.omnicontrol.view;
 
+import android.app.Service;
 import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -273,16 +275,23 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
                         slidingItemView.setCanDrag(true);
                         return;
                     }
+                    slidingItemView.getHideView().setVisibility(View.INVISIBLE);
                     itemTouchHelper.startDrag(vh);
                     dragPosition = position;
+                    //获取系统震动服务
+                    Vibrator vib = (Vibrator) getActivity().getSystemService(Service.VIBRATOR_SERVICE);
+                    //震动70毫秒
+                    vib.vibrate(70);
                 }
             }
         });
         itemTouchHelper = new ItemTouchHelper(new MyItemTouchCallback(adapter).setOnDragListener(new MyItemTouchCallback.OnDragListener() {
             @Override
-            public void onFinishDrag() {
+            public void onFinishDrag(RecyclerView.ViewHolder viewHolder) {
                 //拖拽完成的回掉
                 dragPosition = -1;
+                SlidingItemView slidingItemView = ((TermItemAdapter.MyViewHolder) viewHolder).getSlidingItemView();
+                slidingItemView.getHideView().setVisibility(View.VISIBLE);
             }
         }));
         //和RecyclerView进行关联

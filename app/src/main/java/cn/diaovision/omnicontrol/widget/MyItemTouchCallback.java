@@ -39,7 +39,7 @@ public class MyItemTouchCallback extends ItemTouchHelper.Callback {
             }
         }
         adapter.notifyItemMoved(fromPosition, toPosition);*/
-        return true;
+        return false;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class MyItemTouchCallback extends ItemTouchHelper.Callback {
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
         if (onDragListener != null) {
-            onDragListener.onFinishDrag();
+            onDragListener.onFinishDrag(viewHolder);
         }
     }
 
@@ -68,6 +68,6 @@ public class MyItemTouchCallback extends ItemTouchHelper.Callback {
     }
 
     public interface OnDragListener {
-        void onFinishDrag();
+        void onFinishDrag(RecyclerView.ViewHolder viewHolder);
     }
 }

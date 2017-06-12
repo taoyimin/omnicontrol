@@ -39,9 +39,10 @@
     <dimen name="login_edit_width">300dp</dimen>
     <dimen name="login_edit_height">40dp</dimen>
 
-    <!--navigation layout-->
+    <!--navigation bar-->
     <dimen name="navigation_image_paddingLeft">17.29dp</dimen>
     <dimen name="navigation_radioGroup_marginTop">2.77dp</dimen>
+    <dimen name="navigation_radioButton_textSize">15sp</dimen>
 
     <!--recycler view port item-->
     <dimen name="port_background_width">60.18dp</dimen>
@@ -51,7 +52,21 @@
     <dimen name="port_background_marginTop">10.03dp</dimen>
     <dimen name="port_alias_marginTop">6.92dp</dimen>
     <dimen name="port_alias_marginBottom">10.03dp</dimen>
+    <dimen name="port_alias_marginLeft">7dp</dimen>
+    <dimen name="port_alias_marginRight">7dp</dimen>
     <dimen name="port_badge_textSize">13sp</dimen>
+    
+    <!--recycler view term item-->
+    <dimen name="term_slide_height">72.93dp</dimen>
+    <dimen name="term_slide_marginTop">3.38dp</dimen>
+    <dimen name="term_slide_marginBottom">3.38dp</dimen>
+    <dimen name="term_image_width">130.8dp</dimen>
+
+    <!--term hide layout-->
+    <dimen name="term_hide_width">204dp</dimen>
+    <dimen name="term_hide_icon_width">28.57dp</dimen>
+    <dimen name="term_hide_icon_height">28.57dp</dimen>
+    <dimen name="term_hide_text_marginTop">10.53dp</dimen>
 
     <!--recycler border width-->
     <dimen name="recycler_border_width">0.7dp</dimen>
@@ -109,4 +124,6 @@
 
     <!--meeting fragment-->
     <dimen name="meeting_term_recycler_paddingLeft">15.04dp</dimen>
+    <dimen name="meeting_radio_button_width">47.04dp</dimen>
+    <dimen name="meeting_radio_button_height">47.04dp</dimen>
 </resources>

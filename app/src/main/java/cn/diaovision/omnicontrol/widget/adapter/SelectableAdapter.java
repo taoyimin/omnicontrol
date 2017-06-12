@@ -369,6 +369,7 @@ public class SelectableAdapter extends RecyclerView.Adapter<SelectableAdapter.Se
         boolean checked = getSelectionSupport().isItemChecked(position);
         holder.checkBox.setChecked(checked);
         if (checked) {
+            holder.portBg.setBackgroundResource(R.drawable.button_checked_selector);
             holder.portBg.setSelected(true);
             holder.portImage.setSelected(true);
             holder.portBadge.setSelected(true);

@@ -15,14 +15,14 @@
     <string name="logo_text">雕视多媒体可视化信息联动指挥调度系统平台</string>
 
     <!--navigation-->
-    <string name="navigation_power">电源控制</string>
-    <string name="navigation_video">视频控制</string>
-    <string name="navigation_audio">音频控制</string>
-    <string name="navigation_light">灯光控制</string>
+    <string name="navigation_power">电&#160;&#160;源</string>
+    <string name="navigation_video">视&#160;&#160;频</string>
+    <string name="navigation_audio">音&#160;&#160;频</string>
+    <string name="navigation_light">灯&#160;&#160;光</string>
     <string name="navigation_camera">摄像机</string>
     <string name="navigation_dvd">DVD</string>
-    <string name="navigation_meeting">视频会议</string>
-    <string name="navigation_setting">系统设置</string>
+    <string name="navigation_meeting">会&#160;&#160;议</string>
+    <string name="navigation_setting">设&#160;&#160;置</string>
 
     <!--dialog-->
     <string name="dialog_port_alias">端口名称</string>
@@ -44,4 +44,9 @@
     <string name="camera_rewind">快退</string>
     <string name="camera_logo">摄像机</string>
     <string name="preset_logo">预置位</string>
+
+    <!--term hide layout-->
+    <string name="term_black">黑屏</string>
+    <string name="term_mute">消音</string>
+    <string name="term_hangup">删除</string>
 </resources>

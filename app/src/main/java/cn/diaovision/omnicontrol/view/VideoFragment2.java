@@ -1,9 +1,11 @@
 package cn.diaovision.omnicontrol.view;
 
+import android.app.Service;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -126,6 +128,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                 //编辑完成后设为单选模式
                 outputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
                 outputAdapter.notifyDataSetChanged();
+                inputAdapter.notifyDataSetChanged();
                 //还原输出端选择的颜色和角标
                 outputSelectionSupport.initChoiceConfig(null);
                 //关闭抽屉，直接调用drawerLayout.closeDrawer()方法没有收回效果
@@ -147,6 +150,10 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
             public void onLongClick(RecyclerView.ViewHolder vh, final int position) {
                 updateInfoBefore();
                 if(inputSelectionSupport.getChoiceMode()== ItemSelectionSupport.ChoiceMode.SINGLE&&outputSelectionSupport.getChoiceMode()== ItemSelectionSupport.ChoiceMode.SINGLE){
+                    //获取系统震动服务
+                    Vibrator vib = (Vibrator) getActivity().getSystemService(Service.VIBRATOR_SERVICE);
+                    //震动70毫秒
+                    vib.vibrate(70);
                     //输入端输出端都为单选模式
                     //初始化输出端选择的颜色和角标
                     outputSelectionSupport.initChoiceConfig(inputAdapter.getData().get(position));
@@ -158,6 +165,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                         //长按的item还未被选中
                         outputSelectionSupport.itemLongClick(-1);
                         inputSelectionSupport.itemClick(position);
+                        inputAdapter.notifyDataSetChanged();
                     }
                     //弹出抽屉，直接调用drawerLayout.openDrawer()方法没有弹出效果
                     handler.sendEmptyMessage(0);
