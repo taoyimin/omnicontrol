@@ -23,12 +23,12 @@ import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
  * Created by TaoYimin on 2017/5/17.
  */
 
-public class SelectableAdapter extends RecyclerView.Adapter<SelectableAdapter.SelectableViewHolder> {
+public class PortAdapter extends RecyclerView.Adapter<PortAdapter.SelectableViewHolder> {
     private List<Port> data;
     private ItemSelectionSupport mSelectionSupport;
     Context context;
 
-    public SelectableAdapter(List<Port> data, ItemSelectionSupport selectionSupport) {
+    public PortAdapter(List<Port> data, ItemSelectionSupport selectionSupport) {
         this.data = data;
         mSelectionSupport = selectionSupport;
     }
@@ -74,7 +74,9 @@ public class SelectableAdapter extends RecyclerView.Adapter<SelectableAdapter.Se
                 default:
                     break;
             }
-            holder.portBadge.setText(PortHelper.getInstance().getInputPortBadge(position) + "");
+            if(PortHelper.getInstance().getInputList()!=null&&PortHelper.getInstance().getOutputList()!=null&&PortHelper.getInstance().getChannelSet()!=null) {
+                holder.portBadge.setText(PortHelper.getInstance().getInputPortBadge(position) + "");
+            }
         } else if (data.get(position).dir == Port.DIR_OUT) {
             int inputCategory = PortHelper.getInstance().getInputPortCategory(position);
             switch (data.get(position).category) {
@@ -379,20 +381,21 @@ public class SelectableAdapter extends RecyclerView.Adapter<SelectableAdapter.Se
             holder.portBadge.setSelected(false);
         }
         //把系统配置好的端口全部点亮
-        if (data.get(position).dir == Port.DIR_IN) {
-            if (PortHelper.getInstance().inputPortIsUsed(position)) {
-                holder.portBg.setSelected(true);
-                holder.portImage.setSelected(true);
-                holder.portBadge.setSelected(true);
-            }
-        } else if (data.get(position).dir == Port.DIR_OUT) {
-            if (PortHelper.getInstance().outputPortIsUsed(position)) {
-                holder.portBg.setSelected(true);
-                holder.portImage.setSelected(true);
-                holder.portBadge.setSelected(true);
+        if(PortHelper.getInstance().getInputList()!=null&&PortHelper.getInstance().getOutputList()!=null&&PortHelper.getInstance().getChannelSet()!=null){
+            if (data.get(position).dir == Port.DIR_IN) {
+                if (PortHelper.getInstance().inputPortIsUsed(position)) {
+                    holder.portBg.setSelected(true);
+                    holder.portImage.setSelected(true);
+                    holder.portBadge.setSelected(true);
+                }
+            } else if (data.get(position).dir == Port.DIR_OUT) {
+                if (PortHelper.getInstance().outputPortIsUsed(position)) {
+                    holder.portBg.setSelected(true);
+                    holder.portImage.setSelected(true);
+                    holder.portBadge.setSelected(true);
+                }
             }
         }
-
 /*        if (mSelectionSupport.getChoiceMode() == ItemSelectionSupport.ChoiceMode.MULTIPLE && data.get(position).dir == Port.DIR_OUT) {
 
             mSelectionSupport.setOnItemStatueListener(new ItemSelectionSupport.OnItemStatueListener() {

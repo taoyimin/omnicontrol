@@ -9,10 +9,10 @@ import cn.diaovision.omnicontrol.widget.adapter.TermItemAdapter;
  * Created by TaoYimin on 2017/5/5.
  */
 
-public class MyItemTouchCallback extends ItemTouchHelper.Callback {
+public class TermItemTouchCallback extends ItemTouchHelper.Callback {
     TermItemAdapter adapter;
 
-    public MyItemTouchCallback(TermItemAdapter adapter) {
+    public TermItemTouchCallback(TermItemAdapter adapter) {
         this.adapter = adapter;
     }
 
@@ -62,7 +62,7 @@ public class MyItemTouchCallback extends ItemTouchHelper.Callback {
 
     private OnDragListener onDragListener;
 
-    public MyItemTouchCallback setOnDragListener(OnDragListener onDragListener) {
+    public TermItemTouchCallback setOnDragListener(OnDragListener onDragListener) {
         this.onDragListener = onDragListener;
         return this;
     }
