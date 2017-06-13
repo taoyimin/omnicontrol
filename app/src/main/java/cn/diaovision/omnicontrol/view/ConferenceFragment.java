@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +30,11 @@ import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.model.Config;
 import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
-import cn.diaovision.omnicontrol.widget.MyItemTouchCallback;
+import cn.diaovision.omnicontrol.widget.TermItemTouchCallback;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
 import cn.diaovision.omnicontrol.widget.RecyclerViewWithSlidingItem;
 import cn.diaovision.omnicontrol.widget.SlidingItemView;
-import cn.diaovision.omnicontrol.widget.adapter.SelectableAdapter;
+import cn.diaovision.omnicontrol.widget.adapter.PortAdapter;
 import cn.diaovision.omnicontrol.widget.adapter.TermItemAdapter;
 
 import static android.R.attr.id;
@@ -60,8 +61,11 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
     @BindView(R.id.input)
     RecyclerView inputRecyclerView;
 
+    @BindView(R.id.video_layout)
+    TextView videoLayout;
+
     ItemSelectionSupport inputSelectionSupport;
-    SelectableAdapter inputAdapter;
+    PortAdapter inputAdapter;
 
     TermItemAdapter adapter;
     List<Term> list;
@@ -108,7 +112,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
             list.add(term);
         }
         adapter = new TermItemAdapter(getContext(), list);
-        View footerview = LayoutInflater.from(getContext()).inflate(R.layout.footer_auxiliary, null, false);
+        View footerview = LayoutInflater.from(getContext()).inflate(R.layout.footer_term, null, false);
         adapter.setFooterView(footerview);
         adapter.getFooterView().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,7 +172,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
                 }
             }
         });
-        itemTouchHelper = new ItemTouchHelper(new MyItemTouchCallback(adapter).setOnDragListener(new MyItemTouchCallback.OnDragListener() {
+        itemTouchHelper = new ItemTouchHelper(new TermItemTouchCallback(adapter).setOnDragListener(new TermItemTouchCallback.OnDragListener() {
             @Override
             public void onFinishDrag() {
                 //拖拽完成的回掉
@@ -207,7 +211,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
 
         inputSelectionSupport=new ItemSelectionSupport(inputRecyclerView);
         inputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.NONE);
-        inputAdapter=new SelectableAdapter(inputs,inputSelectionSupport);
+        inputAdapter=new PortAdapter(inputs,inputSelectionSupport);
         inputRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),9));
         inputRecyclerView.setAdapter(inputAdapter);
 
@@ -220,8 +224,8 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
             list.add(term);
         }
         adapter = new TermItemAdapter(getContext(), list);
-        View footerview = LayoutInflater.from(getContext()).inflate(R.layout.footer_auxiliary, null, false);
-        adapter.setFooterView(footerview);
+        View footerView = LayoutInflater.from(getContext()).inflate(R.layout.footer_term, null, false);
+        adapter.setFooterView(footerView);
         adapter.getFooterView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -275,7 +279,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
                         slidingItemView.setCanDrag(true);
                         return;
                     }
-                    slidingItemView.getHideView().setVisibility(View.INVISIBLE);
+                    //slidingItemView.getHideView().setVisibility(View.INVISIBLE);
                     itemTouchHelper.startDrag(vh);
                     dragPosition = position;
                     //获取系统震动服务
@@ -285,13 +289,13 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
                 }
             }
         });
-        itemTouchHelper = new ItemTouchHelper(new MyItemTouchCallback(adapter).setOnDragListener(new MyItemTouchCallback.OnDragListener() {
+        itemTouchHelper = new ItemTouchHelper(new TermItemTouchCallback(adapter).setOnDragListener(new TermItemTouchCallback.OnDragListener() {
             @Override
             public void onFinishDrag(RecyclerView.ViewHolder viewHolder) {
                 //拖拽完成的回掉
                 dragPosition = -1;
-                SlidingItemView slidingItemView = ((TermItemAdapter.MyViewHolder) viewHolder).getSlidingItemView();
-                slidingItemView.getHideView().setVisibility(View.VISIBLE);
+                //SlidingItemView slidingItemView = ((TermItemAdapter.MyViewHolder) viewHolder).getSlidingItemView();
+                //slidingItemView.getHideView().setVisibility(View.VISIBLE);
             }
         }));
         //和RecyclerView进行关联
@@ -304,7 +308,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
     }
 
     public void getActivityDispatchTouchEvent(MotionEvent event) {
-/*        if (event.getAction() == MotionEvent.ACTION_UP) {
+        if (event.getAction() == MotionEvent.ACTION_UP) {
             if (dragPosition < 0 || videoLayout == null)
                 return;
             videoLayout.getGlobalVisibleRect(rect);
@@ -317,7 +321,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
                     termRecycler.getAdapter().notifyItemChanged(dragPosition);
                 }
             }
-        }*/
+        }
     }
 
 /*    @OnClick({R.id.start_conf, R.id.end_conf})
