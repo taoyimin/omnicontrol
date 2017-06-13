@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="wrap_content"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="@dimen/term_hide_width"
-        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/term_slide_marginTop"
+        android:layout_marginBottom="@dimen/term_slide_marginBottom"
+        android:layout_height="@dimen/term_slide_height"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -19,24 +20,24 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_centerInParent="true">
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
 
                 <ImageView
                     android:layout_width="@dimen/term_hide_icon_width"
                     android:layout_height="@dimen/term_hide_icon_height"
+                    android:layout_gravity="center_horizontal"
                     android:scaleType="fitXY"
-                    android:src="@mipmap/black"
-                    android:layout_gravity="center_horizontal"/>
+                    android:src="@drawable/slide_menu_black_selector"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/term_black"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/term_hide_text_marginTop"
                     android:gravity="center"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="@color/color_c1"
+                    android:text="@string/term_black"
+                    android:textColor="@color/slide_menu_text_selector"
                     android:textSize="@dimen/text_size_f3"/>
             </LinearLayout>
         </RelativeLayout>
@@ -46,17 +47,63 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/term_button_mute_color"
-            android:gravity="center"
-            android:text="设置\n静音"/>
+            android:background="@color/term_button_mute_color">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/term_hide_icon_width"
+                    android:layout_height="@dimen/term_hide_icon_height"
+                    android:layout_gravity="center_horizontal"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/slide_menu_off_selector"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/term_hide_text_marginTop"
+                    android:gravity="center"
+                    android:text="@string/term_mute"
+                    android:textColor="@color/slide_menu_text_selector"
+                    android:textSize="@dimen/text_size_f3"/>
+            </LinearLayout>
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/button3"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/term_button_hangup_color"
-            android:gravity="center"
-            android:text="踢除\n终端"/>
+            android:background="@color/term_button_hangup_color">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/term_hide_icon_width"
+                    android:layout_height="@dimen/term_hide_icon_height"
+                    android:layout_gravity="center_horizontal"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/slide_menu_delete_selector"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/term_hide_text_marginTop"
+                    android:gravity="center"
+                    android:text="@string/term_hangup"
+                    android:textColor="@color/slide_menu_text_selector"
+                    android:textSize="@dimen/text_size_f3"/>
+            </LinearLayout>
+        </RelativeLayout>
     </LinearLayout>
 </LinearLayout>
