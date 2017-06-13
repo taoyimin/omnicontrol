@@ -1,4 +1,464 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/video_layoutTop_marginTop"
+        android:layout_weight="1.1"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="@color/color_c2">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/widget_margin"
+                        android:background="@color/color_c3"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/input_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/output_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/input_lastposition"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/output_lastposition"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/input_size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/output_size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                        <TextView
+                            android:id="@+id/channel_size"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+            <cn.diaovision.omnicontrol.widget.AssistDrawerLayout
+                android:id="@+id/assist_drawer_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </cn.diaovision.omnicontrol.widget.AssistDrawerLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/widget_margin"
+            android:layout_marginRight="@dimen/widget_margin"
+            android:layout_weight="4"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="center"
+                android:layout_weight="9"
+                android:background="@color/color_c3"
+                android:gravity="center"
+                android:text="16:9显示屏"
+                android:textColor="@color/edit_hint_color"
+                android:textSize="30sp"/>
+
+            <EditText
+                android:id="@+id/edit_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/widget_margin"
+                android:layout_weight="1"
+                android:background="@color/color_c7"
+                android:textCursorDrawable="@null"
+                android:hint="@string/video_edit_hint"
+                android:paddingLeft="@dimen/video_editView_paddingLeft"
+                android:textColorHint="@color/edit_hint_color"
+                android:textSize="@dimen/text_size_f2"/>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@color/color_c2">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/auxiliary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/widget_margin"
+                    android:background="@color/color_c3">
+
+                </android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/video_layoutBottom_marginTop"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.2"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="@dimen/video_port_logo_width"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/angle_bg_left"/>
+
+                    <ImageView
+                        android:id="@+id/icon_input"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/video_port_logo_image_margin"
+                        android:src="@mipmap/input"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/video_port_logo_text_margin"
+                        android:layout_toRightOf="@id/icon_input"
+                        android:text="@string/video_input"
+                        android:textColor="@color/color_c5"
+                        android:textSize="@dimen/text_size_f2"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/recycler_border_width"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/recycler_border_color"/>
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/color_c2"
+                    android:overScrollMode="never"
+                    android:paddingLeft="@dimen/video_port_recycler_marginLeft"
+                    android:paddingRight="@dimen/video_port_recycler_marginRight"
+                    android:paddingTop="@dimen/video_port_recycler_marginTop">
+
+                </android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/widget_margin"
+            android:layout_height="match_parent">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.2">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/recycler_border_width"
+                        android:background="@color/recycler_border_color"
+                        android:layout_alignParentBottom="true"/>
+            </RelativeLayout>
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10"
+                android:background="@color/color_c2">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent">
+                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                        android:id="@+id/mySeekBar1"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:splitTrack="false"
+                        app:seekBarRotation="CW270"
+                        android:progressBackgroundTint="#80a5bf"
+                        android:secondaryProgressTint="#80a5bf"/>
+                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent">
+                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                        android:id="@+id/mySeekBar2"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:splitTrack="false"
+                        app:seekBarRotation="CW270"
+                        android:progressBackgroundTint="#80a5bf"
+                        android:secondaryProgressTint="#80a5bf"/>
+                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent">
+                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                        android:id="@+id/mySeekBar3"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:splitTrack="false"
+                        app:seekBarRotation="CW270"
+                        android:progressBackgroundTint="#80a5bf"
+                        android:secondaryProgressTint="#80a5bf"/>
+                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent">
+                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                        android:id="@+id/mySeekBar4"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:splitTrack="false"
+                        app:seekBarRotation="CW270"
+                        android:progressBackgroundTint="#80a5bf"
+                        android:secondaryProgressTint="#80a5bf"/>
+                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent">
+                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                        android:id="@+id/mySeekBar5"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:splitTrack="false"
+                        app:seekBarRotation="CW270"
+                        android:progressBackgroundTint="#80a5bf"
+                        android:secondaryProgressTint="#80a5bf"/>
+                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                    android:layout_width="50dp"
+                    android:layout_height="match_parent">
+                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                        android:id="@+id/mySeekBar6"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:splitTrack="false"
+                        app:seekBarRotation="CW270"
+                        android:progressBackgroundTint="#80a5bf"
+                        android:secondaryProgressTint="#80a5bf"/>
+                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent">
+                        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                            android:id="@+id/mySeekBar7"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:splitTrack="false"
+                            app:seekBarRotation="CW270"
+                            android:progressBackgroundTint="#80a5bf"
+                            android:secondaryProgressTint="#80a5bf"/>
+                    </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent">
+                        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
+                            android:id="@+id/mySeekBar8"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:splitTrack="false"
+                            app:seekBarRotation="CW270"
+                            android:progressBackgroundTint="#80a5bf"
+                            android:secondaryProgressTint="#80a5bf"/>
+                    </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/widget_margin"
+            android:layout_height="match_parent">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.2"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/recycler_border_width"
+                        android:background="@color/recycler_border_color"
+                        android:layout_alignParentBottom="true"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="@dimen/video_port_logo_width"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/angle_bg_right"/>
+
+                    <ImageView
+                        android:id="@+id/icon_output"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/video_port_logo_image_margin"
+                        android:src="@mipmap/output"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/video_port_logo_text_margin"
+                        android:layout_toLeftOf="@id/icon_output"
+                        android:text="@string/video_output"
+                        android:textColor="@color/color_c5"
+                        android:textSize="@dimen/text_size_f2"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/output"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/color_c2"
+                    android:overScrollMode="never"
+                    android:paddingLeft="@dimen/video_port_recycler_marginLeft"
+                    android:paddingRight="@dimen/video_port_recycler_marginRight"
+                    android:paddingTop="@dimen/video_port_recycler_marginTop">
+                </android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+
+<!--
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:appCompat="http://schemas.android.com/apk/res-auto"
@@ -75,4 +535,4 @@
             android:layout_below="@+id/txt_input"
             android:id="@+id/audioChnList" />
     </android.support.percent.PercentRelativeLayout>
-</RelativeLayout>
+</RelativeLayout>-->
