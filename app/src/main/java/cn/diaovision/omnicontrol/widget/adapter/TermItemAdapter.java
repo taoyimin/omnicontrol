@@ -54,8 +54,8 @@ public class TermItemAdapter extends RecyclerView.Adapter<TermItemAdapter.MyView
             case TYPE_NORMAL:
                 Term term=list.get(position);
                 holder.title.setText(term.getName());
-                holder.speech.setText("发言："+term.isSpeaking());
-                holder.mute.setText("静音："+term.isMuted());
+                holder.speech.setText("黑屏："+term.isSpeaking());
+                holder.mute.setText("消音："+term.isMuted());
                 holder.slidingItemView.setOnHideViewClickListener(new SlidingItemView.OnHideViewClickListener() {
                     @Override
                     public void onClick1(View view, int pos) {
@@ -85,10 +85,10 @@ public class TermItemAdapter extends RecyclerView.Adapter<TermItemAdapter.MyView
                         Toast.makeText(context, "name=" + list.get(pos).getName() + "position=" + pos, Toast.LENGTH_SHORT).show();
                     }
                 });
-                holder.slidingItemView.bindViewAndData(holder.itemView, list, SlidingItemView.HideViewMode.MODE_HIDE_RIGHT,holder.getLayoutPosition());
+                holder.slidingItemView.bindViewAndData(holder.itemView, list,SlidingItemView.HideViewMode.MODE_HIDE_BOTTOM,holder.getLayoutPosition());
                 break;
             case TYPE_FOOTER:
-                holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                //holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 break;
         }
     }

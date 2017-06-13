@@ -1,7 +1,6 @@
 package cn.diaovision.omnicontrol.view;
 
 import android.app.Service;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,7 +29,7 @@ import cn.diaovision.omnicontrol.widget.AssistDrawerLayout;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
 import cn.diaovision.omnicontrol.widget.PortDialog;
-import cn.diaovision.omnicontrol.widget.adapter.SelectableAdapter;
+import cn.diaovision.omnicontrol.widget.adapter.PortAdapter;
 
 /**
  * Created by TaoYimin on 2017/5/18.
@@ -50,12 +49,11 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     @BindView(R.id.edit_subtitle)
     EditText editSubtitle;
 
-    private SelectableAdapter inputAdapter;
-    private SelectableAdapter outputAdapter;
+    private PortAdapter inputAdapter;
+    private PortAdapter outputAdapter;
     private ItemSelectionSupport inputSelectionSupport;
     private ItemSelectionSupport outputSelectionSupport;
     VideoContract.Presenter presenter;
-    Port currentPort;
 
     Handler handler=new Handler(){
         @Override
@@ -90,8 +88,8 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         outputSelectionSupport=new ItemSelectionSupport(outputRecyclerView);
         inputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
         outputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
-        inputAdapter=new SelectableAdapter(inputs,inputSelectionSupport);
-        outputAdapter=new SelectableAdapter(outputs,outputSelectionSupport);
+        inputAdapter=new PortAdapter(inputs,inputSelectionSupport);
+        outputAdapter=new PortAdapter(outputs,outputSelectionSupport);
         inputRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),6));
         outputRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),6));
         inputRecyclerView.setHasFixedSize(true);
@@ -181,7 +179,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
 
             @Override
             public void onItemDoubleClick(RecyclerView.ViewHolder vh, int position) {
-                popupDialog(presenter.getInputList().get(position));
+                popupDialog(presenter.getInputList().get(position),position);
             }
         });
 
@@ -218,14 +216,13 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
 
             @Override
             public void onItemDoubleClick(RecyclerView.ViewHolder vh, int position) {
-                popupDialog(presenter.getOutputList().get(position));
+                popupDialog(presenter.getOutputList().get(position),position);
             }
         });
 
         inputSelectionSupport.setOnItemStatueListener(new ItemSelectionSupport.OnItemStatueListener() {
             @Override
             public void onSelectSingle(int position) {
-                currentPort=presenter.getInputList().get(position);
                 //获取到选中输入端对应的输出端
                 int[] outsIdx=presenter.getOutputIdx(presenter.getInputList().get(position).idx);
                 outputSelectionSupport.clearChoices();
@@ -240,7 +237,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
 
             @Override
             public void onUnSelectSingle(int position) {
-                currentPort=null;
                 //清空输出端列表的所有选中状态
                 outputSelectionSupport.clearChoices();
                 outputAdapter.notifyDataSetChanged();
@@ -294,7 +290,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
 
             @Override
             public void onUnSelectSingle(int position) {
-                currentPort=null;
                 //清空输入端列表所有选中状态
                 inputSelectionSupport.clearChoices();
                 inputAdapter.notifyDataSetChanged();
@@ -349,14 +344,21 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         views.get(3).setText("输出端LastPosition="+outputSelectionSupport.getLastPosition());
     }
 
-    public void popupDialog(final Port port){
-        PortDialog dialog=new PortDialog(getContext(),port);
+    public void popupDialog(final Port port, final int position){
+        final PortDialog dialog=new PortDialog(getContext(),port);
         dialog.show();
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        dialog.setOnButtonClickListener(new PortDialog.OnButtonClickListener() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
+            public void onConfirmClick() {
+                dialog.dismiss();
+                if(port.dir==Port.DIR_IN){
+                    inputAdapter.notifyItemChanged(position);
+                }else if(port.dir==Port.DIR_OUT){
+                    outputAdapter.notifyItemChanged(position);
+                }else{
                     inputAdapter.notifyDataSetChanged();
                     outputAdapter.notifyDataSetChanged();
+                }
             }
         });
     }

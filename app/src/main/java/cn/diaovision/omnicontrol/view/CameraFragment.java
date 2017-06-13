@@ -1,11 +1,12 @@
 package cn.diaovision.omnicontrol.view;
 
+import android.app.Service;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import cn.diaovision.omnicontrol.core.message.MatrixMessage;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
+import cn.diaovision.omnicontrol.widget.PresetDialog;
 import cn.diaovision.omnicontrol.widget.adapter.CameraAdapter;
 import cn.diaovision.omnicontrol.widget.adapter.PresetAdapter;
 
@@ -282,6 +284,19 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
                     presetAdapter.notifyItemInserted(vh.getLayoutPosition());
                 }
             }
+
+            @Override
+            public void onLongClick(RecyclerView.ViewHolder vh, final int position) {
+                final HiCamera camera = presenter.getCameraList().get(cameraSelectionSupport.getCheckedItemPosition());
+                if(position<camera.getPresetList().size()) {
+                    HiCamera.Preset preset=camera.getPresetList().get(position);
+                    popupDialog(preset,position);
+                    //获取系统震动服务
+                    Vibrator vib = (Vibrator) getActivity().getSystemService(Service.VIBRATOR_SERVICE);
+                    //震动70毫秒
+                    vib.vibrate(70);
+                }
+            }
         });
 
         for(final Button button:cameraControlButtons){
@@ -355,7 +370,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
         this.presenter = new CameraPresenter(this);
     }
 
-    @Override
+/*    @Override
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getOrder()) {
             case 1:
@@ -367,7 +382,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
                 break;
         }
         return super.onContextItemSelected(item);
-    }
+    }*/
 
     public void initPreset(final HiCamera camera) {
         presetSelectionSupport = new ItemSelectionSupport(presetRecyclerView);
@@ -409,6 +424,26 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
             @Override
             public void onSelectCountChange(int count) {
 
+            }
+        });
+    }
+
+    public void popupDialog(HiCamera.Preset preset, final int position){
+        final HiCamera camera = presenter.getCameraList().get(cameraSelectionSupport.getCheckedItemPosition());
+        final PresetDialog dialog = new PresetDialog(getContext(), preset);
+        dialog.show();
+        dialog.setOnButtonClickListener(new PresetDialog.OnButtonClickListener() {
+            @Override
+            public void onConfirmClick() {
+                presetAdapter.notifyItemChanged(position);
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onDeleteClick() {
+                camera.getPresetList().remove(position);
+                presetAdapter.notifyItemRemoved(position);
+                dialog.dismiss();
             }
         });
     }

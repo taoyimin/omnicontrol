@@ -65,8 +65,7 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
             switch (hideViewMode) {
                 case HideViewMode.MODE_HIDE_BOTTOM:
 
-                    if (hideView == null) {
-                        createHideView();
+                   // if (hideView == null) {
                         if (convertView instanceof RelativeLayout) {
                             ((RelativeLayout) convertView).addView(hideView);
                             LayoutParams params = (LayoutParams) hideView
@@ -75,7 +74,7 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
                             hideView.setLayoutParams(params);
                             bringToFront();
                         }
-                    }
+                   // }
 
                     break;
                 case HideViewMode.MODE_HIDE_RIGHT:
@@ -113,7 +112,7 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
     }
 
     private void createHideView() {
-        hideView = LayoutInflater.from(getContext()).inflate(R.layout.layout_hide, this, false);
+        this.hideView = LayoutInflater.from(getContext()).inflate(R.layout.layout_hide, this, false);
         if (hideViewMode == HideViewMode.MODE_HIDE_RIGHT) {
             hideViewWidth = dip2px(context, 204);
             ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(

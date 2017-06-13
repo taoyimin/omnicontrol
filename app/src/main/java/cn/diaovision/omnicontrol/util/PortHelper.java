@@ -119,4 +119,16 @@ public class PortHelper {
             }
         }
     }
+
+    public Set<Channel> getChannelSet() {
+        return channelSet;
+    }
+
+    public List<Port> getInputList() {
+        return inputList;
+    }
+
+    public List<Port> getOutputList() {
+        return outputList;
+    }
 }
