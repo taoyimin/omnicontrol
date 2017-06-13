@@ -42,7 +42,8 @@ public class PortDialog extends Dialog {
     Port port;
     CustomSpinnerAdapter categoryAdapter;
     CustomSpinnerAdapter attributeAdapter;
-    boolean flag;
+
+    OnButtonClickListener onButtonClickListener;
 
     public PortDialog(@NonNull Context context, Port port) {
         this(context, R.style.dialog, port);
@@ -61,7 +62,6 @@ public class PortDialog extends Dialog {
         View layout = inflater.inflate(R.layout.dialog_port, null);
         this.setContentView(layout);
         ButterKnife.bind(this);
-        flag=false;
         //初始化图标种类spinner
         if(port.dir==Port.DIR_IN){
             String[] arrays=context.getResources().getStringArray(R.array.input_port_category);
@@ -168,8 +168,9 @@ public class PortDialog extends Dialog {
                     }
                 }
                 port.alias=aliasEdit.getText().toString();
-                flag=true;
-                dismiss();
+                if(onButtonClickListener!=null){
+                    onButtonClickListener.onConfirmClick();
+                }
             }
         });
     }
@@ -185,11 +186,11 @@ public class PortDialog extends Dialog {
         window.setAttributes(params);
     }
 
-    public boolean isFlag() {
-        return flag;
+    public interface OnButtonClickListener{
+        void onConfirmClick();
     }
 
-    public void setFlag(boolean flag) {
-        this.flag = flag;
+    public void setOnButtonClickListener(OnButtonClickListener onButtonClickListener) {
+        this.onButtonClickListener = onButtonClickListener;
     }
 }
