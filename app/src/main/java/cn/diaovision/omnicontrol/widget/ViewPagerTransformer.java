@@ -6,7 +6,7 @@ import android.view.View;
 /**
  * Created by TaoYimin on 2017/5/22.
  */
-
+@Deprecated
 public class ViewPagerTransformer implements ViewPager.PageTransformer {
 
     @Override

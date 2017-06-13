@@ -20,7 +20,7 @@ import cn.diaovision.omnicontrol.widget.adapter.PortItemAdapter;
 /**
  * Created by liulingfeng on 2017/3/9.
  */
-
+@Deprecated
 public class PortRadioGroupView extends RecyclerView {
     Context ctx;
     List<Port> portList;

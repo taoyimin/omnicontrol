@@ -14,7 +14,7 @@ import cn.diaovision.omnicontrol.R;
 /**
  * Created by liulingfeng on 2017/4/7.
  */
-
+@Deprecated
 public class DirectionPad extends RelativeLayout {
     int h = -1;
     int w = -1;

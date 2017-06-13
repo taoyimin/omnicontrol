@@ -2,25 +2,20 @@ package cn.diaovision.omnicontrol.widget;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import java.util.List;
 
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
-import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
-import cn.diaovision.omnicontrol.widget.adapter.PortItemAdapter;
 import cn.diaovision.omnicontrol.widget.adapter.VolumeItemAdapter;
 
 /**
  * Created by liulingfeng on 2017/3/9.
  */
-
+@Deprecated
 public class VolumeChannelRadioGroupView extends RecyclerView {
     Context ctx;
     List<Channel> channelList;

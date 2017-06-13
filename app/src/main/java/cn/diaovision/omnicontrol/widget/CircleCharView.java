@@ -14,7 +14,7 @@ import android.view.View;
 /**
  * Created by liulingfeng on 2017/3/3.
  */
-
+@Deprecated
 public class CircleCharView extends View {
     public static final int ON = 0;
     public static final int OFF = 1;
