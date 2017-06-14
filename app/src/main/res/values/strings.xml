@@ -51,4 +51,14 @@
     <string name="term_black">黑屏</string>
     <string name="term_mute">消音</string>
     <string name="term_hangup">删除</string>
+
+    <!--config-->
+    <string name="config_title">获取配置表</string>
+    <string name="config_ip1">IP1:</string>
+    <string name="config_ip2">IP2:</string>
+    <string name="config_ip3">IP3:</string>
+    <string name="config_type">型号:</string>
+    <string name="config_subtitle">请输入默认字幕</string>
+    <string name="config_commit">提交</string>
+    <string name="config_reset">重置</string>
 </resources>

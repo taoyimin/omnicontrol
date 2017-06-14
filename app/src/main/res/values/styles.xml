@@ -80,4 +80,56 @@
         <item name="android:textSize">@dimen/text_size_f4</item>
         <item name="android:layout_marginTop">@dimen/camera_control_text_marginTop</item>
     </style>
+
+    <!--audio seekBar style-->
+    <style name="AudioSeekBar">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:maxHeight">@dimen/audio_seekBar_maxHeight</item>
+        <item name="android:splitTrack">false</item>
+        <item name="android:thumb">@drawable/seekbar_thumb_selector</item>
+        <item name="android:progressDrawable">@drawable/seekbar_progress_layer_list</item>
+    </style>
+
+    <!--audio seekBar wrapper style-->
+    <style name="AudioSeekBarWrapper">
+        <item name="android:layout_width">@dimen/audio_seekBarWrapper_width</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginBottom">@dimen/audio_seekBarWrapper_marginBottom</item>
+    </style>
+
+    <!--audio seekBar number text style-->
+    <style name="AudioSeekBarNumber">
+        <item name="android:textColor">@color/color_c3</item>
+        <item name="android:background">@color/color_c2</item>
+        <item name="android:textSize">@dimen/text_size_f3</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <!--config item style-->
+    <style name="ConfigItem">
+        <item name="android:layout_width">@dimen/config_item_width</item>
+        <item name="android:layout_height">@dimen/config_item_height</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:background">@color/color_c7</item>
+    </style>
+
+    <!--config item name style-->
+    <style name="ConfigItemName">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/config_item_height</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">@dimen/text_size_f1</item>
+        <item name="android:textColor">@color/color_c3</item>
+        <item name="android:layout_marginRight">@dimen/config_item_name_marginRight</item>
+    </style>
+
+    <!--config button style-->
+    <style name="ConfigButton">
+        <item name="android:layout_width">@dimen/config_button_width</item>
+        <item name="android:layout_height">@dimen/config_button_height</item>
+        <item name="android:textSize">@dimen/text_size_f2</item>
+    </style>
 </resources>

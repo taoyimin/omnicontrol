@@ -126,4 +126,19 @@
     <dimen name="meeting_term_recycler_paddingLeft">15.04dp</dimen>
     <dimen name="meeting_radio_button_width">47.04dp</dimen>
     <dimen name="meeting_radio_button_height">47.04dp</dimen>
+
+    <!--audio fragment-->
+    <dimen name="audio_seekBar_maxHeight">6.77dp</dimen>
+    <dimen name="audio_seekBarWrapper_width">45.11dp</dimen>
+    <dimen name="audio_seekBarWrapper_marginBottom">-10dp</dimen>
+    <dimen name="audio_seekBarWrapper_marginTop">5dp</dimen>
+    
+    <!--config fragment-->
+    <dimen name="config_item_width">327.07dp</dimen>
+    <dimen name="config_item_height">35.34dp</dimen>
+    <dimen name="config_item_gap_height">27.82dp</dimen>
+    <dimen name="config_item_name_marginRight">13.53dp</dimen>
+    <dimen name="config_button_width">82.71dp</dimen>
+    <dimen name="config_button_height">27.82dp</dimen>
+    <dimen name="config_button_marginRight">5.26dp</dimen>
 </resources>

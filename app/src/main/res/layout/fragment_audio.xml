@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical">
 
     <LinearLayout
@@ -115,10 +115,10 @@
                 android:layout_marginTop="@dimen/widget_margin"
                 android:layout_weight="1"
                 android:background="@color/color_c7"
-                android:textCursorDrawable="@null"
                 android:hint="@string/video_edit_hint"
                 android:paddingLeft="@dimen/video_editView_paddingLeft"
                 android:textColorHint="@color/edit_hint_color"
+                android:textCursorDrawable="@null"
                 android:textSize="@dimen/text_size_f2"/>
         </LinearLayout>
 
@@ -242,138 +242,184 @@
 
         <LinearLayout
             android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
+            android:orientation="vertical">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1.2">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/recycler_border_width"
-                        android:background="@color/recycler_border_color"
-                        android:layout_alignParentBottom="true"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/recycler_border_width"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/recycler_border_color"/>
             </RelativeLayout>
 
-            <HorizontalScrollView
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="10"
-                android:background="@color/color_c2">
+                android:background="@color/color_c1">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
-                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent">
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/mySeekBar1"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:splitTrack="false"
-                        app:seekBarRotation="CW270"
-                        android:progressBackgroundTint="#80a5bf"
-                        android:secondaryProgressTint="#80a5bf"/>
-                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp">
 
-                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent">
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/mySeekBar2"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:splitTrack="false"
-                        app:seekBarRotation="CW270"
-                        android:progressBackgroundTint="#80a5bf"
-                        android:secondaryProgressTint="#80a5bf"/>
-                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
-                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent">
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/mySeekBar3"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:splitTrack="false"
-                        app:seekBarRotation="CW270"
-                        android:progressBackgroundTint="#80a5bf"
-                        android:secondaryProgressTint="#80a5bf"/>
-                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+                        <RelativeLayout
+                            android:layout_width="19.17dp"
+                            android:layout_height="match_parent">
 
-                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent">
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/mySeekBar4"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:splitTrack="false"
-                        app:seekBarRotation="CW270"
-                        android:progressBackgroundTint="#80a5bf"
-                        android:secondaryProgressTint="#80a5bf"/>
-                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+                            <TextView
+                                style="@style/AudioSeekBarNumber"
+                                android:text="0"
+                                android:textColor="@color/transparent"/>
+                        </RelativeLayout>
 
-                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent">
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/mySeekBar5"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:splitTrack="false"
-                        app:seekBarRotation="CW270"
-                        android:progressBackgroundTint="#80a5bf"
-                        android:secondaryProgressTint="#80a5bf"/>
-                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+                        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                            style="@style/AudioSeekBarWrapper">
 
-                <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent">
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                        android:id="@+id/mySeekBar6"
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:splitTrack="false"
-                        app:seekBarRotation="CW270"
-                        android:progressBackgroundTint="#80a5bf"
-                        android:secondaryProgressTint="#80a5bf"/>
-                </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+                            <cn.diaovision.omnicontrol.widget.VerticalSeekBar
+                                android:id="@+id/mySeekBar1"
+                                style="@style/AudioSeekBar"
+                                app:seekBarRotation="CW270"/>
 
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                        android:layout_width="50dp"
-                        android:layout_height="match_parent">
-                        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                            android:id="@+id/mySeekBar7"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:splitTrack="false"
-                            app:seekBarRotation="CW270"
-                            android:progressBackgroundTint="#80a5bf"
-                            android:secondaryProgressTint="#80a5bf"/>
-                    </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+                            <TextView
+                                style="@style/AudioSeekBarNumber"
+                                android:text="1"/>
+                        </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
-                    <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
-                        android:layout_width="50dp"
-                        android:layout_height="match_parent">
-                        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
-                            android:id="@+id/mySeekBar8"
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:splitTrack="false"
-                            app:seekBarRotation="CW270"
-                            android:progressBackgroundTint="#80a5bf"
-                            android:secondaryProgressTint="#80a5bf"/>
-                    </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
-                </LinearLayout>
-            </HorizontalScrollView>
+                        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                            style="@style/AudioSeekBarWrapper">
 
+                            <cn.diaovision.omnicontrol.widget.VerticalSeekBar
+                                android:id="@+id/mySeekBar2"
+                                style="@style/AudioSeekBar"
+                                app:seekBarRotation="CW270"/>
+
+                            <TextView
+                                style="@style/AudioSeekBarNumber"
+                                android:text="2"/>
+                        </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                            style="@style/AudioSeekBarWrapper">
+
+                            <cn.diaovision.omnicontrol.widget.VerticalSeekBar
+                                android:id="@+id/mySeekBar3"
+                                style="@style/AudioSeekBar"
+                                app:seekBarRotation="CW270"/>
+
+                            <TextView
+                                style="@style/AudioSeekBarNumber"
+                                android:text="3"/>
+                        </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                            style="@style/AudioSeekBarWrapper">
+
+                            <cn.diaovision.omnicontrol.widget.VerticalSeekBar
+                                android:id="@+id/mySeekBar4"
+                                style="@style/AudioSeekBar"
+                                app:seekBarRotation="CW270"/>
+
+                            <TextView
+                                style="@style/AudioSeekBarNumber"
+                                android:text="4"/>
+                        </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                            style="@style/AudioSeekBarWrapper">
+
+                            <cn.diaovision.omnicontrol.widget.VerticalSeekBar
+                                android:id="@+id/mySeekBar5"
+                                style="@style/AudioSeekBar"
+                                app:seekBarRotation="CW270"/>
+
+                            <TextView
+                                style="@style/AudioSeekBarNumber"
+                                android:text="5"/>
+                        </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                            style="@style/AudioSeekBarWrapper">
+
+                            <cn.diaovision.omnicontrol.widget.VerticalSeekBar
+                                android:id="@+id/mySeekBar6"
+                                style="@style/AudioSeekBar"
+                                app:seekBarRotation="CW270"/>
+
+                            <TextView
+                                style="@style/AudioSeekBarNumber"
+                                android:text="6"/>
+                        </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                            style="@style/AudioSeekBarWrapper">
+
+                            <cn.diaovision.omnicontrol.widget.VerticalSeekBar
+                                android:id="@+id/mySeekBar7"
+                                style="@style/AudioSeekBar"
+                                app:seekBarRotation="CW270"/>
+
+                            <TextView
+                                style="@style/AudioSeekBarNumber"
+                                android:text="7"/>
+                        </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                        <com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper
+                            style="@style/AudioSeekBarWrapper">
+
+                            <cn.diaovision.omnicontrol.widget.VerticalSeekBar
+                                android:id="@+id/mySeekBar8"
+                                style="@style/AudioSeekBar"
+                                app:seekBarRotation="CW270"/>
+
+                            <TextView
+                                style="@style/AudioSeekBarNumber"
+                                android:text="8"/>
+                        </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
+
+                        <RelativeLayout
+                            android:layout_width="19.17dp"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                style="@style/AudioSeekBarNumber"
+                                android:text="0"
+                                android:textColor="@color/transparent"/>
+                        </RelativeLayout>
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <TextView
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:background="@color/color_c2"/>
+
+                <TextView
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:background="@color/color_c2"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="3dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/color_c2"/>
+            </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -402,8 +448,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/recycler_border_width"
-                        android:background="@color/recycler_border_color"
-                        android:layout_alignParentBottom="true"/>
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/recycler_border_color"/>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -457,82 +503,82 @@
     </LinearLayout>
 </LinearLayout>
 
-<!--
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:appCompat="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
+    <!--
+    <?xml version="1.0" encoding="utf-8"?>
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/panel_up_wrapper">
-        <android.support.v7.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:id="@+id/img_audio"/>
-    </RelativeLayout>
-    <android.support.percent.PercentRelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/panel_up_wrapper">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:appCompat="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
-         <android.support.v7.widget.AppCompatTextView
-            appCompat:layout_widthPercent="30%"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/widget_padding"
-            android:paddingTop="@dimen/widget_padding"
-            android:text="@string/txt_input"
-            android:gravity="center"
-            android:background="@drawable/panel_title_bg"
-            android:textAppearance="@style/PannelTitleText"
-            android:id="@+id/txt_input"/>
-        <android.support.v7.widget.AppCompatTextView
-            appCompat:layout_widthPercent="30%"
+            android:id="@+id/panel_up_wrapper">
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:id="@+id/img_audio"/>
+        </RelativeLayout>
+        <android.support.percent.PercentRelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/widget_padding"
-            android:paddingTop="@dimen/widget_padding"
-            android:text="@string/txt_output"
-            android:layout_toRightOf="@+id/txt_input"
-            android:gravity="center"
-            android:background="@drawable/panel_title_bg"
-            android:textAppearance="@style/PannelTitleText"
-            android:id="@+id/txt_output"/>
-         <android.support.v7.widget.AppCompatTextView
-            appCompat:layout_widthPercent="40%"
-            android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/widget_padding"
-            android:paddingTop="@dimen/widget_padding"
-            android:text="@string/txt_channel"
-            android:layout_toRightOf="@+id/txt_output"
-            android:gravity="center"
-            android:background="@drawable/panel_title_bg"
-            android:textAppearance="@style/PannelTitleText"
-            android:id="@+id/txt_chn"/>
+            android:layout_below="@+id/panel_up_wrapper">
 
-        <cn.diaovision.omnicontrol.widget.PortRadioGroupView
-            appCompat:layout_widthPercent="30%"
-            android:layout_height="300dp"
-            android:layout_below="@+id/txt_input"
-            android:id="@+id/input"
-            android:background="@color/panel_input" />
+             <android.support.v7.widget.AppCompatTextView
+                appCompat:layout_widthPercent="30%"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/widget_padding"
+                android:paddingTop="@dimen/widget_padding"
+                android:text="@string/txt_input"
+                android:gravity="center"
+                android:background="@drawable/panel_title_bg"
+                android:textAppearance="@style/PannelTitleText"
+                android:id="@+id/txt_input"/>
+            <android.support.v7.widget.AppCompatTextView
+                appCompat:layout_widthPercent="30%"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/widget_padding"
+                android:paddingTop="@dimen/widget_padding"
+                android:text="@string/txt_output"
+                android:layout_toRightOf="@+id/txt_input"
+                android:gravity="center"
+                android:background="@drawable/panel_title_bg"
+                android:textAppearance="@style/PannelTitleText"
+                android:id="@+id/txt_output"/>
+             <android.support.v7.widget.AppCompatTextView
+                appCompat:layout_widthPercent="40%"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/widget_padding"
+                android:paddingTop="@dimen/widget_padding"
+                android:text="@string/txt_channel"
+                android:layout_toRightOf="@+id/txt_output"
+                android:gravity="center"
+                android:background="@drawable/panel_title_bg"
+                android:textAppearance="@style/PannelTitleText"
+                android:id="@+id/txt_chn"/>
 
-        <cn.diaovision.omnicontrol.widget.PortRadioGroupView
-            appCompat:layout_widthPercent="30%"
-            android:layout_height="300dp"
-            android:layout_toRightOf="@+id/input"
-            android:layout_below="@+id/txt_input"
-            android:id="@+id/output"
-            android:background="@color/panel_output" />
+            <cn.diaovision.omnicontrol.widget.PortRadioGroupView
+                appCompat:layout_widthPercent="30%"
+                android:layout_height="300dp"
+                android:layout_below="@+id/txt_input"
+                android:id="@+id/input"
+                android:background="@color/panel_input" />
 
-        <cn.diaovision.omnicontrol.widget.VolumeChannelRadioGroupView
-            appCompat:layout_widthPercent="40%"
-            android:layout_height="300dp"
-            android:layout_toRightOf="@+id/output"
-            android:layout_below="@+id/txt_input"
-            android:id="@+id/audioChnList" />
-    </android.support.percent.PercentRelativeLayout>
-</RelativeLayout>-->
+            <cn.diaovision.omnicontrol.widget.PortRadioGroupView
+                appCompat:layout_widthPercent="30%"
+                android:layout_height="300dp"
+                android:layout_toRightOf="@+id/input"
+                android:layout_below="@+id/txt_input"
+                android:id="@+id/output"
+                android:background="@color/panel_output" />
+
+            <cn.diaovision.omnicontrol.widget.VolumeChannelRadioGroupView
+                appCompat:layout_widthPercent="40%"
+                android:layout_height="300dp"
+                android:layout_toRightOf="@+id/output"
+                android:layout_below="@+id/txt_input"
+                android:id="@+id/audioChnList" />
+        </android.support.percent.PercentRelativeLayout>
+    </RelativeLayout>-->

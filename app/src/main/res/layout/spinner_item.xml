@@ -5,7 +5,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dialog_spinner_height">
+        android:layout_height="@dimen/dialog_spinner_height"
+        android:background="@color/color_c7">
 
         <ImageView
             android:id="@+id/button_select"
@@ -17,14 +18,14 @@
             android:src="@mipmap/select_icons"/>
 
         <ImageView
-            android:id="@+id/category_icon"
+            android:id="@+id/icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dialog_icon_category_marginLeft"
             android:layout_centerVertical="true"/>
 
         <TextView
-            android:id="@+id/category_text"
+            android:id="@+id/text1"
             style="?android:attr/spinnerItemStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,10 +34,20 @@
             android:maxLines="1"
             android:textColor="@color/white"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@id/category_icon"
+            android:layout_toRightOf="@id/icon"
             android:layout_toLeftOf="@id/button_select"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"/>
 
+        <TextView
+            android:id="@+id/text2"
+            style="?android:attr/spinnerItemStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_f1"
+            android:gravity="center"
+            android:maxLines="1"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"/>
     </RelativeLayout>
 </RelativeLayout>

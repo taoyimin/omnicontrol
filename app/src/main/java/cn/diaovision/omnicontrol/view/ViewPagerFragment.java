@@ -12,7 +12,7 @@ import cn.diaovision.omnicontrol.R;
 /**
  * Created by TaoYimin on 2017/5/22.
  */
-
+@Deprecated
 public class ViewPagerFragment extends Fragment{
     @Nullable
     @Override

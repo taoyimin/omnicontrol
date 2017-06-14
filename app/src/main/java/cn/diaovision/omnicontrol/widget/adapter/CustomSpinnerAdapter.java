@@ -43,8 +43,12 @@ public class CustomSpinnerAdapter extends BaseAdapter implements SpinnerAdapter 
         return position;
     }
 
-    /*
+    /**
      * 加载显示布局
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -52,23 +56,30 @@ public class CustomSpinnerAdapter extends BaseAdapter implements SpinnerAdapter 
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.spinner_item, null);
-            holder.textView = (TextView) convertView.findViewById(R.id.category_text);
-            holder.imageView = (ImageView) convertView.findViewById(R.id.category_icon);
+            holder.textView1 = (TextView) convertView.findViewById(R.id.text1);
+            holder.textView2 = (TextView) convertView.findViewById(R.id.text2);
+            holder.imageView = (ImageView) convertView.findViewById(R.id.icon);
             holder.button = (ImageView) convertView.findViewById(R.id.button_select);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.textView.setText(arrays[position]);
         if (images != null && images.length != 0) {
+            holder.textView1.setText(arrays[position]);
             holder.imageView.setImageResource(images[position]);
+        }else{
+            holder.textView2.setText(arrays[position]);
         }
         holder.button.setVisibility(View.VISIBLE);
         return convertView;
     }
 
-    /*
+    /**
      * 加载下拉布局
+     * @param position
+     * @param convertView
+     * @param parent
+     * @return
      */
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
@@ -76,23 +87,27 @@ public class CustomSpinnerAdapter extends BaseAdapter implements SpinnerAdapter 
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = inflater.inflate(R.layout.spinner_item, null);
-            holder.textView = (TextView) convertView.findViewById(R.id.category_text);
-            holder.imageView = (ImageView) convertView.findViewById(R.id.category_icon);
+            holder.textView1 = (TextView) convertView.findViewById(R.id.text1);
+            holder.textView2 = (TextView) convertView.findViewById(R.id.text2);
+            holder.imageView = (ImageView) convertView.findViewById(R.id.icon);
             holder.button = (ImageView) convertView.findViewById(R.id.button_select);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.textView.setText(arrays[position]);
         if (images != null && images.length != 0) {
+            holder.textView1.setText(arrays[position]);
             holder.imageView.setImageResource(images[position]);
+        }else{
+            holder.textView2.setText(arrays[position]);
         }
         holder.button.setVisibility(View.INVISIBLE);
         return convertView;
     }
 
     public static class ViewHolder {
-        TextView textView;
+        TextView textView1;
+        TextView textView2;
         ImageView imageView;
         ImageView button;
     }
