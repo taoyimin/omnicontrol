@@ -22,16 +22,16 @@
         android:name=".OmniControlApplication">
         <activity android:name=".LoginActivity"
             android:screenOrientation="landscape">
-
-        </activity>
-        <activity android:name=".MainControlActivity"
-            android:screenOrientation="landscape"
-                  android:process=":vitamio">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".MainControlActivity"
+            android:screenOrientation="landscape"
+                  android:process=":vitamio">
+
         </activity>
         <!--视频播放的Activity声明-->
         <activity

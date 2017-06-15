@@ -31,13 +31,18 @@
     <dimen name="text_size_f4">6.43sp</dimen>-->
 
     <!--login activity-->
-    <dimen name="login_title_margin_top">105.14dp</dimen>
-    <dimen name="login_title_text_size">20.75sp</dimen>
+<!--    <dimen name="login_title_margin_top">105.14dp</dimen>
+    <dimen name="login_title_text_size">22.57sp</dimen>
     <dimen name="login_logo_image_width">200dp</dimen>
     <dimen name="login_logo_image_height">100dp</dimen>
     <dimen name="login_text_size">20sp</dimen>
     <dimen name="login_edit_width">300dp</dimen>
-    <dimen name="login_edit_height">40dp</dimen>
+    <dimen name="login_edit_height">40dp</dimen>-->
+    <dimen name="login_title_text_size">22.57sp</dimen>
+    <dimen name="login_item_paddingLeft">42.86dp</dimen>
+    <dimen name="login_item_paddingRight">42.86dp</dimen>
+    <dimen name="login_editText_marginLeft">10dp</dimen>
+    <dimen name="login_button_width">64.66dp</dimen>
 
     <!--navigation bar-->
     <dimen name="navigation_image_paddingLeft">17.29dp</dimen>

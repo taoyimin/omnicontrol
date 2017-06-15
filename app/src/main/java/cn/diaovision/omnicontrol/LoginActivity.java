@@ -33,6 +33,8 @@ public class LoginActivity extends BaseActivity implements LoginContract.View, V
         ButterKnife.bind(this);
         input_name.setOnKeyListener(this);
         input_password.setOnKeyListener(this);
+        input_name.setText("admin");
+        input_password.setText("123456");
     }
 
     @OnClick(R.id.btn_login)
