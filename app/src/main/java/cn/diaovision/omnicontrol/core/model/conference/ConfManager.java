@@ -1,7 +1,5 @@
 package cn.diaovision.omnicontrol.core.model.conference;
 
-import android.util.Log;
-
 import org.reactivestreams.Publisher;
 
 import java.util.ArrayList;
@@ -69,7 +67,7 @@ public class ConfManager {
                 .flatMap(new Function<RxMessage, Publisher<RxMessage>>() {
                     @Override
                     public Publisher<RxMessage> apply(RxMessage rxMessage) throws Exception {
-                        Log.i("conf","McuMessage.buildReqConfAll()");
+                        //Log.i("conf","McuMessage.buildReqConfAll()");
                         McuMessage reqConfInfoMsg = McuMessage.buildReqConfAll();
 
                         ConfEditor confInfoEditor = new ConfEditor() {
@@ -99,7 +97,7 @@ public class ConfManager {
                             }
                         };
 
-                        Log.i("conf","confInfoTemplate.getConfNum()="+confInfoTemplate.getConfNum());
+                        //Log.i("conf","confInfoTemplate.getConfNum()="+confInfoTemplate.getConfNum());
                         List<McuCommManager.McuBundle> bundleList = new ArrayList<McuCommManager.McuBundle>();
 
                         McuCommManager.McuBundle bundle = new McuCommManager.McuBundle();

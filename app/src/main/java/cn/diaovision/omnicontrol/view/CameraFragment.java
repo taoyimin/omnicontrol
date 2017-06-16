@@ -26,6 +26,7 @@ import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
 import cn.diaovision.omnicontrol.widget.PresetDialog;
+import cn.diaovision.omnicontrol.widget.VideoLayout;
 import cn.diaovision.omnicontrol.widget.adapter.CameraAdapter;
 import cn.diaovision.omnicontrol.widget.adapter.PresetAdapter;
 
@@ -45,8 +46,8 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
 /*    @BindView(R.id.pad_direction)
     DirectionPad padDirection;*/
 
-/*    @BindView(R.id.video_layout)
-    VideoLayout videoLayout;*/
+    @BindView(R.id.video_layout)
+    VideoLayout videoLayout;
 
 /*    @BindViews({R.id.btn_narrow,R.id.btn_wide,R.id.btn_fast,R.id.btn_slow,R.id.btn_stop})
     List<Button> btnList;*/
@@ -363,6 +364,8 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
                 }
             });
         }
+
+        videoLayout.setVideoPath("rtsp://192.168.1.102:8554/test");
     }
 
     @Override
