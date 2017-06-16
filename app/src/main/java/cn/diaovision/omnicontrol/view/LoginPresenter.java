@@ -89,12 +89,12 @@ public class LoginPresenter implements LoginContract.Presenter {
         iUser.login(name, password, new IUser.UserLoginListener() {
             @Override
             public void success(User user) {
-
+                view.toMainActivity();
             }
 
             @Override
             public void fail(String e) {
-
+                view.showToast(e);
             }
         });
     }

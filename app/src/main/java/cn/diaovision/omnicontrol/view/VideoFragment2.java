@@ -1,9 +1,10 @@
 package cn.diaovision.omnicontrol.view;
 
-import android.content.DialogInterface;
+import android.app.Service;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,7 +29,7 @@ import cn.diaovision.omnicontrol.widget.AssistDrawerLayout;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
 import cn.diaovision.omnicontrol.widget.PortDialog;
-import cn.diaovision.omnicontrol.widget.adapter.SelectableAdapter;
+import cn.diaovision.omnicontrol.widget.adapter.PortAdapter;
 
 /**
  * Created by TaoYimin on 2017/5/18.
@@ -48,12 +49,11 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     @BindView(R.id.edit_subtitle)
     EditText editSubtitle;
 
-    private SelectableAdapter inputAdapter;
-    private SelectableAdapter outputAdapter;
+    private PortAdapter inputAdapter;
+    private PortAdapter outputAdapter;
     private ItemSelectionSupport inputSelectionSupport;
     private ItemSelectionSupport outputSelectionSupport;
     VideoContract.Presenter presenter;
-    Port currentPort;
 
     Handler handler=new Handler(){
         @Override
@@ -88,8 +88,8 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         outputSelectionSupport=new ItemSelectionSupport(outputRecyclerView);
         inputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
         outputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
-        inputAdapter=new SelectableAdapter(inputs,inputSelectionSupport);
-        outputAdapter=new SelectableAdapter(outputs,outputSelectionSupport);
+        inputAdapter=new PortAdapter(inputs,inputSelectionSupport);
+        outputAdapter=new PortAdapter(outputs,outputSelectionSupport);
         inputRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),6));
         outputRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),6));
         inputRecyclerView.setHasFixedSize(true);
@@ -108,7 +108,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                 for(int i=0;i<selects.size();i++){
                     outs[i]=selects.get(i);
                 }
-                switch (mode){
+/*                switch (mode){
                     case AssistDrawerLayout.MODE_1XN:
                         presenter.switchVideo(in,outs);
                         break;
@@ -121,11 +121,12 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                     case AssistDrawerLayout.MODE_3X3:
                         presenter.stitchVideo(in,3,3,outs);
                         break;
-                }
-                //presenter.setChannel(in,outs,Channel.MOD_NORMAL);
+                }*/
+                presenter.setChannel(in,outs,Channel.MOD_NORMAL);
                 //编辑完成后设为单选模式
                 outputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
                 outputAdapter.notifyDataSetChanged();
+                inputAdapter.notifyDataSetChanged();
                 //还原输出端选择的颜色和角标
                 outputSelectionSupport.initChoiceConfig(null);
                 //关闭抽屉，直接调用drawerLayout.closeDrawer()方法没有收回效果
@@ -147,6 +148,10 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
             public void onLongClick(RecyclerView.ViewHolder vh, final int position) {
                 updateInfoBefore();
                 if(inputSelectionSupport.getChoiceMode()== ItemSelectionSupport.ChoiceMode.SINGLE&&outputSelectionSupport.getChoiceMode()== ItemSelectionSupport.ChoiceMode.SINGLE){
+                    //获取系统震动服务
+                    Vibrator vib = (Vibrator) getActivity().getSystemService(Service.VIBRATOR_SERVICE);
+                    //震动70毫秒
+                    vib.vibrate(70);
                     //输入端输出端都为单选模式
                     //初始化输出端选择的颜色和角标
                     outputSelectionSupport.initChoiceConfig(inputAdapter.getData().get(position));
@@ -158,6 +163,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                         //长按的item还未被选中
                         outputSelectionSupport.itemLongClick(-1);
                         inputSelectionSupport.itemClick(position);
+                        inputAdapter.notifyDataSetChanged();
                     }
                     //弹出抽屉，直接调用drawerLayout.openDrawer()方法没有弹出效果
                     handler.sendEmptyMessage(0);
@@ -173,7 +179,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
 
             @Override
             public void onItemDoubleClick(RecyclerView.ViewHolder vh, int position) {
-                popupDialog(presenter.getInputList().get(position));
+                popupDialog(presenter.getInputList().get(position),position);
             }
         });
 
@@ -210,14 +216,13 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
 
             @Override
             public void onItemDoubleClick(RecyclerView.ViewHolder vh, int position) {
-                popupDialog(presenter.getOutputList().get(position));
+                popupDialog(presenter.getOutputList().get(position),position);
             }
         });
 
         inputSelectionSupport.setOnItemStatueListener(new ItemSelectionSupport.OnItemStatueListener() {
             @Override
             public void onSelectSingle(int position) {
-                currentPort=presenter.getInputList().get(position);
                 //获取到选中输入端对应的输出端
                 int[] outsIdx=presenter.getOutputIdx(presenter.getInputList().get(position).idx);
                 outputSelectionSupport.clearChoices();
@@ -232,7 +237,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
 
             @Override
             public void onUnSelectSingle(int position) {
-                currentPort=null;
                 //清空输出端列表的所有选中状态
                 outputSelectionSupport.clearChoices();
                 outputAdapter.notifyDataSetChanged();
@@ -286,7 +290,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
 
             @Override
             public void onUnSelectSingle(int position) {
-                currentPort=null;
                 //清空输入端列表所有选中状态
                 inputSelectionSupport.clearChoices();
                 inputAdapter.notifyDataSetChanged();
@@ -341,14 +344,21 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         views.get(3).setText("输出端LastPosition="+outputSelectionSupport.getLastPosition());
     }
 
-    public void popupDialog(final Port port){
-        PortDialog dialog=new PortDialog(getContext(),port);
+    public void popupDialog(final Port port, final int position){
+        final PortDialog dialog=new PortDialog(getContext(),port);
         dialog.show();
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        dialog.setOnButtonClickListener(new PortDialog.OnButtonClickListener() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
+            public void onConfirmClick() {
+                dialog.dismiss();
+                if(port.dir==Port.DIR_IN){
+                    inputAdapter.notifyItemChanged(position);
+                }else if(port.dir==Port.DIR_OUT){
+                    outputAdapter.notifyItemChanged(position);
+                }else{
                     inputAdapter.notifyDataSetChanged();
                     outputAdapter.notifyDataSetChanged();
+                }
             }
         });
     }

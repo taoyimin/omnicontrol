@@ -20,7 +20,7 @@ import cn.diaovision.omnicontrol.widget.CircleCharView;
  * Preset recyclerview adapter
  * Created by liulingfeng on 2017/3/2.
  */
-
+@Deprecated
 public class CameraPresetItemAdapter extends RecyclerView.Adapter<CameraPresetItemAdapter.CameraPresetItemViewHolder> {
 
     List<Preset> presets;

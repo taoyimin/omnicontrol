@@ -14,13 +14,13 @@ import android.widget.RadioGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.util.CrashHandler;
+import cn.diaovision.omnicontrol.view.AudioFragment;
 import cn.diaovision.omnicontrol.view.CameraFragment;
 import cn.diaovision.omnicontrol.view.ConferenceFragment;
 import cn.diaovision.omnicontrol.view.ConfigFragment;
 import cn.diaovision.omnicontrol.view.DvdFragment;
 import cn.diaovision.omnicontrol.view.LightFragment;
 import cn.diaovision.omnicontrol.view.PowerFragment;
-import cn.diaovision.omnicontrol.view.VideoFragment;
 import cn.diaovision.omnicontrol.view.VideoFragment2;
 
 //import com.roughike.bottombar.BottomBar;
@@ -64,8 +64,7 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
     private final Fragment[] FRAGMENTS = {
             new PowerFragment(),
             new VideoFragment2(),
-            new VideoFragment(),
-//            new AudioFragment(),
+            new AudioFragment(),
             new LightFragment(),
             new CameraFragment(),
             new DvdFragment(),

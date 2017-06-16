@@ -46,7 +46,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:text="辅助屏"
+                            android:text="预留区"
                             android:textColor="@color/color_c7"
                             android:textSize="20sp"/>
                     </LinearLayout>
@@ -125,8 +125,13 @@
 
                 <RelativeLayout
                     android:layout_width="@dimen/camera_recycler_logo_width"
-                    android:layout_height="match_parent"
-                    android:background="@color/color_c2">
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/angle_bg_left"/>
 
                     <ImageView
                         android:id="@+id/icon_camera"
@@ -145,17 +150,7 @@
                         android:text="@string/camera_logo"
                         android:textColor="@color/color_c5"
                         android:textSize="@dimen/text_size_f2"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/recycler_border_width"
-                        android:background="@color/recycler_border_color"/>
                 </RelativeLayout>
-
-                <TextView
-                    android:layout_width="@dimen/recycler_border_width"
-                    android:layout_height="match_parent"
-                    android:background="@color/recycler_border_color"/>
 
                 <RelativeLayout
                     android:layout_width="0dp"
@@ -213,13 +208,185 @@
                     android:background="@color/recycler_border_color"/>
             </RelativeLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="10"
-                android:background="@color/color_c2">
+                android:background="@color/color_c2"
+                android:orientation="horizontal">
 
-            </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3">
+
+                    <RelativeLayout
+                        android:layout_width="@dimen/camera_control_background_width"
+                        android:layout_height="@dimen/camera_control_background_height"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true">
+
+                        <ImageView
+                            android:id="@+id/camera_button_bg"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@mipmap/camera_button_bg"
+                            android:scaleType="fitXY"/>
+
+                        <Button
+                            android:id="@+id/camera_up"
+                            style="@style/CameraDirectionButton"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/camera_control_direction_margin"
+                            android:background="@drawable/camera_up_selector"/>
+
+                        <Button
+                            android:id="@+id/camera_down"
+                            style="@style/CameraDirectionButton"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="@dimen/camera_control_direction_margin"
+                            android:background="@drawable/camera_down_selector"/>
+
+                        <Button
+                            android:id="@+id/camera_left"
+                            style="@style/CameraDirectionButton"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/camera_control_direction_margin"
+                            android:background="@drawable/camera_left_selector"/>
+
+                        <Button
+                            android:id="@+id/camera_right"
+                            style="@style/CameraDirectionButton"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="@dimen/camera_control_direction_margin"
+                            android:background="@drawable/camera_right_selector"/>
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="5"
+                    android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_centerVertical="true">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/center_point"
+                            android:layout_width="@dimen/camera_control_center_point_width"
+                            android:layout_height="@dimen/camera_control_center_point_height"
+                            android:layout_centerInParent="true"/>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/camera_control_zoom_out_marginRight"
+                            android:layout_toLeftOf="@id/center_point">
+
+                            <Button
+                                android:id="@+id/camera_zoom_in"
+                                style="@style/CameraPlayButton"
+                                android:background="@drawable/camera_zoom_in_selector"/>
+
+                            <TextView
+                                style="@style/CameraPlayText"
+                                android:layout_below="@id/camera_zoom_in"
+                                android:text="@string/camera_zoom_in"/>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/camera_control_zoom_in_marginLeft"
+                            android:layout_toRightOf="@id/center_point">
+
+                            <Button
+                                android:id="@+id/camera_zoom_out"
+                                style="@style/CameraPlayButton"
+                                android:background="@drawable/camera_zoom_out_selector"/>
+
+                            <TextView
+                                style="@style/CameraPlayText"
+                                android:layout_below="@id/camera_zoom_out"
+                                android:text="@string/camera_zoom_out"/>
+                        </RelativeLayout>
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/camera_control_gap_height">
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:id="@+id/layout_control_stop"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true">
+
+                            <Button
+                                android:id="@+id/camera_stop"
+                                style="@style/CameraPlayButton"
+                                android:background="@drawable/camera_stop_selector"/>
+
+                            <TextView
+                                style="@style/CameraPlayText"
+                                android:layout_below="@id/camera_stop"
+                                android:text="@string/camera_stop"/>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toLeftOf="@id/layout_control_stop"
+                            android:layout_marginRight="@dimen/camera_control_rewind_marginRight">
+
+                            <Button
+                                android:id="@+id/camera_rewind"
+                                style="@style/CameraPlayButton"
+                                android:background="@drawable/camera_rewind_selector"/>
+
+                            <TextView
+                                style="@style/CameraPlayText"
+                                android:layout_below="@id/camera_rewind"
+                                android:text="@string/camera_rewind"/>
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/layout_control_stop"
+                            android:layout_marginLeft="@dimen/camera_control_fast_forward_marginLeft">
+
+                            <Button
+                                android:id="@+id/camera_fast_forward"
+                                style="@style/CameraPlayButton"
+                                android:background="@drawable/camera_fast_forward_selector"/>
+
+                            <TextView
+                                style="@style/CameraPlayText"
+                                android:layout_below="@id/camera_fast_forward"
+                                android:text="@string/camera_fast_forward"/>
+                        </RelativeLayout>
+                    </RelativeLayout>
+                </LinearLayout>
+                </RelativeLayout>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -246,26 +413,26 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/recycler_border_width"
-                        android:layout_alignParentBottom="true"
-                        android:background="@color/recycler_border_color"/>
+                        android:background="@color/recycler_border_color"
+                        android:layout_alignParentBottom="true"/>
                 </RelativeLayout>
-
-                <TextView
-                    android:layout_width="@dimen/recycler_border_width"
-                    android:layout_height="match_parent"
-                    android:background="@color/recycler_border_color"/>
 
                 <RelativeLayout
                     android:layout_width="@dimen/video_port_logo_width"
-                    android:layout_height="match_parent"
-                    android:background="@color/color_c2">
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/angle_bg_right"/>
 
                     <TextView
                         android:id="@+id/text_preset"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
                         android:layout_marginRight="@dimen/camera_recycler_logo_marginRight"
                         android:text="@string/preset_logo"
                         android:textColor="@color/color_c5"
@@ -280,10 +447,6 @@
                         android:layout_toLeftOf="@id/text_preset"
                         android:src="@mipmap/icons_camera"/>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/recycler_border_width"
-                        android:background="@color/recycler_border_color"/>
                 </RelativeLayout>
             </LinearLayout>
 

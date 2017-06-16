@@ -4,7 +4,7 @@
     <!--login-->
     <string name="login_name">用户名</string>
     <string name="login_password">密&#160;&#160;&#160;&#160;码</string>
-    <string name="login_login">登录</string>
+    <string name="login_login">登&#160;&#160;录</string>
     <string name="product_title">雕视多媒体可视化信息流联动指挥调度系统平台</string>
 
     <string name="txt_input">输入</string>
@@ -15,21 +15,23 @@
     <string name="logo_text">雕视多媒体可视化信息联动指挥调度系统平台</string>
 
     <!--navigation-->
-    <string name="navigation_power">电源控制</string>
-    <string name="navigation_video">视频控制</string>
-    <string name="navigation_audio">音频控制</string>
-    <string name="navigation_light">灯光控制</string>
+    <string name="navigation_power">电&#160;&#160;源</string>
+    <string name="navigation_video">视&#160;&#160;频</string>
+    <string name="navigation_audio">音&#160;&#160;频</string>
+    <string name="navigation_light">灯&#160;&#160;光</string>
     <string name="navigation_camera">摄像机</string>
     <string name="navigation_dvd">DVD</string>
-    <string name="navigation_meeting">视频会议</string>
-    <string name="navigation_setting">系统设置</string>
+    <string name="navigation_meeting">会&#160;&#160;议</string>
+    <string name="navigation_setting">设&#160;&#160;置</string>
 
     <!--dialog-->
     <string name="dialog_port_alias">端口名称</string>
     <string name="dialog_port_category">图标种类</string>
     <string name="dialog_port_attribute">附加属性</string>
     <string name="dialog_button_confirm">确&#160;&#160;&#160;&#160;认</string>
+    <string name="dialog_button_delete">删&#160;&#160;&#160;&#160;除</string>
     <string name="dialog_channel_type">一对多分割屏</string>
+    <string name="dialog_preset_alias">名&#160;&#160;称</string>
 
     <!--video-->
     <string name="video_input">输入端</string>
@@ -37,11 +39,26 @@
     <string name="video_edit_hint">请输入视频标题文字</string>
 
     <!--camera-->
-    <string name="camera_zoomin">放大</string>
-    <string name="camera_zoomout">缩小</string>
+    <string name="camera_zoom_in">放大</string>
+    <string name="camera_zoom_out">缩小</string>
     <string name="camera_stop">停止</string>
-    <string name="camera_fast">快速</string>
-    <string name="camera_slow">慢速</string>
+    <string name="camera_fast_forward">快进</string>
+    <string name="camera_rewind">快退</string>
     <string name="camera_logo">摄像机</string>
     <string name="preset_logo">预置位</string>
+
+    <!--term hide layout-->
+    <string name="term_black">黑屏</string>
+    <string name="term_mute">消音</string>
+    <string name="term_hangup">删除</string>
+
+    <!--config-->
+    <string name="config_title">获取配置表</string>
+    <string name="config_ip1">IP1:</string>
+    <string name="config_ip2">IP2:</string>
+    <string name="config_ip3">IP3:</string>
+    <string name="config_type">型号:</string>
+    <string name="config_subtitle">请输入默认字幕</string>
+    <string name="config_commit">提交</string>
+    <string name="config_reset">重置</string>
 </resources>

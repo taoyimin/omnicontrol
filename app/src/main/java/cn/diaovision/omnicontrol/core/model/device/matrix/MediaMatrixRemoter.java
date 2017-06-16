@@ -98,7 +98,6 @@ public class MediaMatrixRemoter {
                     @Override
                     public void run() throws Exception {
                         matrix.updateChannel(portIn, portOut, Channel.MOD_STITCH);
-                        subscriber.onRxResult(new RxMessage("0"));
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -162,6 +161,8 @@ public class MediaMatrixRemoter {
 
                 final byte[] bytes = MatrixMessage.buildStartCameraGoMessage(matrix.id, cam.getBaudrate(), cam.getProto(), cam.getPortIdx(), cmd, speed).toBytes();
                 byte[] recv = matrix.getController().send(bytes, bytes.length);
+                e.onNext(new RxMessage(RxMessage.DONE));
+                e.onComplete();
 /*                if (recv != null && recv.length >= 0) {
                     e.onNext(new RxMessage(RxMessage.DONE));
                     e.onComplete();
@@ -192,6 +193,8 @@ public class MediaMatrixRemoter {
 
                 byte[] bytes = MatrixMessage.buildStopCameraGoMessage(matrix.id, cam.getBaudrate(), cam.getProto(), cam.getPortIdx()).toBytes();
                 byte[] recv = matrix.getController().send(bytes, bytes.length);
+                e.onNext(new RxMessage(RxMessage.DONE));
+                e.onComplete();
 /*                if (recv != null && recv.length >= 0) {
                     e.onNext(new RxMessage(RxMessage.DONE));
                     e.onComplete();
@@ -224,6 +227,7 @@ public class MediaMatrixRemoter {
             public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
                 byte[] bytes = MatrixMessage.buildSetCameraPresetMessgae(matrix.id, cam.getBaudrate(), cam.getProto(), portIdx, presetIdx).toBytes();
                 byte[] recv = matrix.getController().send(bytes, bytes.length);
+                e.onNext(new RxMessage(RxMessage.DONE));
                 e.onComplete();
 /*                if (recv.length > 0) {
                     e.onNext(new RxMessage(RxMessage.DONE));
@@ -237,9 +241,8 @@ public class MediaMatrixRemoter {
                 .doOnComplete(new Action() {
                     @Override
                     public void run() throws Exception {
-                        HiCamera.Preset preset = new HiCamera.Preset(name, presetIdx);
-                        cam.updatePreset(preset);
-                        subscriber.onRxResult(preset);
+                        //HiCamera.Preset preset = new HiCamera.Preset(name, presetIdx);
+                        //cam.updatePreset(preset);
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -263,7 +266,8 @@ public class MediaMatrixRemoter {
             public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
                 byte[] bytes = MatrixMessage.buildLoadCameraPresetMessgae(matrix.id, cam.getBaudrate(), cam.getProto(), portIdx, presetIdx).toBytes();
                 byte[] recv = matrix.getController().send(bytes, bytes.length);
-
+                e.onNext(new RxMessage(RxMessage.DONE));
+                e.onComplete();
 /*                if (recv.length > 0) {
                     e.onNext(new RxMessage(RxMessage.DONE));
                     e.onComplete();
@@ -296,7 +300,8 @@ public class MediaMatrixRemoter {
 
                 byte[] bytes = MatrixMessage.buildClearCameraPresetMessgae(matrix.id, cam.getBaudrate(), cam.getProto(), portIdx, presetIdx).toBytes();
                 byte[] recv = matrix.getController().send(bytes, bytes.length);
-
+                e.onNext(new RxMessage(RxMessage.DONE));
+                e.onComplete();
 /*                if (recv.length > 0) {
                     e.onNext(new RxMessage(RxMessage.DONE));
                     e.onComplete();
@@ -309,7 +314,7 @@ public class MediaMatrixRemoter {
                 .doOnComplete(new Action() {
                     @Override
                     public void run() throws Exception {
-                        cam.deletePreset(cam.getPreset(presetIdx));
+                        //cam.deletePreset(cam.getPreset(presetIdx));
                     }
                 })
                 .subscribeOn(Schedulers.io())

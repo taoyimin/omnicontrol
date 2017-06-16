@@ -21,7 +21,7 @@ import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
  * Universal port recyclerview adapter
  * Created by liulingfeng on 2017/3/2.
  */
-
+@Deprecated
 public class VolumeItemAdapter extends RecyclerView.Adapter<VolumeItemAdapter.VolumeItemHolder>{
 
     List<Channel> channels;

@@ -8,9 +8,10 @@ import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Scroller;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import cn.diaovision.omnicontrol.core.model.conference.Term;
  * Created by TaoYimin on 2017/5/4.
  */
 public class SlidingItemView extends RelativeLayout implements View.OnClickListener {
+    private Context context;
     private Scroller mScroller;
 
     private float downX, dispatchDownX, dispatchDownY;
@@ -48,27 +50,75 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
 
     private int hideViewWidth;
 
+    private int hideViewMode;
+
     public SlidingItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.context = context;
         mScroller = new Scroller(context);
     }
 
-    public void setHideView() {
+    public void setHideView(int hideViewMode) {
+        this.hideViewMode = hideViewMode;
         if (hideView == null) {
             createHideView();
-            if (convertView instanceof RelativeLayout) {
-                ((RelativeLayout) convertView).addView(hideView);
-                LayoutParams params = (LayoutParams) hideView
-                        .getLayoutParams();
-                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                hideView.setLayoutParams(params);
-                bringToFront();
+            switch (hideViewMode) {
+                case HideViewMode.MODE_HIDE_BOTTOM:
+
+                   // if (hideView == null) {
+                        if (convertView instanceof RelativeLayout) {
+                            ((RelativeLayout) convertView).addView(hideView);
+                            LayoutParams params = (LayoutParams) hideView
+                                    .getLayoutParams();
+                            params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                            hideView.setLayoutParams(params);
+                            bringToFront();
+                        }
+                   // }
+
+                    break;
+                case HideViewMode.MODE_HIDE_RIGHT:
+                    View container = getChildAt(0);
+                    addView(hideView);
+                    RelativeLayout.LayoutParams params = (LayoutParams) hideView
+                            .getLayoutParams();
+                    params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    hideView.setLayoutParams(params);
+
+                    params = (LayoutParams) container.getLayoutParams();
+                    params.rightMargin = hideViewWidth;
+                    container.setLayoutParams(params);
+
+                    ViewGroup.LayoutParams viewGroupLp = getLayoutParams();
+                    if (viewGroupLp instanceof LinearLayout.LayoutParams) {
+                        ((LinearLayout.LayoutParams) viewGroupLp).rightMargin = -hideViewWidth;
+                        setLayoutParams(viewGroupLp);
+                    }
+                    if (viewGroupLp instanceof RelativeLayout.LayoutParams) {
+                        ((RelativeLayout.LayoutParams) viewGroupLp).rightMargin = -hideViewWidth;
+                        setLayoutParams(viewGroupLp);
+                    }
+                    if (viewGroupLp instanceof FrameLayout.LayoutParams) {
+                        ((FrameLayout.LayoutParams) viewGroupLp).rightMargin = -hideViewWidth;
+                        setLayoutParams(viewGroupLp);
+                    }
+                    break;
             }
         }
     }
 
+    public View getHideView() {
+        return hideView;
+    }
+
     private void createHideView() {
-        hideView = LayoutInflater.from(getContext()).inflate(R.layout.layout_hide, this, false);
+        this.hideView = LayoutInflater.from(getContext()).inflate(R.layout.layout_hide, this, false);
+        if (hideViewMode == HideViewMode.MODE_HIDE_RIGHT) {
+            hideViewWidth = dip2px(context, 204);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                    hideViewWidth, LayoutParams.MATCH_PARENT);
+            hideView.setLayoutParams(params);
+        }
     }
 
     @Override
@@ -84,10 +134,17 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
                     View parent = (View) convertView.getParent();
                     if (canRemove()) {
                         int width = hideViewWidth;
+
+                        if (hideViewMode == HideViewMode.MODE_HIDE_RIGHT) {
+                            width = hideViewWidth * 2;
+                        } else if (hideViewMode == HideViewMode.MODE_HIDE_BOTTOM) {
+                            width = hideViewWidth;
+                        }
+
                         if (dispatchDownX < getWidth() - width) {
                             ViewGroup viewGroup = (ViewGroup) parent;
                             //int count = viewGroup.getChildCount();
-                            int count = viewGroup.getChildCount()-1;
+                            int count = viewGroup.getChildCount() - 1;
                             for (int i = 0; i < count; i++) {
                                 View convertView = viewGroup.getChildAt(i);
                                 SlidingItemView slidingItemView = (SlidingItemView) convertView
@@ -103,7 +160,7 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
 
                     ViewGroup viewGroup = (ViewGroup) parent;
                     //int count = viewGroup.getChildCount();
-                    int count = viewGroup.getChildCount()-1;
+                    int count = viewGroup.getChildCount() - 1;
                     boolean isExistOpenItem = false;
                     for (int i = 0; i < count; i++) {
                         View convertView = viewGroup.getChildAt(i);
@@ -164,18 +221,17 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
         return true;
     }
 
-    public void bindViewAndData(final View convertView,
-                                final List<Term> list, final int position) {
+    public void bindViewAndData(final View convertView, final List<Term> list, int hideViewMode, final int position) {
         scrollTo(0, 0);
         this.list = list;
         this.convertView = convertView;
         this.convertView.setTag(convertView.getId(), this);
-        setHideView();
+        setHideView(hideViewMode);
         this.position = position;
-        TextView btn1= (TextView) this.hideView.findViewById(R.id.button1);
-        TextView btn2= (TextView) this.hideView.findViewById(R.id.button2);
-        TextView btn3= (TextView) this.hideView.findViewById(R.id.button3);
-        Term term=list.get(position);
+        View btn1 = this.hideView.findViewById(R.id.button1);
+        View btn2 = this.hideView.findViewById(R.id.button2);
+        View btn3 = this.hideView.findViewById(R.id.button3);
+/*        Term term=list.get(position);
         if(term.isSpeaking()){
             btn1.setText("取消\n发言");
         }else{
@@ -185,7 +241,7 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
             btn2.setText("取消\n静音");
         }else{
             btn2.setText("设置\n静音");
-        }
+        }*/
         btn1.setOnClickListener(this);
         btn2.setOnClickListener(this);
         btn3.setOnClickListener(this);
@@ -303,7 +359,7 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
             List<View> views = new ArrayList<>();
             ViewGroup parent = (ViewGroup) convertView.getParent();
             //int count = parent.getChildCount();
-            int count = parent.getChildCount()-1;
+            int count = parent.getChildCount() - 1;
             for (int i = count - 1; i >= 0; i--) {
                 View childView = parent.getChildAt(i);
                 SlidingItemView slidingItemView = (SlidingItemView) childView
@@ -357,6 +413,17 @@ public class SlidingItemView extends RelativeLayout implements View.OnClickListe
     public void setOnHideViewClickListener(
             OnHideViewClickListener onHideViewClickListener) {
         this.onHideViewClickListener = onHideViewClickListener;
+    }
+
+    public interface HideViewMode {
+        int MODE_HIDE_BOTTOM = 0;
+
+        int MODE_HIDE_RIGHT = 1;
+    }
+
+    public static int dip2px(Context context, float dipValue) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dipValue * scale + 0.5f);
     }
 
 /*    public class DoNotRemoveDataException extends RuntimeException {

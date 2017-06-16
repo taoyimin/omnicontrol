@@ -33,7 +33,7 @@ import io.vov.vitamio.widget.VideoView;
  * Created by TaoYimin on 2017/4/28.
  * 流媒体播放器布局
  */
-
+@Deprecated
 public class VideoLayout extends RelativeLayout {
     @BindView(R.id.video_view)
     VideoView videoView;

@@ -60,7 +60,12 @@
 
     <!--spinner background and popup windows background color-->
     <color name="dialog_spinner_background_color">#8496a0</color>
-    
+
+    <!--term hide layout button color-->
+    <color name="term_button_black_color">#b8d3dc</color>
+    <color name="term_button_mute_color">#80a5bf</color>
+    <color name="term_button_hangup_color">#558aac</color>
+
     <!--standard color-->
     <color name="color_c1">#20262b</color>
     <color name="color_c2">#3f484e</color>

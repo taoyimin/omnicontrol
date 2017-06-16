@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/color_c2">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_weight="2.1"
+            android:layout_height="0dp">
+
+            <ImageView
+                android:id="@+id/button_go_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/go_back"
+                android:layout_marginLeft="@dimen/dialog_button_back_marginLeft"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1.4"
+            android:layout_height="0dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <TextView
+                android:id="@+id/alias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dialog_item_marginLeft"
+                android:text="@string/dialog_preset_alias"
+                android:textSize="@dimen/text_size_f1"
+                android:textColor="@color/color_c3"
+                android:layout_centerVertical="true"/>
+
+            <EditText
+                android:id="@+id/alias_edit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="@dimen/dialog_item_marginRight"
+                android:layout_toRightOf="@id/alias"
+                android:layout_marginLeft="@dimen/dialog_spinner_marginLeft"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_f3"
+                android:background="@color/dialog_spinner_background_color">
+            </EditText>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1.1"
+            android:layout_height="0dp">
+
+        </RelativeLayout>
+
+            <Button
+                android:id="@+id/dialog_button_confirm"
+                android:layout_width="match_parent"
+                android:layout_weight="1.6"
+                android:layout_height="0dp"
+                android:layout_marginLeft="@dimen/dialog_item_marginLeft"
+                android:layout_marginRight="@dimen/dialog_item_marginRight"
+                android:background="@color/color_c6"
+                android:textSize="@dimen/text_size_f1"
+                android:text="@string/dialog_button_confirm">
+            </Button>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_weight="1.1"
+            android:layout_height="0dp">
+
+        </RelativeLayout>
+
+            <Button
+                android:id="@+id/dialog_button_delete"
+                android:layout_width="match_parent"
+                android:layout_weight="1.6"
+                android:layout_height="0dp"
+                android:layout_marginLeft="@dimen/dialog_item_marginLeft"
+                android:layout_marginRight="@dimen/dialog_item_marginRight"
+                android:background="@color/color_c5"
+                android:textSize="@dimen/text_size_f1"
+                android:text="@string/dialog_button_delete">
+
+            </Button>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_weight="2.1"
+            android:layout_height="0dp">
+
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

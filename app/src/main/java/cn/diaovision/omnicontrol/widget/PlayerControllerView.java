@@ -1,13 +1,11 @@
 package cn.diaovision.omnicontrol.widget;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatImageButton;
 import android.util.AttributeSet;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import butterknife.BindView;
@@ -18,7 +16,7 @@ import cn.diaovision.omnicontrol.R;
 /**
  * Created by liulingfeng on 2017/3/18.
  */
-
+@Deprecated
 public class PlayerControllerView extends RelativeLayout {
     static final int CMD_GO_UP = 0;
     static final int CMD_GO_DOWN = 1;

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/color_c2">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true">
+
+        <TextView
+            android:id="@+id/config_title"
+            android:text="@string/config_title"
+            style="@style/ConfigItem"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_f1"
+            android:background="@color/color_c5"/>
+
+        <EditText
+            android:id="@+id/config_ip1"
+            style="@style/ConfigItem"
+            android:layout_below="@id/config_title"
+            android:textSize="@dimen/text_size_f1"
+            android:gravity="center"
+            android:textColor="@color/edit_hint_color"
+            android:layout_marginTop="@dimen/config_item_gap_height"/>
+
+        <TextView
+            style="@style/ConfigItemName"
+            android:text="@string/config_ip1"
+            android:layout_toLeftOf="@id/config_ip1"
+            android:layout_alignTop="@id/config_ip1"/>
+
+        <EditText
+            android:id="@+id/config_ip2"
+            style="@style/ConfigItem"
+            android:layout_below="@id/config_ip1"
+            android:textSize="@dimen/text_size_f1"
+            android:gravity="center"
+            android:textColor="@color/edit_hint_color"
+            android:layout_marginTop="@dimen/config_item_gap_height"/>
+
+        <TextView
+            style="@style/ConfigItemName"
+            android:text="@string/config_ip2"
+            android:layout_toLeftOf="@id/config_ip2"
+            android:layout_alignTop="@id/config_ip2"/>
+
+        <EditText
+            android:id="@+id/config_ip3"
+            style="@style/ConfigItem"
+            android:layout_below="@id/config_ip2"
+            android:textSize="@dimen/text_size_f1"
+            android:gravity="center"
+            android:textColor="@color/edit_hint_color"
+            android:layout_marginTop="@dimen/config_item_gap_height"/>
+
+        <TextView
+            style="@style/ConfigItemName"
+            android:text="@string/config_ip3"
+            android:layout_toLeftOf="@id/config_ip3"
+            android:layout_alignTop="@id/config_ip3"/>
+
+        <Spinner
+            android:id="@+id/config_type"
+            style="@style/ConfigItem"
+            android:layout_below="@id/config_ip3"
+            android:layout_marginTop="@dimen/config_item_gap_height"></Spinner>
+
+        <TextView
+            style="@style/ConfigItemName"
+            android:text="@string/config_type"
+            android:layout_toLeftOf="@id/config_type"
+            android:layout_alignTop="@id/config_type"/>
+
+        <EditText
+            android:id="@+id/config_subtitle"
+            style="@style/ConfigItem"
+            android:layout_below="@id/config_type"
+            android:textSize="@dimen/text_size_f1"
+            android:paddingLeft="@dimen/video_editView_paddingLeft"
+            android:hint="@string/config_subtitle"
+            android:textColor="@color/edit_hint_color"
+            android:layout_marginTop="@dimen/config_item_gap_height"/>
+        
+        <Button
+            android:id="@+id/config_reset"
+            style="@style/ConfigButton"
+            android:text="@string/config_reset"
+            android:layout_below="@id/config_subtitle"
+            android:layout_marginTop="@dimen/config_item_gap_height"
+            android:background="@color/color_c5"
+            android:layout_alignRight="@id/config_subtitle"/>
+
+        <Button
+            android:id="@+id/config_commit"
+            style="@style/ConfigButton"
+            android:text="@string/config_commit"
+            android:layout_toLeftOf="@id/config_reset"
+            android:layout_marginRight="@dimen/config_button_marginRight"
+            android:background="@color/color_c6"
+            android:layout_alignTop="@id/config_reset"/>
+    </RelativeLayout>
+</RelativeLayout>

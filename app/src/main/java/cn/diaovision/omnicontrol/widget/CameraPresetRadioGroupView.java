@@ -16,6 +16,7 @@ import cn.diaovision.omnicontrol.widget.adapter.CameraPresetItemAdapter;
  * Created by liulingfeng on 2017/3/9.
  */
 
+@Deprecated
 public class CameraPresetRadioGroupView extends RecyclerView {
     Context ctx;
     List<HiCamera.Preset> presetList;

@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,8 +54,8 @@ public class TermItemAdapter extends RecyclerView.Adapter<TermItemAdapter.MyView
             case TYPE_NORMAL:
                 Term term=list.get(position);
                 holder.title.setText(term.getName());
-                holder.speech.setText("发言："+term.isSpeaking());
-                holder.mute.setText("静音："+term.isMuted());
+                holder.speech.setText("黑屏："+term.isSpeaking());
+                holder.mute.setText("消音："+term.isMuted());
                 holder.slidingItemView.setOnHideViewClickListener(new SlidingItemView.OnHideViewClickListener() {
                     @Override
                     public void onClick1(View view, int pos) {
@@ -86,10 +85,10 @@ public class TermItemAdapter extends RecyclerView.Adapter<TermItemAdapter.MyView
                         Toast.makeText(context, "name=" + list.get(pos).getName() + "position=" + pos, Toast.LENGTH_SHORT).show();
                     }
                 });
-                holder.slidingItemView.bindViewAndData(holder.itemView, list, holder.getLayoutPosition());
+                holder.slidingItemView.bindViewAndData(holder.itemView, list,SlidingItemView.HideViewMode.MODE_HIDE_BOTTOM,holder.getLayoutPosition());
                 break;
             case TYPE_FOOTER:
-                holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                //holder.itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                 break;
         }
     }
@@ -120,7 +119,6 @@ public class TermItemAdapter extends RecyclerView.Adapter<TermItemAdapter.MyView
         TextView title;
         TextView mute;
         TextView speech;
-        ImageView image;
         SlidingItemView slidingItemView;
 
         public MyViewHolder(View itemView) {
@@ -131,7 +129,6 @@ public class TermItemAdapter extends RecyclerView.Adapter<TermItemAdapter.MyView
             title = (TextView) itemView.findViewById(R.id.title);
             mute= (TextView) itemView.findViewById(R.id.mute);
             speech= (TextView) itemView.findViewById(R.id.speech);
-            image = (ImageView) itemView.findViewById(R.id.image);
             slidingItemView = (SlidingItemView) itemView.findViewById(R.id.item_view);
         }
 

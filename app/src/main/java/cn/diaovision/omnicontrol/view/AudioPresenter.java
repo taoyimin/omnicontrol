@@ -2,6 +2,15 @@ package cn.diaovision.omnicontrol.view;
 
 import android.support.annotation.NonNull;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
+import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
+import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
+import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
+import cn.diaovision.omnicontrol.model.Config;
+import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
@@ -15,6 +24,18 @@ import io.reactivex.subjects.Subject;
  */
 
 public class AudioPresenter implements AudioContract.Presenter {
+    static final String TAG="audio";
+
+    Config cfg = new ConfigFixed();
+    MediaMatrix matrix = new MediaMatrix.Builder()
+            .id(cfg.getMatrixId())
+            .ip(cfg.getMatrixIp())
+            .port(cfg.getMatrixUdpIpPort())
+            .localPreviewVideo(cfg.getMatrixPreviewIp(), cfg.getMatrixPreviewPort())
+            .videoInInit(cfg.getMatrixInputVideoNum())
+            .videoOutInit(cfg.getMatrixOutputVideoNum())
+            .camerasInit()
+            .build();
 
     //通过Subject实现ViewModel的双向绑定
     Subject bus = PublishSubject.create();
@@ -72,6 +93,52 @@ public class AudioPresenter implements AudioContract.Presenter {
         if (subscription != null){
             subscription.dispose();
         }
+    }
+
+    @Override
+    public int[] getOutputIdx(int inputIdx) {
+        Set<Channel> chnSet=matrix.getVideoChnSet();
+        Iterator<Channel> iterator=chnSet.iterator();
+        while (iterator.hasNext()){
+            Channel channel=iterator.next();
+            if(channel.getInputIdx()==inputIdx){
+                return channel.getOutputIdx();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public int getInputIdx(int outputIdx) {
+        Set<Channel> chnSet=matrix.getVideoChnSet();
+        Iterator<Channel> iterator=chnSet.iterator();
+        while (iterator.hasNext()){
+            Channel channel=iterator.next();
+            if(channel.containOutputIdx(outputIdx)){
+                return channel.getInputIdx();
+            }
+        }
+        return -1;
+    }
+
+    @Override
+    public List<Port> getInputList() {
+        return matrix.getVideoInPort();
+    }
+
+    @Override
+    public List<Port> getOutputList() {
+        return matrix.getVideoOutPort();
+    }
+
+    @Override
+    public Set<Channel> getChannelSet() {
+        return matrix.getVideoChnSet();
+    }
+
+    @Override
+    public void setChannel(int input, int[] outputs, int mode) {
+        matrix.updateChannel(input,outputs,mode);
     }
 
     //TODO: add viewmodel operations if needed

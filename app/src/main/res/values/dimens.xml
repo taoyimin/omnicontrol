@@ -31,17 +31,23 @@
     <dimen name="text_size_f4">6.43sp</dimen>-->
 
     <!--login activity-->
-    <dimen name="login_title_margin_top">105.14dp</dimen>
-    <dimen name="login_title_text_size">20.75sp</dimen>
+<!--    <dimen name="login_title_margin_top">105.14dp</dimen>
+    <dimen name="login_title_text_size">22.57sp</dimen>
     <dimen name="login_logo_image_width">200dp</dimen>
     <dimen name="login_logo_image_height">100dp</dimen>
     <dimen name="login_text_size">20sp</dimen>
     <dimen name="login_edit_width">300dp</dimen>
-    <dimen name="login_edit_height">40dp</dimen>
+    <dimen name="login_edit_height">40dp</dimen>-->
+    <dimen name="login_title_text_size">22.57sp</dimen>
+    <dimen name="login_item_paddingLeft">42.86dp</dimen>
+    <dimen name="login_item_paddingRight">42.86dp</dimen>
+    <dimen name="login_editText_marginLeft">10dp</dimen>
+    <dimen name="login_button_width">64.66dp</dimen>
 
-    <!--navigation layout-->
+    <!--navigation bar-->
     <dimen name="navigation_image_paddingLeft">17.29dp</dimen>
     <dimen name="navigation_radioGroup_marginTop">2.77dp</dimen>
+    <dimen name="navigation_radioButton_textSize">15sp</dimen>
 
     <!--recycler view port item-->
     <dimen name="port_background_width">60.18dp</dimen>
@@ -51,7 +57,21 @@
     <dimen name="port_background_marginTop">10.03dp</dimen>
     <dimen name="port_alias_marginTop">6.92dp</dimen>
     <dimen name="port_alias_marginBottom">10.03dp</dimen>
+    <dimen name="port_alias_marginLeft">7dp</dimen>
+    <dimen name="port_alias_marginRight">7dp</dimen>
     <dimen name="port_badge_textSize">13sp</dimen>
+    
+    <!--recycler view term item-->
+    <dimen name="term_slide_height">72.93dp</dimen>
+    <dimen name="term_slide_marginTop">3.38dp</dimen>
+    <dimen name="term_slide_marginBottom">3.38dp</dimen>
+    <dimen name="term_image_width">130.8dp</dimen>
+
+    <!--term hide layout-->
+    <dimen name="term_hide_width">204dp</dimen>
+    <dimen name="term_hide_icon_width">28.57dp</dimen>
+    <dimen name="term_hide_icon_height">28.57dp</dimen>
+    <dimen name="term_hide_text_marginTop">10.53dp</dimen>
 
     <!--recycler border width-->
     <dimen name="recycler_border_width">0.7dp</dimen>
@@ -80,8 +100,6 @@
     <dimen name="video_port_recycler_marginTop">9.34dp</dimen>
 
     <!--camera fragment-->
-    <dimen name="camera_control_button_width">60dp</dimen>
-    <dimen name="camera_control_button_height">60dp</dimen>
     <dimen name="camera_layoutTop_marginTop">2.77dp</dimen>
     <dimen name="camera_layoutBottom_marginTop">4.15dp</dimen>
     <dimen name="camera_recycler_logo_width">150dp</dimen>
@@ -91,4 +109,41 @@
     <dimen name="camera_recycler_marginLeft">8.65dp</dimen>
     <dimen name="camera_recycler_marginRight">8.65dp</dimen>
     <dimen name="camera_recycler_marginTop">9.34dp</dimen>
+
+    <!--camera control layout-->
+    <dimen name="camera_control_background_width">128.66dp</dimen>
+    <dimen name="camera_control_background_height">128.66dp</dimen>
+    <dimen name="camera_control_center_point_width">0.1dp</dimen>
+    <dimen name="camera_control_center_point_height">0.1dp</dimen>
+    <dimen name="camera_control_button_width">40.81dp</dimen>
+    <dimen name="camera_control_button_height">40.81dp</dimen>
+    <dimen name="camera_control_zoom_out_marginRight">12.1dp</dimen>
+    <dimen name="camera_control_zoom_in_marginLeft">12.1dp</dimen>
+    <dimen name="camera_control_rewind_marginRight">24.2dp</dimen>
+    <dimen name="camera_control_fast_forward_marginLeft">24.2dp</dimen>
+    <dimen name="camera_control_gap_height">11.76dp</dimen>
+    <dimen name="camera_control_text_marginTop">10.38dp</dimen>
+    <dimen name="camera_control_direction_width">13.84dp</dimen>
+    <dimen name="camera_control_direction_height">13.84dp</dimen>
+    <dimen name="camera_control_direction_margin">10dp</dimen>
+
+    <!--meeting fragment-->
+    <dimen name="meeting_term_recycler_paddingLeft">15.04dp</dimen>
+    <dimen name="meeting_radio_button_width">47.04dp</dimen>
+    <dimen name="meeting_radio_button_height">47.04dp</dimen>
+
+    <!--audio fragment-->
+    <dimen name="audio_seekBar_maxHeight">6.77dp</dimen>
+    <dimen name="audio_seekBarWrapper_width">45.11dp</dimen>
+    <dimen name="audio_seekBarWrapper_marginBottom">-10dp</dimen>
+    <dimen name="audio_seekBarWrapper_marginTop">5dp</dimen>
+    
+    <!--config fragment-->
+    <dimen name="config_item_width">327.07dp</dimen>
+    <dimen name="config_item_height">35.34dp</dimen>
+    <dimen name="config_item_gap_height">27.82dp</dimen>
+    <dimen name="config_item_name_marginRight">13.53dp</dimen>
+    <dimen name="config_button_width">82.71dp</dimen>
+    <dimen name="config_button_height">27.82dp</dimen>
+    <dimen name="config_button_marginRight">5.26dp</dimen>
 </resources>

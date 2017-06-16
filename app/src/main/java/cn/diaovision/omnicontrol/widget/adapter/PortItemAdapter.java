@@ -21,7 +21,7 @@ import cn.diaovision.omnicontrol.widget.CircleCharView;
  * Universal port recyclerview adapter
  * Created by liulingfeng on 2017/3/2.
  */
-
+@Deprecated
 public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortItemViewHolder> {
 
     List<Port> ports;

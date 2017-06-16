@@ -11,7 +11,7 @@ import cn.diaovision.omnicontrol.view.ViewPagerFragment;
 /**
  * Created by TaoYimin on 2017/5/22.
  */
-
+@Deprecated
 public class VerticalFragmentPagerAdapter extends FragmentPagerAdapter {
     List<ViewPagerFragment> list;
 

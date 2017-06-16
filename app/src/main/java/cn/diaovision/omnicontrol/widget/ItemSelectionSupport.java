@@ -398,13 +398,14 @@ public class ItemSelectionSupport {
                 //选中
                 selects.add(position);
                 mOnItemStatueListener.onSelectMultiple(position);
+                lastPosition=position;
             }else{
                 //取消选中
                 selects.remove(selects.indexOf(position));
                 mOnItemStatueListener.onUnSelectMultiple(position);
+                lastPosition=-1;
             }
             adapter.notifyItemChanged(position);
-            lastPosition=-1;
             if(mOnItemStatueListener!=null){
                 mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
             }
@@ -445,7 +446,7 @@ public class ItemSelectionSupport {
                         //刷新之前选中的item
                         adapter.notifyItemChanged(lastPosition);
                     }else{
-                        adapter.notifyDataSetChanged();
+                        //adapter.notifyDataSetChanged();
                     }
                     //刷新现在选中的item
                     adapter.notifyItemChanged(position);
