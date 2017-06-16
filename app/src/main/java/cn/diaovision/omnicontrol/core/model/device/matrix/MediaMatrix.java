@@ -381,22 +381,27 @@ public class MediaMatrix {
     //    }
 
     //update channel in two cases: switch or stitch
-    public void updateChannel(int in, int[] outs, int mode) {
+    synchronized public void updateChannel(int in, int[] outs, int mode) {
         //clear channels with outs or in
-        for (Channel ch : videoChnSet) {
-            boolean containOut = false;
-            int[] chOuts = ch.outputIdx;
-            for (int m : chOuts) {
-                for (int n : outs) {
-                    if (m == n) {
-                        containOut = true;
-                        break;
+        boolean isContained = true;
+        while (isContained) {
+            isContained = false;
+            for (Channel ch : videoChnSet) {
+                int[] chOuts = ch.outputIdx;
+                for (int m : chOuts) {
+                    for (int n : outs) {
+                        if (m == n) {
+                            isContained = true;
+                            break;
+                        }
                     }
                 }
-            }
 
-            if (ch.inputIdx == in || containOut) {
-                videoChnSet.remove(ch);
+                if (ch.inputIdx == in || isContained) {
+                    videoChnSet.remove(ch);
+                    isContained = true;
+                    break;
+                }
             }
         }
 
