@@ -1,6 +1,8 @@
 package cn.diaovision.omnicontrol.core.model.conference;
 
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -394,7 +396,15 @@ public class McuCommManager {
                     Thread.sleep(1000);
                     if (client.getState() != TcpClient.STATE_CONNECTED) {
                         disconnect();
-                        connect(null);
+                        connect(new RxSubscriber() {
+                            @Override
+                            public void onRxResult(Object o) {
+                            }
+
+                            @Override
+                            public void onRxError(Throwable e) {
+                            }
+                        });
                     }
                     if (commListener != null) {
                         commListener.onConnectionChanged(client.getState());
@@ -480,12 +490,17 @@ public class McuCommManager {
         BaseCyclicThread msgDieoutThread = new BaseCyclicThread() {
             @Override
             public void work() {
-
                 ackListLock.lock();
                 try {
-                    McuBundle bundle = ackList.getFirst();
-                    if (System.currentTimeMillis() - bundle.timeRecv > ACK_TIMEOUT) {
-                        ackList.removeFirst();
+//                    Log.i("MCU", "ackList size = " + ackList.size());
+                    if (ackList.size() == 0){
+                        //skip the check
+                    }
+                    else {
+                        McuBundle bundle = ackList.getFirst();
+                        if (System.currentTimeMillis() - bundle.timeRecv > ACK_TIMEOUT) {
+                            ackList.removeFirst();
+                        }
                     }
                 } finally {
                     ackListLock.unlock();
@@ -496,6 +511,7 @@ public class McuCommManager {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+
             }
         };
 
