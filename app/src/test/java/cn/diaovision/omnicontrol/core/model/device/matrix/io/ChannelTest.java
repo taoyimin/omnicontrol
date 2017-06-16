@@ -8,6 +8,7 @@ import static org.junit.Assert.*;
  * Created by liulingfeng on 2017/6/9.
  */
 public class ChannelTest {
+
     @Test
     public void hashCodeTest() throws Exception {
         int[] outs = new int[2];
