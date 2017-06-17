@@ -45,7 +45,6 @@ public class ConfigFixed implements Config{
 
     @Override
     public int getMcuPort() {
-        //return 554;
         return 6190;
     }
 

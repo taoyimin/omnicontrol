@@ -30,4 +30,7 @@ public class MediaMatrixTest {
         }
     }
 
+    @Test
+    public void linkedListTest() throws Exception {
+    }
 }
