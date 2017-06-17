@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:letterSpacing="1"
+        android:text="尚未开放"
+        android:gravity="center"
+        android:textSize="60sp"
+        android:textColor="@color/color_c5"/>
+</RelativeLayout>
+<!--
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:appCompat="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal" android:layout_width="match_parent"
@@ -249,4 +265,4 @@
     </LinearLayout>
 </RelativeLayout>
 </ScrollView>
-</RelativeLayout>
+</RelativeLayout>-->

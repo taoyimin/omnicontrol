@@ -2,54 +2,13 @@ package cn.diaovision.omnicontrol.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.Toast;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnTouch;
 import cn.diaovision.omnicontrol.BaseFragment;
-import cn.diaovision.omnicontrol.OmniControlApplication;
 import cn.diaovision.omnicontrol.R;
-import cn.diaovision.omnicontrol.conn.UdpClient;
-import cn.diaovision.omnicontrol.core.message.MatrixMessage;
-import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
-import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
-import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
-import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
-import cn.diaovision.omnicontrol.model.Config;
-import cn.diaovision.omnicontrol.model.ConfigFixed;
-import cn.diaovision.omnicontrol.rx.RxExecutor;
-import cn.diaovision.omnicontrol.rx.RxMessage;
-import cn.diaovision.omnicontrol.rx.RxReq;
-import cn.diaovision.omnicontrol.rx.RxSubscriber;
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by liulingfeng on 2017/2/24.
@@ -57,7 +16,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class DvdFragment extends BaseFragment implements DvdContract.View{
 
-    Config cfg = new ConfigFixed();
+/*    Config cfg = new ConfigFixed();
     MediaMatrix matrix = new MediaMatrix.Builder()
             .id(cfg.getMatrixId())
             .ip(cfg.getMatrixIp())
@@ -124,7 +83,7 @@ public class DvdFragment extends BaseFragment implements DvdContract.View{
     int camPort;
     int baudrate;
     int baudrateIdx;
-    int proto;
+    int proto;*/
 
     @Nullable
     @Override
@@ -133,7 +92,7 @@ public class DvdFragment extends BaseFragment implements DvdContract.View{
         View v = inflater.inflate(R.layout.fragment_dvd, container, false);
         ButterKnife.bind(this, v);
 
-        List<Integer> portList = new ArrayList<>();
+/*        List<Integer> portList = new ArrayList<>();
         for (int m = 0; m < 32; m ++){
             portList.add(m);
         }
@@ -273,11 +232,12 @@ public class DvdFragment extends BaseFragment implements DvdContract.View{
                 }
                 return false;
             }
-        });
+        });*/
 
         return v;
     }
 
+/*
     @OnClick(R.id.btn_setip)
     void setIp(){
         final String newIp = ipEdit.getText().toString();
@@ -450,6 +410,7 @@ public class DvdFragment extends BaseFragment implements DvdContract.View{
             }
         });
     }
+*/
 
     @Override
     public void bindPresenter() {

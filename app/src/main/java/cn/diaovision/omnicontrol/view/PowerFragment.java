@@ -5,13 +5,10 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.R;
-import cn.diaovision.omnicontrol.widget.DirectionPad;
 
 /* *
  * 开关控制页面
@@ -20,7 +17,7 @@ import cn.diaovision.omnicontrol.widget.DirectionPad;
 
 public class PowerFragment  extends BaseFragment implements PowerContract.View{
 
-    @BindView(R.id.pad_direction)
+/*    @BindView(R.id.pad_direction)
     DirectionPad padDirection;
 
     @BindView(R.id.viewstub)
@@ -30,7 +27,7 @@ public class PowerFragment  extends BaseFragment implements PowerContract.View{
     TextView xV;
 
     @BindView(R.id.y)
-    TextView yV;
+    TextView yV;*/
 
     PowerContract.Presenter presenter;
 
@@ -52,7 +49,7 @@ public class PowerFragment  extends BaseFragment implements PowerContract.View{
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        padDirection.setOnMoveListener(new DirectionPad.OnMoveListener() {
+/*        padDirection.setOnMoveListener(new DirectionPad.OnMoveListener() {
             @Override
             public void onMove(int deg, int velo) {
                 xV.setText("deg = " + deg);
@@ -63,7 +60,7 @@ public class PowerFragment  extends BaseFragment implements PowerContract.View{
             public void onMoveFinish() {
 
             }
-        });
+        });*/
     }
 
     /* *********************************
