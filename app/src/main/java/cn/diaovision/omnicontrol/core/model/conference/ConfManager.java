@@ -65,6 +65,7 @@ public class ConfManager {
 
         //2. connect mcu, get confTemplate, get confInfo become ready
         //   if any error -> onError -> state idle
+        Log.i("MCU","init conference");
         mcuCommMgr.connect()
                 .flatMap(new Function<RxMessage, Publisher<RxMessage>>() {
                     @Override

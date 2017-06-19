@@ -82,23 +82,23 @@ public class ConferencePresenter implements ConferenceContract.Presenter {
 
 
     /* invoked by the view interaction*/
-    public void func() {
-        RxExecutor.getInstance().post(new RxReq() {
-            @Override
-            public RxMessage request() {
-                /*TODO: 这里添加presenter对model的交互逻辑*/
-                return null;
-            }
-        }, new Consumer<RxMessage>() {
-            @Override
-            public void accept(RxMessage s) throws Exception {
-                //TODO: 这里添加presenter根据提交请求的异步返回结果对view的操作逻辑
-
-                //TODO: 采用MVVM方式更新(可选)
-                //RxBus.getInstance().post(new RxMessage("MVP", null));
-            }
-        }, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN);
-    }
+//    public void func() {
+//        RxExecutor.getInstance().post(new RxReq() {
+//            @Override
+//            public RxMessage request() {
+//                /*TODO: 这里添加presenter对model的交互逻辑*/
+//                return null;
+//            }
+//        }, new Consumer<RxMessage>() {
+//            @Override
+//            public void accept(RxMessage s) throws Exception {
+//                //TODO: 这里添加presenter根据提交请求的异步返回结果对view的操作逻辑
+//
+//                //TODO: 采用MVVM方式更新(可选)
+//                //RxBus.getInstance().post(new RxMessage("MVP", null));
+//            }
+//        }, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN);
+//    }
 
 
     //TODO: (optional) remove all subscriber before the presenter is destroyed
