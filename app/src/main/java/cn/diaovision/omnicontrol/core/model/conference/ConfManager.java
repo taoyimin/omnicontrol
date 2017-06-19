@@ -57,7 +57,7 @@ public class ConfManager {
     }
 
     /*初始化，异步调用*/
-    public void init(Config cfg, final RxSubscriber<RxMessage> subscriber){
+    public void init(final Config cfg, final RxSubscriber<RxMessage> subscriber){
 
         //1. 初始化commMgr
         mcu = new Mcu(cfg.getMcuIp(), cfg.getMcuPort());
@@ -65,14 +65,20 @@ public class ConfManager {
 
         //2. connect mcu, get confTemplate, get confInfo become ready
         //   if any error -> onError -> state idle
-        Log.i("MCU","init conference");
         mcuCommMgr.connect()
                 .flatMap(new Function<RxMessage, Publisher<RxMessage>>() {
                     @Override
                     public Publisher<RxMessage> apply(RxMessage rxMessage) throws Exception {
-                        Log.i("conf","McuMessage.buildReqConfAll()");
-                        McuMessage reqConfInfoMsg = McuMessage.buildReqConfAll();
 
+                        McuMessage loginMsg = McuMessage.buildLogin(cfg.getMcuId(), cfg.getMcuKey());
+                        ConfEditor confLoginEditor = new ConfEditor() {
+                            @Override
+                            public void edit(Object o) {
+
+                            }
+                        };
+
+                        McuMessage reqConfInfoMsg = McuMessage.buildReqConfAll();
                         ConfEditor confInfoEditor = new ConfEditor() {
                             @Override
                             public void edit(Object o) {
@@ -100,10 +106,14 @@ public class ConfManager {
                             }
                         };
 
-                        Log.i("conf","confInfoTemplate.getConfNum()="+confInfoTemplate.getConfNum());
                         List<McuCommManager.McuBundle> bundleList = new ArrayList<McuCommManager.McuBundle>();
 
                         McuCommManager.McuBundle bundle = new McuCommManager.McuBundle();
+                        bundle.msg = loginMsg;
+                        bundle.confEditor = confLoginEditor;
+                        bundleList.add(bundle);
+
+                        bundle = new McuCommManager.McuBundle();
                         bundle.msg = reqConfInfoMsg;
                         bundle.confEditor = confInfoEditor;
                         bundleList.add(bundle);
@@ -118,10 +128,11 @@ public class ConfManager {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .retry(3) //retry initialize 3 times before it really calls to the onError
+//                .retry(3) //retry initialize 3 times before it really calls to the onError
                 .doOnComplete(new Action() {
                     @Override
                     public void run() throws Exception {
+                        Log.i("MCU", "mcu ready");
                         state.set(STATE_READY);
                     }
                 })

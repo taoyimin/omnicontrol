@@ -83,7 +83,9 @@
             <cn.diaovision.omnicontrol.widget.AssistDrawerLayout
                 android:id="@+id/assist_drawer_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true">
 
             </cn.diaovision.omnicontrol.widget.AssistDrawerLayout>
         </RelativeLayout>

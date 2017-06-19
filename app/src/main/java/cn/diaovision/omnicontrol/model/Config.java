@@ -20,6 +20,8 @@ public interface Config {
 
     String getMcuIp();
     int getMcuPort();
+    String getMcuId();
+    String getMcuKey();
 
 
     //Matrix attributes

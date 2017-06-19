@@ -86,6 +86,16 @@ public class ConfigXXX implements Config{
     }
 
     @Override
+    public String getMcuId() {
+        return null;
+    }
+
+    @Override
+    public String getMcuKey() {
+        return null;
+    }
+
+    @Override
     public int getMatrixId() {
         return Integer.parseInt(root.element("matrix").attributeValue("id").trim());
     }

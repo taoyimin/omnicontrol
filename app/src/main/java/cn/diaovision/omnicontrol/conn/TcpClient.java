@@ -70,7 +70,7 @@ public class TcpClient {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.i("U", "A error");
+                Log.i("MCU", "A error");
             }
         }
     }
@@ -98,10 +98,14 @@ public class TcpClient {
     }
 
     synchronized public int send(byte data[]){
+        Log.i("MCU", "tcp state = "  + state.get());
         if (state.get() == STATE_CONNECTED && output != null) {
+                Log.i("MCU", "send tcp");
             try {
+//                Log.i("MCU", "send tcp");
                 output.write(data);
                 output.flush();
+
                 return data.length;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -110,6 +114,7 @@ public class TcpClient {
             }
         }
         else {
+            Log.i("MCU", "tcp disconnected");
             //if at disconnected or connecting state
             return -1;
         }

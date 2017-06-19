@@ -40,12 +40,23 @@ public class ConfigFixed implements Config{
 
     @Override
     public String getMcuIp() {
-        return "192.168.10.100";
+//        return "192.168.10.100";
+        return "127.0.0.1";
     }
 
     @Override
     public int getMcuPort() {
         return 6190;
+    }
+
+    @Override
+    public String getMcuId() {
+        return "Admin";
+    }
+
+    @Override
+    public String getMcuKey() {
+        return "123";
     }
 
     @Override

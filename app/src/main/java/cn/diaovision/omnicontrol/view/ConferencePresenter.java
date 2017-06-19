@@ -64,12 +64,12 @@ public class ConferencePresenter implements ConferenceContract.Presenter {
         confManager.init(cfg, new RxSubscriber<RxMessage>() {
             @Override
             public void onRxResult(RxMessage rxMessage) {
-                Log.i(TAG,"ConfManager init success");
+                Log.i("MCU","ConfManager init success");
             }
 
             @Override
             public void onRxError(Throwable e) {
-                Log.i(TAG,"ConfManager init failed");
+                Log.i("MCU","ConfManager init failed");
             }
         });
     }
