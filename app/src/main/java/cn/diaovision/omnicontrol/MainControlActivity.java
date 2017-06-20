@@ -22,6 +22,7 @@ import cn.diaovision.omnicontrol.view.DvdFragment;
 import cn.diaovision.omnicontrol.view.LightFragment;
 import cn.diaovision.omnicontrol.view.PowerFragment;
 import cn.diaovision.omnicontrol.view.VideoFragment2;
+import io.vov.vitamio.Vitamio;
 
 //import com.roughike.bottombar.BottomBar;
 //import devlight.io.library.ntb.NavigationTabBar;
@@ -95,9 +96,7 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         app = (OmniControlApplication) getApplication();
-        //添加解码监听判断
-        if (!io.vov.vitamio.LibsChecker.checkVitamioLibs(this))
-            return;
+        Vitamio.isInitialized(getApplicationContext());
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 

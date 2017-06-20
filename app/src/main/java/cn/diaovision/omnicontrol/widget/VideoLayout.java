@@ -2,6 +2,7 @@ package cn.diaovision.omnicontrol.widget;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.PixelFormat;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -68,11 +69,14 @@ public class VideoLayout extends RelativeLayout {
         View view = View.inflate(context, R.layout.layout_video, this);
         ButterKnife.bind(this, view);
 
+        videoView.getHolder().setFormat(PixelFormat.RGBA_8888);
+        videoView.setHardwareDecoder(true);
+
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
                 Log.i("info","onPrepared");
-                //videoView.setBufferSize(1024 * 512); //设置视频缓冲大小
+                videoView.setBufferSize(1024 * 512); //设置视频缓冲大小
                 videoView.setVideoQuality(MediaPlayer.VIDEOQUALITY_LOW);//设置播放画质
                 mediaPlayer.setPlaybackSpeed(1.0f);
                 mediaPlayer.start();

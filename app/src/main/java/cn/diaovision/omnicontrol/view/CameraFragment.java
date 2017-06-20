@@ -365,7 +365,8 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
             });
         }
 
-        videoLayout.setVideoPath("rtsp://192.168.1.102:8554/test");
+        //videoLayout.setVideoPath("rtsp://192.168.10.100:8554/test.ts");
+        //videoLayout.setVideoPath("http://192.168.10.100:8080/Test/video2.mp4");
     }
 
     @Override
