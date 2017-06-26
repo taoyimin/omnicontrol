@@ -70,14 +70,13 @@ public class VideoLayout extends RelativeLayout {
         ButterKnife.bind(this, view);
 
         videoView.getHolder().setFormat(PixelFormat.RGBA_8888);
-        videoView.setHardwareDecoder(true);
 
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
                 Log.i("info","onPrepared");
-                videoView.setBufferSize(1024 * 512); //设置视频缓冲大小
-                videoView.setVideoQuality(MediaPlayer.VIDEOQUALITY_LOW);//设置播放画质
+                //videoView.setBufferSize(1024 * 512); //设置视频缓冲大小
+                //videoView.setVideoQuality(MediaPlayer.VIDEOQUALITY_LOW);//设置播放画质
                 mediaPlayer.setPlaybackSpeed(1.0f);
                 mediaPlayer.start();
             }
