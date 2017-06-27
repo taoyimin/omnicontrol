@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2006 The Android Open Source Project
- * Copyright (C) 2013 YIXIA.COM
+ * Copyright (C) 2015 Zhang Rui <bbcallen@gmail.com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +14,28 @@
  * limitations under the License.
  */
 
-package io.vov.vitamio;
+package cn.diaovision.omnicontrol.widget.media;
 
-/**
- * DON'T TOUCH THIS FILE IF YOU DON'T KNOW THE MediaScanner PROCEDURE!!!
- */
-public interface MediaScannerClient {
-  public void scanFile(String path, long lastModified, long fileSize);
+import android.view.View;
+import android.widget.MediaController;
 
-  public void addNoMediaFolder(String path);
+public interface IMediaController {
+    void hide();
 
-  public void handleStringTag(String name, byte[] value, String valueEncoding);
+    boolean isShowing();
 
-  public void setMimeType(String mimeType);
+    void setAnchorView(View view);
+
+    void setEnabled(boolean enabled);
+
+    void setMediaPlayer(MediaController.MediaPlayerControl player);
+
+    void show(int timeout);
+
+    void show();
+
+    //----------
+    // Extends
+    //----------
+    void showOnce(View view);
 }
