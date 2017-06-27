@@ -96,7 +96,7 @@
             android:layout_weight="4"
             android:orientation="vertical">
 
-            <TextView
+<!--            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center"
@@ -105,7 +105,14 @@
                 android:gravity="center"
                 android:text="16:9显示屏"
                 android:textColor="@color/edit_hint_color"
-                android:textSize="30sp"/>
+                android:textSize="30sp"/>-->
+
+            <cn.diaovision.omnicontrol.widget.media.IjkVideoView
+                android:id="@+id/video_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </cn.diaovision.omnicontrol.widget.media.IjkVideoView>
 
             <EditText
                 android:id="@+id/edit_subtitle"

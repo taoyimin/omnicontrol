@@ -367,9 +367,10 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
 
         //videoLayout.setVideoPath("rtsp://192.168.10.100:8554/test.ts");
         //videoLayout.setVideoPath("http://192.168.10.100:8080/Test/video2.mp4");
-        videoLayout.setVideoPath("rtsp://192.168.10.31/test1.mp4");
+        videoLayout.setVideoPath("rtsp://192.168.10.31/test1.ts");
         //videoLayout.setVideoPath("http://ivi.bupt.edu.cn/hls/cctv5phd.m3u8");
         //videoLayout.setVideoPath("http://192.168.10.101:8080/Test/video2.mp4");
+        videoLayout.start();
     }
 
     @Override
@@ -456,9 +457,15 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
     }
 
     @Override
-    public void onDestroyView() {
+    public void onStop() {
+        super.onStop();
         //停止视频播放，并释放资源
-        videoLayout.stopPlayback();
+        //videoLayout.stopPlayback();
+        //IjkMediaPlayer.native_profileEnd();
+    }
+
+    @Override
+    public void onDestroyView() {
         super.onDestroyView();
     }
 }

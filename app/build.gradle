@@ -66,5 +66,9 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
 
-    compile project(path: ':vitamio')
+    compile project(':ijkplayer-java')
+
+    compile project(':ijkplayer-armv7a')
+
+    compile project(':ijkplayer-arm64')
 }

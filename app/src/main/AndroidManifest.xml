@@ -29,16 +29,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainControlActivity"
-            android:screenOrientation="landscape"
-                  android:process=":vitamio">
+            android:screenOrientation="landscape">
 
         </activity>
-        <!--视频播放的Activity声明-->
-        <activity
-            android:name="io.vov.vitamio.activity.InitActivity"
-            android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
-            android:launchMode="singleTop"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 </manifest>
