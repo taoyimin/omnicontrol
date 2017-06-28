@@ -55,7 +55,7 @@ public class ConfigFixed implements Config{
 
     @Override
     public String getMatrixIp() {
-        return "192.168.10.12";
+        return "192.168.10.11";
     }
 
     @Override

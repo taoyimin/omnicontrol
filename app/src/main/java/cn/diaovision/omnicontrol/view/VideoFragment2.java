@@ -111,7 +111,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                 for(int i=0;i<selects.size();i++){
                     outs[i]=selects.get(i);
                 }
-/*                switch (mode){
+                switch (mode){
                     case AssistDrawerLayout.MODE_1XN:
                         presenter.switchVideo(in,outs);
                         break;
@@ -124,8 +124,8 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                     case AssistDrawerLayout.MODE_3X3:
                         presenter.stitchVideo(in,3,3,outs);
                         break;
-                }*/
-                presenter.setChannel(in,outs,Channel.MOD_NORMAL);
+                }
+                //presenter.setChannel(in,outs,Channel.MOD_NORMAL);
                 //编辑完成后设为单选模式
                 outputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
                 outputAdapter.notifyDataSetChanged();

@@ -460,7 +460,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
     public void onStop() {
         super.onStop();
         //停止视频播放，并释放资源
-        //videoLayout.stopPlayback();
+        videoLayout.stopPlayback();
         //IjkMediaPlayer.native_profileEnd();
     }
 
