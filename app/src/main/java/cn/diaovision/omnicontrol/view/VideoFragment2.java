@@ -29,8 +29,8 @@ import cn.diaovision.omnicontrol.widget.AssistDrawerLayout;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
 import cn.diaovision.omnicontrol.widget.PortDialog;
+import cn.diaovision.omnicontrol.widget.VideoLayout;
 import cn.diaovision.omnicontrol.widget.adapter.PortAdapter;
-import cn.diaovision.omnicontrol.widget.media.IjkVideoView;
 
 /**
  * Created by TaoYimin on 2017/5/18.
@@ -50,7 +50,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     @BindView(R.id.edit_subtitle)
     EditText editSubtitle;
     @BindView(R.id.video_layout)
-    IjkVideoView ijkVideoView;
+    VideoLayout ijkVideoView;
 
     private PortAdapter inputAdapter;
     private PortAdapter outputAdapter;
@@ -236,7 +236,8 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                     }
                 }
                 outputAdapter.notifyDataSetChanged();
-/*                presenter.switchVideo(position,new int[]{25});
+/*                ijkVideoView.stopPlayback();
+                presenter.switchVideo(position,new int[]{25});
                 ijkVideoView.setVideoPath("rtsp://192.168.10.31/test1.ts");
                 ijkVideoView.start();*/
             }

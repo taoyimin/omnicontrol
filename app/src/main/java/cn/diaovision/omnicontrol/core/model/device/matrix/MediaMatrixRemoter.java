@@ -1,7 +1,5 @@
 package cn.diaovision.omnicontrol.core.model.device.matrix;
 
-import android.util.Log;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +84,6 @@ public class MediaMatrixRemoter {
                 .map(new Function<MatrixMessage, RxMessage>() {
                     @Override
                     public RxMessage apply(MatrixMessage matrixMessage) throws Exception {
-                        Log.i("info",new String(matrixMessage.toBytes()));
                         byte[] recv = matrix.getController().send(matrixMessage.toBytes(), matrixMessage.toBytes().length);
                         if (recv.length > 0) {
                             //4. send message
