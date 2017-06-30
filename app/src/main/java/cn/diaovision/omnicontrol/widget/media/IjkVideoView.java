@@ -18,7 +18,6 @@ package cn.diaovision.omnicontrol.widget.media;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -34,6 +33,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -564,21 +564,22 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
                             message="Invalid progressive playback";
                         }
 
-                        new android.app.AlertDialog.Builder(getContext())
+/*                        new android.app.AlertDialog.Builder(getContext())
                                 .setMessage(message)
                                 .setPositiveButton("error",
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int whichButton) {
-                                            /* If we get here, there is no onError listener, so
+                                            *//* If we get here, there is no onError listener, so
                                              * at least inform them that the video is over.
-                                             */
+                                             *//*
                                                 if (mOnCompletionListener != null) {
                                                     mOnCompletionListener.onCompletion(mMediaPlayer);
                                                 }
                                             }
                                         })
                                 .setCancelable(false)
-                                .show();
+                                .show();*/
+                        Toast.makeText(getContext(),"播放错误",Toast.LENGTH_SHORT).show();
                     }
                     return true;
                 }
