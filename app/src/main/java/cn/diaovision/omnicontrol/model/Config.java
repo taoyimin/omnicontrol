@@ -1,11 +1,13 @@
 package cn.diaovision.omnicontrol.model;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
+import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 
 /**
  * Created by liulingfeng on 2017/4/24.
@@ -43,4 +45,7 @@ public interface Config {
 
     Date getConfStartDate();
     Date getConfEndDate();
+
+    List<Port> getInputPortList();
+    List<Port> getOutputPortList();
 }

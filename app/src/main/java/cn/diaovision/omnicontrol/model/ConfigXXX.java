@@ -5,6 +5,8 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,8 +14,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import cn.diaovision.omnicontrol.OmniControlApplication;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
+import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 
 /**
  * Created by liulingfeng on 2017/5/8.
@@ -23,29 +27,13 @@ public class ConfigXXX implements Config{
     Document document;
     Element root;
 
-    String matrixIp;
-    int matrixPort;
-    String matrixAlias;
-    int matrixPortInNum;
-    int matrixPortOutNum;
-    List<HiCamera> matrixCameraList;
-    List<Channel> matrixChannelList;
-
     private ConfigXXX(String xmlFile){
-/*        SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-        try {
-            SAXParser parser = parserFactory.newSAXParser();
-//            parser.parse(is, );
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        }*/
-
         SAXReader reader = new SAXReader();
         try {
-            document = reader.read(xmlFile);
+            document = reader.read(OmniControlApplication.getContext().getAssets().open(xmlFile));
         } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         root = document.getRootElement();
@@ -107,12 +95,12 @@ public class ConfigXXX implements Config{
 
     @Override
     public int getMatrixPreviewIpPort() {
-        return Integer.parseInt(root.element("matrix").element("preview_video").element("port").getTextTrim());
+        return Integer.parseInt(root.element("matrix").element("preview_video").element("ip_port").getTextTrim());
     }
 
     @Override
     public int getMatrixPreviewPort() {
-        return 0;
+        return  Integer.parseInt(root.element("matrix").element("preview_video").element("port").getTextTrim());
     }
 
     @Override
@@ -206,5 +194,39 @@ public class ConfigXXX implements Config{
     @Override
     public Date getConfEndDate() {
         return null;
+    }
+
+    public List<Port> getInputPortList(){
+        List<Port> inputList=new ArrayList<>();
+        List<Element> elements=root.element("matrix").element("input_list").elements("input");
+        for(Element element:elements){
+            int parentIdx=Integer.parseInt(element.element("parent_index").getTextTrim());
+            int index=Integer.parseInt(element.element("index").getTextTrim());
+            int type=Integer.parseInt(element.element("type").getTextTrim());
+            int dir=Integer.parseInt(element.element("dir").getTextTrim());
+            int category=Integer.parseInt(element.element("category").getTextTrim());
+            String alias=element.element("alias").getTextTrim();
+            Port port=new Port(parentIdx,index,type,dir,category);
+            port.alias=alias;
+            inputList.add(port);
+        }
+        return inputList;
+    }
+
+    public List<Port> getOutputPortList(){
+        List<Port> outputList=new ArrayList<>();
+        List<Element> elements=root.element("matrix").element("output_list").elements("output");
+        for(Element element:elements){
+            int parentIdx=Integer.parseInt(element.element("parent_index").getTextTrim());
+            int index=Integer.parseInt(element.element("index").getTextTrim());
+            int type=Integer.parseInt(element.element("type").getTextTrim());
+            int dir=Integer.parseInt(element.element("dir").getTextTrim());
+            int category=Integer.parseInt(element.element("category").getTextTrim());
+            String alias=element.element("alias").getTextTrim();
+            Port port=new Port(parentIdx,index,type,dir,category);
+            port.alias=alias;
+            outputList.add(port);
+        }
+        return outputList;
     }
 }
