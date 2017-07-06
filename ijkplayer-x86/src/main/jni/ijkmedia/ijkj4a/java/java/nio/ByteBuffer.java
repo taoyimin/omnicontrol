@@ -1,7 +1,5 @@
 package java.nio;
 
-import android.os.Build;
-
 @SimpleCClassName
 @IncludeUtil
 public class ByteBuffer {

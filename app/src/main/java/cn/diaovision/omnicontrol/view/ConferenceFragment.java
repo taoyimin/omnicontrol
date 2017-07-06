@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -26,18 +28,15 @@ import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.conference.Term;
-import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.model.Config;
 import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
-import cn.diaovision.omnicontrol.widget.TermItemTouchCallback;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
 import cn.diaovision.omnicontrol.widget.RecyclerViewWithSlidingItem;
 import cn.diaovision.omnicontrol.widget.SlidingItemView;
+import cn.diaovision.omnicontrol.widget.TermItemTouchCallback;
 import cn.diaovision.omnicontrol.widget.adapter.PortAdapter;
 import cn.diaovision.omnicontrol.widget.adapter.TermItemAdapter;
-
-import static android.R.attr.id;
 
 /**
  * Created by liulingfeng on 2017/2/24.
@@ -54,6 +53,9 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
     Button commitSubtitle;
     @BindView(R.id.subtitle_edit)
     EditText subtitleEdit;*/
+
+    @BindView(R.id.radio_group)
+    RadioGroup radioGroup;
 
     @BindView(R.id.auxiliary_recycler)
     RecyclerViewWithSlidingItem termRecycler;
@@ -193,7 +195,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
         });*/
 
         /*test code*/
-        Port port;
+/*        Port port;
         List<Port> inputs=new ArrayList<>();
         for (int m = 0; m < 32; m++) {
             if(m<4){
@@ -207,11 +209,11 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
             }
             port.alias="端口:"+m;
             inputs.add(port);
-        }
+        }*/
 
         inputSelectionSupport=new ItemSelectionSupport(inputRecyclerView);
         inputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.NONE);
-        inputAdapter=new PortAdapter(inputs,inputSelectionSupport);
+        inputAdapter=new PortAdapter(presenter.getInputPortList(),inputSelectionSupport);
         inputRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),9));
         inputRecyclerView.setAdapter(inputAdapter);
 
@@ -300,6 +302,28 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
         }));
         //和RecyclerView进行关联
         itemTouchHelper.attachToRecyclerView(termRecycler);
+
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                switch (checkedId){
+                    case R.id.conf_start:
+/*                        int a=0;
+                        ConfTest confTest=new ConfTest();
+                        confTest.init();
+                        confTest.sendMessage();*/
+                        Config cfg=new ConfigFixed();
+                        presenter.startConf(cfg.getConfStartDate(),cfg.getConfEndDate(),0);
+                        break;
+                    case R.id.conf_end:
+                        //presenter.hangupTerm(0,0);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     @Override

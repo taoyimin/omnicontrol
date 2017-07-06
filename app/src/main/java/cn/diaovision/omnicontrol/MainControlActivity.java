@@ -13,6 +13,9 @@ import android.widget.RadioGroup;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
+import cn.diaovision.omnicontrol.model.Config;
+import cn.diaovision.omnicontrol.model.ConfigXXX;
 import cn.diaovision.omnicontrol.util.CrashHandler;
 import cn.diaovision.omnicontrol.view.AudioFragment;
 import cn.diaovision.omnicontrol.view.CameraFragment;
@@ -77,6 +80,9 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
 
     //Data
     int preTab = 0;
+
+    public static MediaMatrix matrix;
+    public static Config cfg;
 
     //UIs
 /*    @BindView(R.id.navigation_bar)
@@ -193,6 +199,26 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
                 }
             }
         });
+
+        initConfig();
+        initMediaMatrix();
+    }
+
+    private void initConfig() {
+        cfg=ConfigXXX.fromFile("config_template.xml");
+    }
+
+    private void initMediaMatrix() {
+        matrix=new MediaMatrix.Builder()
+                .id(cfg.getMatrixId())
+                .ip(cfg.getMatrixIp())
+                .port(cfg.getMatrixUdpIpPort())
+                .localPreviewVideo(cfg.getMatrixPreviewIp(), cfg.getMatrixPreviewPort())
+                .videoInInit(cfg.getInputPortList())
+                .videoOutInit(cfg.getOutputPortList())
+                .camerasInit(cfg.getMatrixCameras())
+                .build();
+        matrix.setVideoChnSet(cfg.getMatrixChannels());
     }
 
     void switchFragment(int i){

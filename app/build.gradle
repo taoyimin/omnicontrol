@@ -67,8 +67,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
 
     compile project(':ijkplayer-java')
-
     compile project(':ijkplayer-armv7a')
-
     compile project(':ijkplayer-arm64')
+    compile project(':ijkplayer-armv5')
+    compile project(':ijkplayer-x86')
+    compile project(':ijkplayer-x86_64')
 }

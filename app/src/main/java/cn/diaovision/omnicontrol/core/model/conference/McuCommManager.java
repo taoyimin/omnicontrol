@@ -1,8 +1,5 @@
 package cn.diaovision.omnicontrol.core.model.conference;
 
-
-import android.util.Log;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;

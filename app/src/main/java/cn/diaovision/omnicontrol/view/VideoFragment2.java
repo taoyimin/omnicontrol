@@ -346,6 +346,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         views.get(5).setText("输出端"+outputSelectionSupport.getCheckedItemPositions());
         views.get(6).setText("当前已配置通道"+presenter.getChannelSet().size()+"个");
     }
+
     private void updateInfoBefore() {
         views.get(2).setText("输入端LastPosition="+inputSelectionSupport.getLastPosition());
         views.get(3).setText("输出端LastPosition="+outputSelectionSupport.getLastPosition());

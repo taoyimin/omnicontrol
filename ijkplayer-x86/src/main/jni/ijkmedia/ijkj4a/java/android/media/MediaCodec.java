@@ -1,7 +1,8 @@
 package android.media;
 
-import java.nio.ByteBuffer;
 import android.view.Surface;
+
+import java.nio.ByteBuffer;
 
 @SimpleCClassName
 @MinApi(16)

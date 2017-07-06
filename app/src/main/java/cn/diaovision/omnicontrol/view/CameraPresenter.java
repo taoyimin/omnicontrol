@@ -8,10 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
-import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
-import cn.diaovision.omnicontrol.model.Config;
-import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
@@ -21,6 +18,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
+import static cn.diaovision.omnicontrol.MainControlActivity.matrix;
+
 /* 兼容MVVM模式的Presenter样板
  * Created by liulingfeng on 2017/4/3.
  */
@@ -28,7 +27,7 @@ import io.reactivex.subjects.Subject;
 public class CameraPresenter implements CameraContract.Presenter {
     static final String TAG="camera";
 
-    Config cfg = new ConfigFixed();
+/*    Config cfg = new ConfigFixed();
     MediaMatrix matrix = new MediaMatrix.Builder()
             .id(cfg.getMatrixId())
             .ip(cfg.getMatrixIp())
@@ -37,7 +36,7 @@ public class CameraPresenter implements CameraContract.Presenter {
             .videoInInit(cfg.getMatrixInputVideoNum())
             .videoOutInit(cfg.getMatrixOutputVideoNum())
             .camerasInit()
-            .build();
+            .build();*/
 
     MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
 
