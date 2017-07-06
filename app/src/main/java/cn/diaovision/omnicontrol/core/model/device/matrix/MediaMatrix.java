@@ -453,11 +453,11 @@ public class MediaMatrix {
             return this;
         }
 
-        public Builder videoInInit(int num) {
+        public Builder videoInInit(List<Port> inputList) {
 /*            for (int m = 0; m < num; m ++){
                 videoInPort.add(new Port(id, m, Port.TYPE_VIDEO, Port.DIR_IN,Port.CATEGORY_VIDEO));
             }*/
-            Port port;
+/*            Port port;
             for (int m = 0; m < num; m++) {
                 if(m<4){
                     port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_CAMERA);
@@ -470,12 +470,13 @@ public class MediaMatrix {
                 }
                 port.alias="端口:"+(m+1);
                 videoInPort.add(port);
-            }
+            }*/
+            videoInPort=inputList;
             return this;
         }
 
-        public Builder videoOutInit(int num) {
-            for (int m = 0; m < num; m++) {
+        public Builder videoOutInit(List<Port> outputList) {
+/*            for (int m = 0; m < num; m++) {
                 //videoOutPort.add(new Port(id, m, Port.TYPE_VIDEO, Port.DIR_OUT, Port.CATEGORY_TV));
                 Port port;
                 if(m<2){
@@ -493,12 +494,13 @@ public class MediaMatrix {
                 }
                 port.alias="端口："+(m+1);
                 videoOutPort.add(port);
-            }
+            }*/
+            videoOutPort=outputList;
             return this;
         }
 
-        public Builder camerasInit() {
-            cameras.put(1, new HiCamera(1, 1, 9600, HiCamera.PROTO_PILSA));
+        public Builder camerasInit(Map<Integer,HiCamera> cameras) {
+/*            cameras.put(1, new HiCamera(1, 1, 9600, HiCamera.PROTO_PILSA));
             cameras.put(2, new HiCamera(2, 1, 9600, HiCamera.PROTO_PILSA));
             cameras.put(3, new HiCamera(3, 1, 9600, HiCamera.PROTO_PILSA));
             cameras.put(4, new HiCamera(4, 1, 9600, HiCamera.PROTO_PILSA));
@@ -507,7 +509,8 @@ public class MediaMatrix {
             cameras.put(7, new HiCamera(7, 1, 9600, HiCamera.PROTO_PILSA));
             cameras.put(8, new HiCamera(8, 1, 9600, HiCamera.PROTO_PILSA));
             cameras.put(9, new HiCamera(9, 1, 9600, HiCamera.PROTO_PILSA));
-            cameras.put(10, new HiCamera(10, 1, 9600, HiCamera.PROTO_PILSA));
+            cameras.put(10, new HiCamera(10, 1, 9600, HiCamera.PROTO_PILSA));*/
+            this.cameras=cameras;
             return this;
         }
 
