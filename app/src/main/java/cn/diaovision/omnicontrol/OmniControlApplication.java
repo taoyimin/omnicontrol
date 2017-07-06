@@ -1,6 +1,7 @@
 package cn.diaovision.omnicontrol;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import cn.diaovision.omnicontrol.conn.TcpClient;
@@ -13,6 +14,7 @@ import cn.diaovision.omnicontrol.rx.RxBus;
 
 public class OmniControlApplication extends Application {
     final static private String PREF_NAME = "omnicontrol";
+    private static Context applicationContext;
 
     //RxBus
     RxBus rxBus;
@@ -25,7 +27,8 @@ public class OmniControlApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        SharedPreferences pref = getAppPreferences();
+        applicationContext=getApplicationContext();
+/*        SharedPreferences pref = getAppPreferences();
         String ip = pref.getString("ip", "192.168.1.1");
         int port = pref.getInt("port", 5000);
         saveAppPreference("ip", ip);
@@ -39,9 +42,7 @@ public class OmniControlApplication extends Application {
         int cam_proto = getAppPreferences().getInt("cam_proto", -1);
         if (camporto >= 0) {
             mediaMatrix.addCamera(camporto, camport, cam_baudrate, cam_proto);
-        }
-        //初始化加载库文件
-        //Vitamio.isInitialized(getApplicationContext());
+        }*/
     }
 
     @Override
@@ -80,5 +81,9 @@ public class OmniControlApplication extends Application {
 
     public RxBus getRxBus() {
         return RxBus.getInstance();
+    }
+
+    public static Context getContext(){
+        return applicationContext;
     }
 }
