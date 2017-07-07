@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
     <matrix id="1">
-        <ip>192.168.1.1</ip>
+        <ip>192.168.10.11</ip>
         <port>5000</port>
         <input_number>32</input_number>
         <output_number>32</output_number>
