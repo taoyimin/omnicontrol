@@ -114,7 +114,7 @@ public class ConfManager {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                //.retry(3) //retry initialize 3 times before it really calls to the onError
+                .retry(3) //retry initialize 3 times before it really calls to the onError
                 .doOnComplete(new Action() {
                     @Override
                     public void run() throws Exception {

@@ -240,6 +240,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                 presenter.switchVideo(position,new int[]{25});
                 ijkVideoView.setVideoPath("rtsp://192.168.10.31/test1.ts");
                 ijkVideoView.start();*/
+                presenter.switchPreviewVideo(position,28);
             }
 
             @Override
@@ -321,6 +322,9 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
             public void onSelectCountChange(int count) {
             }
         });
+
+        ijkVideoView.setVideoPath("rtsp://192.168.10.31/test1.ts");
+        ijkVideoView.start();
 
 /*        setSubtitle.setOnClickListener(new View.OnClickListener() {
             @Override
