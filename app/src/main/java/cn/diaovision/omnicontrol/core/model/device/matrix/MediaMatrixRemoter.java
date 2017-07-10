@@ -20,6 +20,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 import static cn.diaovision.omnicontrol.core.message.MatrixMessage.buildMultiSwitchMessage;
+import static cn.diaovision.omnicontrol.core.message.MatrixMessage.buildSwitchMessage;
 
 /**
  * 矩阵控制器，这里用remoter，以区分controller
@@ -43,8 +44,8 @@ public class MediaMatrixRemoter {
     }
 
     /*get the matrix's online status using getId message*/
-    public int getMatrixStatus(RxSubscriber<RxMessage> subscriber){
-         if (matrix == null || !matrix.isReachable())
+    public int getMatrixStatus(RxSubscriber<RxMessage> subscriber) {
+        if (matrix == null || !matrix.isReachable())
             return -1;
 
         final byte[] bytes = MatrixMessage.buildGetIdMessage().toBytes();
@@ -52,16 +53,51 @@ public class MediaMatrixRemoter {
             @Override
             public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
                 byte[] recv = matrix.getController().send(bytes, bytes.length);
-                if (recv.length > 0){
+                if (recv.length > 0) {
                     //if server response, then it is online
                     e.onNext(new RxMessage(RxMessage.DONE));
-                }
-                else {
+                } else {
                     //matrix is offline if error happens
                     e.onError(new IOException());
                 }
             }
         }, BackpressureStrategy.BUFFER)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return 0;
+    }
+
+    public int switchPreviewVideo(final int portIn, final int portOut, final RxSubscriber<RxMessage> subscriber) {
+        if (matrix == null || !matrix.isReachable())
+            return -1;
+        final MatrixMessage matrixMessage = buildSwitchMessage(matrix.id, portIn, portOut);
+        Flowable.create(new FlowableOnSubscribe<RxMessage>() {
+            @Override
+            public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
+                byte[] recv = matrix.getController().send(matrixMessage.toBytes(), matrixMessage.toBytes().length);
+                if (recv.length > 0) {
+                    //e.onNext(new RxMessage(RxMessage.DONE));
+                    e.onError(new IOException());
+                } else {
+                    matrix.setReachable(false);
+                    throw new IOException();
+                }
+            }
+        },BackpressureStrategy.BUFFER)
+/*        Flowable.just(switchMessage)
+                .map(new Function<MatrixMessage, RxMessage>() {
+                    @Override
+                    public RxMessage apply(MatrixMessage matrixMessage) throws Exception {
+                        byte[] recv = matrix.getController().send(matrixMessage.toBytes(), matrixMessage.toBytes().length);
+                        if (recv.length > 0) {
+                            return new RxMessage(RxMessage.DONE);
+                        } else {
+                            matrix.setReachable(false);
+                            throw new IOException();
+                        }
+                    }
+                })*/
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);

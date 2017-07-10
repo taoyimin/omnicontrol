@@ -28,6 +28,7 @@ public interface VideoContract {
         void setChannel(int input, int[] outputs,int mode);
         void switchVideo(int portIn, int[] portOut);
         void stitchVideo(int portIn,  int columnCnt,  int rowCnt,  int[] portOut);
+        void switchPreviewVideo(int portIn, int portOut);
         void setSubtitle(int portIdx, String str);
 
         interface PortStateListener{

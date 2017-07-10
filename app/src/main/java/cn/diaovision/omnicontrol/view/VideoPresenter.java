@@ -144,6 +144,24 @@ public class VideoPresenter implements VideoContract.Presenter {
     }
 
     @Override
+    public void switchPreviewVideo(int portIn, int portOut){
+        int res=matrixRemoter.switchPreviewVideo(portIn, portOut, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG, "Switch preview video succeed");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG, "Switch preview video failed");
+            }
+        });
+        if (res < 0) {
+            Log.i(TAG, "invalid switch preview video");
+        }
+    }
+
+    @Override
     public void switchVideo(int portIn, int[] portOut) {
         int res = matrixRemoter.switchVideo(portIn, portOut, new RxSubscriber<RxMessage>() {
             @Override
