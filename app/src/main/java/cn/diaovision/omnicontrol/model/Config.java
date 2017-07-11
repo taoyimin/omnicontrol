@@ -48,4 +48,7 @@ public interface Config {
 
     List<Port> getInputPortList();
     List<Port> getOutputPortList();
+
+    void modifyPort(Port port);
+    void modifyChannel(Set<Channel> channelSet);
 }

@@ -134,5 +134,15 @@ public class ConfigFixed implements Config{
         return null;
     }
 
+    @Override
+    public void modifyPort(Port port) {
+
+    }
+
+    @Override
+    public void modifyChannel(Set<Channel> channelSet) {
+
+    }
+
 
 }
