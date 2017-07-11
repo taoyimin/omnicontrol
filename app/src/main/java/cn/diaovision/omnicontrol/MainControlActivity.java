@@ -1,6 +1,7 @@
 package cn.diaovision.omnicontrol;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -205,7 +206,7 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
     }
 
     private void initConfig() {
-        cfg=ConfigXXX.fromFile("config_template.xml");
+        cfg=ConfigXXX.fromFile(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Omnicontrol/config/config.xml");
     }
 
     private void initMediaMatrix() {

@@ -21,6 +21,7 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
+import cn.diaovision.omnicontrol.MainControlActivity;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
@@ -362,6 +363,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         dialog.setOnButtonClickListener(new PortDialog.OnButtonClickListener() {
             @Override
             public void onConfirmClick() {
+                //对话框的确定按钮按下，回调到这里
                 dialog.dismiss();
                 if(port.dir==Port.DIR_IN){
                     inputAdapter.notifyItemChanged(position);
@@ -371,6 +373,8 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                     inputAdapter.notifyDataSetChanged();
                     outputAdapter.notifyDataSetChanged();
                 }
+                //存储到配置文件
+                MainControlActivity.cfg.modifyPort(port);
             }
         });
     }

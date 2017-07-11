@@ -3,8 +3,8 @@
     <matrix id="1">
         <ip>192.168.10.11</ip>
         <port>5000</port>
-        <input_number>32</input_number>
-        <output_number>32</output_number>
+        <input_number>36</input_number>
+        <output_number>36</output_number>
         <preview_video>
             <ip>192.168.10.31</ip>
             <ip_port>554</ip_port>
@@ -17,7 +17,7 @@
                 <index>0</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口1</alias>
             </input>
             <input>
@@ -25,7 +25,7 @@
                 <index>1</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口2</alias>
             </input>
             <input>
@@ -33,7 +33,7 @@
                 <index>2</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口3</alias>
             </input>
             <input>
@@ -41,7 +41,7 @@
                 <index>3</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口4</alias>
             </input>
             <input>
@@ -49,7 +49,7 @@
                 <index>4</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口5</alias>
             </input>
             <input>
@@ -57,7 +57,7 @@
                 <index>5</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口6</alias>
             </input>
             <input>
@@ -65,7 +65,7 @@
                 <index>6</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口7</alias>
             </input>
             <input>
@@ -73,7 +73,7 @@
                 <index>7</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口8</alias>
             </input>
             <input>
@@ -81,7 +81,7 @@
                 <index>8</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口9</alias>
             </input>
             <input>
@@ -89,7 +89,7 @@
                 <index>9</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口10</alias>
             </input>
             <input>
@@ -97,7 +97,7 @@
                 <index>10</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口11</alias>
             </input>
             <input>
@@ -105,7 +105,7 @@
                 <index>11</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口12</alias>
             </input>
             <input>
@@ -113,7 +113,7 @@
                 <index>12</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口13</alias>
             </input>
             <input>
@@ -121,7 +121,7 @@
                 <index>13</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口14</alias>
             </input>
             <input>
@@ -129,7 +129,7 @@
                 <index>14</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口15</alias>
             </input>
             <input>
@@ -137,7 +137,7 @@
                 <index>15</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口16</alias>
             </input>
             <input>
@@ -145,7 +145,7 @@
                 <index>16</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口17</alias>
             </input>
             <input>
@@ -153,7 +153,7 @@
                 <index>17</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口18</alias>
             </input>
             <input>
@@ -161,7 +161,7 @@
                 <index>18</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口19</alias>
             </input>
             <input>
@@ -169,7 +169,7 @@
                 <index>19</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口20</alias>
             </input>
             <input>
@@ -177,7 +177,7 @@
                 <index>20</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口21</alias>
             </input>
             <input>
@@ -185,7 +185,7 @@
                 <index>21</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口22</alias>
             </input>
             <input>
@@ -193,7 +193,7 @@
                 <index>22</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口23</alias>
             </input>
             <input>
@@ -201,7 +201,7 @@
                 <index>23</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口24</alias>
             </input>
             <input>
@@ -209,7 +209,7 @@
                 <index>24</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口25</alias>
             </input>
             <input>
@@ -217,7 +217,7 @@
                 <index>25</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口26</alias>
             </input>
             <input>
@@ -225,7 +225,7 @@
                 <index>26</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口27</alias>
             </input>
             <input>
@@ -233,7 +233,7 @@
                 <index>27</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口28</alias>
             </input>
             <input>
@@ -241,7 +241,7 @@
                 <index>28</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口29</alias>
             </input>
             <input>
@@ -249,7 +249,7 @@
                 <index>29</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口30</alias>
             </input>
             <input>
@@ -257,7 +257,7 @@
                 <index>30</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口31</alias>
             </input>
             <input>
@@ -265,8 +265,40 @@
                 <index>31</index>
                 <type>0</type>
                 <dir>0</dir>
-                <category>0</category>
+                <category>2</category>
                 <alias>端口32</alias>
+            </input>
+            <input>
+                <parent_index>1</parent_index>
+                <index>32</index>
+                <type>0</type>
+                <dir>0</dir>
+                <category>2</category>
+                <alias>端口33</alias>
+            </input>
+            <input>
+                <parent_index>1</parent_index>
+                <index>33</index>
+                <type>0</type>
+                <dir>0</dir>
+                <category>2</category>
+                <alias>端口34</alias>
+            </input>
+            <input>
+                <parent_index>1</parent_index>
+                <index>34</index>
+                <type>0</type>
+                <dir>0</dir>
+                <category>2</category>
+                <alias>端口35</alias>
+            </input>
+            <input>
+                <parent_index>1</parent_index>
+                <index>35</index>
+                <type>0</type>
+                <dir>0</dir>
+                <category>2</category>
+                <alias>端口36</alias>
             </input>
         </input_list>
 
@@ -527,6 +559,38 @@
                 <category>4</category>
                 <alias>端口32</alias>
             </output>
+            <output>
+                <parent_index>1</parent_index>
+                <index>32</index>
+                <type>0</type>
+                <dir>1</dir>
+                <category>4</category>
+                <alias>端口33</alias>
+            </output>
+            <output>
+                <parent_index>1</parent_index>
+                <index>33</index>
+                <type>0</type>
+                <dir>1</dir>
+                <category>4</category>
+                <alias>端口34</alias>
+            </output>
+            <output>
+                <parent_index>1</parent_index>
+                <index>34</index>
+                <type>0</type>
+                <dir>1</dir>
+                <category>4</category>
+                <alias>端口35</alias>
+            </output>
+            <output>
+                <parent_index>1</parent_index>
+                <index>35</index>
+                <type>0</type>
+                <dir>1</dir>
+                <category>4</category>
+                <alias>端口36</alias>
+            </output>
         </output_list>
 
         <camera_list>
@@ -545,21 +609,6 @@
         </camera_list>
 
         <channel_list>
-            <channel name="1" mode="normal">
-                <input>1</input>
-                <output_list>
-                    <output>2</output>
-                    <output>3</output>
-                    <output>4</output>
-                </output_list>
-            </channel>
-            <channel name="2" mode="normal">
-                <input>2</input>
-                <output_list>
-                    <output>7</output>
-                    <output>8</output>
-                </output_list>
-            </channel>
         </channel_list>
     </matrix>
 

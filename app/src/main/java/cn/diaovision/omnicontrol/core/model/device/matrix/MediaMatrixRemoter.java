@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import cn.diaovision.omnicontrol.MainControlActivity;
 import cn.diaovision.omnicontrol.core.message.MatrixMessage;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
@@ -71,21 +72,8 @@ public class MediaMatrixRemoter {
     public int switchPreviewVideo(final int portIn, final int portOut, final RxSubscriber<RxMessage> subscriber) {
         if (matrix == null || !matrix.isReachable())
             return -1;
-        final MatrixMessage matrixMessage = buildSwitchMessage(matrix.id, portIn, portOut);
-        Flowable.create(new FlowableOnSubscribe<RxMessage>() {
-            @Override
-            public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
-                byte[] recv = matrix.getController().send(matrixMessage.toBytes(), matrixMessage.toBytes().length);
-                if (recv.length > 0) {
-                    //e.onNext(new RxMessage(RxMessage.DONE));
-                    e.onError(new IOException());
-                } else {
-                    matrix.setReachable(false);
-                    throw new IOException();
-                }
-            }
-        },BackpressureStrategy.BUFFER)
-/*        Flowable.just(switchMessage)
+        final MatrixMessage switchMessage = buildSwitchMessage(matrix.id, portIn, portOut);
+        Flowable.just(switchMessage)
                 .map(new Function<MatrixMessage, RxMessage>() {
                     @Override
                     public RxMessage apply(MatrixMessage matrixMessage) throws Exception {
@@ -97,7 +85,7 @@ public class MediaMatrixRemoter {
                             throw new IOException();
                         }
                     }
-                })*/
+                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
@@ -133,7 +121,8 @@ public class MediaMatrixRemoter {
                 .doOnComplete(new Action() {
                     @Override
                     public void run() throws Exception {
-                        matrix.updateChannel(portIn, portOut, Channel.MOD_STITCH);
+                        matrix.updateChannel(portIn, portOut, Channel.MOD_NORMAL);
+                        MainControlActivity.cfg.modifyChannel(matrix.getVideoChnSet());
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -174,6 +163,7 @@ public class MediaMatrixRemoter {
                     @Override
                     public void run() throws Exception {
                         matrix.updateChannel(portIn, portOut, Channel.MOD_STITCH);
+                        MainControlActivity.cfg.modifyChannel(matrix.getVideoChnSet());
                     }
                 })
                 .subscribeOn(Schedulers.io())
