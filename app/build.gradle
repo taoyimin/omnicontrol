@@ -58,7 +58,7 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
     //BadgeView
-    compile 'cn.bingoogolapple:bga-badgeview:1.1.3@aar'
+    //compile 'cn.bingoogolapple:bga-badgeview:1.1.3@aar'
 
     //dom4j
     //compile group: 'dom4j', name: 'dom4j', version: '1.6.1'
