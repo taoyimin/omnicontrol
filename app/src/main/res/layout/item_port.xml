@@ -18,7 +18,7 @@
         android:layout_centerHorizontal="true"
         android:textAppearance="@style/ItemTitleText"/>
 
-    <cn.bingoogolapple.badgeview.BGABadgeImageView
+<!--    <cn.bingoogolapple.badgeview.BGABadgeImageView
         android:id="@+id/port_image"
         android:layout_width="80dp"
         android:layout_height="80dp"
@@ -26,5 +26,5 @@
         app:badge_horizontalMargin="0dp"
         app:badge_padding="0dp"
         app:badge_textSize="13sp"
-        app:badge_verticalMargin="0dp"/>
+        app:badge_verticalMargin="0dp"/>-->
 </RelativeLayout>

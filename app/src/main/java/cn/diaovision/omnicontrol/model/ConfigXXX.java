@@ -73,7 +73,7 @@ public class ConfigXXX implements Config {
     }
 
     @Override
-    public void modifyPort(Port port) {
+    public void setPort(Port port) {
         List<Element> elements = new ArrayList<>();
         if (port.dir == Port.DIR_IN) {
             elements = root.element("matrix").element("input_list").elements("input");
@@ -102,7 +102,7 @@ public class ConfigXXX implements Config {
     }
 
     @Override
-    public void modifyChannel(Set<Channel> channelSet) {
+    public void setChannelSet(Set<Channel> channelSet) {
         List<Element> elements = root.element("matrix").element("channel_list").elements("channel");
         for (Element element : elements) {
             element.detach();

@@ -18,6 +18,7 @@ import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.model.Config;
 import cn.diaovision.omnicontrol.model.ConfigXXX;
 import cn.diaovision.omnicontrol.util.CrashHandler;
+import cn.diaovision.omnicontrol.util.PortHelper;
 import cn.diaovision.omnicontrol.view.AudioFragment;
 import cn.diaovision.omnicontrol.view.CameraFragment;
 import cn.diaovision.omnicontrol.view.ConferenceFragment;
@@ -102,7 +103,6 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         app = (OmniControlApplication) getApplication();
-        //Vitamio.isInitialized(getApplicationContext());
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -166,6 +166,9 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
         gestureDetector = new GestureDetectorCompat(this, this);
 
         CrashHandler.getInstance().init(this);
+        initConfig();
+        initMediaMatrix();
+        PortHelper.getInstance().init();
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -200,9 +203,6 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
                 }
             }
         });
-
-        initConfig();
-        initMediaMatrix();
     }
 
     private void initConfig() {

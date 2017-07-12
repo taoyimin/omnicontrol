@@ -1,5 +1,7 @@
 package cn.diaovision.omnicontrol.core.model.device.matrix;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +79,7 @@ public class MediaMatrixRemoter {
                 .map(new Function<MatrixMessage, RxMessage>() {
                     @Override
                     public RxMessage apply(MatrixMessage matrixMessage) throws Exception {
+                        Log.i("thread",""+Thread.currentThread());
                         byte[] recv = matrix.getController().send(matrixMessage.toBytes(), matrixMessage.toBytes().length);
                         if (recv.length > 0) {
                             return new RxMessage(RxMessage.DONE);
@@ -122,7 +125,7 @@ public class MediaMatrixRemoter {
                     @Override
                     public void run() throws Exception {
                         matrix.updateChannel(portIn, portOut, Channel.MOD_NORMAL);
-                        MainControlActivity.cfg.modifyChannel(matrix.getVideoChnSet());
+                        MainControlActivity.cfg.setChannelSet(matrix.getVideoChnSet());
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -163,7 +166,7 @@ public class MediaMatrixRemoter {
                     @Override
                     public void run() throws Exception {
                         matrix.updateChannel(portIn, portOut, Channel.MOD_STITCH);
-                        MainControlActivity.cfg.modifyChannel(matrix.getVideoChnSet());
+                        MainControlActivity.cfg.setChannelSet(matrix.getVideoChnSet());
                     }
                 })
                 .subscribeOn(Schedulers.io())

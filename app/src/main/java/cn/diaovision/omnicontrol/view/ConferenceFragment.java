@@ -291,7 +291,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
                 }
             }
         });
-        itemTouchHelper = new ItemTouchHelper(new TermItemTouchCallback(adapter).setOnDragListener(new TermItemTouchCallback.OnDragListener() {
+        itemTouchHelper = new ItemTouchHelper(new TermItemTouchCallback().setOnDragListener(new TermItemTouchCallback.OnDragListener() {
             @Override
             public void onFinishDrag(RecyclerView.ViewHolder viewHolder) {
                 //拖拽完成的回掉
@@ -309,12 +309,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 switch (checkedId){
                     case R.id.conf_start:
-/*                        int a=0;
-                        ConfTest confTest=new ConfTest();
-                        confTest.init();
-                        confTest.sendMessage();*/
-                        Config cfg=new ConfigFixed();
-                        presenter.startConf(cfg.getConfStartDate(),cfg.getConfEndDate(),0);
+                        //presenter.endConf(0);
                         break;
                     case R.id.conf_end:
                         //presenter.hangupTerm(0,0);

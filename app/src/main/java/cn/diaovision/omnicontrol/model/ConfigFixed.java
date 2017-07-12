@@ -135,12 +135,12 @@ public class ConfigFixed implements Config{
     }
 
     @Override
-    public void modifyPort(Port port) {
+    public void setPort(Port port) {
 
     }
 
     @Override
-    public void modifyChannel(Set<Channel> channelSet) {
+    public void setChannelSet(Set<Channel> channelSet) {
 
     }
 

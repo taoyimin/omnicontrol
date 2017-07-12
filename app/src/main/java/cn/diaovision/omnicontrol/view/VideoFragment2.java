@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.BindViews;
@@ -23,9 +22,7 @@ import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.MainControlActivity;
 import cn.diaovision.omnicontrol.R;
-import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
-import cn.diaovision.omnicontrol.util.PortHelper;
 import cn.diaovision.omnicontrol.widget.AssistDrawerLayout;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
@@ -57,16 +54,18 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     private PortAdapter outputAdapter;
     private ItemSelectionSupport inputSelectionSupport;
     private ItemSelectionSupport outputSelectionSupport;
+    private static final int OPEN_DRAWER=0;
+    private static final int CLOSE_DRAWER=1;
     VideoContract.Presenter presenter;
 
     Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what){
-                case 0:
+                case OPEN_DRAWER:
                     drawerLayout.openDrawer();
                     break;
-                case 1:
+                case CLOSE_DRAWER:
                     drawerLayout.closeDrawer();
                     break;
             }
@@ -84,16 +83,13 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Set<Channel> channelSet=presenter.getChannelSet();
-        List<Port> inputs=presenter.getInputList();
-        final List<Port> outputs=presenter.getOutputList();
-        PortHelper.getInstance().init(inputs,outputs,channelSet);
+        //初始化输入输出端口列表
         inputSelectionSupport=new ItemSelectionSupport(inputRecyclerView);
         outputSelectionSupport=new ItemSelectionSupport(outputRecyclerView);
         inputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
         outputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
-        inputAdapter=new PortAdapter(inputs,inputSelectionSupport);
-        outputAdapter=new PortAdapter(outputs,outputSelectionSupport);
+        inputAdapter=new PortAdapter(presenter.getInputList(),inputSelectionSupport);
+        outputAdapter=new PortAdapter(presenter.getOutputList(),outputSelectionSupport);
         inputRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),6));
         outputRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),6));
         inputRecyclerView.setHasFixedSize(true);
@@ -101,6 +97,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         inputRecyclerView.setAdapter(inputAdapter);
         outputRecyclerView.setAdapter(outputAdapter);
 
+        //左上角抽屉布局的监听
         drawerLayout.setOnEditCompleteListener(new AssistDrawerLayout.OnEditCompleteListener() {
             @Override
             public void onComplete(int mode) {
@@ -134,7 +131,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                 //还原输出端选择的颜色和角标
                 outputSelectionSupport.initChoiceConfig(null);
                 //关闭抽屉，直接调用drawerLayout.closeDrawer()方法没有收回效果
-                handler.sendEmptyMessage(1);
+                handler.sendEmptyMessage(CLOSE_DRAWER);
             }
         });
 
@@ -261,14 +258,14 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
 
             }
 
-            @Override
+/*            @Override
             public void onPopupDialog(int position) {
                 //popupDialog(presenter.getInputList().get(position));
             }
 
             @Override
             public void onSelectCountChange(int count) {
-            }
+            }*/
         });
 
         outputSelectionSupport.setOnItemStatueListener(new ItemSelectionSupport.OnItemStatueListener() {
@@ -314,14 +311,14 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
 
             }
 
-            @Override
+/*            @Override
             public void onPopupDialog(int position) {
                 //popupDialog(presenter.getOutputList().get(position));
             }
 
             @Override
             public void onSelectCountChange(int count) {
-            }
+            }*/
         });
 
         ijkVideoView.setVideoPath("rtsp://192.168.10.31/test1.ts");
@@ -374,7 +371,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                     outputAdapter.notifyDataSetChanged();
                 }
                 //存储到配置文件
-                MainControlActivity.cfg.modifyPort(port);
+                MainControlActivity.cfg.setPort(port);
             }
         });
     }

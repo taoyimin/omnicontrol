@@ -21,7 +21,6 @@ import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
-import cn.diaovision.omnicontrol.util.PortHelper;
 import cn.diaovision.omnicontrol.widget.AssistDrawerLayout;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
@@ -157,7 +156,7 @@ public class AudioFragment extends BaseFragment implements AudioContract.View{
         Set<Channel> channelSet=presenter.getChannelSet();
         List<Port> inputs=presenter.getInputList();
         final List<Port> outputs=presenter.getOutputList();
-        PortHelper.getInstance().init(inputs,outputs,channelSet);
+        //PortHelper.getInstance().init(inputs,outputs,channelSet);
         inputSelectionSupport=new ItemSelectionSupport(inputRecyclerView);
         outputSelectionSupport=new ItemSelectionSupport(outputRecyclerView);
         inputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
@@ -320,14 +319,14 @@ public class AudioFragment extends BaseFragment implements AudioContract.View{
 
             }
 
-            @Override
+/*            @Override
             public void onPopupDialog(int position) {
                 //popupDialog(presenter.getInputList().get(position));
             }
 
             @Override
             public void onSelectCountChange(int count) {
-            }
+            }*/
         });
 
         outputSelectionSupport.setOnItemStatueListener(new ItemSelectionSupport.OnItemStatueListener() {
@@ -374,14 +373,14 @@ public class AudioFragment extends BaseFragment implements AudioContract.View{
 
             }
 
-            @Override
+/*            @Override
             public void onPopupDialog(int position) {
                 //popupDialog(presenter.getOutputList().get(position));
             }
 
             @Override
             public void onSelectCountChange(int count) {
-            }
+            }*/
         });
     }
 

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import cn.bingoogolapple.badgeview.BGABadgeImageView;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.widget.CircleCharView;
@@ -192,8 +191,8 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
         });
 
         //设置badgeview
-        holder.image.showTextBadge(ports.get(position).idx + "");
-        holder.image.isShowBadge();
+        //holder.image.showTextBadge(ports.get(position).idx + "");
+        //holder.image.isShowBadge();
 
         //bind view here
         if (ports != null) {
@@ -259,7 +258,7 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
         View v;
         AppCompatTextView alias;
         CircleCharView cView;
-        BGABadgeImageView image;
+        //BGABadgeImageView image;
         int pos;
 
         public PortItemViewHolder(View itemView) {
@@ -274,7 +273,7 @@ public class PortItemAdapter extends RecyclerView.Adapter<PortItemAdapter.PortIt
 
             alias = (AppCompatTextView) v.findViewById(R.id.port_alias);
             cView = (CircleCharView) v.findViewById(R.id.port_circle);
-            image = (BGABadgeImageView) v.findViewById(R.id.port_image);
+            //image = (BGABadgeImageView) v.findViewById(R.id.port_image);
             //cView.unselect(0);
         }
 

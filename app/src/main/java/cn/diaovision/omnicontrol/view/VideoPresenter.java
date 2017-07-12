@@ -97,6 +97,7 @@ public class VideoPresenter implements VideoContract.Presenter {
         }
     }
 
+    /*获取输入端口对应的输出端口数组*/
     @Override
     public int[] getOutputIdx(int inputIdx) {
         Set<Channel> chnSet= matrix.getVideoChnSet();
@@ -110,6 +111,7 @@ public class VideoPresenter implements VideoContract.Presenter {
         return null;
     }
 
+    /*获取输出端口对应的输入端口*/
     @Override
     public int getInputIdx(int outputIdx) {
         Set<Channel> chnSet=matrix.getVideoChnSet();
@@ -123,26 +125,31 @@ public class VideoPresenter implements VideoContract.Presenter {
         return -1;
     }
 
+    /*获取矩阵输入端口的集合*/
     @Override
     public List<Port> getInputList() {
         return matrix.getVideoInPort();
     }
 
+    /*获取矩阵输出端口的集合*/
     @Override
     public List<Port> getOutputList() {
         return matrix.getVideoOutPort();
     }
 
+    /*获取矩阵已配置好的通道集合*/
     @Override
     public Set<Channel> getChannelSet(){
         return matrix.getVideoChnSet();
     }
 
+    /*配置通道*/
     @Override
     public void setChannel(int input, int[] outputs, int mode) {
-        matrix.updateChannel(input,outputs,mode);
+        //matrix.updateChannel(input,outputs,mode);
     }
 
+    /*预览输入端口的流媒体时调用，将输入端口切换到流媒体卡端口*/
     @Override
     public void switchPreviewVideo(int portIn, int portOut){
         int res=matrixRemoter.switchPreviewVideo(portIn, portOut, new RxSubscriber<RxMessage>() {
@@ -161,6 +168,7 @@ public class VideoPresenter implements VideoContract.Presenter {
         }
     }
 
+    /*一对多输出，将矩阵输入端口切换到多个输出端口*/
     @Override
     public void switchVideo(int portIn, int[] portOut) {
         int res = matrixRemoter.switchVideo(portIn, portOut, new RxSubscriber<RxMessage>() {
@@ -179,6 +187,7 @@ public class VideoPresenter implements VideoContract.Presenter {
         }
     }
 
+    /*一对多输出（局部分割），将矩阵输入端口分割成多个画面输出到多个输出端口*/
     @Override
     public void stitchVideo( int portIn,  int columnCnt,  int rowCnt,  int[] portOut) {
         int res = matrixRemoter.stitchVideo( portIn,   columnCnt,   rowCnt, portOut, new RxSubscriber<RxMessage>() {
@@ -197,6 +206,7 @@ public class VideoPresenter implements VideoContract.Presenter {
         }
     }
 
+    /*矩阵端口叠加字幕*/
     @Override
     public void setSubtitle(int portIdx, String str) {
         int res=matrixRemoter.setSubtitle(portIdx, str, new RxSubscriber<RxMessage>() {

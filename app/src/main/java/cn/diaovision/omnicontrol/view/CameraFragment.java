@@ -261,7 +261,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
 
             }
 
-            @Override
+/*            @Override
             public void onPopupDialog(int position) {
 
             }
@@ -269,7 +269,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
             @Override
             public void onSelectCountChange(int count) {
 
-            }
+            }*/
         });
 
         presetRecyclerView.addOnItemTouchListener(new OnRecyclerItemClickListener(presetRecyclerView) {
@@ -424,7 +424,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
 
             }
 
-            @Override
+/*            @Override
             public void onPopupDialog(int position) {
 
             }
@@ -432,7 +432,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
             @Override
             public void onSelectCountChange(int count) {
 
-            }
+            }*/
         });
     }
 
