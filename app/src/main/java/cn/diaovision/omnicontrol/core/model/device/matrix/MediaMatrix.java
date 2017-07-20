@@ -260,8 +260,16 @@ public class MediaMatrix {
     //        }
     //    }
 
-    public void addCamera(int portIdx, int camIdx, int baudrate, int proto) {
+/*    public void addCamera(int portIdx, int camIdx, int baudrate, int proto) {
         cameras.put(portIdx, new HiCamera(portIdx, camIdx, baudrate, proto));
+    }*/
+
+    public void addCamera(HiCamera camera) {
+        cameras.put(camera.getPortIdx(),camera);
+    }
+
+    public void deleteCamera(int portIdx) {
+        cameras.remove(portIdx);
     }
 
     //    public int startCameraGo(int portIdx, int cmd, int speed){
@@ -414,12 +422,12 @@ public class MediaMatrix {
 
     public static class Builder {
         int id = 0;
-        String ip = "192.168.1.1";
+        String ip = "192.168.10.11";
         int port = 5000;
-        String localPreviewIp = "192.168.1.2";
-        int localPreviewPort = 553;
-        String meetingPreviewIp = "192.168.10.1";
-        int meetingPreviewPort = 553;
+        String localPreviewIp = "192.168.10.31";
+        int localPreviewPort = 554;
+        String meetingPreviewIp = "192.168.10.21";
+        int meetingPreviewPort = 6190;
         List<Port> videoInPort = new ArrayList<>();
         List<Port> videoOutPort = new ArrayList<>();
 
