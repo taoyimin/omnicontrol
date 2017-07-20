@@ -51,7 +51,7 @@ public class PresetAdapter extends RecyclerView.Adapter<PresetAdapter.PresetView
         holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_blue_selector));
         if (position < data.size()) {
             //设置预置位编号
-            holder.portBadge.setText(data.get(position).getIdx() + 1 + "");
+            holder.portBadge.setText(position + 1 + "");
             //设置预置位别名
             holder.portAlias.setText(data.get(position).getName());
             //设置item的选中状态
@@ -66,7 +66,6 @@ public class PresetAdapter extends RecyclerView.Adapter<PresetAdapter.PresetView
             }
         } else {
             holder.portBadge.setText("+");
-            //设置预置位别名
             holder.portAlias.setText("添加预置位");
         }
     }
