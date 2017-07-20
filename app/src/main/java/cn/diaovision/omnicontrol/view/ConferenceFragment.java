@@ -43,17 +43,6 @@ import cn.diaovision.omnicontrol.widget.adapter.TermItemAdapter;
  */
 
 public class ConferenceFragment extends BaseFragment implements ConferenceContract.View {
-/*    @BindView(R.id.port)
-    PortRadioGroupView portRadioGroupView;
-    @BindView(R.id.auxiliary_recycler)
-    RecyclerViewWithSlidingItem termRecycler;
-    @BindView(R.id.video_layout)
-    RelativeLayout videoLayout;
-    @BindView(R.id.commit_subtitle)
-    Button commitSubtitle;
-    @BindView(R.id.subtitle_edit)
-    EditText subtitleEdit;*/
-
     @BindView(R.id.radio_group)
     RadioGroup radioGroup;
 
@@ -92,131 +81,13 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-/*        *//*test code*//*
-        final List<Port> ports = new ArrayList<>();
-        for (int i = 0; i < 30; i++) {
-            Port port = new Port(i, i, i, i,Port.CATEGORY_CONFERENCE);
-            ports.add(port);
-        }
-        //RecyclerView config
-        portRadioGroupView.config(ports, R.layout.item_port);
-        portRadioGroupView.configLayout(RecyclerView.VERTICAL, 9);
-        portRadioGroupView.updateData();
-        portRadioGroupView.getAdapter().setItemClickable(false);
-
-        *//*test code*//*
-        currentTerm = new Term(666);
-        currentTerm.setName("position=666");
-        list = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            Term term = new Term(i);
-            term.setName("position=" + i);
-            list.add(term);
-        }
-        adapter = new TermItemAdapter(getContext(), list);
-        View footerview = LayoutInflater.from(getContext()).inflate(R.layout.footer_term, null, false);
-        adapter.setFooterView(footerview);
-        adapter.getFooterView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupDialog();
-            }
-        });
-        adapter.setOnHideViewClickListener(new TermItemAdapter.OnHideViewClickListener() {
-            @Override
-            public void onClick1(View view, int pos) {
-                //发言与取消发言
-                Term term=list.get(pos);
-                if(term.isSpeaking()){
-                    term.setSpeaking(false);
-                    presenter.cancelSpeechTerm(confId,term.getId());
-                }else{
-                    term.setSpeaking(true);
-                    presenter.speechTerm(confId,term.getId());
-                }
-            }
-
-            @Override
-            public void onClick2(View view, int pos) {
-                //静音与取消静音
-                Term term=list.get(pos);
-                if(term.isMuted()){
-                    term.setMuted(false);
-                    presenter.unmuteTerm(confId,term.getId());
-                }else{
-                    term.setMuted(true);
-                    presenter.muteTerm(confId,term.getId());
-                }
-            }
-
-            @Override
-            public void onClick3(View view, int pos) {
-                //踢除终端
-                Term term=list.get(pos);
-                presenter.hangupTerm(confId,term.getId());
-            }
-        });
-        termRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        termRecycler.setHasFixedSize(true);
-        termRecycler.setAdapter(adapter);
-        termRecycler.addOnItemTouchListener(new OnRecyclerItemClickListener(termRecycler) {
-            @Override
-            public void onLongClick(RecyclerView.ViewHolder vh,int position) {
-                //最后一个是添加按钮,不能拖拽
-                if (position != adapter.getItemCount() - 1) {
-                    SlidingItemView slidingItemView = ((TermItemAdapter.MyViewHolder) vh).getSlidingItemView();
-                    if (!slidingItemView.isCanDrag()) {
-                        slidingItemView.setCanDrag(true);
-                        return;
-                    }
-                    itemTouchHelper.startDrag(vh);
-                    dragPosition = position;
-                }
-            }
-        });
-        itemTouchHelper = new ItemTouchHelper(new TermItemTouchCallback(adapter).setOnDragListener(new TermItemTouchCallback.OnDragListener() {
-            @Override
-            public void onFinishDrag() {
-                //拖拽完成的回掉
-                dragPosition = -1;
-            }
-        }));
-        //和RecyclerView进行关联
-        itemTouchHelper.attachToRecyclerView(termRecycler);
-
-        commitSubtitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String subtitle=subtitleEdit.getText().toString();
-                if(!subtitle.isEmpty()){
-                    presenter.setSubtitle(1,subtitle);
-                }
-            }
-        });*/
-
-        /*test code*/
-/*        Port port;
-        List<Port> inputs=new ArrayList<>();
-        for (int m = 0; m < 32; m++) {
-            if(m<4){
-                port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_CAMERA);
-            }else if(m<8){
-                port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_VIDEO);
-            }else if(m<13){
-                port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_DESKTOP);
-            }else{
-                port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_OUTPUT_RETURN);
-            }
-            port.alias="端口:"+m;
-            inputs.add(port);
-        }*/
-
+        //初始化输入端列表
         inputSelectionSupport=new ItemSelectionSupport(inputRecyclerView);
         inputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.NONE);
         inputAdapter=new PortAdapter(presenter.getInputPortList(),inputSelectionSupport);
         inputRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),9));
         inputRecyclerView.setAdapter(inputAdapter);
-
+        //初始化一个终端，测试使用
         currentTerm = new Term(666);
         currentTerm.setName("position=666");
         list = new ArrayList<>();

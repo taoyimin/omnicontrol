@@ -27,17 +27,6 @@ import static cn.diaovision.omnicontrol.MainControlActivity.matrix;
 public class CameraPresenter implements CameraContract.Presenter {
     static final String TAG="camera";
 
-/*    Config cfg = new ConfigFixed();
-    MediaMatrix matrix = new MediaMatrix.Builder()
-            .id(cfg.getMatrixId())
-            .ip(cfg.getMatrixIp())
-            .port(cfg.getMatrixUdpIpPort())
-            .localPreviewVideo(cfg.getMatrixPreviewIp(), cfg.getMatrixPreviewPort())
-            .videoInInit(cfg.getMatrixInputVideoNum())
-            .videoOutInit(cfg.getMatrixOutputVideoNum())
-            .camerasInit()
-            .build();*/
-
     MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
 
     //通过Subject实现ViewModel的双向绑定
@@ -99,6 +88,7 @@ public class CameraPresenter implements CameraContract.Presenter {
         }
     }
 
+    /*摄像机移动*/
     @Override
     public void cameraCtrlGo(int portIdx, final int cmd, final int speed) {
         int res = matrixRemoter.startCameraGo(portIdx, cmd, speed, new RxSubscriber<RxMessage>() {
@@ -117,6 +107,7 @@ public class CameraPresenter implements CameraContract.Presenter {
         }
     }
 
+    /*摄像机停止*/
     @Override
     public void cameraStopGo(int portIdx) {
         int res = matrixRemoter.stopCameraGo(portIdx,new RxSubscriber<RxMessage>() {
@@ -135,6 +126,7 @@ public class CameraPresenter implements CameraContract.Presenter {
         }
     }
 
+    /*添加预置位*/
     @Override
     public void addPreset(int portIdx,int presetIdx, String name) {
         int res = matrixRemoter.storeCameraPreset(portIdx, presetIdx, name, new RxSubscriber<RxMessage>() {
@@ -154,6 +146,7 @@ public class CameraPresenter implements CameraContract.Presenter {
         }
     }
 
+    /*删除预置位*/
     @Override
     public void delPreset(int portIdx, int presetIdx) {
         int res=matrixRemoter.removeCameraPreset(portIdx,presetIdx, new RxSubscriber<RxMessage>() {
@@ -172,6 +165,7 @@ public class CameraPresenter implements CameraContract.Presenter {
         }
     }
 
+    /*调用预置位*/
     @Override
     public void loadPreset(int portIdx,int presetIdx) {
         int res = matrixRemoter.loadCameraPreset(portIdx, presetIdx, new RxSubscriber<RxMessage>() {
@@ -190,11 +184,13 @@ public class CameraPresenter implements CameraContract.Presenter {
         }
     }
 
+    /*根据端口号获取摄像机*/
     @Override
     public HiCamera getCamera(int port) {
         return matrix.getCameras().get(port);
     }
 
+    /*获取摄像机集合*/
     @Override
     public List<HiCamera> getCameraList() {
         Map<Integer,HiCamera> cameras = matrix.getCameras();

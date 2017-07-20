@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.MainControlActivity;
 import cn.diaovision.omnicontrol.R;
+import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.widget.AssistDrawerLayout;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
@@ -238,7 +239,9 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                 presenter.switchVideo(position,new int[]{25});
                 ijkVideoView.setVideoPath("rtsp://192.168.10.31/test1.ts");
                 ijkVideoView.start();*/
-                presenter.switchPreviewVideo(position,28);
+                presenter.switchPreviewVideo(position,MainControlActivity.cfg.getMatrixPreviewPort());
+                ijkVideoView.setVideoPath("rtsp://"+MainControlActivity.cfg.getMatrixPreviewIp()+"/test1.ts");
+                ijkVideoView.start();
             }
 
             @Override
@@ -246,6 +249,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                 //清空输出端列表的所有选中状态
                 outputSelectionSupport.clearChoices();
                 outputAdapter.notifyDataSetChanged();
+                ijkVideoView.stopPlayback();
             }
 
             @Override
@@ -321,9 +325,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
             }*/
         });
 
-        ijkVideoView.setVideoPath("rtsp://192.168.10.31/test1.ts");
-        ijkVideoView.start();
-
 /*        setSubtitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -356,6 +357,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
 
     public void popupDialog(final Port port, final int position){
         final PortDialog dialog=new PortDialog(getContext(),port);
+        final int preCategory=port.category;
         dialog.show();
         dialog.setOnButtonClickListener(new PortDialog.OnButtonClickListener() {
             @Override
@@ -370,8 +372,23 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                     inputAdapter.notifyDataSetChanged();
                     outputAdapter.notifyDataSetChanged();
                 }
+                if(preCategory==Port.CATEGORY_CAMERA&&port.category!=Port.CATEGORY_CAMERA){
+                    //将摄像机改为其它类型的情况，删除该摄像机的配置信息
+                    MainControlActivity.cfg.deleteCamera(MainControlActivity.cfg.getMatrixCameras().get(port.idx));
+                    MainControlActivity.matrix.deleteCamera(port.idx);
+                }
                 //存储到配置文件
                 MainControlActivity.cfg.setPort(port);
+                if(port.category==Port.CATEGORY_IP){
+                    //如果是预览卡，则把端口号写入配置文件中
+                    MainControlActivity.cfg.setPreviewVideoPort(port.idx);
+                }else if(port.category==Port.CATEGORY_CAMERA){
+                    //如果是摄像机，则把摄像机信息写入配置文件中
+                    HiCamera camera=new HiCamera(port.idx,0,1200,0);
+                    camera.setAlias(port.alias);
+                    MainControlActivity.cfg.setCamera(camera);
+                    MainControlActivity.matrix.addCamera(camera);
+                }
             }
         });
     }

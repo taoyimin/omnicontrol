@@ -7,6 +7,8 @@ import android.os.Environment;
  */
 
 public class FileHelper {
+
+    /*获取截图的存储路径*/
     public static String getSrceenShotPath(){
         String path="";
         //判断SD卡是否挂载

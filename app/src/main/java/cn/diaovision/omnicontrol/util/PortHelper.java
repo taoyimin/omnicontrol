@@ -32,6 +32,7 @@ public class PortHelper {
         return instance;
     }
 
+    /*初始化*/
     public static void init() {
         instance.inputList = MainControlActivity.matrix.getVideoInPort();
         instance.outputList = MainControlActivity.matrix.getVideoOutPort();

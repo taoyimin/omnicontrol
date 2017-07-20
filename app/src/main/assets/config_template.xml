@@ -8,7 +8,7 @@
         <preview_video>
             <ip>192.168.10.31</ip>
             <ip_port>554</ip_port>
-            <port>29</port>
+            <port>28</port>
         </preview_video>
 
         <input_list>
@@ -594,18 +594,7 @@
         </output_list>
 
         <camera_list>
-            <camera>
-                <port>1</port>
-                <index>1</index>
-                <baudrate>2400</baudrate>
-                <proctocol>PELCO-D</proctocol>
-            </camera>
-            <camera>
-                <port>2</port>
-                <index>2</index>
-                <baudrate>2400</baudrate>
-                <proctocol>PELCO-D</proctocol>
-            </camera>
+
         </camera_list>
 
         <channel_list>

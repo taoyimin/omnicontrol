@@ -32,6 +32,10 @@
     <string name="dialog_button_delete">删&#160;&#160;&#160;&#160;除</string>
     <string name="dialog_channel_type">一对多分割屏</string>
     <string name="dialog_preset_alias">名&#160;&#160;称</string>
+    <string name="dialog_camera_alias">相机名称</string>
+    <string name="dialog_camera_address">相机地址</string>
+    <string name="dialog_camera_baudrate">波&#160;&#160;特&#160;&#160;率</string>
+    <string name="dialog_camera_proto">协议类型</string>
 
     <!--video-->
     <string name="video_input">输入端</string>
@@ -46,6 +50,8 @@
     <string name="camera_rewind">快退</string>
     <string name="camera_logo">摄像机</string>
     <string name="preset_logo">预置位</string>
+
+    <!--baudrate-->
 
     <!--term hide layout-->
     <string name="term_black">黑屏</string>
