@@ -144,5 +144,35 @@ public class ConfigFixed implements Config{
 
     }
 
+    @Override
+    public void setPreviewVideoPort(int portIdx) {
+
+    }
+
+    @Override
+    public void setCamera(HiCamera hiCamera) {
+
+    }
+
+    @Override
+    public void deleteCamera(HiCamera camera) {
+
+    }
+
+    @Override
+    public void setCameraPreset(int cameraIdx, HiCamera.Preset preset) {
+
+    }
+
+    @Override
+    public void addCameraPreset(int cameraIdx, HiCamera.Preset preset) {
+
+    }
+
+    @Override
+    public void deleteCameraPreset(int cameraIdx, HiCamera.Preset preset) {
+
+    }
+
 
 }

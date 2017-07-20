@@ -51,4 +51,11 @@ public interface Config {
 
     void setPort(Port port);
     void setChannelSet(Set<Channel> channelSet);
+
+    void setPreviewVideoPort(int portIdx);
+    void setCamera(HiCamera camera);
+    void deleteCamera(HiCamera camera);
+    void setCameraPreset(int cameraIdx,HiCamera.Preset preset);
+    void addCameraPreset(int cameraIdx,HiCamera.Preset preset);
+    void deleteCameraPreset(int cameraIdx,HiCamera.Preset preset);
 }
