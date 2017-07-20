@@ -205,4 +205,11 @@ public class VideoLayout extends RelativeLayout {
             videoView.release(true);
         }
     }
+
+    public boolean isPlaying(){
+        if(videoView!=null){
+            return videoView.isPlaying();
+        }
+        return false;
+    }
 }
