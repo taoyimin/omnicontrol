@@ -9,7 +9,6 @@ import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,10 +17,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,24 +25,14 @@ import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.MainControlActivity;
 import cn.diaovision.omnicontrol.R;
-import cn.diaovision.omnicontrol.conn.UdpClient;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
-import cn.diaovision.omnicontrol.util.ByteUtils;
 import cn.diaovision.omnicontrol.widget.AssistDrawerLayout;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
 import cn.diaovision.omnicontrol.widget.PortDialog;
 import cn.diaovision.omnicontrol.widget.VideoLayout;
 import cn.diaovision.omnicontrol.widget.adapter.PortAdapter;
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableOnSubscribe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by TaoYimin on 2017/5/18.
@@ -318,7 +303,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                     inputAdapter.notifyDataSetChanged();
                 }
                 editSubtitle.setText("");
-                start2();
             }
 
             @Override
@@ -364,105 +348,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                 presenter.setSubtitle(currentPort.idx,subtitle);
             }
         });*/
-    }
-
-    private void start1() {
-        Flowable.create(new FlowableOnSubscribe<String>() {
-            @Override
-            public void subscribe(FlowableEmitter<String> e) throws Exception {
-                UdpClient udp = new UdpClient("192.168.10.109", 5000);
-                //call 30
-                byte[] bytes = new byte[]{60, 67, 65, 76, 76, 44, 51, 48, 62};
-                //save 30
-                //byte[] bytes=new byte[]{60,83,65,86,69,44,51,48,62};
-
-                Log.i("info", "send:" + ByteUtils.bytes2Ascii(bytes));
-                byte[] recv = udp.send(bytes, bytes.length);
-                String s = "";
-                for (byte b : recv) {
-                    s += b + ";";
-                }
-                e.onNext(ByteUtils.bytes2Ascii(recv));
-            }
-        }, BackpressureStrategy.BUFFER)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<String>() {
-                    @Override
-                    public void accept(String string) throws Exception {
-                        Log.i("info", string);
-                    }
-                });
-    }
-
-    private void start2() {
-        final List<Integer> list = new ArrayList<>();
-        list.add(0);
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        list.add(4);
-        list.add(5);
-/*        Flowable.intervalRange(0,list.size()-1,0,3, TimeUnit.SECONDS)
-                .map(new Function<Long, Integer>() {
-                    @Override
-                    public Integer apply(Long aLong) throws Exception {
-                        return aLong.intValue();
-                    }
-                })
-                .subscribe(new Subscriber<Integer>() {
-                    @Override
-                    public void onSubscribe(Subscription s) {
-                        Log.i("info", "onSubscribe");
-                        s.request(Integer.MAX_VALUE);
-                    }
-
-                    @Override
-                    public void onNext(Integer integer) {
-                        Log.i("info", "onNext" + integer);
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-                        Log.i("info", "onError");
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.i("info", "onComplete");
-                    }
-                });*/
-        Flowable.fromIterable(list)
-                .map(new Function<Integer, String>() {
-                    @Override
-                    public String apply(Integer integer) throws Exception {
-                        Log.i("info",""+Thread.currentThread().getName());
-                        return integer + "";
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onSubscribe(Subscription s) {
-                        s.request(Integer.MAX_VALUE);
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-                        Log.i("info", s);
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        Log.i("info", "onComplete");
-                    }
-                });
     }
 
     private void updateInfoAfter() {

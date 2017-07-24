@@ -132,7 +132,7 @@ public class MatrixMessage {
         /*append checksum*/
         byte[] bytes;
         if (checked) {
-            //header + id + type + payload + tail
+            //header + id + type + payload + checksum + tail
             bytes = new byte[1 + 2 + 2 + payload.length + 2 + 1];
             bytes[0] = header;
             bytes[1] = id[0];
@@ -147,7 +147,7 @@ public class MatrixMessage {
             bytes[bytes.length-1] = tail;
         }
         else {
-            //header + id + type + payload + checksum + tail
+            //header + id + type + payload + tail
             bytes = new byte[1 + 2 + payload.length + 1];
             bytes[0] = header;
             bytes[1] = id[0];

@@ -99,7 +99,8 @@
             <cn.diaovision.omnicontrol.widget.VideoLayout
                 android:id="@+id/video_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="0dp"
+                android:layout_weight="9">
 
             </cn.diaovision.omnicontrol.widget.VideoLayout>
 
@@ -113,10 +114,10 @@
                 android:textCursorDrawable="@null"
                 android:hint="@string/video_edit_hint"
                 android:paddingLeft="@dimen/video_editView_paddingLeft"
+                android:gravity="center"
                 android:textColorHint="@color/edit_hint_color"
                 android:textSize="@dimen/text_size_f2"/>
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="0dp"

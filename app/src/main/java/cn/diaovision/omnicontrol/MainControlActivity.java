@@ -79,6 +79,7 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
 
     //Context
     OmniControlApplication app;
+    private int currentIndex=0;
 
     //Data
     int preTab = 0;
@@ -227,6 +228,7 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, FRAGMENTS[i], TAG_FRAGMENT[i]);
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             transaction.commit();
+            currentIndex=i;
         }
     }
 
@@ -237,8 +239,10 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         //handle at this layer if needed
-        if(FRAGMENTS[6]!=null)
+        if(FRAGMENTS[6]!=null&&currentIndex==6)
             ((ConferenceFragment)FRAGMENTS[6]).getActivityDispatchTouchEvent(ev);
+        if(FRAGMENTS[1]!=null&&currentIndex==1)
+            ((VideoFragment2)FRAGMENTS[1]).getActivityDispatchTouchEvent(ev);
         gestureDetector.onTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
     }

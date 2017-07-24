@@ -214,22 +214,6 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
         }
     }
 
-/*    @OnClick({R.id.start_conf, R.id.end_conf})
-    void onButtonClick(Button btn) {
-        switch (btn.getId()) {
-            case R.id.start_conf:
-                //开始会议
-                presenter.startConf(cfg.getConfStartDate(), cfg.getConfEndDate(), confId);
-                break;
-            case R.id.end_conf:
-                //结束会议
-                presenter.endConf(confId);
-                break;
-            default:
-                break;
-        }
-    }*/
-
     public void popupDialog() {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_invite_term, null);
         final EditText editText = (EditText) view.findViewById(R.id.dialog_edit);
