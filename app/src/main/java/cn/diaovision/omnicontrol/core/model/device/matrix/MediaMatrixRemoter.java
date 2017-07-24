@@ -1,7 +1,5 @@
 package cn.diaovision.omnicontrol.core.model.device.matrix;
 
-import android.util.Log;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +29,6 @@ import static cn.diaovision.omnicontrol.core.message.MatrixMessage.buildSwitchMe
  */
 
 public class MediaMatrixRemoter {
-    int a;
     private MediaMatrix matrix;
 
     public MediaMatrixRemoter(MediaMatrix matrix) {
@@ -79,7 +76,6 @@ public class MediaMatrixRemoter {
                 .map(new Function<MatrixMessage, RxMessage>() {
                     @Override
                     public RxMessage apply(MatrixMessage matrixMessage) throws Exception {
-                        Log.i("thread",""+Thread.currentThread());
                         byte[] recv = matrix.getController().send(matrixMessage.toBytes(), matrixMessage.toBytes().length);
                         if (recv.length > 0) {
                             return new RxMessage(RxMessage.DONE);
@@ -98,7 +94,7 @@ public class MediaMatrixRemoter {
     public int switchVideo(final int portIn, final int[] portOut, final RxSubscriber<RxMessage> subscriber) {
         if (matrix == null || !matrix.isReachable())
             return -1;
-        List<MatrixMessage> msgList = new ArrayList<>();
+        final List<MatrixMessage> msgList = new ArrayList<>();
         for (int o : portOut) {
             int[] pout = new int[1];
             pout[0] = o;
@@ -106,14 +102,13 @@ public class MediaMatrixRemoter {
         }
         MatrixMessage multiSwitchMsg = buildMultiSwitchMessage(matrix.id, portIn, portOut);
         msgList.add(multiSwitchMsg);
-        Flowable.interval(1, TimeUnit.SECONDS)
-                .fromIterable(msgList)
-                .map(new Function<MatrixMessage, RxMessage>() {
+        Flowable.intervalRange(0,msgList.size(),0,500, TimeUnit.MILLISECONDS)
+                .map(new Function<Long, RxMessage>() {
                     @Override
-                    public RxMessage apply(MatrixMessage matrixMessage) throws Exception {
-                        byte[] recv = matrix.getController().send(matrixMessage.toBytes(), matrixMessage.toBytes().length);
+                    public RxMessage apply(Long aLong) throws Exception {
+                        MatrixMessage msg=msgList.get(aLong.intValue());
+                        byte[] recv = matrix.getController().send(msg.toBytes(), msg.toBytes().length);
                         if (recv.length > 0) {
-                            //4. send message
                             return new RxMessage(RxMessage.DONE);
                         } else {
                             matrix.setReachable(false);
@@ -139,7 +134,7 @@ public class MediaMatrixRemoter {
             return -1;
         MatrixMessage multiSwithMsg = buildMultiSwitchMessage(matrix.id, portIn, portOut);
         MatrixMessage stitchMsg = MatrixMessage.buildStitchMessage(matrix.id, columnCnt, rowCnt, portOut);
-        List<MatrixMessage> msgList = new ArrayList<>();
+        final List<MatrixMessage> msgList = new ArrayList<>();
         for (int o : portOut) {
             int[] pout = new int[1];
             pout[0] = o;
@@ -147,14 +142,13 @@ public class MediaMatrixRemoter {
         }
         msgList.add(multiSwithMsg);
         msgList.add(stitchMsg);
-        Flowable.interval(1, TimeUnit.SECONDS)
-                .fromIterable(msgList)
-                .map(new Function<MatrixMessage, RxMessage>() {
+        Flowable.intervalRange(0, msgList.size(), 0, 500, TimeUnit.MILLISECONDS)
+                .map(new Function<Long, RxMessage>() {
                     @Override
-                    public RxMessage apply(MatrixMessage matrixMessage) throws Exception {
-                        byte[] recv = matrix.getController().send(matrixMessage.toBytes(), matrixMessage.toBytes().length);
+                    public RxMessage apply(Long aLong) throws Exception {
+                        MatrixMessage msg = msgList.get(aLong.intValue());
+                        byte[] recv = matrix.getController().send(msg.toBytes(), msg.toBytes().length);
                         if (recv.length > 0) {
-                            //4. send message
                             return new RxMessage(RxMessage.DONE);
                         } else {
                             matrix.setReachable(false);
@@ -357,7 +351,6 @@ public class MediaMatrixRemoter {
         if (matrix == null || !matrix.isReachable()) {
             return -1;
         }
-
         Flowable.just(str)
                 .map(new Function<String, RxMessage>() {
                     @Override
@@ -380,7 +373,6 @@ public class MediaMatrixRemoter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
-
         return 0;
     }
 
