@@ -201,6 +201,25 @@ public class CameraPresenter implements CameraContract.Presenter {
         return cameraList;
     }
 
+    /*预览输入端口的流媒体时调用，将输入端口切换到流媒体卡端口*/
+    @Override
+    public void switchPreviewVideo(int portIn, int portOut){
+        int res=matrixRemoter.switchPreviewVideo(portIn, portOut, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG, "Switch preview video succeed");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG, "Switch preview video failed");
+            }
+        });
+        if (res < 0) {
+            Log.i(TAG, "invalid switch preview video");
+        }
+    }
+
     //TODO: add viewmodel operations if needed
 //    public void onTitleChanged(String str){
 //    }

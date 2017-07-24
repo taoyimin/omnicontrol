@@ -96,6 +96,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
                 //初始化预置位
                 initPreset(presenter.getCameraList().get(position));
                 //播放流媒体
+                presenter.switchPreviewVideo(presenter.getCameraList().get(position).getPortIdx(),MainControlActivity.cfg.getMatrixPreviewPort());
                 videoLayout.setVideoPath("rtsp://"+MainControlActivity.cfg.getMatrixPreviewIp()+"/test1.ts");
                 videoLayout.start();
             }
