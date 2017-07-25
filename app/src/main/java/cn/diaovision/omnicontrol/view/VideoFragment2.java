@@ -47,8 +47,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     List<TextView> views;
     @BindView(R.id.assist_drawer_layout)
     AssistDrawerLayout drawerLayout;
-    /*    @BindView(R.id.set_subtitle)
-        Button setSubtitle;*/
     @BindView(R.id.edit_subtitle)
     EditText editSubtitle;
     @BindView(R.id.video_layout)
@@ -58,7 +56,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     private PortAdapter outputAdapter;
     private ItemSelectionSupport inputSelectionSupport;
     private ItemSelectionSupport outputSelectionSupport;
-    Rect rect = new Rect();
+    private Rect rect = new Rect();
     private static final int OPEN_DRAWER = 0;
     private static final int CLOSE_DRAWER = 1;
     VideoContract.Presenter presenter;
@@ -142,14 +140,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                         break;
                 }
                 //presenter.setChannel(in,outs,Channel.MOD_NORMAL);
-                //编辑完成后设为单选模式
-                outputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
-                outputAdapter.notifyDataSetChanged();
-                inputAdapter.notifyDataSetChanged();
-                //还原输出端选择的颜色和角标
-                outputSelectionSupport.initChoiceConfig(null);
-                //关闭抽屉，直接调用drawerLayout.closeDrawer()方法没有收回效果
-                handler.sendEmptyMessage(CLOSE_DRAWER);
+                editComplete();
             }
         });
 
@@ -256,7 +247,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                 ijkVideoView.setVideoPath("rtsp://" + MainControlActivity.cfg.getMatrixPreviewIp() + "/test1.ts");
                 ijkVideoView.start();
                 editSubtitle.setText("");
-                //start1();
             }
 
             @Override
@@ -424,5 +414,21 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         //停止视频播放，并释放资源
         ijkVideoView.stopPlayback();
         //IjkMediaPlayer.native_profileEnd();
+    }
+
+    public AssistDrawerLayout getDrawerLayout() {
+        return drawerLayout;
+    }
+
+    /*设置完端口切换模式后调用*/
+    public void editComplete(){
+        //编辑完成后设为单选模式
+        outputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
+        outputAdapter.notifyDataSetChanged();
+        inputAdapter.notifyDataSetChanged();
+        //还原输出端选择的颜色和角标
+        outputSelectionSupport.initChoiceConfig(null);
+        //关闭抽屉，直接调用drawerLayout.closeDrawer()方法没有收回效果
+        handler.sendEmptyMessage(CLOSE_DRAWER);
     }
 }

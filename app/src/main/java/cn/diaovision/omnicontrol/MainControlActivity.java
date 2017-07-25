@@ -27,6 +27,7 @@ import cn.diaovision.omnicontrol.view.DvdFragment;
 import cn.diaovision.omnicontrol.view.LightFragment;
 import cn.diaovision.omnicontrol.view.PowerFragment;
 import cn.diaovision.omnicontrol.view.VideoFragment2;
+import cn.diaovision.omnicontrol.widget.AssistDrawerLayout;
 
 //import com.roughike.bottombar.BottomBar;
 //import devlight.io.library.ntb.NavigationTabBar;
@@ -300,5 +301,17 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
             Log.i("<UI>", "<UI> y swipe");
         }
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(currentIndex==1){
+            AssistDrawerLayout drawerLayout=((VideoFragment2)FRAGMENTS[1]).getDrawerLayout();
+            if(drawerLayout!=null&&drawerLayout.isDrawerOpen()){
+                ((VideoFragment2)FRAGMENTS[1]).editComplete();
+                return;
+            }
+        }
+        super.onBackPressed();
     }
 }
