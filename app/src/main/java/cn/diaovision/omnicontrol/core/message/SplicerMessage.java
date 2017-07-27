@@ -2,10 +2,10 @@ package cn.diaovision.omnicontrol.core.message;
 
 /**
  * Created by TaoYimin on 2017/7/25.
- * 融合器消息类
+ * 拼接控制器消息类
  */
 
-public class FusionMessage {
+public class SplicerMessage {
     //消息类型
     public final static int MSG_OPEN = 0;//新开窗口
     public final static int MSG_SHUT = 1;//关闭窗口
@@ -17,6 +17,9 @@ public class FusionMessage {
     public final static int MSG_SWCH = 7;//信号源切换指令
     public final static int MSG_SAVE = 8;//保存场景
     public final static int MSG_CALL = 9;//调出场景
+    public final static int MSG_RCNG = 10;//读取控制器多组屏状态
+    public final static int MSG_RCN2 = 11;//读取多组屏的拼接参数和分辨率
+    public final static int MSG_SCN2 = 12;//设置多组屏的拼接参数和分辨率
 
     //消息类型对应数组
     public final static byte[][] TYPE_BYTES = {
@@ -30,6 +33,9 @@ public class FusionMessage {
             {'S', 'W', 'C', 'H'},//7
             {'S', 'A', 'V', 'E'},//8
             {'C', 'A', 'L', 'L'},//9
+            {'R', 'C', 'N', 'G'},//10
+            {'R', 'C', 'N', '2'},//11
+            {'S', 'C', 'N', '2'},//12
     };
 
     private final byte header = '<';
@@ -37,7 +43,7 @@ public class FusionMessage {
     private byte[] type;
     private byte[] payload;
 
-    public FusionMessage(int type, byte[] payload) {
+    public SplicerMessage(int type, byte[] payload) {
         this.type = TYPE_BYTES[type];
         this.payload = payload;
     }
@@ -57,26 +63,55 @@ public class FusionMessage {
     }
 
     /*调出场景消息*/
-    public static FusionMessage buildCallMessage(int sceneId) {
+    public static SplicerMessage buildCallMessage(int sceneId) {
         int len=(sceneId+"").toCharArray().length;
         byte[] payload=new byte[len];
         System.arraycopy(int2bytes(sceneId), 0, payload, 0, payload.length);
-        return new FusionMessage(MSG_CALL, payload);
+        return new SplicerMessage(MSG_CALL, payload);
+    }
+
+    /*读取控制器多组屏状态消息*/
+    public static SplicerMessage buildRcngMessage(){
+        byte[] payload =new byte[0];
+        return new SplicerMessage(MSG_RCNG,payload);
+    }
+
+    /*读取多组屏的拼接参数和分辨率消息*/
+    public static SplicerMessage buildRcn2Message(int groupId){
+        int len=(groupId+"").toCharArray().length;
+        byte[] payload=new byte[len];
+        System.arraycopy(int2bytes(groupId),0,payload,0,payload.length);
+        return new SplicerMessage(MSG_RCN2,payload);
     }
 
     /*融合器返回成功消息*/
-    public static FusionMessage buildSucessMessage(int type){
+    public static SplicerMessage buildSucessMessage(int type){
         byte[] payload=new byte[]{'O','K'};
-        return new FusionMessage(type,payload);
+        return new SplicerMessage(type,payload);
     }
 
-
-    static private byte[] int2bytes(int i) {
+    private static byte[] int2bytes(int i) {
         char[] chars = (i + "").toCharArray();
         byte[] bytes = new byte[chars.length];
         for (int m = 0; m < chars.length; m++) {
             bytes[m]= (byte) chars[m];
         }
         return bytes;
+    }
+
+    public static SplicerMessage parseEndMessage(byte[] bytes){
+        int type = 0;
+        byte[] types=new byte[]{bytes[1],bytes[2],bytes[3],bytes[4]};
+        for(int i=0;i<TYPE_BYTES.length;i++){
+            if(TYPE_BYTES[i]==types){
+                type=i;
+            }
+        }
+        byte[] payload=new byte[]{'O','K'};
+        return new SplicerMessage(type,payload);
+    }
+
+    public void setType(byte[] type) {
+        this.type = type;
     }
 }
