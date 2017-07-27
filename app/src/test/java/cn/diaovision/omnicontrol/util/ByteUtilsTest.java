@@ -2,9 +2,7 @@ package cn.diaovision.omnicontrol.util;
 
 import org.junit.Test;
 
-import java.util.Date;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by liulingfeng on 2017/4/11.
@@ -52,4 +50,16 @@ public class ByteUtilsTest {
         assertEquals(a, 0x12345678);
     }
 
+    @Test
+    public void bytes2ascii() throws Exception {
+        String s="ABC123";
+        byte[] bytes=new byte[6];
+        bytes[0]=65;
+        bytes[1]=66;
+        bytes[2]=67;
+        bytes[3]=49;
+        bytes[4]=50;
+        bytes[5]=51;
+        assertEquals(s,ByteUtils.bytes2ascii(bytes));
+    }
 }

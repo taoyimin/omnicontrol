@@ -1,10 +1,10 @@
-package cn.diaovision.omnicontrol.core.model.device.fusion;
+package cn.diaovision.omnicontrol.core.model.device.splicer;
 
 /**
  * Created by TaoYimin on 2017/7/25.
  * 窗口实体类
  */
-
+@Deprecated
 public class Windows {
     //窗口id
     private int id;

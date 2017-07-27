@@ -1,68 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    android:id="@+id/drawer_layout"
+<cn.diaovision.omnicontrol.widget.MyDrawLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/drawer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
         android:layout_gravity="left"
-        android:background="#fff"
-        android:layout_marginRight="-65dp">
+        android:layout_marginRight="-65dp"
+        android:background="@color/color_c3"
+        android:orientation="horizontal">
+
         <RadioGroup
             android:id="@+id/radio_group"
             android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
+            android:orientation="vertical">
 
             <RadioButton
                 android:id="@+id/radio_btn1"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="正常显示\n1XN"
-                android:gravity="center"
-                android:checked="true"
                 android:background="@drawable/radio_button_selector"
-                android:button="@null"/>
+                android:button="@null"
+                android:checked="true"
+                android:gravity="center"
+                android:text="正常显示\n1XN"/>
 
             <RadioButton
                 android:id="@+id/radio_btn2"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="拼接显示\n2X1"
-                android:gravity="center"
                 android:background="@drawable/radio_button_selector"
-                android:button="@null"/>
+                android:button="@null"
+                android:gravity="center"
+                android:text="拼接显示\n2X1"/>
 
             <RadioButton
                 android:id="@+id/radio_btn3"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="拼接显示\n2X2"
-                android:gravity="center"
                 android:background="@drawable/radio_button_selector"
-                android:button="@null"/>
+                android:button="@null"
+                android:gravity="center"
+                android:text="拼接显示\n2X2"/>
 
             <RadioButton
                 android:id="@+id/radio_btn4"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="拼接显示\n3X3"
-                android:gravity="center"
                 android:background="@drawable/radio_button_selector"
-                android:button="@null"/>
+                android:button="@null"
+                android:gravity="center"
+                android:text="拼接显示\n3X3"/>
         </RadioGroup>
 
         <FrameLayout
@@ -74,4 +77,4 @@
             <include layout="@layout/layout_scene1"/>
         </FrameLayout>
     </LinearLayout>
-</android.support.v4.widget.DrawerLayout>
+</cn.diaovision.omnicontrol.widget.MyDrawLayout>

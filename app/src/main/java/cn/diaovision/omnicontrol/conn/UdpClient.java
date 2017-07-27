@@ -9,6 +9,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.diaovision.omnicontrol.util.ByteUtils;
+
 /**
  * Created by liulingfeng on 2017/3/19.
  */
@@ -54,7 +56,7 @@ public class UdpClient {
     public List<byte[]> send(final byte[] bytes, final int len, boolean moreRecv) {
         final String ip = this.ip;
         byte[] recvBuff = new byte[1024];
-        byte[] recv = null;
+        byte[] recv;
         List<byte[]> recvList = new ArrayList<>();
         try {
             DatagramSocket udpSkt = new DatagramSocket();
@@ -63,13 +65,17 @@ public class UdpClient {
             DatagramPacket packet = new DatagramPacket(bytes, len, addr, port);
             udpSkt.send(packet);
             DatagramPacket packetRecv = new DatagramPacket(recvBuff, recvBuff.length);
-            for (int i=0;i<3;i++) {
+            while (true){
                 udpSkt.receive(packetRecv);
                 byte[] data = packetRecv.getData();
                 int ll = packetRecv.getLength();
                 recv = new byte[ll];
                 System.arraycopy(data, 0, recv, 0, ll);
+                String result= ByteUtils.bytes2ascii(recv);
                 recvList.add(recv);
+                if("<Err>".equals(result)||result.endsWith("OK>")){
+                    break;
+                }
             }
             udpSkt.close();
         } catch (UnknownHostException e) {

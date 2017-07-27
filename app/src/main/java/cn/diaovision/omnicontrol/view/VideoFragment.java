@@ -17,13 +17,14 @@ import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
+import cn.diaovision.omnicontrol.core.model.device.splicer.Scene;
 import cn.diaovision.omnicontrol.widget.PortRadioGroupView;
 import cn.diaovision.omnicontrol.widget.VideoLayout;
 
 /**
  * Created by liulingfeng on 2017/2/24.
  */
-
+@Deprecated
 public class VideoFragment extends BaseFragment implements VideoContract.View{
 
     @BindView(R.id.input)
@@ -195,5 +196,10 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
     @Override
     public void bindPresenter() {
         presenter = new VideoPresenter(this);
+    }
+
+    @Override
+    public void initScene(List<Scene> list) {
+
     }
 }

@@ -67,6 +67,14 @@
     <dimen name="term_slide_marginBottom">3.38dp</dimen>
     <dimen name="term_image_width">130.8dp</dimen>
 
+    <!--recycler view scene item-->
+    <dimen name="scene_item_height">40.93dp</dimen>
+    <dimen name="scene_item_marginTop">3.38dp</dimen>
+    <dimen name="scene_item_marginBottom">3.38dp</dimen>
+    <dimen name="scene_item_marginRight">6.76dp</dimen>
+    <dimen name="scene_item_marginLeft">6.76dp</dimen>
+    <dimen name="scene_id_width">50dp</dimen>
+
     <!--term hide layout-->
     <dimen name="term_hide_width">204dp</dimen>
     <dimen name="term_hide_icon_width">28.57dp</dimen>
