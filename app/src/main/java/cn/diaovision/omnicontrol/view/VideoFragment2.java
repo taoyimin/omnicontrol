@@ -1,38 +1,42 @@
 package cn.diaovision.omnicontrol.view;
 
 import android.app.Service;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.FileOutputStream;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.BindViews;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.MainControlActivity;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
+import cn.diaovision.omnicontrol.core.model.device.splicer.Scene;
 import cn.diaovision.omnicontrol.widget.AssistDrawerLayout;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
 import cn.diaovision.omnicontrol.widget.PortDialog;
 import cn.diaovision.omnicontrol.widget.VideoLayout;
 import cn.diaovision.omnicontrol.widget.adapter.PortAdapter;
+import cn.diaovision.omnicontrol.widget.adapter.SceneAdapter;
 
 /**
  * Created by TaoYimin on 2017/5/18.
@@ -43,17 +47,22 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     RecyclerView inputRecyclerView;
     @BindView(R.id.output)
     RecyclerView outputRecyclerView;
-    @BindViews({R.id.input_count, R.id.output_count, R.id.input_lastposition, R.id.output_lastposition, R.id.input_size, R.id.output_size, R.id.channel_size})
-    List<TextView> views;
+/*    @BindViews({R.id.input_count, R.id.output_count, R.id.input_lastposition, R.id.output_lastposition, R.id.input_size, R.id.output_size, R.id.channel_size})
+    List<TextView> views;*/
     @BindView(R.id.assist_drawer_layout)
     AssistDrawerLayout drawerLayout;
     @BindView(R.id.edit_subtitle)
     EditText editSubtitle;
     @BindView(R.id.video_layout)
     VideoLayout ijkVideoView;
+    @BindView(R.id.scene_recycler)
+    RecyclerView sceneRecycler;
+    @BindView(R.id.auxiliary_recycler)
+    RecyclerView auxiliaryRecycler;
 
     private PortAdapter inputAdapter;
     private PortAdapter outputAdapter;
+    private SceneAdapter sceneAdapter;
     private ItemSelectionSupport inputSelectionSupport;
     private ItemSelectionSupport outputSelectionSupport;
     private Rect rect = new Rect();
@@ -147,16 +156,16 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         inputRecyclerView.addOnItemTouchListener(new OnRecyclerItemClickListener(inputRecyclerView) {
             @Override
             public void onItemClick(RecyclerView.ViewHolder vh, int position) {
-                updateInfoBefore();
+                //updateInfoBefore();
                 inputSelectionSupport.itemClick(position);
-                updateInfoAfter();
+                //updateInfoAfter();
                 //初始化输出端选择的颜色和角标
                 outputSelectionSupport.initChoiceConfig(inputAdapter.getData().get(position));
             }
 
             @Override
             public void onLongClick(RecyclerView.ViewHolder vh, final int position) {
-                updateInfoBefore();
+                //updateInfoBefore();
                 if (inputSelectionSupport.getChoiceMode() == ItemSelectionSupport.ChoiceMode.SINGLE && outputSelectionSupport.getChoiceMode() == ItemSelectionSupport.ChoiceMode.SINGLE) {
                     //获取系统震动服务
                     Vibrator vib = (Vibrator) getActivity().getSystemService(Service.VIBRATOR_SERVICE);
@@ -184,7 +193,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                     //输入端为单选模式，输出端为多选模式
                     inputSelectionSupport.itemClick(position);
                 }
-                updateInfoAfter();
+                //updateInfoAfter();
             }
 
             @Override
@@ -196,9 +205,9 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         outputRecyclerView.addOnItemTouchListener(new OnRecyclerItemClickListener(outputRecyclerView) {
             @Override
             public void onItemClick(RecyclerView.ViewHolder vh, int position) {
-                updateInfoBefore();
+                //updateInfoBefore();
                 outputSelectionSupport.itemClick(position);
-                updateInfoAfter();
+                //updateInfoAfter();
             }
 
 /*            @Override
@@ -293,6 +302,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                     inputAdapter.notifyDataSetChanged();
                 }
                 editSubtitle.setText("");
+                sceneAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -323,6 +333,8 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
             }*/
         });
 
+        presenter.getSceneList(1);
+
 /*        setSubtitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -340,7 +352,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         });*/
     }
 
-    private void updateInfoAfter() {
+/*    private void updateInfoAfter() {
         views.get(0).setText("输入端选中" + inputSelectionSupport.getCheckedItemCount() + "个");
         views.get(1).setText("输出端选中" + outputSelectionSupport.getCheckedItemCount() + "个");
         views.get(4).setText("输入端" + inputSelectionSupport.getCheckedItemPositions());
@@ -351,7 +363,7 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     private void updateInfoBefore() {
         views.get(2).setText("输入端LastPosition=" + inputSelectionSupport.getLastPosition());
         views.get(3).setText("输出端LastPosition=" + outputSelectionSupport.getLastPosition());
-    }
+    }*/
 
     public void popupDialog(final Port port, final int position) {
         final PortDialog dialog = new PortDialog(getContext(), port);
@@ -430,5 +442,35 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         outputSelectionSupport.initChoiceConfig(null);
         //关闭抽屉，直接调用drawerLayout.closeDrawer()方法没有收回效果
         handler.sendEmptyMessage(CLOSE_DRAWER);
+    }
+
+    /*对某一个控件截屏*/
+    public void printScreen(View view) {
+        String imgPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Omnicontrol/test.png";
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();
+        Bitmap bitmap = view.getDrawingCache();
+        if (bitmap != null) {
+            try {
+                FileOutputStream out = new FileOutputStream(imgPath);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /*初始化场景列表*/
+    @Override
+    public void initScene(List<Scene> list) {
+        sceneAdapter=new SceneAdapter(list);
+        sceneRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        sceneRecycler.setAdapter(sceneAdapter);
+        sceneAdapter.setOnItemClickListener(new SceneAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+
+            }
+        });
     }
 }
