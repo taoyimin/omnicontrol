@@ -1,13 +1,13 @@
-package cn.diaovision.omnicontrol.core.model.device.fusion;
+package cn.diaovision.omnicontrol.core.model.device.splicer;
 
 import cn.diaovision.omnicontrol.conn.UdpClient;
 
 /**
  * Created by TaoYimin on 2017/7/25.
- * 融合处理器
+ * 拼接控制器
  */
 
-public class MediaFusion {
+public class MediaSplicer {
     //融合器ip
     private String ip="192.168.10.109";
     //融合器通讯端口
