@@ -1,5 +1,11 @@
 package cn.diaovision.omnicontrol.core.message;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.diaovision.omnicontrol.core.model.device.splicer.Scene;
+import cn.diaovision.omnicontrol.util.ByteUtils;
+
 /**
  * Created by TaoYimin on 2017/7/25.
  * 拼接控制器消息类
@@ -20,6 +26,7 @@ public class SplicerMessage {
     public final static int MSG_RCNG = 10;//读取控制器多组屏状态
     public final static int MSG_RCN2 = 11;//读取多组屏的拼接参数和分辨率
     public final static int MSG_SCN2 = 12;//设置多组屏的拼接参数和分辨率
+    public final static int MSG_RLST = 13;//设置多组屏的拼接参数和分辨率
 
     //消息类型对应数组
     public final static byte[][] TYPE_BYTES = {
@@ -36,6 +43,7 @@ public class SplicerMessage {
             {'R', 'C', 'N', 'G'},//10
             {'R', 'C', 'N', '2'},//11
             {'S', 'C', 'N', '2'},//12
+            {'R', 'L', 'S', 'T'},//13
     };
 
     private final byte header = '<';
@@ -64,51 +72,74 @@ public class SplicerMessage {
 
     /*调出场景消息*/
     public static SplicerMessage buildCallMessage(int sceneId) {
-        int len=(sceneId+"").toCharArray().length;
-        byte[] payload=new byte[len];
+        int len = (sceneId + "").toCharArray().length;
+        byte[] payload = new byte[len];
         System.arraycopy(int2bytes(sceneId), 0, payload, 0, payload.length);
         return new SplicerMessage(MSG_CALL, payload);
     }
 
     /*读取控制器多组屏状态消息*/
-    public static SplicerMessage buildRcngMessage(){
-        byte[] payload =new byte[0];
-        return new SplicerMessage(MSG_RCNG,payload);
+    public static SplicerMessage buildRcngMessage() {
+        byte[] payload = new byte[0];
+        return new SplicerMessage(MSG_RCNG, payload);
     }
 
     /*读取多组屏的拼接参数和分辨率消息*/
-    public static SplicerMessage buildRcn2Message(int groupId){
-        int len=(groupId+"").toCharArray().length;
-        byte[] payload=new byte[len];
-        System.arraycopy(int2bytes(groupId),0,payload,0,payload.length);
-        return new SplicerMessage(MSG_RCN2,payload);
+    public static SplicerMessage buildRcn2Message(int groupId) {
+        int len = (groupId + "").toCharArray().length;
+        byte[] payload = new byte[len];
+        System.arraycopy(int2bytes(groupId), 0, payload, 0, payload.length);
+        return new SplicerMessage(MSG_RCN2, payload);
+    }
+
+    /*读取场景列表*/
+    public static SplicerMessage buildRlstMessage(int groupId) {
+        int len = (groupId + "").toCharArray().length;
+        byte[] payload = new byte[len];
+        System.arraycopy(int2bytes(groupId), 0, payload, 0, payload.length);
+        return new SplicerMessage(MSG_RLST, payload);
     }
 
     /*融合器返回成功消息*/
-    public static SplicerMessage buildSucessMessage(int type){
-        byte[] payload=new byte[]{'O','K'};
-        return new SplicerMessage(type,payload);
+    public static SplicerMessage buildSucessMessage(int type) {
+        byte[] payload = new byte[]{'O', 'K'};
+        return new SplicerMessage(type, payload);
     }
 
     private static byte[] int2bytes(int i) {
         char[] chars = (i + "").toCharArray();
         byte[] bytes = new byte[chars.length];
         for (int m = 0; m < chars.length; m++) {
-            bytes[m]= (byte) chars[m];
+            bytes[m] = (byte) chars[m];
         }
         return bytes;
     }
 
-    public static SplicerMessage parseEndMessage(byte[] bytes){
-        int type = 0;
-        byte[] types=new byte[]{bytes[1],bytes[2],bytes[3],bytes[4]};
-        for(int i=0;i<TYPE_BYTES.length;i++){
-            if(TYPE_BYTES[i]==types){
-                type=i;
+    public static List<Scene> parseSceneMessage(List<byte[]> data) {
+        List<Scene> sceneList = new ArrayList<>();
+        if (data != null && data.size() != 0) {
+            for (int i = data.size() - 2; i >= 0; i--) {
+                byte[] bytes = data.get(i);
+                String result=ByteUtils.bytes2ascii(bytes);
+                String[] strs=result.substring(1,result.length()-1).split(",");
+                Scene scene=new Scene(Integer.parseInt(strs[2]),Integer.parseInt(strs[3]),Integer.parseInt(strs[4]),java.net.URLDecoder.decode(strs[5]));
+                sceneList.add(scene);
             }
         }
-        byte[] payload=new byte[]{'O','K'};
-        return new SplicerMessage(type,payload);
+        return sceneList;
+    }
+
+
+    public static SplicerMessage parseEndMessage(byte[] bytes) {
+        int type = 0;
+        byte[] types = new byte[]{bytes[1], bytes[2], bytes[3], bytes[4]};
+        for (int i = 0; i < TYPE_BYTES.length; i++) {
+            if (TYPE_BYTES[i] == types) {
+                type = i;
+            }
+        }
+        byte[] payload = new byte[]{'O', 'K'};
+        return new SplicerMessage(type, payload);
     }
 
     public void setType(byte[] type) {
