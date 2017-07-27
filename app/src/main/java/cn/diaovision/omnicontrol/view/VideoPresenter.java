@@ -3,6 +3,9 @@ package cn.diaovision.omnicontrol.view;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +13,9 @@ import java.util.Set;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
+import cn.diaovision.omnicontrol.core.model.device.splicer.MediaSplicer;
+import cn.diaovision.omnicontrol.core.model.device.splicer.MediaSplicerRemoter;
+import cn.diaovision.omnicontrol.core.model.device.splicer.Scene;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
@@ -38,6 +44,7 @@ public class VideoPresenter implements VideoContract.Presenter {
             .build();*/
 
     MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
+    MediaSplicerRemoter splicerRemoter=new MediaSplicerRemoter(new MediaSplicer());
 
     //通过Subject实现ViewModel的双向绑定
     Subject bus = PublishSubject.create();
@@ -223,6 +230,33 @@ public class VideoPresenter implements VideoContract.Presenter {
         if(res<0){
             Log.i(TAG,"invalid set subtitle");
         }
+    }
+
+    /*获取某个屏的场景集合*/
+    @Override
+    public void getSceneList(int group) {
+        splicerRemoter.getSceneList(group, new Subscriber<List<Scene>>() {
+            @Override
+            public void onSubscribe(Subscription s) {
+                s.request(Integer.MAX_VALUE);
+            }
+
+            @Override
+            public void onNext(List<Scene> scenes) {
+                view.initScene(scenes);
+            }
+
+
+            @Override
+            public void onError(Throwable t) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
     }
 
     //TODO: add viewmodel operations if needed

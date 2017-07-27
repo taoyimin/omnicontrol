@@ -7,6 +7,7 @@ import cn.diaovision.omnicontrol.BasePresenter;
 import cn.diaovision.omnicontrol.BaseView;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
+import cn.diaovision.omnicontrol.core.model.device.splicer.Scene;
 
 /* *
  * view + presenter统一的接口
@@ -17,6 +18,7 @@ import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 
 public interface VideoContract {
     interface View extends BaseView<Presenter>{
+        void initScene(List<Scene> list);
     }
 
     interface Presenter extends BasePresenter{
@@ -30,6 +32,7 @@ public interface VideoContract {
         void stitchVideo(int portIn,  int columnCnt,  int rowCnt,  int[] portOut);
         void switchPreviewVideo(int portIn, int portOut);
         void setSubtitle(int portIdx, String str);
+        void getSceneList(int group);
 
         interface PortStateListener{
             void onPreviewDisconnected();
