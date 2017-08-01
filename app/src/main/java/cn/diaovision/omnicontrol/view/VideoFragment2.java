@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +35,7 @@ import cn.diaovision.omnicontrol.widget.AssistDrawerLayout;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
 import cn.diaovision.omnicontrol.widget.PortDialog;
+import cn.diaovision.omnicontrol.widget.SceneDialog;
 import cn.diaovision.omnicontrol.widget.VideoLayout;
 import cn.diaovision.omnicontrol.widget.adapter.PortAdapter;
 import cn.diaovision.omnicontrol.widget.adapter.SceneAdapter;
@@ -403,6 +405,30 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         });
     }
 
+    public void popupDialog(final Scene scene){
+        final SceneDialog dialog=new SceneDialog(getContext(),scene);
+        dialog.show();
+        dialog.setOnButtonClickListener(new SceneDialog.OnButtonClickListener() {
+            @Override
+            public void onConfirmClick() {
+                //修改场景名称
+                String name=dialog.getEditText();
+                if(!TextUtils.isEmpty(name)) {
+                    presenter.renameScene(scene.getId(), name,1);
+                }else {
+                    showToast("场景名称不能为空!");
+                    return;
+                }
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onCancelClick() {
+                dialog.dismiss();
+            }
+        });
+    }
+
     public void getActivityDispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
             if (editSubtitle == null)
@@ -462,15 +488,38 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
 
     /*初始化场景列表*/
     @Override
-    public void initScene(List<Scene> list) {
+    public void initScene(final List<Scene> list) {
         sceneAdapter=new SceneAdapter(list);
         sceneRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         sceneRecycler.setAdapter(sceneAdapter);
         sceneAdapter.setOnItemClickListener(new SceneAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
+                Scene scene=list.get(position);
+                presenter.loadSceneList(scene.getId());
+            }
 
+            @Override
+            public void onItemLongClick(int position) {
+                //弹出修改场景对话框
+                Scene scene=list.get(position);
+                popupDialog(scene);
+                //获取系统震动服务
+                Vibrator vib = (Vibrator) getActivity().getSystemService(Service.VIBRATOR_SERVICE);
+                //震动70毫秒
+                vib.vibrate(70);
             }
         });
+    }
+
+    /*弹出吐司*/
+    @Override
+    public void showToast(String string) {
+        Toast.makeText(getContext(),string,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void refreshSceneList() {
+        sceneAdapter.notifyDataSetChanged();
     }
 }

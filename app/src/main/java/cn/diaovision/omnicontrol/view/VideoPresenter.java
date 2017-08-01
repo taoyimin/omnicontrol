@@ -13,7 +13,6 @@ import java.util.Set;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
-import cn.diaovision.omnicontrol.core.model.device.splicer.MediaSplicer;
 import cn.diaovision.omnicontrol.core.model.device.splicer.MediaSplicerRemoter;
 import cn.diaovision.omnicontrol.core.model.device.splicer.Scene;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
@@ -26,13 +25,14 @@ import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
 import static cn.diaovision.omnicontrol.MainControlActivity.matrix;
+import static cn.diaovision.omnicontrol.MainControlActivity.splicer;
 
 /* 兼容MVVM模式的Presenter样板
  * Created by liulingfeng on 2017/4/3.
  */
 
 public class VideoPresenter implements VideoContract.Presenter {
-    static final String TAG="video";
+    static final String TAG = "video";
 /*    Config cfg = new ConfigFixed();
     MediaMatrix matrix = new MediaMatrix.Builder()
             .id(cfg.getMatrixId())
@@ -43,8 +43,9 @@ public class VideoPresenter implements VideoContract.Presenter {
             .videoOutInit(cfg.getMatrixOutputVideoNum())
             .build();*/
 
+
     MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
-    MediaSplicerRemoter splicerRemoter=new MediaSplicerRemoter(new MediaSplicer());
+    MediaSplicerRemoter splicerRemoter = new MediaSplicerRemoter(splicer);
 
     //通过Subject实现ViewModel的双向绑定
     Subject bus = PublishSubject.create();
@@ -107,11 +108,11 @@ public class VideoPresenter implements VideoContract.Presenter {
     /*获取输入端口对应的输出端口数组*/
     @Override
     public int[] getOutputIdx(int inputIdx) {
-        Set<Channel> chnSet= matrix.getVideoChnSet();
-        Iterator<Channel> iterator=chnSet.iterator();
-        while (iterator.hasNext()){
-            Channel channel=iterator.next();
-            if(channel.getInputIdx()==inputIdx){
+        Set<Channel> chnSet = matrix.getVideoChnSet();
+        Iterator<Channel> iterator = chnSet.iterator();
+        while (iterator.hasNext()) {
+            Channel channel = iterator.next();
+            if (channel.getInputIdx() == inputIdx) {
                 return channel.getOutputIdx();
             }
         }
@@ -121,11 +122,11 @@ public class VideoPresenter implements VideoContract.Presenter {
     /*获取输出端口对应的输入端口*/
     @Override
     public int getInputIdx(int outputIdx) {
-        Set<Channel> chnSet=matrix.getVideoChnSet();
-        Iterator<Channel> iterator=chnSet.iterator();
-        while (iterator.hasNext()){
-            Channel channel=iterator.next();
-            if(channel.containOutputIdx(outputIdx)){
+        Set<Channel> chnSet = matrix.getVideoChnSet();
+        Iterator<Channel> iterator = chnSet.iterator();
+        while (iterator.hasNext()) {
+            Channel channel = iterator.next();
+            if (channel.containOutputIdx(outputIdx)) {
                 return channel.getInputIdx();
             }
         }
@@ -146,7 +147,7 @@ public class VideoPresenter implements VideoContract.Presenter {
 
     /*获取矩阵已配置好的通道集合*/
     @Override
-    public Set<Channel> getChannelSet(){
+    public Set<Channel> getChannelSet() {
         return matrix.getVideoChnSet();
     }
 
@@ -158,8 +159,8 @@ public class VideoPresenter implements VideoContract.Presenter {
 
     /*预览输入端口的流媒体时调用，将输入端口切换到流媒体卡端口*/
     @Override
-    public void switchPreviewVideo(int portIn, int portOut){
-        int res=matrixRemoter.switchPreviewVideo(portIn, portOut, new RxSubscriber<RxMessage>() {
+    public void switchPreviewVideo(int portIn, int portOut) {
+        int res = matrixRemoter.switchPreviewVideo(portIn, portOut, new RxSubscriber<RxMessage>() {
             @Override
             public void onRxResult(RxMessage rxMessage) {
                 Log.i(TAG, "Switch preview video succeed");
@@ -196,8 +197,8 @@ public class VideoPresenter implements VideoContract.Presenter {
 
     /*一对多输出（局部分割），将矩阵输入端口分割成多个画面输出到多个输出端口*/
     @Override
-    public void stitchVideo( int portIn,  int columnCnt,  int rowCnt,  int[] portOut) {
-        int res = matrixRemoter.stitchVideo( portIn,   columnCnt,   rowCnt, portOut, new RxSubscriber<RxMessage>() {
+    public void stitchVideo(int portIn, int columnCnt, int rowCnt, int[] portOut) {
+        int res = matrixRemoter.stitchVideo(portIn, columnCnt, rowCnt, portOut, new RxSubscriber<RxMessage>() {
             @Override
             public void onRxResult(RxMessage rxMessage) {
                 Log.i(TAG, "Stitch succeed");
@@ -216,19 +217,19 @@ public class VideoPresenter implements VideoContract.Presenter {
     /*矩阵端口叠加字幕*/
     @Override
     public void setSubtitle(int portIdx, String str) {
-        int res=matrixRemoter.setSubtitle(portIdx, str, new RxSubscriber<RxMessage>() {
+        int res = matrixRemoter.setSubtitle(portIdx, str, new RxSubscriber<RxMessage>() {
             @Override
             public void onRxResult(RxMessage rxMessage) {
-                Log.i(TAG,"set subtitle success");
+                Log.i(TAG, "set subtitle success");
             }
 
             @Override
             public void onRxError(Throwable e) {
-                Log.i(TAG,"set subtitle failed");
+                Log.i(TAG, "set subtitle failed");
             }
         });
-        if(res<0){
-            Log.i(TAG,"invalid set subtitle");
+        if (res < 0) {
+            Log.i(TAG, "invalid set subtitle");
         }
     }
 
@@ -243,6 +244,7 @@ public class VideoPresenter implements VideoContract.Presenter {
 
             @Override
             public void onNext(List<Scene> scenes) {
+                splicer.setScenes(scenes);
                 view.initScene(scenes);
             }
 
@@ -250,6 +252,63 @@ public class VideoPresenter implements VideoContract.Presenter {
             @Override
             public void onError(Throwable t) {
 
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    /*调用场景*/
+    @Override
+    public void loadSceneList(int sceneId) {
+        splicerRemoter.loadScene(sceneId, new Subscriber<RxMessage>() {
+            @Override
+            public void onSubscribe(Subscription s) {
+                s.request(Integer.MAX_VALUE);
+            }
+
+            @Override
+            public void onNext(RxMessage rxMessage) {
+                if (rxMessage.what == RxMessage.DONE) {
+                    view.showToast("场景切换成功!");
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                view.showToast("场景切换失败！");
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    /*修改场景名*/
+    @Override
+    public void renameScene(int sceneId, String name, int groupId) {
+        splicerRemoter.renameScene(sceneId, name, groupId, new Subscriber<RxMessage>() {
+            @Override
+            public void onSubscribe(Subscription s) {
+                s.request(Integer.MAX_VALUE);
+            }
+
+            @Override
+            public void onNext(RxMessage rxMessage) {
+                if (rxMessage.what == RxMessage.DONE) {
+                    view.showToast("修改成功！");
+                    view.refreshSceneList();
+                }
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                view.showToast("修改失败！");
             }
 
             @Override

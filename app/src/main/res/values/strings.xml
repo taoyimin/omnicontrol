@@ -30,6 +30,7 @@
     <string name="dialog_port_attribute">附加属性</string>
     <string name="dialog_button_confirm">确&#160;&#160;&#160;&#160;认</string>
     <string name="dialog_button_delete">删&#160;&#160;&#160;&#160;除</string>
+    <string name="dialog_button_cancel">取&#160;&#160;&#160;&#160;消</string>
     <string name="dialog_channel_type">一对多分割屏</string>
     <string name="dialog_preset_alias">名&#160;&#160;称</string>
     <string name="dialog_camera_alias">相机名称</string>

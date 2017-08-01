@@ -19,6 +19,8 @@ import cn.diaovision.omnicontrol.core.model.device.splicer.Scene;
 public interface VideoContract {
     interface View extends BaseView<Presenter>{
         void initScene(List<Scene> list);
+        void showToast(String string);
+        void refreshSceneList();
     }
 
     interface Presenter extends BasePresenter{
@@ -33,6 +35,8 @@ public interface VideoContract {
         void switchPreviewVideo(int portIn, int portOut);
         void setSubtitle(int portIdx, String str);
         void getSceneList(int group);
+        void loadSceneList(int sceneId);
+        void renameScene(int sceneId,String name,int groupId);
 
         interface PortStateListener{
             void onPreviewDisconnected();

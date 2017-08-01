@@ -202,4 +202,14 @@ public class VideoFragment extends BaseFragment implements VideoContract.View{
     public void initScene(List<Scene> list) {
 
     }
+
+    @Override
+    public void showToast(String string) {
+
+    }
+
+    @Override
+    public void refreshSceneList() {
+
+    }
 }

@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
+import cn.diaovision.omnicontrol.core.model.device.splicer.MediaSplicer;
 import cn.diaovision.omnicontrol.model.Config;
 import cn.diaovision.omnicontrol.model.ConfigXXX;
 import cn.diaovision.omnicontrol.util.CrashHandler;
@@ -86,6 +87,7 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
     int preTab = 0;
 
     public static MediaMatrix matrix;
+    public static MediaSplicer splicer;
     public static Config cfg;
 
     //UIs
@@ -170,6 +172,7 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
         CrashHandler.getInstance().init(this);
         initConfig();
         initMediaMatrix();
+        initMediaSplicer();
         PortHelper.getInstance().init();
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -222,6 +225,10 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
                 .camerasInit(cfg.getMatrixCameras())
                 .build();
         matrix.setVideoChnSet(cfg.getMatrixChannels());
+    }
+
+    private void initMediaSplicer() {
+        splicer=new MediaSplicer();
     }
 
     void switchFragment(int i){
