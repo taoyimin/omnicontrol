@@ -1,5 +1,7 @@
 package cn.diaovision.omnicontrol.core.model.device.splicer;
 
+import java.util.List;
+
 import cn.diaovision.omnicontrol.conn.UdpClient;
 
 /**
@@ -14,11 +16,21 @@ public class MediaSplicer {
     private int port=5000;
     //UPD客户端
     UdpClient controller;
+    //场景集合
+    List<Scene> scenes;
 
     public UdpClient getController() {
         if (controller == null) {
             controller = new UdpClient(ip, port);
         }
         return controller;
+    }
+
+    public List<Scene> getScenes() {
+        return scenes;
+    }
+
+    public void setScenes(List<Scene> scenes) {
+        this.scenes = scenes;
     }
 }
