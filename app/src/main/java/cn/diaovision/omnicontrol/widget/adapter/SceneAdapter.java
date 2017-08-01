@@ -44,6 +44,15 @@ public class SceneAdapter extends RecyclerView.Adapter<SceneAdapter.SceneViewHol
                 }
             }
         });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(onItemClickListener!=null){
+                    onItemClickListener.onItemLongClick(position);
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -65,6 +74,7 @@ public class SceneAdapter extends RecyclerView.Adapter<SceneAdapter.SceneViewHol
 
     public interface OnItemClickListener{
         void onItemClick(int position);
+        void onItemLongClick(int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
