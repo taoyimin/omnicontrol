@@ -64,6 +64,8 @@ dependencies {
     //compile group: 'dom4j', name: 'dom4j', version: '1.6.1'
     compile 'dom4j:dom4j:20040902.021138'
 
+    compile 'com.kyleduo.switchbutton:library:1.4.6'
+
     testCompile 'junit:junit:4.12'
 
     compile project(':ijkplayer-java')
