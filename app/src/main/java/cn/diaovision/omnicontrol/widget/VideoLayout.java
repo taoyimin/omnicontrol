@@ -23,7 +23,7 @@ import cn.diaovision.omnicontrol.widget.media.IjkVideoView;
  */
 public class VideoLayout extends RelativeLayout {
     @BindView(R.id.video_view)
-    public IjkVideoView videoView;
+    IjkVideoView videoView;
     @BindView(R.id.pause)
     Button btn_pause;
     @BindView(R.id.screen_shot)
@@ -151,5 +151,9 @@ public class VideoLayout extends RelativeLayout {
             return videoView.isPlaying();
         }
         return false;
+    }
+
+    public IjkVideoView getVideoView() {
+        return videoView;
     }
 }
