@@ -111,8 +111,10 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
     private boolean usingOpenSLES=false;
     private String pixelFormat="";//Auto Select=,RGB 565=fcc-rv16,RGB 888X=fcc-rv32,YV12=fcc-yv12,默认为RGB 888X
     private boolean enableBackgroundPlay=false;
-    private boolean enableSurfaceView=true;
-    private boolean enableTextureView=false;
+
+    private boolean enableSurfaceView=false;
+    private boolean enableTextureView=true;
+
     private boolean enableNoView=false;
     private boolean mIsLive=true;
 
@@ -155,6 +157,10 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
         // REMOVED: mPendingSubtitleTracks = new Vector<Pair<InputStream, MediaFormat>>();
         mCurrentState = STATE_IDLE;
         mTargetState = STATE_IDLE;
+    }
+
+    public IRenderView getmRenderView() {
+        return mRenderView;
     }
 
     public void setRenderView(IRenderView renderView) {
