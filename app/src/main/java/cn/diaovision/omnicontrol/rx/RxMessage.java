@@ -7,6 +7,7 @@ package cn.diaovision.omnicontrol.rx;
 public class RxMessage {
     //TODO: add what type for RxMessage
     public static final String DONE = "DONE"; //request is done
+    public static final String ERR = "ERR"; //request is err
     public static final String ACK = "ACK"; //ack returned
     public static final String CONNECTED = "CONNECTED"; //connected
     public static final String DISCONNECTED = "DISCONNECTED"; //connected
