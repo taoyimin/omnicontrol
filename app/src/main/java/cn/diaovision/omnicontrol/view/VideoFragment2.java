@@ -522,4 +522,18 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
     public void refreshSceneList() {
         sceneAdapter.notifyDataSetChanged();
     }
+
+/*    @OnClick(R.id.shotScreen)
+    public void shotScreen(){
+        String imgPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Omnicontrol/test.png";
+        Bitmap bitmap=((TextureView)ijkVideoView.videoView.mRenderView).getBitmap();
+        if (bitmap != null) {
+            try {
+                FileOutputStream out = new FileOutputStream(imgPath);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }*/
 }

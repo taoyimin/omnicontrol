@@ -1,19 +1,15 @@
 package cn.diaovision.omnicontrol.view;
 
 import android.support.annotation.NonNull;
+import android.widget.CompoundButton;
 
-import butterknife.Optional;
-import cn.diaovision.omnicontrol.rx.RxBus;
+import cn.diaovision.omnicontrol.core.model.device.State;
+import cn.diaovision.omnicontrol.core.model.device.common.CommonDevice;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.FlowableEmitter;
-import io.reactivex.FlowableOnSubscribe;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.processors.PublishProcessor;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
@@ -41,7 +37,7 @@ public class PowerPresenter implements PowerContract.Presenter {
     @NonNull
     private final PowerContract.View view;
 
-    public PowerPresenter(PowerContract.View view){
+    public PowerPresenter(PowerContract.View view) {
         this.view = view;
 
         bus.subscribe(subscriber);
@@ -75,13 +71,75 @@ public class PowerPresenter implements PowerContract.Presenter {
 
 
     //TODO: (optional) remove all subscriber before the presenter is destroyed
-    public void stopObserve(){
-        if (subscription != null){
+    public void stopObserve() {
+        if (subscription != null) {
             subscription.dispose();
         }
     }
 
+    /*打开设备电源*/
+    @Override
+    public void powerOn(final CompoundButton buttonView, final CommonDevice device) {
+        RxExecutor.getInstance().post(new RxReq() {
+            @Override
+            public RxMessage request() {
+                byte[] msg = device.buildPowerOnMessage();
+                byte[] recv = device.getController().send(msg, msg.length);
+                if (recv != null && recv.length > 0) {
+                    return new RxMessage(RxMessage.DONE);
+                } else {
+                    return new RxMessage(RxMessage.ERR);
+                }
+            }
+        }, new Consumer<RxMessage>() {
+            @Override
+            public void accept(RxMessage s) throws Exception {
+                if (s.what == RxMessage.DONE) {
+                    device.setState(State.ON);
+                    view.refreshDeviceList();
+                    view.showToast("设备打开成功！");
+                } else if (s.what == RxMessage.ERR) {
+                    view.removeAdapterListener();
+                    buttonView.toggle();
+                    view.initAdapterListener();
+                    view.showToast("设备打开失败！");
+                }
+            }
+        }, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN);
+    }
+
+    /*关闭设备电源*/
+    @Override
+    public void powerOff(final CompoundButton buttonView, final CommonDevice device) {
+        RxExecutor.getInstance().post(new RxReq() {
+            @Override
+            public RxMessage request() {
+                byte[] msg = device.buildPowerOffMessage();
+                byte[] recv = device.getController().send(msg, msg.length);
+                if (recv != null && recv.length > 0) {
+                    return new RxMessage(RxMessage.DONE);
+                } else {
+                    return new RxMessage(RxMessage.ERR);
+                }
+            }
+        }, new Consumer<RxMessage>() {
+            @Override
+            public void accept(RxMessage s) throws Exception {
+                if (s.what == RxMessage.DONE) {
+                    device.setState(State.OFF);
+                    view.refreshDeviceList();
+                    view.showToast("设备关闭成功！");
+                } else if (s.what == RxMessage.ERR) {
+                    view.removeAdapterListener();
+                    buttonView.toggle();
+                    view.initAdapterListener();
+                    view.showToast("设备关闭失败！");
+                }
+            }
+        }, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN);
+    }
+
     //TODO: add viewmodel operations if needed
-//    public void onTitleChanged(String str){
-//    }
+    //    public void onTitleChanged(String str){
+    //    }
 }
