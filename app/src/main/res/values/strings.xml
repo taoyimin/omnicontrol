@@ -37,6 +37,10 @@
     <string name="dialog_camera_address">相机地址</string>
     <string name="dialog_camera_baudrate">波&#160;&#160;特&#160;&#160;率</string>
     <string name="dialog_camera_proto">协议类型</string>
+    <string name="dialog_device_category">设备类型</string>
+    <string name="dialog_device_ip">网络地址</string>
+    <string name="dialog_device_port">通信端口</string>
+    <string name="dialog_device_alias">设备名称</string>
 
     <!--video-->
     <string name="video_input">输入端</string>

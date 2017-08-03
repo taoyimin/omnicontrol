@@ -20,6 +20,7 @@ import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.State;
 import cn.diaovision.omnicontrol.core.model.device.common.BarcoProjector;
 import cn.diaovision.omnicontrol.core.model.device.common.CommonDevice;
+import cn.diaovision.omnicontrol.widget.DeviceDialog;
 import cn.diaovision.omnicontrol.widget.adapter.CommonDeviceAdapter;
 
 /* *
@@ -64,6 +65,7 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
         deviceRecycler.setAdapter(deviceAdapter);
     }
 
+    /*初始化设备列表适配器的监听器*/
     @Override
     public void initAdapterListener() {
         deviceAdapter.setOnButtonStateChangeListener(new CommonDeviceAdapter.OnButtonStateChangeListener() {
@@ -77,18 +79,62 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
                 }
             }
         });
+        deviceAdapter.setOnItemClickListener(new CommonDeviceAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                presenter.initState(deviceAdapter.getData());
+                if(position==deviceAdapter.getData().size()){
+                    popupDialog(null,position);
+                }
+            }
+
+            @Override
+            public void onItemLongClick(int position) {
+                popupDialog(deviceAdapter.getData().get(position), position);
+            }
+        });
     }
 
+    /*弹出设备编辑对话框*/
+    private void popupDialog(CommonDevice device, final int position) {
+        final DeviceDialog dialog = new DeviceDialog(getContext(), device);
+        dialog.show();
+        dialog.setOnButtonClickListener(new DeviceDialog.OnButtonClickListener() {
+            @Override
+            public void onConfirmClick() {
+                dialog.dismiss();
+                deviceAdapter.notifyItemChanged(position);
+            }
+
+            @Override
+            public void onDeleteClick() {
+                dialog.dismiss();
+                deviceAdapter.getData().remove(position);
+                deviceAdapter.notifyItemRemoved(position);
+            }
+
+            @Override
+            public void onAddDeviceClick(CommonDevice device) {
+                dialog.dismiss();
+                deviceAdapter.getData().add(device);
+                deviceAdapter.notifyItemInserted(position);
+            }
+        });
+    }
+
+    /*弹出吐司*/
     @Override
     public void showToast(String str) {
         Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
     }
 
+    /*刷新设备列表*/
     @Override
     public void refreshDeviceList() {
         deviceAdapter.notifyDataSetChanged();
     }
 
+    /*移除设备列表适配器的监听器*/
     @Override
     public void removeAdapterListener() {
         deviceAdapter.setOnButtonStateChangeListener(null);

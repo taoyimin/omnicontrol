@@ -605,4 +605,9 @@
         <port_config>6190</port_config>
     </mcu>
 
+    <common_device>
+        <device>
+        </device>
+    </common_device>
+
 </config>

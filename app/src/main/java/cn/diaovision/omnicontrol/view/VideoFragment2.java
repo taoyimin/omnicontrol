@@ -1,10 +1,8 @@
 package cn.diaovision.omnicontrol.view;
 
 import android.app.Service;
-import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Vibrator;
@@ -20,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.FileOutputStream;
 import java.util.List;
 
 import butterknife.BindView;
@@ -468,22 +465,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
         outputSelectionSupport.initChoiceConfig(null);
         //关闭抽屉，直接调用drawerLayout.closeDrawer()方法没有收回效果
         handler.sendEmptyMessage(CLOSE_DRAWER);
-    }
-
-    /*对某一个控件截屏*/
-    public void printScreen(View view) {
-        String imgPath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Omnicontrol/test.png";
-        view.setDrawingCacheEnabled(true);
-        view.buildDrawingCache();
-        Bitmap bitmap = view.getDrawingCache();
-        if (bitmap != null) {
-            try {
-                FileOutputStream out = new FileOutputStream(imgPath);
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     /*初始化场景列表*/

@@ -1,15 +1,24 @@
 package cn.diaovision.omnicontrol.view;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.CompoundButton;
 
+import java.util.List;
+
 import cn.diaovision.omnicontrol.core.model.device.State;
+import cn.diaovision.omnicontrol.core.model.device.common.BarcoProjector;
 import cn.diaovision.omnicontrol.core.model.device.common.CommonDevice;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
@@ -137,6 +146,42 @@ public class PowerPresenter implements PowerContract.Presenter {
                 }
             }
         }, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN);
+    }
+
+    @Override
+    public void initState(List<CommonDevice> devices) {
+        Flowable.fromIterable(devices)
+                .map(new Function<CommonDevice, CommonDevice>() {
+                    @Override
+                    public CommonDevice apply(CommonDevice device) throws Exception {
+                        byte[] msg=device.buildStateMessage();
+                        byte[] recv=device.getController().send(msg,msg.length);
+                        if(device instanceof BarcoProjector){
+                            if(recv!=null&&recv.length>15&&recv[15]==49)
+                                device.setState(State.ON);
+                            else
+                                device.setState(State.OFF);
+                        }
+                        return device;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        Log.i("info","doOnComplete:"+Thread.currentThread());
+                        view.removeAdapterListener();
+                        view.refreshDeviceList();
+                        view.initAdapterListener();
+                    }
+                })
+                .subscribe(new Consumer<CommonDevice>() {
+                    @Override
+                    public void accept(CommonDevice device) throws Exception {
+                        Log.i("info","accept");
+                    }
+                });
     }
 
     //TODO: add viewmodel operations if needed
