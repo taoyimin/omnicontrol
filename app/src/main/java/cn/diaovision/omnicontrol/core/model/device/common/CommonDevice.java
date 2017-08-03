@@ -71,6 +71,8 @@ public abstract class CommonDevice {
 
     public abstract byte[] buildPowerOffMessage();
 
+    public abstract byte[] buildStateMessage();
+
     public interface TYPE{
         int BARCO_PROJECTOR=0;
     }
