@@ -27,6 +27,7 @@ public class CommonDeviceAdapter extends RecyclerView.Adapter<CommonDeviceAdapte
     private Context context;
     private List<CommonDevice> data;
     private OnButtonStateChangeListener onButtonStateChangeListener;
+    private OnItemClickListener onItemClickListener;
 
     public CommonDeviceAdapter(List<CommonDevice> data) {
         this.data = data;
@@ -34,50 +35,90 @@ public class CommonDeviceAdapter extends RecyclerView.Adapter<CommonDeviceAdapte
 
     @Override
     public CommonDeviceViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        CommonDeviceViewHolder holder;
         context = parent.getContext();
-        return new CommonDeviceViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_common_device, parent, false));
+        switch (viewType){
+            case 0:
+                holder=new CommonDeviceViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_common_device, parent, false));
+                break;
+            case 1:
+                holder=new CommonDeviceViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_device_footer, parent, false));
+                break;
+            default:
+                holder=new CommonDeviceViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_common_device, parent, false));
+                break;
+        }
+        return holder;
     }
 
     @Override
-    public void onBindViewHolder(CommonDeviceViewHolder holder, final int position) {
+    public void onBindViewHolder(final CommonDeviceViewHolder holder, final int position) {
         if (data == null) {
             return;
         }
-        CommonDevice device = data.get(position);
-        boolean state = device.getState() == State.ON ? true : false;
-        switch (device.getType()) {
-            case CommonDevice.TYPE.BARCO_PROJECTOR:
-                if (state)
-                    holder.image.setImageResource(R.mipmap.device_power_on);
-                else
-                    holder.image.setImageResource(R.mipmap.device_power_off);
-                break;
-            default:
-                break;
+        if(position<data.size()){
+            CommonDevice device = data.get(position);
+            boolean state = device.getState() == State.ON ? true : false;
+            switch (device.getType()) {
+                case CommonDevice.TYPE.BARCO_PROJECTOR:
+                    if (state)
+                        holder.image.setImageResource(R.mipmap.device_power_on);
+                    else
+                        holder.image.setImageResource(R.mipmap.device_power_off);
+                    break;
+                default:
+                    break;
+            }
+            if (state) {
+                holder.state.setTextColor(context.getResources().getColor(R.color.camera_green));
+                holder.state.setText("运行中");
+            } else {
+                holder.state.setTextColor(context.getResources().getColor(R.color.output_return_red));
+                holder.state.setText("已停止");
+            }
+            holder.button.setChecked(state);
+            holder.button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (onButtonStateChangeListener != null) {
+                        onButtonStateChangeListener.onButtonStateChange(buttonView, holder.getLayoutPosition(), isChecked);
+                    }
+                }
+            });
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    if (onItemClickListener != null) {
+                        onItemClickListener.onItemLongClick(holder.getLayoutPosition());
+                    }
+                    return true;
+                }
+            });
+            holder.ip.setText(device.getIp());
+            holder.alias.setText(device.getName());
         }
-        if (state) {
-            holder.state.setTextColor(context.getResources().getColor(R.color.camera_green));
-            holder.state.setText("运行中");
-        } else {
-            holder.state.setTextColor(context.getResources().getColor(R.color.output_return_red));
-            holder.state.setText("已停止");
-        }
-        holder.button.setChecked(state);
-        holder.button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (onButtonStateChangeListener != null) {
-                    onButtonStateChangeListener.onButtonStateChange(buttonView, position,isChecked);
+            public void onClick(View v) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(holder.getLayoutPosition());
                 }
             }
         });
-        holder.ip.setText(device.getIp());
-        holder.alias.setText(device.getName());
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(position==data.size()){
+            return 1;
+        }else{
+            return 0;
+        }
     }
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return data.size()+1;
     }
 
     public class CommonDeviceViewHolder extends RecyclerView.ViewHolder {
@@ -102,8 +143,17 @@ public class CommonDeviceAdapter extends RecyclerView.Adapter<CommonDeviceAdapte
         void onButtonStateChange(CompoundButton buttonView, int position,boolean isChecked);
     }
 
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+        void onItemLongClick(int position);
+    }
+
     public void setOnButtonStateChangeListener(OnButtonStateChangeListener onButtonStateChangeListener) {
         this.onButtonStateChangeListener = onButtonStateChangeListener;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     public List<CommonDevice> getData() {
