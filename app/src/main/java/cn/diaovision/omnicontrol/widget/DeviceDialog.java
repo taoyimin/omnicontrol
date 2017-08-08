@@ -23,7 +23,9 @@ import cn.diaovision.omnicontrol.MainControlActivity;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.State;
 import cn.diaovision.omnicontrol.core.model.device.common.BarcoProjector;
+import cn.diaovision.omnicontrol.core.model.device.common.BigBirdSplicer;
 import cn.diaovision.omnicontrol.core.model.device.common.CommonDevice;
+import cn.diaovision.omnicontrol.core.model.device.common.DiaoVisionMatrix;
 import cn.diaovision.omnicontrol.widget.adapter.CustomSpinnerAdapter;
 
 /**
@@ -131,10 +133,20 @@ public class DeviceDialog extends Dialog {
                         return;
                     }
                     switch (categorySpinner.getSelectedItemPosition()) {
+                        case CommonDevice.TYPE.DIAOVISION_MATRIX:
+                            device = new DiaoVisionMatrix(alias, ip, Integer.parseInt(port));
+                            device.setType(CommonDevice.TYPE.DIAOVISION_MATRIX);
+                            device.setState(State.NA);
+                            break;
                         case CommonDevice.TYPE.BARCO_PROJECTOR:
                             device = new BarcoProjector(alias, ip, Integer.parseInt(port));
                             device.setType(CommonDevice.TYPE.BARCO_PROJECTOR);
-                            device.setState(State.OFF);
+                            device.setState(State.NA);
+                            break;
+                        case CommonDevice.TYPE.BIGBIRD_SPLICER:
+                            device = new BigBirdSplicer(alias, ip, Integer.parseInt(port));
+                            device.setType(CommonDevice.TYPE.BIGBIRD_SPLICER);
+                            device.setState(State.NA);
                             break;
                         default:
                             break;

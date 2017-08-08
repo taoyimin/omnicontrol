@@ -73,7 +73,9 @@ public abstract class CommonDevice {
 
     public abstract byte[] buildStateMessage();
 
-    public interface TYPE{
-        int BARCO_PROJECTOR=0;
+    public interface TYPE {
+        int DIAOVISION_MATRIX = 0;//雕视全通信指挥服务器
+        int BARCO_PROJECTOR = 1;//巴可投影机
+        int BIGBIRD_SPLICER = 2;//小鸟拼接器
     }
 }

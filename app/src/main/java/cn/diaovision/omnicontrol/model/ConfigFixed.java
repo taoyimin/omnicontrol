@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import cn.diaovision.omnicontrol.core.model.device.common.CommonDevice;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
@@ -174,5 +175,14 @@ public class ConfigFixed implements Config{
 
     }
 
+    @Override
+    public List<CommonDevice> getDeviceList() {
+        return null;
+    }
+
+    @Override
+    public void setDeviceList(List<CommonDevice> devices) {
+
+    }
 
 }

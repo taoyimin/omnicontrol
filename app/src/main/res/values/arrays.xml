@@ -45,6 +45,7 @@
     </string-array>
 
     <string-array name="common_device_category">
+        <item>雕视全通信指挥服务器</item>
         <item>巴可投影机</item>
     </string-array>
 

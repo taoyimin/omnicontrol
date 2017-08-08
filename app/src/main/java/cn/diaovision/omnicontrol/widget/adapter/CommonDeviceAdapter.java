@@ -58,25 +58,45 @@ public class CommonDeviceAdapter extends RecyclerView.Adapter<CommonDeviceAdapte
         }
         if(position<data.size()){
             CommonDevice device = data.get(position);
-            boolean state = device.getState() == State.ON ? true : false;
+            int state = device.getState();
             switch (device.getType()) {
                 case CommonDevice.TYPE.BARCO_PROJECTOR:
-                    if (state)
+                    if (state==State.ON)
                         holder.image.setImageResource(R.mipmap.device_power_on);
-                    else
+                    else if(state==State.OFF)
                         holder.image.setImageResource(R.mipmap.device_power_off);
+                    else if(state==State.NA)
+                        holder.image.setImageResource(R.mipmap.device_na);
+                    holder.button.setVisibility(View.VISIBLE);
                     break;
                 default:
+                    if (state==State.ON)
+                        holder.image.setImageResource(R.mipmap.device_power_on);
+                    else if(state==State.OFF)
+                        holder.image.setImageResource(R.mipmap.device_power_off);
+                    else if(state==State.NA)
+                        holder.image.setImageResource(R.mipmap.device_na);
+                    holder.button.setVisibility(View.INVISIBLE);
                     break;
             }
-            if (state) {
-                holder.state.setTextColor(context.getResources().getColor(R.color.camera_green));
-                holder.state.setText("运行中");
-            } else {
-                holder.state.setTextColor(context.getResources().getColor(R.color.output_return_red));
-                holder.state.setText("已停止");
+            switch (state){
+                case State.ON:
+                    holder.state.setTextColor(context.getResources().getColor(R.color.text_device_on));
+                    holder.state.setText("运行中");
+                    break;
+                case State.OFF:
+                    holder.state.setTextColor(context.getResources().getColor(R.color.text_device_off));
+                    holder.state.setText("已停止");
+                    break;
+                case State.NA:
+                    holder.state.setTextColor(context.getResources().getColor(R.color.text_device_na));
+                    holder.state.setText("未连接");
             }
-            holder.button.setChecked(state);
+            if(state==State.ON) {
+                holder.button.setChecked(true);
+            }else{
+                holder.button.setChecked(false);
+            }
             holder.button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

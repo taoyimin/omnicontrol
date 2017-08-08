@@ -1,7 +1,6 @@
 package cn.diaovision.omnicontrol.view;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.widget.CompoundButton;
 
 import java.util.List;
@@ -21,6 +20,8 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
+
+import static cn.diaovision.omnicontrol.MainControlActivity.cfg;
 
 /* 兼容MVVM模式的Presenter样板
  * Created by liulingfeng on 2017/4/3.
@@ -149,18 +150,25 @@ public class PowerPresenter implements PowerContract.Presenter {
     }
 
     @Override
-    public void initState(List<CommonDevice> devices) {
+    public void initState(final List<CommonDevice> devices) {
         Flowable.fromIterable(devices)
                 .map(new Function<CommonDevice, CommonDevice>() {
                     @Override
                     public CommonDevice apply(CommonDevice device) throws Exception {
-                        byte[] msg=device.buildStateMessage();
-                        byte[] recv=device.getController().send(msg,msg.length);
-                        if(device instanceof BarcoProjector){
-                            if(recv!=null&&recv.length>15&&recv[15]==49)
+                        byte[] msg = device.buildStateMessage();
+                        byte[] recv = device.getController().send(msg, msg.length);
+                        if (device instanceof BarcoProjector) {
+                            if (recv == null)
+                                device.setState(State.NA);
+                            else if (recv.length > 15 && recv[15] == 49)
                                 device.setState(State.ON);
                             else
                                 device.setState(State.OFF);
+                        } else{
+                            if (recv == null)
+                                device.setState(State.NA);
+                            else
+                                device.setState(State.ON);
                         }
                         return device;
                     }
@@ -170,18 +178,28 @@ public class PowerPresenter implements PowerContract.Presenter {
                 .doOnComplete(new Action() {
                     @Override
                     public void run() throws Exception {
-                        Log.i("info","doOnComplete:"+Thread.currentThread());
                         view.removeAdapterListener();
                         view.refreshDeviceList();
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        Thread.sleep(1000);
                         view.initAdapterListener();
                     }
                 })
                 .subscribe(new Consumer<CommonDevice>() {
                     @Override
                     public void accept(CommonDevice device) throws Exception {
-                        Log.i("info","accept");
                     }
                 });
+    }
+
+    @Override
+    public List<CommonDevice> getDeviceList() {
+        return cfg.getDeviceList();
     }
 
     //TODO: add viewmodel operations if needed

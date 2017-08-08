@@ -21,6 +21,10 @@ import java.util.Map;
 import java.util.Set;
 
 import cn.diaovision.omnicontrol.OmniControlApplication;
+import cn.diaovision.omnicontrol.core.model.device.common.BarcoProjector;
+import cn.diaovision.omnicontrol.core.model.device.common.BigBirdSplicer;
+import cn.diaovision.omnicontrol.core.model.device.common.CommonDevice;
+import cn.diaovision.omnicontrol.core.model.device.common.DiaoVisionMatrix;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
@@ -181,7 +185,7 @@ public class ConfigXXX implements Config {
             if (Integer.parseInt(element.element("port").getTextTrim()) == cameraIdx) {
                 List<Element> presetElements = element.element("preset_list").elements("preset");
                 for (Element presetElement : presetElements) {
-                    if(Integer.parseInt(presetElement.element("idx").getTextTrim())==preset.getIdx()){
+                    if (Integer.parseInt(presetElement.element("idx").getTextTrim()) == preset.getIdx()) {
                         presetElement.element("name").setText(preset.getName());
                     }
                 }
@@ -196,8 +200,8 @@ public class ConfigXXX implements Config {
         List<Element> elements = root.element("matrix").element("camera_list").elements("camera");
         for (Element element : elements) {
             if (Integer.parseInt(element.element("port").getTextTrim()) == cameraIdx) {
-                Element presetElement=element.element("preset_list").addElement("preset");
-                presetElement.addElement("idx").setText(preset.getIdx()+"");
+                Element presetElement = element.element("preset_list").addElement("preset");
+                presetElement.addElement("idx").setText(preset.getIdx() + "");
                 presetElement.addElement("name").setText(preset.getName());
             }
         }
@@ -212,11 +216,70 @@ public class ConfigXXX implements Config {
             if (Integer.parseInt(element.element("port").getTextTrim()) == cameraIdx) {
                 List<Element> presetElements = element.element("preset_list").elements("preset");
                 for (Element presetElement : presetElements) {
-                    if(Integer.parseInt(presetElement.element("idx").getTextTrim())==preset.getIdx()){
+                    if (Integer.parseInt(presetElement.element("idx").getTextTrim()) == preset.getIdx()) {
                         presetElement.detach();
                     }
                 }
             }
+        }
+        save();
+    }
+
+    /*获取设备列表*/
+    @Override
+    public List<CommonDevice> getDeviceList() {
+        List<CommonDevice> devices = new ArrayList<>();
+        if (!root.element("common_device").elementIterator().hasNext()) {
+            return devices;
+        }
+        List<Element> elements = root.element("common_device").elements("device");
+        for (Element element : elements) {
+            CommonDevice device = null;
+            int type = Integer.parseInt(element.element("type").getTextTrim());
+            String alias = element.element("alias").getText();
+            String ip = element.element("ip").getTextTrim();
+            int port = Integer.parseInt(element.element("port").getTextTrim());
+            int state = Integer.parseInt(element.element("state").getTextTrim());
+            switch (type) {
+                case CommonDevice.TYPE.DIAOVISION_MATRIX:
+                    device = new DiaoVisionMatrix(alias, ip, port);
+                    device.setType(type);
+                    device.setState(state);
+                    break;
+                case CommonDevice.TYPE.BARCO_PROJECTOR:
+                    device = new BarcoProjector(alias, ip, port);
+                    device.setType(type);
+                    device.setState(state);
+                    break;
+                case CommonDevice.TYPE.BIGBIRD_SPLICER:
+                    device = new BigBirdSplicer(alias, ip, port);
+                    device.setType(type);
+                    device.setState(state);
+                    break;
+                default:
+                    break;
+            }
+            devices.add(device);
+        }
+        return devices;
+    }
+
+    /*修改设备的配置信息*/
+    @Override
+    public void setDeviceList(List<CommonDevice> devices) {
+        if (root.element("common_device").elementIterator().hasNext()) {
+            List<Element> elements = root.element("common_device").elements("device");
+            for (Element element : elements) {
+                element.detach();
+            }
+        }
+        for (CommonDevice device : devices) {
+            Element deviceElement = root.element("common_device").addElement("device");
+            deviceElement.addElement("alias").setText(device.getName());
+            deviceElement.addElement("ip").setText(device.getIp());
+            deviceElement.addElement("port").setText(device.getPort() + "");
+            deviceElement.addElement("type").setText(device.getType() + "");
+            deviceElement.addElement("state").setText(device.getState() + "");
         }
         save();
     }
@@ -338,12 +401,12 @@ public class ConfigXXX implements Config {
                     break;
             }
             String alias = element.element("alias").getTextTrim();
-            List<HiCamera.Preset> presetList=new ArrayList<>();
-            List<Element> presetElements=element.element("preset_list").elements("preset");
-            for(Element presetElement:presetElements){
-                String name=presetElement.element("name").getTextTrim();
-                int idx= Integer.parseInt(presetElement.element("idx").getTextTrim());
-                HiCamera.Preset preset=new HiCamera.Preset(name,idx);
+            List<HiCamera.Preset> presetList = new ArrayList<>();
+            List<Element> presetElements = element.element("preset_list").elements("preset");
+            for (Element presetElement : presetElements) {
+                String name = presetElement.element("name").getTextTrim();
+                int idx = Integer.parseInt(presetElement.element("idx").getTextTrim());
+                HiCamera.Preset preset = new HiCamera.Preset(name, idx);
                 presetList.add(preset);
             }
             HiCamera hiCamera = new HiCamera(port, index, baudrate, proto);

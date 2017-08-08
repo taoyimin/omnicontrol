@@ -10,15 +10,13 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
+import cn.diaovision.omnicontrol.MainControlActivity;
 import cn.diaovision.omnicontrol.R;
-import cn.diaovision.omnicontrol.core.model.device.State;
-import cn.diaovision.omnicontrol.core.model.device.common.BarcoProjector;
 import cn.diaovision.omnicontrol.core.model.device.common.CommonDevice;
 import cn.diaovision.omnicontrol.widget.DeviceDialog;
 import cn.diaovision.omnicontrol.widget.adapter.CommonDeviceAdapter;
@@ -52,17 +50,18 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        List<CommonDevice> list = new ArrayList<>();
-        CommonDevice device1 = new BarcoProjector("123", "192.168.10.102", 1025);
+        List<CommonDevice> list = presenter.getDeviceList();
+/*        CommonDevice device1 = new BarcoProjector("123", "192.168.10.102", 1025);
         CommonDevice device2 = new BarcoProjector("321", "192.168.10.103", 1025);
-        device1.setState(State.OFF);
-        device2.setState(State.OFF);
+        device1.setState(State.NA);
+        device2.setState(State.NA);
         list.add(device1);
-        list.add(device2);
+        list.add(device2);*/
         deviceAdapter = new CommonDeviceAdapter(list);
         initAdapterListener();
         deviceRecycler.setLayoutManager(new GridLayoutManager(getContext(), 6));
         deviceRecycler.setAdapter(deviceAdapter);
+        presenter.initState(deviceAdapter.getData());
     }
 
     /*初始化设备列表适配器的监听器*/
@@ -82,7 +81,6 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
         deviceAdapter.setOnItemClickListener(new CommonDeviceAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                presenter.initState(deviceAdapter.getData());
                 if(position==deviceAdapter.getData().size()){
                     popupDialog(null,position);
                 }
@@ -104,6 +102,7 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
             public void onConfirmClick() {
                 dialog.dismiss();
                 deviceAdapter.notifyItemChanged(position);
+                MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
             }
 
             @Override
@@ -111,6 +110,7 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
                 dialog.dismiss();
                 deviceAdapter.getData().remove(position);
                 deviceAdapter.notifyItemRemoved(position);
+                MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
             }
 
             @Override
@@ -118,6 +118,7 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
                 dialog.dismiss();
                 deviceAdapter.getData().add(device);
                 deviceAdapter.notifyItemInserted(position);
+                MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
             }
         });
     }
@@ -132,6 +133,7 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
     @Override
     public void refreshDeviceList() {
         deviceAdapter.notifyDataSetChanged();
+        MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
     }
 
     /*移除设备列表适配器的监听器*/

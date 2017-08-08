@@ -606,8 +606,6 @@
     </mcu>
 
     <common_device>
-        <device>
-        </device>
     </common_device>
 
 </config>

@@ -47,7 +47,6 @@ public class MediaMatrixRemoter {
     public int getMatrixStatus(RxSubscriber<RxMessage> subscriber) {
         if (matrix == null || !matrix.isReachable())
             return -1;
-
         final byte[] bytes = MatrixMessage.buildGetIdMessage().toBytes();
         Flowable.create(new FlowableOnSubscribe<RxMessage>() {
             @Override

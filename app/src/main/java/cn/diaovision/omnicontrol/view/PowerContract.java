@@ -29,5 +29,6 @@ public interface PowerContract {
         void powerOn(CompoundButton buttonView,CommonDevice device);
         void powerOff(CompoundButton buttonView,CommonDevice device);
         void initState(List<CommonDevice> devices);
+        List<CommonDevice> getDeviceList();
     }
 }

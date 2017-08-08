@@ -12,6 +12,9 @@
 
     <!--text color in white themes-->
     <color name="text_body_light">#555555</color>
+    <color name="text_device_na">#e6e6e6</color>
+    <color name="text_device_off">#ff5f3b</color>
+    <color name="text_device_on">#a4ef5f</color>
 
     <!--login title text color-->
     <color name="login_title_text">#cad3d7</color>
