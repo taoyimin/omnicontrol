@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -29,6 +31,10 @@ import cn.diaovision.omnicontrol.widget.adapter.CommonDeviceAdapter;
 public class PowerFragment extends BaseFragment implements PowerContract.View {
     @BindView(R.id.device_recycler)
     RecyclerView deviceRecycler;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+    @BindView(R.id.hint_text)
+    TextView hintText;
 
     CommonDeviceAdapter deviceAdapter;
     PowerContract.Presenter presenter;
@@ -140,6 +146,18 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
     @Override
     public void removeAdapterListener() {
         deviceAdapter.setOnButtonStateChangeListener(null);
+    }
+
+    @Override
+    public void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
+        hintText.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        progressBar.setVisibility(View.GONE);
+        hintText.setVisibility(View.GONE);
     }
 
     /* *********************************

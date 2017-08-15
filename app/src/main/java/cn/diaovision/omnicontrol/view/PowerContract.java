@@ -22,6 +22,8 @@ public interface PowerContract {
         void refreshDeviceList();
         void initAdapterListener();
         void removeAdapterListener();
+        void showProgress();
+        void hideProgress();
     }
 
     interface Presenter extends BasePresenter{
