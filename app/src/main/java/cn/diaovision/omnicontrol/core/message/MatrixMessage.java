@@ -37,6 +37,7 @@ public class MatrixMessage {
     public final static int MSG_SET_CAMERA_PRESET = 17; //设置摄像机预置位
     public final static int MSG_CLEAR_CAMERA_PRESET = 18; //清除摄像机预置位
     public final static int MSG_LOAD_CAMERA_PRESET = 19; //清除摄像机预置位
+    public final static int MSG_BIND_AUDIO_PORT = 20;//绑定音频端口
 
     /*
      * msg type bytes
@@ -62,6 +63,7 @@ public class MatrixMessage {
             {(byte) 'C', (byte) 'P'}, //17
             {(byte) 'C', (byte) 'P'}, //18
             {(byte) 'C', (byte) 'P'}, //19
+            {(byte) 'B', (byte) 'A'}, //20
     };
 
     /*
@@ -109,15 +111,14 @@ public class MatrixMessage {
     byte[] type;
 
 
-    private MatrixMessage(byte[] id, int type, byte[] payload, boolean checked){
+    private MatrixMessage(byte[] id, int type, byte[] payload, boolean checked) {
         this.id = new byte[2];
 
         if (type > TYPE_BYTES.length) {
             this.type = new byte[2];
             this.type[0] = 0x00;
             this.type[1] = 0x00;
-        }
-        else {
+        } else {
             this.type = TYPE_BYTES[type];
         }
 
@@ -128,7 +129,7 @@ public class MatrixMessage {
         this.checked = checked;
     }
 
-    public byte[] toBytes(){
+    public byte[] toBytes() {
         /*append checksum*/
         byte[] bytes;
         if (checked) {
@@ -142,11 +143,10 @@ public class MatrixMessage {
             System.arraycopy(payload, 0, bytes, 5, payload.length);
 
             byte[] chk = calcCheckSum();
-            bytes[bytes.length-3] = chk[1];
-            bytes[bytes.length-2] = chk[0];
-            bytes[bytes.length-1] = tail;
-        }
-        else {
+            bytes[bytes.length - 3] = chk[1];
+            bytes[bytes.length - 2] = chk[0];
+            bytes[bytes.length - 1] = tail;
+        } else {
             //header + id + type + payload + tail
             bytes = new byte[1 + 2 + payload.length + 1];
             bytes[0] = header;
@@ -155,24 +155,24 @@ public class MatrixMessage {
             bytes[3] = type[0];
             bytes[4] = type[1];
             System.arraycopy(payload, 0, bytes, 5, payload.length);
-            bytes[bytes.length-1] = tail;
+            bytes[bytes.length - 1] = tail;
         }
 
         return bytes;
     }
 
-    private byte[] calcCheckSum(){
-        if (payload == null){
+    private byte[] calcCheckSum() {
+        if (payload == null) {
             return new byte[0];
         }
         byte chk = 0x00;
-        for (byte b : id){
+        for (byte b : id) {
             chk ^= b;
         }
-        for (byte b : type){
+        for (byte b : type) {
             chk ^= b;
         }
-        for (byte b : payload){
+        for (byte b : payload) {
             chk ^= b;
         }
         return hex2char(chk);
@@ -182,18 +182,18 @@ public class MatrixMessage {
     /*
      * message create
      */
-    static public MatrixMessage buildSwitchMessage(int id, int portIn, int portOut){
+    static public MatrixMessage buildSwitchMessage(int id, int portIn, int portOut) {
         byte[] payload = new byte[7];
         payload[0] = MODEL;
-        System.arraycopy(hex2char(portOut,3), 0, payload, 1, 3);
-        System.arraycopy(hex2char(portIn,3), 0, payload, 4, 3);
+        System.arraycopy(hex2char(portOut, 3), 0, payload, 1, 3);
+        System.arraycopy(hex2char(portIn, 3), 0, payload, 4, 3);
         return new MatrixMessage(hex2char(id, 2), MSG_SWITCH, payload, true);
     }
 
-    static public MatrixMessage buildMultiSwitchMessage(int id, int portIn, int[] portOuts){
-        byte[] payload = new byte[1 + 3 + portOuts.length*3];
+    static public MatrixMessage buildMultiSwitchMessage(int id, int portIn, int[] portOuts) {
+        byte[] payload = new byte[1 + 3 + portOuts.length * 3];
         payload[0] = MODEL;
-        System.arraycopy(hex2char(portIn,3), 0, payload, 1, 3);
+        System.arraycopy(hex2char(portIn, 3), 0, payload, 1, 3);
         int offset = 1;
         for (int i : portOuts) {
             offset += 3;
@@ -202,35 +202,35 @@ public class MatrixMessage {
         return new MatrixMessage(hex2char(id, 2), MSG_MULTI_SWITCH, payload, true);
     }
 
-    static public MatrixMessage buildPortInquiryMessage(int id, int portOut){
+    static public MatrixMessage buildPortInquiryMessage(int id, int portOut) {
         byte[] payload = new byte[1 + 3];
         payload[0] = MODEL;
-        System.arraycopy(hex2char(portOut,3), 0, payload, 1, 3);
+        System.arraycopy(hex2char(portOut, 3), 0, payload, 1, 3);
         return new MatrixMessage(hex2char(id, 2), MSG_INQUIRY_PORT, payload, true);
     }
 
-    static public MatrixMessage buildLockPortMessage(int id, int portOut){
+    static public MatrixMessage buildLockPortMessage(int id, int portOut) {
         byte[] payload = new byte[1 + 3];
         payload[0] = MODEL;
-        System.arraycopy(hex2char(portOut,3), 0, payload, 1, 3);
+        System.arraycopy(hex2char(portOut, 3), 0, payload, 1, 3);
         return new MatrixMessage(hex2char(id, 2), MSG_LOCK_PORT, payload, true);
     }
 
-    static public MatrixMessage buildUnlockPortMessage(int id, int portOut){
+    static public MatrixMessage buildUnlockPortMessage(int id, int portOut) {
         byte[] payload = new byte[1 + 3];
         payload[0] = MODEL;
-        System.arraycopy(hex2char(portOut,3), 0, payload, 1, 3);
+        System.arraycopy(hex2char(portOut, 3), 0, payload, 1, 3);
         return new MatrixMessage(hex2char(id, 2), MSG_UNLOCK_PORT, payload, true);
     }
 
-    static public MatrixMessage buildSetIdMessage(int id, int newId){
+    static public MatrixMessage buildSetIdMessage(int id, int newId) {
         byte[] payload = new byte[2];
-        System.arraycopy(hex2char(newId,2), 0, payload, 0, 2);
+        System.arraycopy(hex2char(newId, 2), 0, payload, 0, 2);
         byte[] idByte = {'F', 'S'};
         return new MatrixMessage(idByte, MSG_SET_ID, payload, true);
     }
 
-    static public MatrixMessage buildGetIdMessage(){
+    static public MatrixMessage buildGetIdMessage() {
         byte[] payload = new byte[2];
         payload[0] = (byte) 'F';
         payload[1] = (byte) 'S';
@@ -238,7 +238,7 @@ public class MatrixMessage {
         return new MatrixMessage(idByte, MSG_GET_ID, payload, true);
     }
 
-    static public MatrixMessage buildStartCameraGoMessage(int id, int baudrate, int proto, int port, int cmd, int speed){
+    static public MatrixMessage buildStartCameraGoMessage(int id, int baudrate, int proto, int port, int cmd, int speed) {
         byte[] payload = new byte[11];
 
         payload[0] = getCamBaudrateByte(baudrate);
@@ -247,7 +247,7 @@ public class MatrixMessage {
         System.arraycopy(hex2char(port, 3), 0, payload, 2, 3);
 
         byte[] cmdByte = new byte[2];
-        switch (cmd){
+        switch (cmd) {
             case CAM_UP:
                 cmdByte[0] = (byte) '8';
                 cmdByte[1] = (byte) '0';
@@ -296,7 +296,7 @@ public class MatrixMessage {
         return new MatrixMessage(hex2char(id, 2), MSG_START_CAMERA_GO, payload, true);
     }
 
-    static public MatrixMessage buildStopCameraGoMessage(int id, int baudrate, int proto, int port){
+    static public MatrixMessage buildStopCameraGoMessage(int id, int baudrate, int proto, int port) {
         byte[] payload = new byte[5];
 
         payload[0] = getCamBaudrateByte(baudrate);
@@ -307,47 +307,47 @@ public class MatrixMessage {
         return new MatrixMessage(hex2char(id, 2), MSG_STOP_CAMERA_GO, payload, true);
     }
 
-    static public MatrixMessage buildGetCameraInfoMessage(int id, int port){
+    static public MatrixMessage buildGetCameraInfoMessage(int id, int port) {
         byte[] payload = new byte[5];
-        System.arraycopy(hex2char(port,3), 0, payload, 0, 3);
+        System.arraycopy(hex2char(port, 3), 0, payload, 0, 3);
         payload[3] = (byte) 'F';
         payload[4] = (byte) 'S';
         return new MatrixMessage(hex2char(id, 2), MSG_GET_CAMERA_INFO, payload, true);
     }
 
     /*addr: address of the camera*/
-    static public MatrixMessage buildSetCameraInfoMessage(int id, int port, int addr){
+    static public MatrixMessage buildSetCameraInfoMessage(int id, int port, int addr) {
         byte[] payload = new byte[5];
-        System.arraycopy(hex2char(port,3), 0, payload, 0, 3);
-        System.arraycopy(hex2char(addr,2), 0, payload, 3, 2);
+        System.arraycopy(hex2char(port, 3), 0, payload, 0, 3);
+        System.arraycopy(hex2char(addr, 2), 0, payload, 3, 2);
         return new MatrixMessage(hex2char(id, 2), MSG_SET_CAMERA_INFO, payload, true);
     }
 
-    static public MatrixMessage buildSetCameraPresetMessgae(int id, int baudrate, int proto, int port, int presetIdx){
+    static public MatrixMessage buildSetCameraPresetMessgae(int id, int baudrate, int proto, int port, int presetIdx) {
         byte[] payload = new byte[8];
         payload[0] = getCamBaudrateByte(baudrate);
         payload[1] = getCamProtoByte(proto);
-        System.arraycopy(hex2char(port,3), 0, payload, 2, 3);
+        System.arraycopy(hex2char(port, 3), 0, payload, 2, 3);
         payload[5] = 0x30;
         System.arraycopy(hex2char(presetIdx, 2), 0, payload, 6, 2);
         return new MatrixMessage(hex2char(id, 2), MSG_SET_CAMERA_PRESET, payload, true);
     }
 
-    static public MatrixMessage buildLoadCameraPresetMessgae(int id, int baudrate, int proto, int port, int presetIdx){
+    static public MatrixMessage buildLoadCameraPresetMessgae(int id, int baudrate, int proto, int port, int presetIdx) {
         byte[] payload = new byte[8];
         payload[0] = getCamBaudrateByte(baudrate);
         payload[1] = getCamProtoByte(proto);
-        System.arraycopy(hex2char(port,3), 0, payload, 2, 3);
+        System.arraycopy(hex2char(port, 3), 0, payload, 2, 3);
         payload[5] = 0x32;
         System.arraycopy(hex2char(presetIdx, 2), 0, payload, 6, 2);
         return new MatrixMessage(hex2char(id, 2), MSG_LOAD_CAMERA_PRESET, payload, true);
     }
 
-    static public MatrixMessage buildClearCameraPresetMessgae(int id, int baudrate, int proto, int port, int presetIdx){
+    static public MatrixMessage buildClearCameraPresetMessgae(int id, int baudrate, int proto, int port, int presetIdx) {
         byte[] payload = new byte[8];
         payload[0] = getCamBaudrateByte(baudrate);
         payload[1] = getCamProtoByte(proto);
-        System.arraycopy(hex2char(port,3), 0, payload, 2, 3);
+        System.arraycopy(hex2char(port, 3), 0, payload, 2, 3);
         payload[5] = 0x31;
 
         //TODO: num to hex
@@ -355,13 +355,13 @@ public class MatrixMessage {
         return new MatrixMessage(hex2char(id, 2), MSG_CLEAR_CAMERA_PRESET, payload, true);
     }
 
-    static public MatrixMessage buildSetResoluMessage(int id, int portOut, String resolu){
+    static public MatrixMessage buildSetResoluMessage(int id, int portOut, String resolu) {
         byte[] payload = new byte[7];
         payload[0] = (byte) 'O';
         System.arraycopy(hex2char(portOut, 3), 0, payload, 1, 3);
         payload[4] = (byte) '3';
 
-        switch ( resolu ){
+        switch (resolu) {
             case "480p":
                 payload[5] = (byte) '0';
                 payload[6] = (byte) '4';
@@ -398,7 +398,7 @@ public class MatrixMessage {
         return new MatrixMessage(hex2char(id, 2), MSG_SET_RESOLU, payload, true);
     }
 
-    static public MatrixMessage buildGetResoluMessage(int id, int portOut){
+    static public MatrixMessage buildGetResoluMessage(int id, int portOut) {
         byte[] payload = new byte[7];
         payload[0] = (byte) 'O';
         System.arraycopy(hex2char(portOut, 3), 0, payload, 1, 3);
@@ -410,15 +410,15 @@ public class MatrixMessage {
     }
 
     /*multiSwitchMessage should be called prior to the stitch*/
-    static public MatrixMessage buildStitchMessage(int id, int column, int row, int[] portOuts){
-        byte[] payload = new byte[1 + 1 + 2 + 2 + portOuts.length*3];
+    static public MatrixMessage buildStitchMessage(int id, int column, int row, int[] portOuts) {
+        byte[] payload = new byte[1 + 1 + 2 + 2 + portOuts.length * 3];
         payload[0] = (byte) 'P';
         payload[1] = (byte) 'W';
-        System.arraycopy(hex2char(column,2), 0, payload, 2, 2);
-        System.arraycopy(hex2char(row,2), 0, payload, 4, 2);
+        System.arraycopy(hex2char(column, 2), 0, payload, 2, 2);
+        System.arraycopy(hex2char(row, 2), 0, payload, 4, 2);
         int cnt = 0;
         for (int i : portOuts) {
-            System.arraycopy(hex2char(i, 3), 0, payload, 6+3*cnt, 3);
+            System.arraycopy(hex2char(i, 3), 0, payload, 6 + 3 * cnt, 3);
             cnt++;
         }
         return new MatrixMessage(hex2char(id, 2), MSG_STITCH, payload, true);
@@ -427,20 +427,20 @@ public class MatrixMessage {
     /*multiSwitchMessage should be called prior to the crop*/
     //TODO: crop not supported
     @Deprecated
-    static public MatrixMessage buildCropMessage(int id, int cropX, int cropY, int[] portOuts){
-        byte[] payload = new byte[1 + 1 + 2 + 2 + portOuts.length*3];
+    static public MatrixMessage buildCropMessage(int id, int cropX, int cropY, int[] portOuts) {
+        byte[] payload = new byte[1 + 1 + 2 + 2 + portOuts.length * 3];
         payload[0] = (byte) 'P';
         payload[1] = (byte) 'W';
-        System.arraycopy(hex2char(cropX,2), 0, payload, 2, 2);
-        System.arraycopy(hex2char(cropY,2), 0, payload, 4, 2);
+        System.arraycopy(hex2char(cropX, 2), 0, payload, 2, 2);
+        System.arraycopy(hex2char(cropY, 2), 0, payload, 4, 2);
         for (int i : portOuts) {
             System.arraycopy(hex2char(i, 3), 0, payload, 4, 2);
         }
         return new MatrixMessage(hex2char(id, 2), MSG_CROP, payload, true);
     }
 
-    static public MatrixMessage buildSetSubtitleMessage(int id, int port, String str){
-//        byte[] strBytes = toGBK(str);
+    static public MatrixMessage buildSetSubtitleMessage(int id, int port, String str) {
+        //        byte[] strBytes = toGBK(str);
         byte[] strBytes; //= new byte[0];
         try {
             strBytes = str.getBytes("gb2312");
@@ -448,7 +448,7 @@ public class MatrixMessage {
             System.arraycopy(hex2char(port, 3), 0, payload, 0, 3);
             payload[3] = '0';
             //TODO: hex format
-            System.arraycopy(hex2char(strBytes.length/2, 2), 0, payload, 4, 2);
+            System.arraycopy(hex2char(strBytes.length / 2, 2), 0, payload, 4, 2);
             System.arraycopy(strBytes, 0, payload, 6, strBytes.length);
 
             return new MatrixMessage(hex2char(id, 2), MSG_SUBTITLE, payload, true);
@@ -458,14 +458,14 @@ public class MatrixMessage {
 
     }
 
-    static public MatrixMessage buildSetSubtitleFormatMessage(int id, int port, int subLen, byte size, byte color){
+    static public MatrixMessage buildSetSubtitleFormatMessage(int id, int port, int subLen, byte size, byte color) {
         byte[] payload = new byte[3 + 2 + 1 + 1 + 2 + 1];
-        System.arraycopy(hex2char(port,3), 0, payload, 0, 3);
+        System.arraycopy(hex2char(port, 3), 0, payload, 0, 3);
 
         //fixed content
-        System.arraycopy(hex2char(subLen,2), 0, payload, 3, 2);
-//        payload[3] = '0';
-//        payload[4] = '1';
+        System.arraycopy(hex2char(subLen, 2), 0, payload, 3, 2);
+        //        payload[3] = '0';
+        //        payload[4] = '1';
 
         payload[5] = size;
         payload[6] = color;
@@ -481,7 +481,7 @@ public class MatrixMessage {
     /*
      * Utilities
      */
-    static public byte[] toGBK(String str){
+    static public byte[] toGBK(String str) {
         try {
             return str.getBytes("gb2312");
         } catch (UnsupportedEncodingException e) {
@@ -490,22 +490,20 @@ public class MatrixMessage {
         }
     }
 
-    static private byte[] hex2char(byte b){
+    static private byte[] hex2char(byte b) {
         byte[] bytes = new byte[2];
         int val = b & 0x0f;
-        if (val <= 9){
+        if (val <= 9) {
             val += 0x30;
-        }
-        else {
+        } else {
             val += 0x30 + 7;
         }
         bytes[0] = (byte) val;
 
         val = (b >> 4) & 0x0f;
-        if (val <= 9){
+        if (val <= 9) {
             val += 0x30;
-        }
-        else {
+        } else {
             val += 0x30 + 7;
         }
         bytes[1] = (byte) val;
@@ -513,27 +511,26 @@ public class MatrixMessage {
         return bytes;
     }
 
-    static private byte[] hex2char(int i, int len){
+    static private byte[] hex2char(int i, int len) {
         byte[] bytes = new byte[len];
         len = len > 4 ? 4 : len;
-        for (int m = 0; m < len; m ++){
-            int val = (i>>(4*m)) & 0x0f;
-            if (val <= 9){
+        for (int m = 0; m < len; m++) {
+            int val = (i >> (4 * m)) & 0x0f;
+            if (val <= 9) {
                 val += 0x30;
-            }
-            else {
+            } else {
                 val += 0x30 + 7;
             }
-            bytes[len-m-1] = (byte) val;
+            bytes[len - m - 1] = (byte) val;
         }
         return bytes;
     }
 
     /*十进制转2字节*/
     @Deprecated
-    static private byte[] deci2char(int i){
+    static private byte[] deci2char(int i) {
         byte[] deciBytes = new byte[2];
-        if (i > 100 || i < 0){
+        if (i > 100 || i < 0) {
             deciBytes[0] = (byte) 'F';
             deciBytes[1] = (byte) 'F';
             return deciBytes;
@@ -541,11 +538,10 @@ public class MatrixMessage {
 
         byte[] bytes = String.valueOf(i).getBytes();
 
-        if (i < 10){
+        if (i < 10) {
             deciBytes[0] = (byte) '0';
             deciBytes[1] = bytes[0];
-        }
-        else {
+        } else {
             deciBytes[0] = bytes[0];
             deciBytes[1] = bytes[1];
         }
@@ -554,8 +550,8 @@ public class MatrixMessage {
     }
 
     /*云台波特率*/
-    static private byte getCamBaudrateByte(int baudrate){
-        switch(baudrate) {
+    static private byte getCamBaudrateByte(int baudrate) {
+        switch (baudrate) {
             case 1200:
                 return '1';
             case 2400:
@@ -578,8 +574,8 @@ public class MatrixMessage {
     }
 
     /*云台协议*/
-    static private byte getCamProtoByte(int proto){
-        switch(proto){
+    static private byte getCamProtoByte(int proto) {
+        switch (proto) {
             case CAM_PROTO_PELCO_D:
                 return '1';
             case CAM_PROTO_PELCO_P:

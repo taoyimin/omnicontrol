@@ -301,7 +301,6 @@ public class VideoFragment2 extends BaseFragment implements VideoContract.View {
                     inputAdapter.notifyDataSetChanged();
                 }
                 editSubtitle.setText("");
-                sceneAdapter.notifyDataSetChanged();
             }
 
             @Override

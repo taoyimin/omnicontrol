@@ -151,6 +151,7 @@ public class PowerPresenter implements PowerContract.Presenter {
 
     @Override
     public void initState(final List<CommonDevice> devices) {
+        view.showProgress();
         Flowable.fromIterable(devices)
                 .map(new Function<CommonDevice, CommonDevice>() {
                     @Override
@@ -190,9 +191,17 @@ public class PowerPresenter implements PowerContract.Presenter {
                         view.initAdapterListener();
                     }
                 })
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnComplete(new Action() {
+                    @Override
+                    public void run() throws Exception {
+                        view.hideProgress();
+                    }
+                })
                 .subscribe(new Consumer<CommonDevice>() {
                     @Override
                     public void accept(CommonDevice device) throws Exception {
+
                     }
                 });
     }

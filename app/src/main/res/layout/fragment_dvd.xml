@@ -3,22 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:clipChildren="false">
+    android:orientation="vertical">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/view_pager"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:clipChildren="false">
-
-    </android.support.v4.view.ViewPager>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:letterSpacing="1"
+        android:text="尚未开放"
+        android:gravity="center"
+        android:textSize="60sp"
+        android:textColor="@color/color_c5"/>
 </LinearLayout>

@@ -81,78 +81,6 @@ public class AudioFragment extends BaseFragment implements AudioContract.View{
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        /* test code */
-/*        List<Port> inputs = new ArrayList<>();
-        for (int m = 0; m < 32; m ++){
-            Port port = new Port(0, m, Port.TYPE_VIDEO, Port.DIR_IN,Port.CATEGORY_VIDEO);
-            port.alias = "测试"+String.valueOf(m);
-            port.idx = m;
-            port.dir = Port.DIR_IN;
-            port.state = m%4;
-            inputs.add(port);
-        }
-        final List<Port> outputs = new ArrayList<>();
-        for (int m = 0; m < 32; m ++){
-            Port port = new Port(0, m, Port.TYPE_VIDEO, Port.DIR_OUT,Port.CATEGORY_TV);
-            port.alias = "测试"+String.valueOf(m);
-            port.idx = m;
-            port.state = m%4;
-            outputs.add(port);
-        }
-        Set<Channel> channelSet = new HashSet<>();
-        for (int m = 0; m < 32; m ++){
-            int[] outs = new int[1];
-            Channel chn = new Channel(Channel.CHN_VIDEO,1, outs);
-            chn.state = m%4;
-            channelSet.add(chn);
-        }*/
-
-
- /*       inputList.config(ports, R.layout.item_port);
-        inputList.configLayout(LinearLayoutManager.VERTICAL, 3);
-        outputList.config(outports, R.layout.item_port);
-        outputList.configLayout(LinearLayoutManager.VERTICAL, 3);
-        volumeChannelList.config(audioChnList, R.layout.item_volume);
-
-        inputList.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
-            @Override
-            public void onSelected(int pos) {
-                outputList.select(pos);
-                volumeChannelList.select(pos);
-            }
-
-            @Override
-            public void onUnselected(int pos) {
-
-            }
-        });
-
-        outputList.setOnItemSelectListener(new PortRadioGroupView.OnItemSelectListener() {
-            @Override
-            public void onSelected(int pos) {
-                inputList.select(pos);
-                volumeChannelList.select(pos);
-            }
-
-            @Override
-            public void onUnselected(int pos) {
-
-            }
-        });
-
-        volumeChannelList.setOnItemSelectListener(new VolumeChannelRadioGroupView.OnItemSelectListener() {
-            @Override
-            public void onSelected(int pos) {
-                outputList.select(pos);
-                inputList.select(pos);
-            }
-
-            @Override
-            public void onUnselected(int pos) {
-
-            }
-        });*/
         Set<Channel> channelSet=presenter.getChannelSet();
         List<Port> inputs=presenter.getInputList();
         final List<Port> outputs=presenter.getOutputList();
@@ -169,7 +97,6 @@ public class AudioFragment extends BaseFragment implements AudioContract.View{
         outputRecyclerView.setHasFixedSize(true);
         inputRecyclerView.setAdapter(inputAdapter);
         outputRecyclerView.setAdapter(outputAdapter);
-
         drawerLayout.setOnEditCompleteListener(new AssistDrawerLayout.OnEditCompleteListener() {
             @Override
             public void onComplete(int mode) {
@@ -388,5 +315,4 @@ public class AudioFragment extends BaseFragment implements AudioContract.View{
     public void bindPresenter() {
         presenter = new AudioPresenter(this);
     }
-
 }

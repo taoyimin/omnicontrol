@@ -299,6 +299,7 @@ public class PortAdapter extends RecyclerView.Adapter<PortAdapter.SelectableView
                             holder.portImage.setImageResource(R.drawable.projector_green_selector);
                             holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_green_selector));
                         }
+                        break;
                 }
                 break;
             case Port.CATEGORY_DISPLAY:
