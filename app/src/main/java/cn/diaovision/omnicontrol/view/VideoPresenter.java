@@ -3,9 +3,6 @@ package cn.diaovision.omnicontrol.view;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -13,8 +10,6 @@ import java.util.Set;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
-import cn.diaovision.omnicontrol.core.model.device.splicer.MediaSplicerRemoter;
-import cn.diaovision.omnicontrol.core.model.device.splicer.Scene;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
@@ -25,7 +20,6 @@ import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
 import static cn.diaovision.omnicontrol.MainControlActivity.matrix;
-import static cn.diaovision.omnicontrol.MainControlActivity.splicer;
 
 /* 兼容MVVM模式的Presenter样板
  * Created by liulingfeng on 2017/4/3.
@@ -33,19 +27,7 @@ import static cn.diaovision.omnicontrol.MainControlActivity.splicer;
 
 public class VideoPresenter implements VideoContract.Presenter {
     static final String TAG = "video";
-/*    Config cfg = new ConfigFixed();
-    MediaMatrix matrix = new MediaMatrix.Builder()
-            .id(cfg.getMatrixId())
-            .ip(cfg.getMatrixIp())
-            .port(cfg.getMatrixUdpIpPort())
-            .localPreviewVideo(cfg.getMatrixPreviewIp(), cfg.getMatrixPreviewPort())
-            .videoInInit(cfg.getMatrixInputVideoNum())
-            .videoOutInit(cfg.getMatrixOutputVideoNum())
-            .build();*/
-
-
     MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
-    MediaSplicerRemoter splicerRemoter = new MediaSplicerRemoter(splicer);
 
     //通过Subject实现ViewModel的双向绑定
     Subject bus = PublishSubject.create();
@@ -59,7 +41,6 @@ public class VideoPresenter implements VideoContract.Presenter {
     };
 
     Disposable subscription;
-
 
     /*double binding between view and presenter*/
     @NonNull
@@ -151,12 +132,6 @@ public class VideoPresenter implements VideoContract.Presenter {
         return matrix.getVideoChnSet();
     }
 
-    /*配置通道*/
-    @Override
-    public void setChannel(int input, int[] outputs, int mode) {
-        //matrix.updateChannel(input,outputs,mode);
-    }
-
     /*预览输入端口的流媒体时调用，将输入端口切换到流媒体卡端口*/
     @Override
     public void switchPreviewVideo(int portIn, int portOut) {
@@ -232,92 +207,4 @@ public class VideoPresenter implements VideoContract.Presenter {
             Log.i(TAG, "invalid set subtitle");
         }
     }
-
-    /*获取某个屏的场景集合*/
-    @Override
-    public void getSceneList(int group) {
-        splicerRemoter.getSceneList(group, new Subscriber<List<Scene>>() {
-            @Override
-            public void onSubscribe(Subscription s) {
-                s.request(Integer.MAX_VALUE);
-            }
-
-            @Override
-            public void onNext(List<Scene> scenes) {
-                splicer.setScenes(scenes);
-                view.initScene(scenes);
-            }
-
-
-            @Override
-            public void onError(Throwable t) {
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-    }
-
-    /*调用场景*/
-    @Override
-    public void loadSceneList(int sceneId) {
-        splicerRemoter.loadScene(sceneId, new Subscriber<RxMessage>() {
-            @Override
-            public void onSubscribe(Subscription s) {
-                s.request(Integer.MAX_VALUE);
-            }
-
-            @Override
-            public void onNext(RxMessage rxMessage) {
-                if (rxMessage.what == RxMessage.DONE) {
-                    view.showToast("场景切换成功!");
-                }
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                view.showToast("场景切换失败！");
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-    }
-
-    /*修改场景名*/
-    @Override
-    public void renameScene(int sceneId, String name, int groupId) {
-        splicerRemoter.renameScene(sceneId, name, groupId, new Subscriber<RxMessage>() {
-            @Override
-            public void onSubscribe(Subscription s) {
-                s.request(Integer.MAX_VALUE);
-            }
-
-            @Override
-            public void onNext(RxMessage rxMessage) {
-                if (rxMessage.what == RxMessage.DONE) {
-                    view.showToast("修改成功！");
-                    view.refreshSceneList();
-                }
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                view.showToast("修改失败！");
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-    }
-
-    //TODO: add viewmodel operations if needed
-    //    public void onTitleChanged(String str){
-    //    }
 }
