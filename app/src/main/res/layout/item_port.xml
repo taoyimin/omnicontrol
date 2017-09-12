@@ -1,30 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-    <cn.diaovision.omnicontrol.widget.CircleCharView
-        android:id="@+id/port_circle"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_centerHorizontal="true"/>
+    <RelativeLayout
+        android:id="@+id/port_bg"
+        android:layout_width="@dimen/port_background_width"
+        android:layout_height="@dimen/port_background_height"
+        android:layout_marginTop="@dimen/port_background_marginTop"
+        android:layout_centerHorizontal="true"
+        android:background="@mipmap/button_bg">
 
-    <android.support.v7.widget.AppCompatTextView
+    <ImageView
+        android:id="@+id/port_image"
+        android:layout_width="@dimen/port_icon_width"
+        android:layout_height="@dimen/port_icon_height"
+        android:scaleType="centerCrop"
+        android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/port_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/port_badge_textSize"
+            android:layout_alignTop="@id/port_image"
+            android:layout_alignRight="@id/port_image"/>
+    </RelativeLayout>
+
+    <TextView
         android:id="@+id/port_alias"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/port_circle"
+        android:layout_marginTop="@dimen/port_alias_marginTop"
+        android:layout_marginBottom="@dimen/port_alias_marginBottom"
+        android:layout_below="@+id/port_bg"
         android:layout_centerHorizontal="true"
-        android:textAppearance="@style/ItemTitleText"/>
+        android:textColor="@color/color_c3"
+        android:textSize="@dimen/text_size_f4"
+        android:layout_marginLeft="@dimen/port_alias_marginLeft"
+        android:layout_marginRight="@dimen/port_alias_marginRight"/>
 
-<!--    <cn.bingoogolapple.badgeview.BGABadgeImageView
-        android:id="@+id/port_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        app:badge_borderWidth="0dp"
-        app:badge_horizontalMargin="0dp"
-        app:badge_padding="0dp"
-        app:badge_textSize="13sp"
-        app:badge_verticalMargin="0dp"/>-->
+    <CheckBox
+        android:id="@+id/port_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:visibility="invisible"/>
 </RelativeLayout>
