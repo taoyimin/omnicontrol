@@ -19,6 +19,12 @@
     <!--login title text color-->
     <color name="login_title_text">#cad3d7</color>
 
+    <!--power power_logo_device item text color-->
+    <color name="common_device_text">#ededed</color>
+
+    <!--power recycler item background color-->
+    <color name="common_device_background">#4d4d4d</color>
+
     <!--botton colors-->
     <color name="btn_light_bg">#57d2f7</color>
     <color name="btn_light_txt">#f0f0f0</color>

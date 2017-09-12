@@ -44,12 +44,6 @@
         <item>会议</item>
     </string-array>
 
-    <string-array name="common_device_category">
-        <item>雕视全通信指挥服务器</item>
-        <item>巴可投影机</item>
-        <item>小鸟融合器</item>
-    </string-array>
-
     <string-array name="config_type">
         <item>型号1</item>
         <item>型号2</item>

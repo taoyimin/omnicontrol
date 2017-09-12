@@ -44,6 +44,9 @@
 
     <!--power-->
     <string name="power_progress_hint">正在获取设备状态</string>
+    <string name="power_communicate_port">通信端口</string>
+    <string name="power_device_recycler">设备列表</string>
+    <string name="power_button_recycler">指令列表</string>
 
     <!--video-->
     <string name="video_input">输入端</string>
