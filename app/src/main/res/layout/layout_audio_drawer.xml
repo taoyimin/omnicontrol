@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cn.diaovision.omnicontrol.widget.MyDrawLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_layout"
+    android:layout_width="140dp"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="140dp"
+        android:layout_height="match_parent">
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/drawer"
+        android:layout_width="140dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="left"
+        android:layout_marginRight="-65dp"
+        android:background="@color/color_c3">
+
+        <Button
+            android:id="@+id/set_channel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="设置"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"/>
+    </RelativeLayout>
+</cn.diaovision.omnicontrol.widget.MyDrawLayout>
