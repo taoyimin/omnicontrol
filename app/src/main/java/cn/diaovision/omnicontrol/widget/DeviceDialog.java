@@ -14,27 +14,19 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.MainControlActivity;
 import cn.diaovision.omnicontrol.R;
-import cn.diaovision.omnicontrol.core.model.device.State;
-import cn.diaovision.omnicontrol.core.model.device.common.BarcoProjector;
-import cn.diaovision.omnicontrol.core.model.device.common.BigBirdSplicer;
-import cn.diaovision.omnicontrol.core.model.device.common.CommonDevice;
-import cn.diaovision.omnicontrol.core.model.device.common.DiaoVisionMatrix;
-import cn.diaovision.omnicontrol.widget.adapter.CustomSpinnerAdapter;
+import cn.diaovision.omnicontrol.core.model.device.common.Device;
 
 /**
  * Created by TaoYimin on 2017/6/7.
  */
 
 public class DeviceDialog extends Dialog {
-    @BindView(R.id.category_spinner)
-    Spinner categorySpinner;
     @BindView(R.id.button_go_back)
     ImageView buttonGoBack;
     @BindView(R.id.alias_edit)
@@ -51,16 +43,14 @@ public class DeviceDialog extends Dialog {
     View emptyArea;
 
     Context context;
-    CommonDevice device;
-    CustomSpinnerAdapter categoryAdapter;
-
+    Device device;
     OnButtonClickListener onButtonClickListener;
 
-    public DeviceDialog(@NonNull Context context, CommonDevice device) {
+    public DeviceDialog(@NonNull Context context, Device device) {
         this(context, R.style.dialog, device);
     }
 
-    public DeviceDialog(@NonNull Context context, @StyleRes int themeResId, CommonDevice device) {
+    public DeviceDialog(@NonNull Context context, @StyleRes int themeResId, Device device) {
         super(context, themeResId);
         this.context = context;
         this.device = device;
@@ -73,14 +63,9 @@ public class DeviceDialog extends Dialog {
         View layout = inflater.inflate(R.layout.dialog_device, null);
         this.setContentView(layout);
         ButterKnife.bind(this);
-        String[] arrays = context.getResources().getStringArray(R.array.common_device_category);
-        categoryAdapter = new CustomSpinnerAdapter(context, arrays, null);
-        categorySpinner.setAdapter(categoryAdapter);
         if (device != null) {
             emptyArea.setVisibility(View.VISIBLE);
             buttonDelete.setVisibility(View.VISIBLE);
-            //设置设备类型的默认选中
-            categorySpinner.setSelection(device.getType());
             //设置设备名称编辑框默认文字
             aliasEdit.setText(device.getName());
             //设置设备的默认IP地址
@@ -96,7 +81,6 @@ public class DeviceDialog extends Dialog {
             buttonConfirm.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    device.setType(categorySpinner.getSelectedItemPosition());
                     device.setName(aliasEdit.getText().toString());
                     device.setIp(ipEdit.getText().toString());
                     device.setPort(Integer.parseInt(portEdit.getText().toString()));
@@ -132,25 +116,10 @@ public class DeviceDialog extends Dialog {
                         Toast.makeText(context, "通信端口不能为空！", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    switch (categorySpinner.getSelectedItemPosition()) {
-                        case CommonDevice.TYPE.DIAOVISION_MATRIX:
-                            device = new DiaoVisionMatrix(alias, ip, Integer.parseInt(port));
-                            device.setType(CommonDevice.TYPE.DIAOVISION_MATRIX);
-                            device.setState(State.NA);
-                            break;
-                        case CommonDevice.TYPE.BARCO_PROJECTOR:
-                            device = new BarcoProjector(alias, ip, Integer.parseInt(port));
-                            device.setType(CommonDevice.TYPE.BARCO_PROJECTOR);
-                            device.setState(State.NA);
-                            break;
-                        case CommonDevice.TYPE.BIGBIRD_SPLICER:
-                            device = new BigBirdSplicer(alias, ip, Integer.parseInt(port));
-                            device.setType(CommonDevice.TYPE.BIGBIRD_SPLICER);
-                            device.setState(State.NA);
-                            break;
-                        default:
-                            break;
-                    }
+                    device = new Device(alias, ip, Integer.parseInt(port));
+                    device.setName(alias);
+                    device.setIp(ip);
+                    device.setPort(Integer.parseInt(port));
                     if (onButtonClickListener != null) {
                         onButtonClickListener.onAddDeviceClick(device);
                     }
@@ -167,9 +136,9 @@ public class DeviceDialog extends Dialog {
         Display display = ((MainControlActivity) context).getWindowManager().getDefaultDisplay();
         params.width = (int) (display.getWidth() * 0.35);
         if (device != null) {
-            params.height = (int) (display.getHeight() * 0.65);
+            params.height = (int) (display.getHeight() * 0.6);
         } else {
-            params.height = (int) (display.getHeight() * 0.60);
+            params.height = (int) (display.getHeight() * 0.5);
         }
         window.setAttributes(params);
     }
@@ -179,7 +148,7 @@ public class DeviceDialog extends Dialog {
 
         void onDeleteClick();
 
-        void onAddDeviceClick(CommonDevice device);
+        void onAddDeviceClick(Device device);
     }
 
     public void setOnButtonClickListener(OnButtonClickListener onButtonClickListener) {
