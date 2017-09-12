@@ -7,21 +7,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
-import cn.diaovision.omnicontrol.MainControlActivity;
 import cn.diaovision.omnicontrol.R;
-import cn.diaovision.omnicontrol.core.model.device.common.CommonDevice;
+import cn.diaovision.omnicontrol.core.model.device.common.Device;
 import cn.diaovision.omnicontrol.widget.DeviceDialog;
-import cn.diaovision.omnicontrol.widget.adapter.CommonDeviceAdapter;
+import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
+import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
+import cn.diaovision.omnicontrol.widget.adapter.DeviceAdapter;
+import cn.diaovision.omnicontrol.widget.adapter.CommandAdapter;
 
 /* *
  * 开关控制页面
@@ -31,13 +31,13 @@ import cn.diaovision.omnicontrol.widget.adapter.CommonDeviceAdapter;
 public class PowerFragment extends BaseFragment implements PowerContract.View {
     @BindView(R.id.device_recycler)
     RecyclerView deviceRecycler;
-    @BindView(R.id.progress_bar)
-    ProgressBar progressBar;
-    @BindView(R.id.hint_text)
-    TextView hintText;
+    @BindView(R.id.command_recycler)
+    RecyclerView commandRecycler;
 
-    CommonDeviceAdapter deviceAdapter;
+    DeviceAdapter deviceAdapter;
+    CommandAdapter commandAdapter;
     PowerContract.Presenter presenter;
+    ItemSelectionSupport deviceSelectionSupport;
 
     @Nullable
     @Override
@@ -56,51 +56,63 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        List<CommonDevice> list = presenter.getDeviceList();
-/*        CommonDevice device1 = new BarcoProjector("123", "192.168.10.102", 1025);
-        CommonDevice device2 = new BarcoProjector("321", "192.168.10.103", 1025);
-        device1.setState(State.NA);
-        device2.setState(State.NA);
-        list.add(device1);
-        list.add(device2);*/
-        deviceAdapter = new CommonDeviceAdapter(list);
-        initAdapterListener();
+        //List<Device> list = presenter.getDeviceList();
+        final List<Device> list = new ArrayList<>();
+        list.add(new Device(1, "123", "123", 123));
+        list.add(new Device(2, "321", "321", 321));
+        deviceSelectionSupport = new ItemSelectionSupport(deviceRecycler);
+        deviceSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
+        deviceAdapter = new DeviceAdapter(list, deviceSelectionSupport);
+        commandAdapter = new CommandAdapter(null);
         deviceRecycler.setLayoutManager(new GridLayoutManager(getContext(), 6));
+        commandRecycler.setLayoutManager(new GridLayoutManager(getContext(),6));
         deviceRecycler.setAdapter(deviceAdapter);
-        presenter.initState(deviceAdapter.getData());
-    }
-
-    /*初始化设备列表适配器的监听器*/
-    @Override
-    public void initAdapterListener() {
-        deviceAdapter.setOnButtonStateChangeListener(new CommonDeviceAdapter.OnButtonStateChangeListener() {
+        commandRecycler.setAdapter(commandAdapter);
+        deviceRecycler.addOnItemTouchListener(new OnRecyclerItemClickListener(deviceRecycler) {
             @Override
-            public void onButtonStateChange(CompoundButton buttonView, int position, boolean isChecked) {
-                CommonDevice device = deviceAdapter.getData().get(position);
-                if (isChecked) {
-                    presenter.powerOn(buttonView, device);
+            public void onItemClick(RecyclerView.ViewHolder vh, int position) {
+                if (position == list.size()) {
+                    //如果是最后一个，弹出添加设备对话框
+                    popupDialog(null, position);
                 } else {
-                    presenter.powerOff(buttonView, device);
+                    deviceSelectionSupport.itemClick(position);
+                }
+            }
+
+            @Override
+            public void onLongClick(RecyclerView.ViewHolder vh, int position) {
+                if (position != list.size()) {
+                    popupDialog(list.get(position), position);
                 }
             }
         });
-        deviceAdapter.setOnItemClickListener(new CommonDeviceAdapter.OnItemClickListener() {
+        deviceSelectionSupport.setOnItemStatueListener(new ItemSelectionSupport.OnItemStatueListener() {
             @Override
-            public void onItemClick(int position) {
-                if(position==deviceAdapter.getData().size()){
-                    popupDialog(null,position);
-                }
+            public void onSelectSingle(int position) {
+                commandAdapter.setCmds(list.get(position).getCmds());
+                commandAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onItemLongClick(int position) {
-                popupDialog(deviceAdapter.getData().get(position), position);
+            public void onUnSelectSingle(int position) {
+                commandAdapter.setCmds(null);
+                commandAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onSelectMultiple(int position) {
+
+            }
+
+            @Override
+            public void onUnSelectMultiple(int position) {
+
             }
         });
     }
 
     /*弹出设备编辑对话框*/
-    private void popupDialog(CommonDevice device, final int position) {
+    private void popupDialog(Device device, final int position) {
         final DeviceDialog dialog = new DeviceDialog(getContext(), device);
         dialog.show();
         dialog.setOnButtonClickListener(new DeviceDialog.OnButtonClickListener() {
@@ -108,7 +120,7 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
             public void onConfirmClick() {
                 dialog.dismiss();
                 deviceAdapter.notifyItemChanged(position);
-                MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
+                //MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
             }
 
             @Override
@@ -116,15 +128,15 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
                 dialog.dismiss();
                 deviceAdapter.getData().remove(position);
                 deviceAdapter.notifyItemRemoved(position);
-                MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
+                //MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
             }
 
             @Override
-            public void onAddDeviceClick(CommonDevice device) {
+            public void onAddDeviceClick(Device device) {
                 dialog.dismiss();
                 deviceAdapter.getData().add(device);
                 deviceAdapter.notifyItemInserted(position);
-                MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
+                //MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
             }
         });
     }
@@ -133,31 +145,6 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
     @Override
     public void showToast(String str) {
         Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
-    }
-
-    /*刷新设备列表*/
-    @Override
-    public void refreshDeviceList() {
-        deviceAdapter.notifyDataSetChanged();
-        MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
-    }
-
-    /*移除设备列表适配器的监听器*/
-    @Override
-    public void removeAdapterListener() {
-        deviceAdapter.setOnButtonStateChangeListener(null);
-    }
-
-    @Override
-    public void showProgress() {
-        progressBar.setVisibility(View.VISIBLE);
-        hintText.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideProgress() {
-        progressBar.setVisibility(View.GONE);
-        hintText.setVisibility(View.GONE);
     }
 
     /* *********************************
