@@ -44,7 +44,7 @@ public class VolumeAdapter extends RecyclerView.Adapter<VolumeAdapter.Selectable
     @Override
     public SelectableViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
-        return new SelectableViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_port2, parent, false));
+        return new SelectableViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_port, parent, false));
     }
 
     @Override

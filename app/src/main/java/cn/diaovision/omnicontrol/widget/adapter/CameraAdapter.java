@@ -36,7 +36,7 @@ public class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.CameraView
 
     @Override
     public CameraViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new CameraViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_port2, parent, false));
+        return new CameraViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_port, parent, false));
     }
 
     @Override

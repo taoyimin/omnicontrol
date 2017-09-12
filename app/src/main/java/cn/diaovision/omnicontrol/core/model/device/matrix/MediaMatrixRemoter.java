@@ -131,7 +131,9 @@ public class MediaMatrixRemoter {
     public int stitchVideo(final int portIn, final int columnCnt, final int rowCnt, final int[] portOut, RxSubscriber<RxMessage> subscriber) {
         if (matrix == null || !matrix.isReachable())
             return -1;
+        //WM
         MatrixMessage multiSwithMsg = buildMultiSwitchMessage(matrix.id, portIn, portOut);
+        //SP PW
         MatrixMessage stitchMsg = MatrixMessage.buildStitchMessage(matrix.id, columnCnt, rowCnt, portOut);
         final List<MatrixMessage> msgList = new ArrayList<>();
         for (int o : portOut) {
@@ -139,8 +141,8 @@ public class MediaMatrixRemoter {
             pout[0] = o;
             msgList.add(MatrixMessage.buildStitchMessage(matrix.id, 1, 1, pout));
         }
-        msgList.add(multiSwithMsg);
         msgList.add(stitchMsg);
+        msgList.add(multiSwithMsg);
         Flowable.intervalRange(0, msgList.size(), 0, 500, TimeUnit.MILLISECONDS)
                 .map(new Function<Long, RxMessage>() {
                     @Override

@@ -29,7 +29,6 @@ import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
 import cn.diaovision.omnicontrol.widget.PresetDialog;
 import cn.diaovision.omnicontrol.widget.VideoLayout;
-import cn.diaovision.omnicontrol.widget.WrapContentGridLayoutManager;
 import cn.diaovision.omnicontrol.widget.adapter.CameraAdapter;
 import cn.diaovision.omnicontrol.widget.adapter.PresetAdapter;
 
@@ -240,7 +239,7 @@ public class CameraFragment extends BaseFragment implements CameraContract.View 
             presetAdapter = new PresetAdapter(camera.getPresetList(), presetSelectionSupport);
         }
         //使用WrapContentGridLayoutManager解决RecyclerView刷新数据可能导致应用崩溃的BUG
-        presetRecyclerView.setLayoutManager(new WrapContentGridLayoutManager(getContext(), 3));
+        presetRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         presetRecyclerView.setAdapter(presetAdapter);
         presetAdapter.notifyDataSetChanged();
         presetSelectionSupport.setOnItemStatueListener(new ItemSelectionSupport.OnItemStatueListener() {
