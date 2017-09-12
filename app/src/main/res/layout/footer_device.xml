@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/device_bg"
+        android:layout_width="@dimen/device_background_width"
+        android:layout_height="@dimen/device_background_height"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/device_background_marginTop"
+        android:background="@mipmap/button_bg"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/device_image"
+            android:layout_width="@dimen/device_icon_width"
+            android:layout_height="@dimen/device_icon_height"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/device_alias"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/device_bg"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/device_alias_marginBottom"
+        android:layout_marginLeft="@dimen/device_alias_marginLeft"
+        android:layout_marginRight="@dimen/device_alias_marginRight"
+        android:layout_marginTop="@dimen/device_alias_marginTop"
+        android:textColor="@color/color_c3"
+        android:textSize="@dimen/text_size_f4"
+        android:visibility="gone"/>
+
+    <CheckBox
+        android:id="@+id/device_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:orientation="vertical"
+        android:background="@color/item_bg">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_input_add"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="增加"
+            android:gravity="center|top"
+            android:textSize="10sp"/>
+    </LinearLayout>
+</RelativeLayout>

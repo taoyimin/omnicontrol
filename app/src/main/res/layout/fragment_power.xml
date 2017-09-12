@@ -1,45 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/device_recycler"
-        android:overScrollMode="never"
-        android:padding="15dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/power_log_recycler_marginBottom"
+        android:layout_marginLeft="@dimen/power_log_recycler_marginLeft"
+        android:layout_marginRight="@dimen/power_log_recycler_marginRight"
+        android:layout_marginTop="@dimen/power_log_recycler_marginTop"
+        android:layout_weight="1.1"
+        android:background="@color/color_c3">
 
     </android.support.v7.widget.RecyclerView>
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminateTint="@color/color_c7"
-        android:layout_centerInParent="true"
-        android:indeterminateTintMode="src_atop"
-        android:visibility="gone"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/hint_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/power_progress_hint"
-        android:textColor="@color/color_c7"
-        android:textSize="@dimen/text_size_f2"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/progress_bar"
-        android:visibility="gone"/>
-</RelativeLayout>
-<!--
-<TextView
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:letterSpacing="1"
-android:text="尚未开放"
-android:gravity="center"
-android:textSize="60sp"
-android:textColor="@color/color_c5"/>-->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.2"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="@dimen/power_device_logo_width"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/angle_bg_left"/>
+
+                    <ImageView
+                        android:id="@+id/icon_device"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/power_device_logo_image_margin"
+                        android:src="@mipmap/power_logo_device"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/power_device_logo_text_margin"
+                        android:layout_toRightOf="@id/icon_device"
+                        android:text="@string/power_device_recycler"
+                        android:textColor="@color/color_c5"
+                        android:textSize="@dimen/text_size_f2"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/recycler_border_width"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/recycler_border_color"/>
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/device_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/color_c2"
+                    android:overScrollMode="never"
+                    android:paddingLeft="@dimen/power_device_recycler_paddingLeft"
+                    android:paddingRight="@dimen/power_device_recycler_paddingRight"
+                    android:paddingTop="@dimen/power_device_recycler_paddingTop">
+
+                </android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/widget_margin"
+            android:layout_height="match_parent">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.2"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/recycler_border_width"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/recycler_border_color"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="@dimen/power_button_logo_width"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/angle_bg_right"/>
+
+                    <ImageView
+                        android:id="@+id/icon_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/power_button_logo_image_margin"
+                        android:src="@mipmap/power_logo_button"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/power_button_logo_text_margin"
+                        android:layout_toLeftOf="@id/icon_button"
+                        android:text="@string/power_button_recycler"
+                        android:textColor="@color/color_c5"
+                        android:textSize="@dimen/text_size_f2"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/command_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/color_c2"
+                    android:overScrollMode="never"
+                    android:paddingLeft="@dimen/power_button_recycler_paddingLeft"
+                    android:paddingRight="@dimen/power_button_recycler_paddingRight"
+                    android:paddingTop="@dimen/power_button_recycler_paddingTop">
+                </android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

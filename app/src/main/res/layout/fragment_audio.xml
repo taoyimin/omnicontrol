@@ -39,12 +39,12 @@
                 </ImageView>
             </LinearLayout>
 
-            <cn.diaovision.omnicontrol.widget.AssistDrawerLayout
+            <cn.diaovision.omnicontrol.widget.AudioDrawerLayout
                 android:id="@+id/assist_drawer_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-            </cn.diaovision.omnicontrol.widget.AssistDrawerLayout>
+            </cn.diaovision.omnicontrol.widget.AudioDrawerLayout>
         </RelativeLayout>
 
         <LinearLayout
@@ -60,16 +60,13 @@
                 android:layout_height="0dp"
                 android:layout_weight="0.5"/>
 
-            <TextView
+            <cn.diaovision.omnicontrol.widget.VisualizerView
+                android:id="@+id/visual_view"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="center"
                 android:layout_weight="9"
-                android:background="@color/color_c3"
-                android:gravity="center"
-                android:text="音频显示屏"
-                android:textColor="@color/edit_hint_color"
-                android:textSize="30sp"/>
+                android:background="@color/color_c3"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -173,9 +170,9 @@
                     android:layout_height="match_parent"
                     android:background="@color/color_c2"
                     android:overScrollMode="never"
-                    android:paddingLeft="@dimen/video_port_recycler_marginLeft"
-                    android:paddingRight="@dimen/video_port_recycler_marginRight"
-                    android:paddingTop="@dimen/video_port_recycler_marginTop">
+                    android:paddingLeft="@dimen/audio_port_recycler_paddingLeft"
+                    android:paddingRight="@dimen/audio_port_recycler_paddingRight"
+                    android:paddingTop="@dimen/audio_port_recycler_paddingTop">
 
                 </android.support.v7.widget.RecyclerView>
             </RelativeLayout>
@@ -441,91 +438,11 @@
                     android:layout_height="match_parent"
                     android:background="@color/color_c2"
                     android:overScrollMode="never"
-                    android:paddingLeft="@dimen/video_port_recycler_marginLeft"
-                    android:paddingRight="@dimen/video_port_recycler_marginRight"
-                    android:paddingTop="@dimen/video_port_recycler_marginTop">
+                    android:paddingLeft="@dimen/audio_port_recycler_paddingLeft"
+                    android:paddingRight="@dimen/audio_port_recycler_paddingRight"
+                    android:paddingTop="@dimen/audio_port_recycler_paddingTop">
                 </android.support.v7.widget.RecyclerView>
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
-
-    <!--
-    <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:appCompat="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical" android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/panel_up_wrapper">
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:id="@+id/img_audio"/>
-        </RelativeLayout>
-        <android.support.percent.PercentRelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/panel_up_wrapper">
-
-             <android.support.v7.widget.AppCompatTextView
-                appCompat:layout_widthPercent="30%"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/widget_padding"
-                android:paddingTop="@dimen/widget_padding"
-                android:text="@string/txt_input"
-                android:gravity="center"
-                android:background="@drawable/panel_title_bg"
-                android:textAppearance="@style/PannelTitleText"
-                android:id="@+id/txt_input"/>
-            <android.support.v7.widget.AppCompatTextView
-                appCompat:layout_widthPercent="30%"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/widget_padding"
-                android:paddingTop="@dimen/widget_padding"
-                android:text="@string/txt_output"
-                android:layout_toRightOf="@+id/txt_input"
-                android:gravity="center"
-                android:background="@drawable/panel_title_bg"
-                android:textAppearance="@style/PannelTitleText"
-                android:id="@+id/txt_output"/>
-             <android.support.v7.widget.AppCompatTextView
-                appCompat:layout_widthPercent="40%"
-                android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/widget_padding"
-                android:paddingTop="@dimen/widget_padding"
-                android:text="@string/txt_channel"
-                android:layout_toRightOf="@+id/txt_output"
-                android:gravity="center"
-                android:background="@drawable/panel_title_bg"
-                android:textAppearance="@style/PannelTitleText"
-                android:id="@+id/txt_chn"/>
-
-            <cn.diaovision.omnicontrol.widget.PortRadioGroupView
-                appCompat:layout_widthPercent="30%"
-                android:layout_height="300dp"
-                android:layout_below="@+id/txt_input"
-                android:id="@+id/input"
-                android:background="@color/panel_input" />
-
-            <cn.diaovision.omnicontrol.widget.PortRadioGroupView
-                appCompat:layout_widthPercent="30%"
-                android:layout_height="300dp"
-                android:layout_toRightOf="@+id/input"
-                android:layout_below="@+id/txt_input"
-                android:id="@+id/output"
-                android:background="@color/panel_output" />
-
-            <cn.diaovision.omnicontrol.widget.VolumeChannelRadioGroupView
-                appCompat:layout_widthPercent="40%"
-                android:layout_height="300dp"
-                android:layout_toRightOf="@+id/output"
-                android:layout_below="@+id/txt_input"
-                android:id="@+id/audioChnList" />
-        </android.support.percent.PercentRelativeLayout>
-    </RelativeLayout>-->
