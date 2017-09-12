@@ -15,7 +15,6 @@ import android.widget.RadioGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
-import cn.diaovision.omnicontrol.core.model.device.splicer.MediaSplicer;
 import cn.diaovision.omnicontrol.model.Config;
 import cn.diaovision.omnicontrol.model.ConfigXXX;
 import cn.diaovision.omnicontrol.util.CrashHandler;
@@ -27,8 +26,9 @@ import cn.diaovision.omnicontrol.view.ConfigFragment;
 import cn.diaovision.omnicontrol.view.DvdFragment;
 import cn.diaovision.omnicontrol.view.LightFragment;
 import cn.diaovision.omnicontrol.view.PowerFragment;
-import cn.diaovision.omnicontrol.view.VideoFragment2;
+import cn.diaovision.omnicontrol.view.VideoFragment;
 import cn.diaovision.omnicontrol.widget.AssistDrawerLayout;
+import cn.diaovision.omnicontrol.widget.AudioDrawerLayout;
 
 //import com.roughike.bottombar.BottomBar;
 //import devlight.io.library.ntb.NavigationTabBar;
@@ -70,7 +70,7 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
 
     private final Fragment[] FRAGMENTS = {
             new PowerFragment(),
-            new VideoFragment2(),
+            new VideoFragment(),
             new AudioFragment(),
             new LightFragment(),
             new CameraFragment(),
@@ -87,7 +87,6 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
     int preTab = 0;
 
     public static MediaMatrix matrix;
-    public static MediaSplicer splicer;
     public static Config cfg;
 
     //UIs
@@ -172,7 +171,6 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
         CrashHandler.getInstance().init(this);
         initConfig();
         initMediaMatrix();
-        initMediaSplicer();
         PortHelper.getInstance().init();
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -227,10 +225,6 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
         matrix.setVideoChnSet(cfg.getMatrixChannels());
     }
 
-    private void initMediaSplicer() {
-        splicer=new MediaSplicer();
-    }
-
     void switchFragment(int i){
         if (i < 8) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, FRAGMENTS[i], TAG_FRAGMENT[i]);
@@ -250,7 +244,7 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
         if(FRAGMENTS[6]!=null&&currentIndex==6)
             ((ConferenceFragment)FRAGMENTS[6]).getActivityDispatchTouchEvent(ev);
         if(FRAGMENTS[1]!=null&&currentIndex==1)
-            ((VideoFragment2)FRAGMENTS[1]).getActivityDispatchTouchEvent(ev);
+            ((VideoFragment)FRAGMENTS[1]).getActivityDispatchTouchEvent(ev);
         gestureDetector.onTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
     }
@@ -313,9 +307,16 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
     @Override
     public void onBackPressed() {
         if(currentIndex==1){
-            AssistDrawerLayout drawerLayout=((VideoFragment2)FRAGMENTS[1]).getDrawerLayout();
+            AssistDrawerLayout drawerLayout=((VideoFragment)FRAGMENTS[1]).getDrawerLayout();
             if(drawerLayout!=null&&drawerLayout.isDrawerOpen()){
-                ((VideoFragment2)FRAGMENTS[1]).editComplete();
+                ((VideoFragment)FRAGMENTS[1]).editComplete();
+                return;
+            }
+        }
+        if(currentIndex==2){
+            AudioDrawerLayout drawerLayout=((AudioFragment)FRAGMENTS[2]).getDrawerLayout();
+            if(drawerLayout!=null&&drawerLayout.isDrawerOpen()){
+                ((AudioFragment)FRAGMENTS[2]).editComplete();
                 return;
             }
         }
