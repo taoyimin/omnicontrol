@@ -882,7 +882,7 @@ public class IjkVideoView extends FrameLayout implements MediaController.MediaPl
 
     @Override
     public int getAudioSessionId() {
-        return 0;
+        return mMediaPlayer.getAudioSessionId();
     }
 
     // REMOVED: getAudioSessionId();
