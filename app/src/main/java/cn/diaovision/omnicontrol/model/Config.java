@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import cn.diaovision.omnicontrol.core.model.device.common.CommonDevice;
+import cn.diaovision.omnicontrol.core.model.device.common.Device;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
@@ -60,6 +60,6 @@ public interface Config {
     void addCameraPreset(int cameraIdx,HiCamera.Preset preset);
     void deleteCameraPreset(int cameraIdx,HiCamera.Preset preset);
 
-    List<CommonDevice> getDeviceList();
-    void setDeviceList(List<CommonDevice> devices);
+    List<Device> getDeviceList();
+    void setDeviceList(List<Device> devices);
 }

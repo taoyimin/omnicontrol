@@ -21,10 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 import cn.diaovision.omnicontrol.OmniControlApplication;
-import cn.diaovision.omnicontrol.core.model.device.common.BarcoProjector;
-import cn.diaovision.omnicontrol.core.model.device.common.BigBirdSplicer;
-import cn.diaovision.omnicontrol.core.model.device.common.CommonDevice;
-import cn.diaovision.omnicontrol.core.model.device.common.DiaoVisionMatrix;
+import cn.diaovision.omnicontrol.core.model.device.common.Device;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
@@ -227,38 +224,17 @@ public class ConfigXXX implements Config {
 
     /*获取设备列表*/
     @Override
-    public List<CommonDevice> getDeviceList() {
-        List<CommonDevice> devices = new ArrayList<>();
+    public List<Device> getDeviceList() {
+        List<Device> devices = new ArrayList<>();
         if (!root.element("common_device").elementIterator().hasNext()) {
             return devices;
         }
         List<Element> elements = root.element("common_device").elements("device");
         for (Element element : elements) {
-            CommonDevice device = null;
-            int type = Integer.parseInt(element.element("type").getTextTrim());
+            Device device = null;
             String alias = element.element("alias").getText();
             String ip = element.element("ip").getTextTrim();
             int port = Integer.parseInt(element.element("port").getTextTrim());
-            int state = Integer.parseInt(element.element("state").getTextTrim());
-            switch (type) {
-                case CommonDevice.TYPE.DIAOVISION_MATRIX:
-                    device = new DiaoVisionMatrix(alias, ip, port);
-                    device.setType(type);
-                    device.setState(state);
-                    break;
-                case CommonDevice.TYPE.BARCO_PROJECTOR:
-                    device = new BarcoProjector(alias, ip, port);
-                    device.setType(type);
-                    device.setState(state);
-                    break;
-                case CommonDevice.TYPE.BIGBIRD_SPLICER:
-                    device = new BigBirdSplicer(alias, ip, port);
-                    device.setType(type);
-                    device.setState(state);
-                    break;
-                default:
-                    break;
-            }
             devices.add(device);
         }
         return devices;
@@ -266,20 +242,18 @@ public class ConfigXXX implements Config {
 
     /*修改设备的配置信息*/
     @Override
-    public void setDeviceList(List<CommonDevice> devices) {
+    public void setDeviceList(List<Device> devices) {
         if (root.element("common_device").elementIterator().hasNext()) {
             List<Element> elements = root.element("common_device").elements("device");
             for (Element element : elements) {
                 element.detach();
             }
         }
-        for (CommonDevice device : devices) {
+        for (Device device : devices) {
             Element deviceElement = root.element("common_device").addElement("device");
             deviceElement.addElement("alias").setText(device.getName());
             deviceElement.addElement("ip").setText(device.getIp());
             deviceElement.addElement("port").setText(device.getPort() + "");
-            deviceElement.addElement("type").setText(device.getType() + "");
-            deviceElement.addElement("state").setText(device.getState() + "");
         }
         save();
     }
