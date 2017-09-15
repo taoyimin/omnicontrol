@@ -62,4 +62,36 @@ public class ByteUtilsTest {
         bytes[5]=51;
         assertEquals(s,ByteUtils.bytes2ascii(bytes));
     }
+
+    @Test
+    public void bytes2string() throws Exception {
+        String s="65,66,67,49,50,51";
+        byte[] bytes=new byte[6];
+        bytes[0]=65;
+        bytes[1]=66;
+        bytes[2]=67;
+        bytes[3]=49;
+        bytes[4]=50;
+        bytes[5]=51;
+        assertEquals(s,ByteUtils.bytes2string(bytes));
+    }
+
+    @Test
+    public void string2bytes() throws Exception {
+        byte[] bytes1=new byte[6];
+        bytes1[0]=65;
+        bytes1[1]=66;
+        bytes1[2]=67;
+        bytes1[3]=49;
+        bytes1[4]=50;
+        bytes1[5]=51;
+        String s="65,66,67,49,50,51";
+        byte[] bytes2=ByteUtils.string2bytes(s);
+        assertEquals(bytes1[0],bytes2[0]);
+        assertEquals(bytes1[1],bytes2[1]);
+        assertEquals(bytes1[2],bytes2[2]);
+        assertEquals(bytes1[3],bytes2[3]);
+        assertEquals(bytes1[4],bytes2[4]);
+        assertEquals(bytes1[5],bytes2[5]);
+    }
 }
