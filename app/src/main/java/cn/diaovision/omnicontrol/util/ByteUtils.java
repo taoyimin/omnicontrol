@@ -65,4 +65,24 @@ public class ByteUtils {
         }
         return sb.toString();
     }
+
+    /*byte数组转数字字符串，数字之间用逗号隔开*/
+    public static String bytes2string(byte[] bytes){
+        StringBuffer sb=new StringBuffer();
+        for(byte b:bytes){
+            sb.append(b+",");
+        }
+        sb.deleteCharAt(sb.lastIndexOf(","));
+        return sb.toString();
+    }
+
+    /*数字字符串转byte数组*/
+    public static byte[] string2bytes(String string){
+        String[] strs=string.split(",");
+        byte[] bytes=new byte[strs.length];
+        for(int i=0;i<strs.length;i++){
+            bytes[i]=Byte.parseByte(strs[i]);
+        }
+        return bytes;
+    }
 }
