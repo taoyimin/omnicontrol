@@ -66,6 +66,16 @@ public class ByteUtils {
         return sb.toString();
     }
 
+    /*ascii字符串转byte数组*/
+    public static byte[] ascii2bytes(String string){
+        char[] chars=string.toCharArray();
+        byte[] bytes=new byte[chars.length];
+        for(int i=0;i<chars.length;i++){
+            bytes[i]= (byte) chars[i];
+        }
+        return bytes;
+    }
+
     /*byte数组转数字字符串，数字之间用逗号隔开*/
     public static String bytes2string(byte[] bytes){
         StringBuffer sb=new StringBuffer();
@@ -78,7 +88,7 @@ public class ByteUtils {
 
     /*数字字符串转byte数组*/
     public static byte[] string2bytes(String string){
-        String[] strs=string.split(",");
+        String[] strs=string.split(",|，");
         byte[] bytes=new byte[strs.length];
         for(int i=0;i<strs.length;i++){
             bytes[i]=Byte.parseByte(strs[i]);
