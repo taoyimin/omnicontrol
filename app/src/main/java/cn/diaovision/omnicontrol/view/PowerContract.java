@@ -20,5 +20,6 @@ public interface PowerContract {
 
     interface Presenter extends BasePresenter{
         List<Device> getDeviceList();
+        void sendCommand(Device device, Device.Command cmd);
     }
 }

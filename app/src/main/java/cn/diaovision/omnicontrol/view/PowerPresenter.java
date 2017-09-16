@@ -1,6 +1,8 @@
 package cn.diaovision.omnicontrol.view;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.List;
 
@@ -8,6 +10,7 @@ import cn.diaovision.omnicontrol.core.model.device.common.Device;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
+import cn.diaovision.omnicontrol.util.ByteUtils;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
@@ -82,6 +85,33 @@ public class PowerPresenter implements PowerContract.Presenter {
     @Override
     public List<Device> getDeviceList() {
         return cfg.getDeviceList();
+    }
+
+    @Override
+    public void sendCommand(final Device device, final Device.Command cmd) {
+        RxExecutor.getInstance().post(new RxReq() {
+            @Override
+            public RxMessage request() {
+                byte[] bytes = null;
+                if (!TextUtils.isEmpty(cmd.getStringCmd())) {
+                    bytes = ByteUtils.ascii2bytes(cmd.getStringCmd());
+                } else if (cmd.getByteCmd() != null) {
+                    bytes = cmd.getByteCmd();
+                }
+                List<byte[]> recv = device.getController().send(bytes, bytes.length, true);
+                return new RxMessage(RxMessage.DONE, recv);
+            }
+        }, new Consumer() {
+            @Override
+            public void accept(Object o) throws Exception {
+                List<byte[]> recv = ((List<byte[]>) ((RxMessage) o).val);
+                if (recv != null&&recv.size()>1){
+                    for(int i=0;i<recv.size();i++){
+                        Log.i("info", ByteUtils.bytes2ascii(recv.get(i)));
+                    }
+                }
+            }
+        }, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN);
     }
 
     //TODO: add viewmodel operations if needed
