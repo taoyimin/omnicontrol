@@ -9,19 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.diaovision.omnicontrol.BaseFragment;
+import cn.diaovision.omnicontrol.MainControlActivity;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.device.common.Device;
+import cn.diaovision.omnicontrol.widget.CommandDialog;
 import cn.diaovision.omnicontrol.widget.DeviceDialog;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
-import cn.diaovision.omnicontrol.widget.adapter.DeviceAdapter;
 import cn.diaovision.omnicontrol.widget.adapter.CommandAdapter;
+import cn.diaovision.omnicontrol.widget.adapter.DeviceAdapter;
 
 /* *
  * 开关控制页面
@@ -56,10 +57,10 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        //List<Device> list = presenter.getDeviceList();
-        final List<Device> list = new ArrayList<>();
+        final List<Device> list = presenter.getDeviceList();
+/*        final List<Device> list = new ArrayList<>();
         list.add(new Device(1, "123", "123", 123));
-        list.add(new Device(2, "321", "321", 321));
+        list.add(new Device(2, "321", "321", 321));*/
         deviceSelectionSupport = new ItemSelectionSupport(deviceRecycler);
         deviceSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
         deviceAdapter = new DeviceAdapter(list, deviceSelectionSupport);
@@ -109,6 +110,28 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
 
             }
         });
+        commandRecycler.addOnItemTouchListener(new OnRecyclerItemClickListener(commandRecycler){
+            @Override
+            public void onItemClick(RecyclerView.ViewHolder vh, int position) {
+                List<Device.Command> cmds=list.get(deviceSelectionSupport.getCheckedItemPosition()).getCmds();
+                if (position == cmds.size()) {
+                    //如果是最后一个，弹出添加指令对话框
+                    popupCommandDialog(null, position);
+                } else {
+                    //deviceSelectionSupport.itemClick(position);
+                    Device device=list.get(deviceSelectionSupport.getCheckedItemPosition());
+                    presenter.sendCommand(device,cmds.get(position));
+                }
+            }
+
+            @Override
+            public void onLongClick(RecyclerView.ViewHolder vh, int position) {
+                List<Device.Command> cmds=list.get(deviceSelectionSupport.getCheckedItemPosition()).getCmds();
+                if (position != cmds.size()) {
+                    popupCommandDialog(cmds.get(position), position);
+                }
+            }
+        });
     }
 
     /*弹出设备编辑对话框*/
@@ -120,7 +143,7 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
             public void onConfirmClick() {
                 dialog.dismiss();
                 deviceAdapter.notifyItemChanged(position);
-                //MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
+                MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
             }
 
             @Override
@@ -128,7 +151,7 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
                 dialog.dismiss();
                 deviceAdapter.getData().remove(position);
                 deviceAdapter.notifyItemRemoved(position);
-                //MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
+                MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
             }
 
             @Override
@@ -136,7 +159,37 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
                 dialog.dismiss();
                 deviceAdapter.getData().add(device);
                 deviceAdapter.notifyItemInserted(position);
-                //MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
+                MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
+            }
+        });
+    }
+
+    /*弹出指令编辑对话框*/
+    private void popupCommandDialog(Device.Command cmd, final int position) {
+        final CommandDialog dialog = new CommandDialog(getContext(), cmd);
+        dialog.show();
+        dialog.setOnButtonClickListener(new CommandDialog.OnButtonClickListener() {
+            @Override
+            public void onConfirmClick() {
+                dialog.dismiss();
+                commandAdapter.notifyItemChanged(position);
+                MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
+            }
+
+            @Override
+            public void onDeleteClick() {
+                dialog.dismiss();
+                commandAdapter.getCmds().remove(position);
+                commandAdapter.notifyItemRemoved(position);
+                MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
+            }
+
+            @Override
+            public void onAddDeviceClick(Device.Command cmd) {
+                dialog.dismiss();
+                commandAdapter.getCmds().add(cmd);
+                commandAdapter.notifyItemInserted(position);
+                MainControlActivity.cfg.setDeviceList(deviceAdapter.getData());
             }
         });
     }
