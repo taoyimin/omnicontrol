@@ -86,8 +86,9 @@ public class UdpClient {
             e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
+        }finally {
+            return recvList;
         }
-        return recvList;
     }
 
     //        byte[] recvs = new byte[1024];

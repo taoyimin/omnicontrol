@@ -249,7 +249,7 @@ public class AudioFragment extends BaseFragment implements AudioContract.View {
 
     private void initVisualizer() {
         //测试音频
-        mediaPlayer = MediaPlayer.create(getContext(), R.raw.test);
+        //mediaPlayer = MediaPlayer.create(getContext(), R.raw.test);
         visualizer = new Visualizer(mediaPlayer.getAudioSessionId());
         visualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
         visualizer.setDataCaptureListener(new Visualizer.OnDataCaptureListener() {

@@ -17,6 +17,15 @@
         android:layout_height="@dimen/command_icon_height"
         android:scaleType="centerCrop"
         android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/command_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="+"
+            android:textColor="@color/color_c3"
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <TextView

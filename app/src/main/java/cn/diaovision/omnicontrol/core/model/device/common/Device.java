@@ -17,23 +17,14 @@ public class Device {
     private List<Command> cmds;
     private UdpClient controller;
 
+    public Device() {
+    }
+
     public Device(String name, String ip, int port) {
         this.name = name;
         this.ip = ip;
         this.port = port;
         cmds=new ArrayList<>();
-        cmds.add(new Command(1,"指令1",""));
-        cmds.add(new Command(2,"指令2",""));
-        cmds.add(new Command(3,"指令3",""));
-        cmds.add(new Command(4,"指令4",""));
-        cmds.add(new Command(5,"指令5","765"));
-        cmds.add(new Command(6,"指令6",""));
-        cmds.add(new Command(7,"指令7",""));
-        cmds.add(new Command(8,"指令8",""));
-        cmds.add(new Command(9,"指令9","345"));
-        cmds.add(new Command(10,"指令10",""));
-        cmds.add(new Command(11,"指令11",""));
-        cmds.add(new Command(12,"指令12",""));
     }
 
     public Device(int id, String name, String ip, int port) {
@@ -42,18 +33,6 @@ public class Device {
         this.ip = ip;
         this.port = port;
         cmds=new ArrayList<>();
-        cmds.add(new Command(1,"指令1",""));
-        cmds.add(new Command(2,"指令2",""));
-        cmds.add(new Command(3,"指令3",""));
-        cmds.add(new Command(4,"指令4",""));
-        cmds.add(new Command(5,"指令5","765"));
-        cmds.add(new Command(6,"指令6",""));
-        cmds.add(new Command(7,"指令7",""));
-        cmds.add(new Command(8,"指令8",""));
-        cmds.add(new Command(9,"指令9","345"));
-        cmds.add(new Command(10,"指令10",""));
-        cmds.add(new Command(11,"指令11",""));
-        cmds.add(new Command(12,"指令12",""));
     }
 
     public int getId() {
@@ -103,16 +82,18 @@ public class Device {
         return controller;
     }
 
-    public class Command{
+    public static class Command{
         private int id;
         private String name;
-        private String cmd;
-        private String byteCmd;
+        private String stringCmd;
+        private byte[] byteCmd;
 
-        public Command(int id, String name, String cmd) {
+        public Command() {
+        }
+
+        public Command(int id, String name) {
             this.id = id;
             this.name = name;
-            this.cmd = cmd;
         }
 
         public int getId() {
@@ -131,19 +112,19 @@ public class Device {
             this.name = name;
         }
 
-        public String getCmd() {
-            return cmd;
+        public String getStringCmd() {
+            return stringCmd;
         }
 
-        public void setCmd(String cmd) {
-            this.cmd = cmd;
+        public void setStringCmd(String stringCmd) {
+            this.stringCmd = stringCmd;
         }
 
-        public String getByteCmd() {
+        public byte[] getByteCmd() {
             return byteCmd;
         }
 
-        public void setByteCmd(String byteCmd) {
+        public void setByteCmd(byte[] byteCmd) {
             this.byteCmd = byteCmd;
         }
     }

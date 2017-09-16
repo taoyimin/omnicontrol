@@ -41,6 +41,9 @@
     <string name="dialog_device_ip">网络地址</string>
     <string name="dialog_device_port">通信端口</string>
     <string name="dialog_device_alias">设备名称</string>
+    <string name="dialog_command_alias">指令名称</string>
+    <string name="dialog_command_string_cmd">字符指令</string>
+    <string name="dialog_command_byte_cmd">字节指令</string>
 
     <!--power-->
     <string name="power_progress_hint">正在获取设备状态</string>
