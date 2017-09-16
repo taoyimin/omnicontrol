@@ -25,6 +25,7 @@ import cn.diaovision.omnicontrol.core.model.device.common.Device;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
+import cn.diaovision.omnicontrol.util.ByteUtils;
 
 /**
  * Created by liulingfeng on 2017/5/8.
@@ -225,16 +226,80 @@ public class ConfigXXX implements Config {
     /*获取设备列表*/
     @Override
     public List<Device> getDeviceList() {
+/*        List<Device> devices = new ArrayList<>();
+        if (!root.element("common_device").elementIterator().hasNext()) {
+            return devices;
+        }
+        List<Element> elements = root.element("common_device").elements("device");
+        for (Element element : elements) {
+            Device device = new Device();
+            String alias = element.element("alias").getText();
+            String ip = element.element("ip").getTextTrim();
+            int port = Integer.parseInt(element.element("port").getTextTrim());
+            List<Element> commandElements=element.elements("command_list");
+            List<Device.Command> cmds=new ArrayList<>();
+            if(element.element("command_list").elementIterator().hasNext()&&element.element("command_list").element("command").elementIterator().hasNext()){
+                for(Element commandElement:commandElements){
+                    String name=commandElement.element("alias").getText();
+                    String stringCmd=commandElement.element("string_cmd").getText();
+                    String byteString=commandElement.element("bytes_cmd").getText();
+                    byte[] byteCmd=null;
+                    if(TextUtils.isEmpty(byteString)){
+                        byteCmd=new byte[0];
+                    }else{
+                        byteCmd=ByteUtils.string2bytes(byteString);
+                    }
+                    Device.Command cmd=new Device.Command();
+                    cmd.setName(name);
+                    cmd.setStringCmd(stringCmd);
+                    cmd.setByteCmd(byteCmd);
+                    cmds.add(cmd);
+                }
+            }
+            device.setName(alias);
+            device.setIp(ip);
+            device.setPort(port);
+            device.setCmds(cmds);
+            devices.add(device);*/
+
         List<Device> devices = new ArrayList<>();
         if (!root.element("common_device").elementIterator().hasNext()) {
             return devices;
         }
         List<Element> elements = root.element("common_device").elements("device");
         for (Element element : elements) {
-            Device device = null;
+            Device device = new Device();
             String alias = element.element("alias").getText();
             String ip = element.element("ip").getTextTrim();
             int port = Integer.parseInt(element.element("port").getTextTrim());
+            Element commandsElement=element.element("command_list");
+            List<Device.Command> cmds=new ArrayList<>();
+            if(commandsElement.elementIterator().hasNext()){
+                if(commandsElement.element("command").elementIterator().hasNext()){
+                    List<Element> commandElements=commandsElement.elements("command");
+                    for(int i=0;i<commandElements.size();i++){
+                        Element commandElement=commandElements.get(i);
+                        String name=commandElement.element("alias").getText();
+                        String stringCmd=commandElement.element("string_cmd").getText();
+                        String byteString=commandElement.element("bytes_cmd").getText();
+                        byte[] byteCmd=null;
+                        if(TextUtils.isEmpty(byteString)){
+                            byteCmd=new byte[0];
+                        }else{
+                            byteCmd=ByteUtils.string2bytes(byteString);
+                        }
+                        Device.Command cmd=new Device.Command();
+                        cmd.setName(name);
+                        cmd.setStringCmd(stringCmd);
+                        cmd.setByteCmd(byteCmd);
+                        cmds.add(cmd);
+                    }
+                }
+            }
+            device.setName(alias);
+            device.setIp(ip);
+            device.setPort(port);
+            device.setCmds(cmds);
             devices.add(device);
         }
         return devices;
@@ -254,6 +319,18 @@ public class ConfigXXX implements Config {
             deviceElement.addElement("alias").setText(device.getName());
             deviceElement.addElement("ip").setText(device.getIp());
             deviceElement.addElement("port").setText(device.getPort() + "");
+            Element commandsElement = deviceElement.addElement("command_list");
+            for (int i = 0; i < device.getCmds().size(); i++) {
+                Element commandElement=commandsElement.addElement("command");
+                commandElement.addElement("alias").setText(device.getCmds().get(i).getName());
+                commandElement.addElement("string_cmd").setText(device.getCmds().get(i).getStringCmd());
+                byte[] bytes = device.getCmds().get(i).getByteCmd();
+                if (bytes != null && bytes.length > 0) {
+                    commandElement.addElement("bytes_cmd").setText(ByteUtils.bytes2string(bytes));
+                }else{
+                    commandElement.addElement("bytes_cmd").setText("");
+                }
+            }
         }
         save();
     }
