@@ -1,16 +1,20 @@
 package cn.diaovision.omnicontrol.view;
 
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cn.diaovision.omnicontrol.core.model.device.common.Device;
+import cn.diaovision.omnicontrol.core.model.device.common.DeviceLog;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
 import cn.diaovision.omnicontrol.util.ByteUtils;
+import cn.diaovision.omnicontrol.util.DateHelper;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
@@ -36,7 +40,7 @@ public class PowerPresenter implements PowerContract.Presenter {
     };
 
     Disposable subscription;
-
+    List<DeviceLog> logs = new ArrayList<>();
 
     /*double binding between view and presenter*/
     @NonNull
@@ -98,20 +102,43 @@ public class PowerPresenter implements PowerContract.Presenter {
                 } else if (cmd.getByteCmd() != null) {
                     bytes = cmd.getByteCmd();
                 }
+                Date date = new Date();
+                String time = DateHelper.getInstance().getHour(date) + ":" + DateHelper.getInstance().getMin(date) + ":" + DateHelper.getInstance().getSec(date);
+                String log = time +"  "+ "向IP地址为" + device.getIp() + "的设备发送了一条指令:" + ByteUtils.bytes2ascii(bytes);
+                logs.add(new DeviceLog(log));
+                ((Fragment) view).getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.notifyLogChange(logs.size() - 1, 1);
+                    }
+                });
                 List<byte[]> recv = device.getController().send(bytes, bytes.length, true);
                 return new RxMessage(RxMessage.DONE, recv);
             }
         }, new Consumer() {
             @Override
             public void accept(Object o) throws Exception {
+                Date date = new Date();
+                String time = DateHelper.getInstance().getHour(date) + ":" + DateHelper.getInstance().getMin(date) + ":" + DateHelper.getInstance().getSec(date);
                 List<byte[]> recv = ((List<byte[]>) ((RxMessage) o).val);
-                if (recv != null&&recv.size()>1){
-                    for(int i=0;i<recv.size();i++){
-                        Log.i("info", ByteUtils.bytes2ascii(recv.get(i)));
+                if (recv != null && recv.size() > 1) {
+                    for (int i = 0; i < recv.size(); i++) {
+                        String log = time+"  "+"收到IP地址为" + device.getIp() + "的设备的一条应答:" + ByteUtils.bytes2ascii(recv.get(i));
+                        DeviceLog deviceLog = new DeviceLog(log);
+                        logs.add(deviceLog);
                     }
+                    view.notifyLogChange(logs.size() - recv.size(), recv.size());
+                } else {
+                    logs.add(new DeviceLog(time+"  "+"没有收到IP地址为" + device.getIp() + "的设备的应答"));
+                    view.notifyLogChange(logs.size() - 1, 1);
                 }
             }
         }, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN);
+    }
+
+    @Override
+    public List<DeviceLog> getLogList() {
+        return logs;
     }
 
     //TODO: add viewmodel operations if needed
