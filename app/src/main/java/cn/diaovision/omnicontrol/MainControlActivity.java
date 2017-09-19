@@ -30,9 +30,6 @@ import cn.diaovision.omnicontrol.view.VideoFragment;
 import cn.diaovision.omnicontrol.widget.AssistDrawerLayout;
 import cn.diaovision.omnicontrol.widget.AudioDrawerLayout;
 
-//import com.roughike.bottombar.BottomBar;
-//import devlight.io.library.ntb.NavigationTabBar;
-
 public class MainControlActivity extends BaseActivity implements GestureDetector.OnGestureListener{
 
     private final String[] TAG_FRAGMENT = {
@@ -89,10 +86,6 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
     public static MediaMatrix matrix;
     public static Config cfg;
 
-    //UIs
-/*    @BindView(R.id.navigation_bar)
-    TabLayout navigationBar;*/
-
     @BindView(R.id.navigation_bar0)
     RadioGroup radioGroup;
 
@@ -113,58 +106,6 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, FRAGMENTS[0], TAG_FRAGMENT[0]);
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         transaction.commit();
-
-
-        //init tabs
-/*        for (int m = 0; m < TAB_FRAGMENT_NAME.length; m ++) {
-            TabLayout.Tab tab = navigationBar.newTab().setCustomView(R.layout.tab_navi_item);
-            View v = tab.getCustomView();
-
-            AppCompatImageView imgView = (AppCompatImageView) v.findViewById(R.id.img);
-            imgView.setImageResource(TAB_ICON[m]);
-            AppCompatTextView txtView = (AppCompatTextView) v.findViewById(R.id.txt);
-            txtView.setText(TAB_FRAGMENT_NAME[m]);
-
-            navigationBar.addTab(tab);
-
-
-        }*/
-        //set init tab scale
-/*        int pos =  navigationBar.getSelectedTabPosition();
-        navigationBar.getTabAt(pos).getCustomView().findViewById(R.id.tab_content).setScaleX(1.2f);
-        navigationBar.getTabAt(pos).getCustomView().findViewById(R.id.tab_content).setScaleY(1.2f);
-
-        //navigation tab selection
-        navigationBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-
-                AnimatorSet animeSet = new AnimatorSet();
-                ObjectAnimator animeX = ObjectAnimator.ofFloat(tab.getCustomView().findViewById(R.id.tab_content), "scaleX", 1, 1.2f);
-                ObjectAnimator animeY = ObjectAnimator.ofFloat(tab.getCustomView().findViewById(R.id.tab_content), "scaleY", 1, 1.2f);
-                animeSet.setDuration(120);
-                animeSet.playTogether(animeX, animeY);
-                animeSet.start();
-
-                switchFragment(tab.getPosition());
-            }
-
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                AnimatorSet animeSet = new AnimatorSet();
-                ObjectAnimator animeX = ObjectAnimator.ofFloat(tab.getCustomView().findViewById(R.id.tab_content), "scaleX", 1.2f, 1);
-                ObjectAnimator animeY = ObjectAnimator.ofFloat(tab.getCustomView().findViewById(R.id.tab_content), "scaleY", 1.2f, 1);
-                animeSet.setDuration(120);
-                animeSet.playTogether(animeX, animeY);
-                animeSet.start();
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });*/
 
         gestureDetector = new GestureDetectorCompat(this, this);
 

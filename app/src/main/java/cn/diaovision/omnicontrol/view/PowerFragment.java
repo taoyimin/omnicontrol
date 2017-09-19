@@ -37,7 +37,7 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
 
     DeviceAdapter deviceAdapter;
     CommandAdapter commandAdapter;
-    PowerContract.Presenter presenter;
+    PowerPresenter presenter;
     ItemSelectionSupport deviceSelectionSupport;
 
     @Nullable
