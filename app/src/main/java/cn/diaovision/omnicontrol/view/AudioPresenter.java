@@ -1,23 +1,25 @@
 package cn.diaovision.omnicontrol.view;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
+import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
-import cn.diaovision.omnicontrol.model.Config;
-import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
+import cn.diaovision.omnicontrol.rx.RxSubscriber;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
+
+import static cn.diaovision.omnicontrol.MainControlActivity.matrix;
 
 /* 兼容MVVM模式的Presenter样板
  * Created by liulingfeng on 2017/4/3.
@@ -26,7 +28,7 @@ import io.reactivex.subjects.Subject;
 public class AudioPresenter implements AudioContract.Presenter {
     static final String TAG="audio";
 
-    Config cfg = new ConfigFixed();
+/*    Config cfg = new ConfigFixed();
     MediaMatrix matrix = new MediaMatrix.Builder()
             .id(cfg.getMatrixId())
             .ip(cfg.getMatrixIp())
@@ -35,7 +37,9 @@ public class AudioPresenter implements AudioContract.Presenter {
             .videoInInit(cfg.getMatrixInputVideoNum())
             .videoOutInit(cfg.getMatrixOutputVideoNum())
             .camerasInit()
-            .build();
+            .build();*/
+
+    MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
 
     //通过Subject实现ViewModel的双向绑定
     Subject bus = PublishSubject.create();
@@ -136,11 +140,29 @@ public class AudioPresenter implements AudioContract.Presenter {
         return matrix.getVideoChnSet();
     }
 
-    @Override
+/*    @Override
     public void setChannel(int input, int[] outputs, int mode) {
         matrix.updateChannel(input,outputs,mode);
-    }
+    }*/
 
+    /*一对多输出，将矩阵输入端口切换到多个输出端口*/
+    @Override
+    public void switchVideo(int portIn, int[] portOut) {
+        int res = matrixRemoter.switchVideo(portIn, portOut, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG, "Switch succeed");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG, "Switch failed");
+            }
+        });
+        if (res < 0) {
+            Log.i(TAG, "invalid switch");
+        }
+    }
     //TODO: add viewmodel operations if needed
 //    public void onTitleChanged(String str){
 //    }

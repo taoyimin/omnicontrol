@@ -46,28 +46,27 @@ public class PresetAdapter extends RecyclerView.Adapter<PresetAdapter.PresetView
         if (data == null) {
             return;
         }
-        holder.portBg.setBackgroundResource(R.drawable.button_blue_selector);
+        holder.presetBg.setBackgroundResource(R.drawable.button_blue_selector);
         //设置预置位编号背景颜色
-        holder.portBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_blue_selector));
+        holder.presetBadge.setTextColor(context.getResources().getColorStateList(R.color.port_badge_blue_selector));
         if (position < data.size()) {
             //设置预置位编号
-            holder.portBadge.setText(data.get(position).getIdx() + 1 + "");
+            holder.presetBadge.setText(position + 1 + "");
             //设置预置位别名
-            holder.portAlias.setText(data.get(position).getName());
+            holder.presetAlias.setText(data.get(position).getName());
             //设置item的选中状态
             boolean checked = getSelectionSupport().isItemChecked(position);
             holder.checkBox.setChecked(checked);
             if (checked) {
-                holder.portBg.setSelected(true);
-                holder.portBadge.setSelected(true);
+                holder.presetBg.setSelected(true);
+                holder.presetBadge.setSelected(true);
             } else {
-                holder.portBg.setSelected(false);
-                holder.portBadge.setSelected(false);
+                holder.presetBg.setSelected(false);
+                holder.presetBadge.setSelected(false);
             }
         } else {
-            holder.portBadge.setText("+");
-            //设置预置位别名
-            holder.portAlias.setText("添加预置位");
+            holder.presetBadge.setText("+");
+            holder.presetAlias.setText("添加预置位");
         }
     }
 
@@ -81,14 +80,14 @@ public class PresetAdapter extends RecyclerView.Adapter<PresetAdapter.PresetView
     }
 
     public class PresetViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.port_bg)
-        RelativeLayout portBg;
-        @BindView(R.id.port_checkbox)
+        @BindView(R.id.preset_bg)
+        RelativeLayout presetBg;
+        @BindView(R.id.preset_checkbox)
         CheckBox checkBox;
-        @BindView(R.id.port_alias)
-        TextView portAlias;
-        @BindView(R.id.port_badge)
-        TextView portBadge;
+        @BindView(R.id.preset_alias)
+        TextView presetAlias;
+        @BindView(R.id.preset_badge)
+        TextView presetBadge;
 
         public PresetViewHolder(View itemView) {
             super(itemView);

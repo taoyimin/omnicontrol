@@ -8,10 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
-import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
-import cn.diaovision.omnicontrol.model.Config;
-import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
@@ -21,23 +18,14 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
+import static cn.diaovision.omnicontrol.MainControlActivity.matrix;
+
 /* 兼容MVVM模式的Presenter样板
  * Created by liulingfeng on 2017/4/3.
  */
 
 public class CameraPresenter implements CameraContract.Presenter {
     static final String TAG="camera";
-
-    Config cfg = new ConfigFixed();
-    MediaMatrix matrix = new MediaMatrix.Builder()
-            .id(cfg.getMatrixId())
-            .ip(cfg.getMatrixIp())
-            .port(cfg.getMatrixUdpIpPort())
-            .localPreviewVideo(cfg.getMatrixPreviewIp(), cfg.getMatrixPreviewPort())
-            .videoInInit(cfg.getMatrixInputVideoNum())
-            .videoOutInit(cfg.getMatrixOutputVideoNum())
-            .camerasInit()
-            .build();
 
     MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
 
@@ -100,6 +88,7 @@ public class CameraPresenter implements CameraContract.Presenter {
         }
     }
 
+    /*摄像机移动*/
     @Override
     public void cameraCtrlGo(int portIdx, final int cmd, final int speed) {
         int res = matrixRemoter.startCameraGo(portIdx, cmd, speed, new RxSubscriber<RxMessage>() {
@@ -118,6 +107,7 @@ public class CameraPresenter implements CameraContract.Presenter {
         }
     }
 
+    /*摄像机停止*/
     @Override
     public void cameraStopGo(int portIdx) {
         int res = matrixRemoter.stopCameraGo(portIdx,new RxSubscriber<RxMessage>() {
@@ -136,6 +126,7 @@ public class CameraPresenter implements CameraContract.Presenter {
         }
     }
 
+    /*添加预置位*/
     @Override
     public void addPreset(int portIdx,int presetIdx, String name) {
         int res = matrixRemoter.storeCameraPreset(portIdx, presetIdx, name, new RxSubscriber<RxMessage>() {
@@ -155,6 +146,7 @@ public class CameraPresenter implements CameraContract.Presenter {
         }
     }
 
+    /*删除预置位*/
     @Override
     public void delPreset(int portIdx, int presetIdx) {
         int res=matrixRemoter.removeCameraPreset(portIdx,presetIdx, new RxSubscriber<RxMessage>() {
@@ -173,6 +165,7 @@ public class CameraPresenter implements CameraContract.Presenter {
         }
     }
 
+    /*调用预置位*/
     @Override
     public void loadPreset(int portIdx,int presetIdx) {
         int res = matrixRemoter.loadCameraPreset(portIdx, presetIdx, new RxSubscriber<RxMessage>() {
@@ -191,11 +184,13 @@ public class CameraPresenter implements CameraContract.Presenter {
         }
     }
 
+    /*根据端口号获取摄像机*/
     @Override
     public HiCamera getCamera(int port) {
         return matrix.getCameras().get(port);
     }
 
+    /*获取摄像机集合*/
     @Override
     public List<HiCamera> getCameraList() {
         Map<Integer,HiCamera> cameras = matrix.getCameras();
@@ -204,6 +199,25 @@ public class CameraPresenter implements CameraContract.Presenter {
             cameraList.add(camera);
         }
         return cameraList;
+    }
+
+    /*预览输入端口的流媒体时调用，将输入端口切换到流媒体卡端口*/
+    @Override
+    public void switchPreviewVideo(int portIn, int portOut){
+        int res=matrixRemoter.switchPreviewVideo(portIn, portOut, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG, "Switch preview video succeed");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG, "Switch preview video failed");
+            }
+        });
+        if (res < 0) {
+            Log.i(TAG, "invalid switch preview video");
+        }
     }
 
     //TODO: add viewmodel operations if needed

@@ -322,17 +322,17 @@ public class ItemSelectionSupport {
             if(!selects.contains(position)) {
                 //之前为未选中状态
                 selects.add(position);
-                if(mOnItemStatueListener!=null){
+/*                if(mOnItemStatueListener!=null){
                     mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
-                }
+                }*/
             }
         }else{
             if(selects.contains(position)) {
                 //之前为选中状态
                 selects.remove(selects.indexOf(position));
-                if(mOnItemStatueListener!=null){
+/*                if(mOnItemStatueListener!=null){
                     mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
-                }
+                }*/
             }
         }
     }
@@ -340,9 +340,9 @@ public class ItemSelectionSupport {
     public void clearChoices() {
         if (selects != null) {
             selects.clear();
-            if(mOnItemStatueListener!=null){
+/*            if(mOnItemStatueListener!=null){
                 mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
-            }
+            }*/
         }
     }
 
@@ -407,7 +407,7 @@ public class ItemSelectionSupport {
             }
             adapter.notifyItemChanged(position);
             if(mOnItemStatueListener!=null){
-                mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
+                //mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
             }
         } else if (mChoiceMode == ChoiceMode.SINGLE) {
             //当前处于单选模式
@@ -419,7 +419,7 @@ public class ItemSelectionSupport {
                     lastPosition = -1;
                     if(mOnItemStatueListener!=null){
                         mOnItemStatueListener.onUnSelectSingle(position);
-                        mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
+                        //mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
                     }
                 }else{
                     selects.clear();
@@ -431,7 +431,7 @@ public class ItemSelectionSupport {
                     lastPosition = position;
                     if(mOnItemStatueListener!=null){
                         mOnItemStatueListener.onSelectSingle(position);
-                        mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
+                        //mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
                     }
                 }
 
@@ -453,7 +453,7 @@ public class ItemSelectionSupport {
                     lastPosition = position;
                     if(mOnItemStatueListener!=null){
                         mOnItemStatueListener.onSelectSingle(position);
-                        mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
+                        //mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
                     }
                 } else {
                     //之前为选中状态，本次操作为取消选中
@@ -462,7 +462,7 @@ public class ItemSelectionSupport {
                     lastPosition = -1;
                     if(mOnItemStatueListener!=null){
                         mOnItemStatueListener.onUnSelectSingle(position);
-                        mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
+                        //mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
                     }
                 }
             }
@@ -481,14 +481,14 @@ public class ItemSelectionSupport {
                 selects.add(position);
                 adapter.notifyItemChanged(position);
             }
-            if(mOnItemStatueListener!=null){
+/*            if(mOnItemStatueListener!=null){
                 mOnItemStatueListener.onSelectCountChange(getCheckedItemCount());
-            }
+            }*/
         }else if(mChoiceMode== ChoiceMode.MULTIPLE){
             //如果当前为多选模式，长按则弹出对话框
-            if(mOnItemStatueListener!=null){
+/*            if(mOnItemStatueListener!=null){
                 mOnItemStatueListener.onPopupDialog(position);
-            }
+            }*/
         }
     }
 
@@ -497,8 +497,8 @@ public class ItemSelectionSupport {
         void onUnSelectSingle(int position);
         void onSelectMultiple(int position);
         void onUnSelectMultiple(int position);
-        void onPopupDialog(int position);
-        void onSelectCountChange(int count);
+        //void onPopupDialog(int position);
+        //void onSelectCountChange(int count);
     }
 
     public void setOnItemStatueListener(OnItemStatueListener mOnItemStatueListener) {

@@ -5,6 +5,12 @@
       <module fileurl="file://$PROJECT_DIR$/Omnicontrol.iml" filepath="$PROJECT_DIR$/Omnicontrol.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/dv_omnicontrol_android.iml" filepath="$PROJECT_DIR$/dv_omnicontrol_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ijkplayer-arm64/ijkplayer-arm64.iml" filepath="$PROJECT_DIR$/ijkplayer-arm64/ijkplayer-arm64.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ijkplayer-armv5/ijkplayer-armv5.iml" filepath="$PROJECT_DIR$/ijkplayer-armv5/ijkplayer-armv5.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ijkplayer-armv7a/ijkplayer-armv7a.iml" filepath="$PROJECT_DIR$/ijkplayer-armv7a/ijkplayer-armv7a.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ijkplayer-java/ijkplayer-java.iml" filepath="$PROJECT_DIR$/ijkplayer-java/ijkplayer-java.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ijkplayer-x86/ijkplayer-x86.iml" filepath="$PROJECT_DIR$/ijkplayer-x86/ijkplayer-x86.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ijkplayer-x86_64/ijkplayer-x86_64.iml" filepath="$PROJECT_DIR$/ijkplayer-x86_64/ijkplayer-x86_64.iml" />
       <module fileurl="file://$PROJECT_DIR$/vitamio/vitamio.iml" filepath="$PROJECT_DIR$/vitamio/vitamio.iml" />
     </modules>
   </component>

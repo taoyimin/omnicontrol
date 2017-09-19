@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/command_bg"
+        android:layout_width="@dimen/command_background_width"
+        android:layout_height="@dimen/command_background_height"
+        android:layout_marginTop="@dimen/command_background_marginTop"
+        android:layout_centerHorizontal="true"
+        android:background="@mipmap/button_bg">
+
+    <ImageView
+        android:id="@+id/command_image"
+        android:layout_width="@dimen/command_icon_width"
+        android:layout_height="@dimen/command_icon_height"
+        android:scaleType="centerCrop"
+        android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/command_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="+"
+            android:textColor="@color/color_c3"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/command_alias"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/command_alias_marginTop"
+        android:layout_marginBottom="@dimen/command_alias_marginBottom"
+        android:layout_below="@+id/command_bg"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/color_c3"
+        android:textSize="@dimen/text_size_f4"
+        android:layout_marginLeft="@dimen/command_alias_marginLeft"
+        android:layout_marginRight="@dimen/command_alias_marginRight"/>
+</RelativeLayout>

@@ -46,7 +46,7 @@
 
     <mcu>
         <ip>192.168.30.31</ip>
-        <port_config>554</port_config>
+        <port_config>6190</port_config>
     </mcu>
 
 </config>

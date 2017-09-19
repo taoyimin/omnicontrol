@@ -4,34 +4,34 @@
                 android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:id="@+id/port_bg"
-        android:layout_width="@dimen/port_background_width"
-        android:layout_height="@dimen/port_background_height"
-        android:layout_marginTop="@dimen/port_background_marginTop"
+        android:id="@+id/preset_bg"
+        android:layout_width="@dimen/preset_background_width"
+        android:layout_height="@dimen/preset_background_height"
+        android:layout_marginTop="@dimen/preset_background_marginTop"
         android:layout_centerHorizontal="true"
         android:background="@mipmap/button_bg">
 
         <TextView
-            android:id="@+id/port_badge"
+            android:id="@+id/preset_badge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/port_badge_textSize"
+            android:textSize="@dimen/preset_badge_textSize"
             android:layout_centerInParent="true"/>
     </RelativeLayout>
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/port_alias"
+    <TextView
+        android:id="@+id/preset_alias"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/port_alias_marginTop"
-        android:layout_marginBottom="@dimen/port_alias_marginBottom"
-        android:layout_below="@+id/port_bg"
+        android:layout_marginTop="@dimen/preset_alias_marginTop"
+        android:layout_marginBottom="@dimen/preset_alias_marginBottom"
+        android:layout_below="@+id/preset_bg"
         android:layout_centerHorizontal="true"
         android:textColor="@color/color_c3"
         android:textSize="@dimen/text_size_f4"/>
 
     <CheckBox
-        android:id="@+id/port_checkbox"
+        android:id="@+id/preset_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="false"

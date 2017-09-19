@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import cn.diaovision.omnicontrol.MainControlActivity;
 import cn.diaovision.omnicontrol.core.message.MatrixMessage;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
@@ -20,6 +21,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
 import static cn.diaovision.omnicontrol.core.message.MatrixMessage.buildMultiSwitchMessage;
+import static cn.diaovision.omnicontrol.core.message.MatrixMessage.buildSwitchMessage;
 
 /**
  * 矩阵控制器，这里用remoter，以区分controller
@@ -27,7 +29,6 @@ import static cn.diaovision.omnicontrol.core.message.MatrixMessage.buildMultiSwi
  */
 
 public class MediaMatrixRemoter {
-    int a;
     private MediaMatrix matrix;
 
     public MediaMatrixRemoter(MediaMatrix matrix) {
@@ -43,20 +44,18 @@ public class MediaMatrixRemoter {
     }
 
     /*get the matrix's online status using getId message*/
-    public int getMatrixStatus(RxSubscriber<RxMessage> subscriber){
-         if (matrix == null || !matrix.isReachable())
+    public int getMatrixStatus(RxSubscriber<RxMessage> subscriber) {
+        if (matrix == null || !matrix.isReachable())
             return -1;
-
         final byte[] bytes = MatrixMessage.buildGetIdMessage().toBytes();
         Flowable.create(new FlowableOnSubscribe<RxMessage>() {
             @Override
             public void subscribe(FlowableEmitter<RxMessage> e) throws Exception {
                 byte[] recv = matrix.getController().send(bytes, bytes.length);
-                if (recv.length > 0){
+                if (recv.length > 0) {
                     //if server response, then it is online
                     e.onNext(new RxMessage(RxMessage.DONE));
-                }
-                else {
+                } else {
                     //matrix is offline if error happens
                     e.onError(new IOException());
                 }
@@ -68,10 +67,33 @@ public class MediaMatrixRemoter {
         return 0;
     }
 
+    public int switchPreviewVideo(final int portIn, final int portOut, final RxSubscriber<RxMessage> subscriber) {
+        if (matrix == null || !matrix.isReachable())
+            return -1;
+        final MatrixMessage switchMessage = buildSwitchMessage(matrix.id, portIn, portOut);
+        Flowable.just(switchMessage)
+                .map(new Function<MatrixMessage, RxMessage>() {
+                    @Override
+                    public RxMessage apply(MatrixMessage matrixMessage) throws Exception {
+                        byte[] recv = matrix.getController().send(matrixMessage.toBytes(), matrixMessage.toBytes().length);
+                        if (recv.length > 0) {
+                            return new RxMessage(RxMessage.DONE);
+                        } else {
+                            matrix.setReachable(false);
+                            throw new IOException();
+                        }
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(subscriber);
+        return 0;
+    }
+
     public int switchVideo(final int portIn, final int[] portOut, final RxSubscriber<RxMessage> subscriber) {
         if (matrix == null || !matrix.isReachable())
             return -1;
-        List<MatrixMessage> msgList = new ArrayList<>();
+        final List<MatrixMessage> msgList = new ArrayList<>();
         for (int o : portOut) {
             int[] pout = new int[1];
             pout[0] = o;
@@ -79,14 +101,13 @@ public class MediaMatrixRemoter {
         }
         MatrixMessage multiSwitchMsg = buildMultiSwitchMessage(matrix.id, portIn, portOut);
         msgList.add(multiSwitchMsg);
-        Flowable.interval(1, TimeUnit.SECONDS)
-                .fromIterable(msgList)
-                .map(new Function<MatrixMessage, RxMessage>() {
+        Flowable.intervalRange(0,msgList.size(),0,500, TimeUnit.MILLISECONDS)
+                .map(new Function<Long, RxMessage>() {
                     @Override
-                    public RxMessage apply(MatrixMessage matrixMessage) throws Exception {
-                        byte[] recv = matrix.getController().send(matrixMessage.toBytes(), matrixMessage.toBytes().length);
+                    public RxMessage apply(Long aLong) throws Exception {
+                        MatrixMessage msg=msgList.get(aLong.intValue());
+                        byte[] recv = matrix.getController().send(msg.toBytes(), msg.toBytes().length);
                         if (recv.length > 0) {
-                            //4. send message
                             return new RxMessage(RxMessage.DONE);
                         } else {
                             matrix.setReachable(false);
@@ -97,7 +118,8 @@ public class MediaMatrixRemoter {
                 .doOnComplete(new Action() {
                     @Override
                     public void run() throws Exception {
-                        matrix.updateChannel(portIn, portOut, Channel.MOD_STITCH);
+                        matrix.updateChannel(portIn, portOut, Channel.MOD_NORMAL);
+                        MainControlActivity.cfg.setChannelSet(matrix.getVideoChnSet());
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -109,24 +131,25 @@ public class MediaMatrixRemoter {
     public int stitchVideo(final int portIn, final int columnCnt, final int rowCnt, final int[] portOut, RxSubscriber<RxMessage> subscriber) {
         if (matrix == null || !matrix.isReachable())
             return -1;
+        //WM
         MatrixMessage multiSwithMsg = buildMultiSwitchMessage(matrix.id, portIn, portOut);
+        //SP PW
         MatrixMessage stitchMsg = MatrixMessage.buildStitchMessage(matrix.id, columnCnt, rowCnt, portOut);
-        List<MatrixMessage> msgList = new ArrayList<>();
+        final List<MatrixMessage> msgList = new ArrayList<>();
         for (int o : portOut) {
             int[] pout = new int[1];
             pout[0] = o;
             msgList.add(MatrixMessage.buildStitchMessage(matrix.id, 1, 1, pout));
         }
-        msgList.add(multiSwithMsg);
         msgList.add(stitchMsg);
-        Flowable.interval(1, TimeUnit.SECONDS)
-                .fromIterable(msgList)
-                .map(new Function<MatrixMessage, RxMessage>() {
+        msgList.add(multiSwithMsg);
+        Flowable.intervalRange(0, msgList.size(), 0, 500, TimeUnit.MILLISECONDS)
+                .map(new Function<Long, RxMessage>() {
                     @Override
-                    public RxMessage apply(MatrixMessage matrixMessage) throws Exception {
-                        byte[] recv = matrix.getController().send(matrixMessage.toBytes(), matrixMessage.toBytes().length);
+                    public RxMessage apply(Long aLong) throws Exception {
+                        MatrixMessage msg = msgList.get(aLong.intValue());
+                        byte[] recv = matrix.getController().send(msg.toBytes(), msg.toBytes().length);
                         if (recv.length > 0) {
-                            //4. send message
                             return new RxMessage(RxMessage.DONE);
                         } else {
                             matrix.setReachable(false);
@@ -138,6 +161,7 @@ public class MediaMatrixRemoter {
                     @Override
                     public void run() throws Exception {
                         matrix.updateChannel(portIn, portOut, Channel.MOD_STITCH);
+                        MainControlActivity.cfg.setChannelSet(matrix.getVideoChnSet());
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -328,7 +352,6 @@ public class MediaMatrixRemoter {
         if (matrix == null || !matrix.isReachable()) {
             return -1;
         }
-
         Flowable.just(str)
                 .map(new Function<String, RxMessage>() {
                     @Override
@@ -351,7 +374,6 @@ public class MediaMatrixRemoter {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(subscriber);
-
         return 0;
     }
 

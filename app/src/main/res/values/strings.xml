@@ -30,8 +30,26 @@
     <string name="dialog_port_attribute">附加属性</string>
     <string name="dialog_button_confirm">确&#160;&#160;&#160;&#160;认</string>
     <string name="dialog_button_delete">删&#160;&#160;&#160;&#160;除</string>
+    <string name="dialog_button_cancel">取&#160;&#160;&#160;&#160;消</string>
     <string name="dialog_channel_type">一对多分割屏</string>
     <string name="dialog_preset_alias">名&#160;&#160;称</string>
+    <string name="dialog_camera_alias">相机名称</string>
+    <string name="dialog_camera_address">相机地址</string>
+    <string name="dialog_camera_baudrate">波&#160;&#160;特&#160;&#160;率</string>
+    <string name="dialog_camera_proto">协议类型</string>
+    <string name="dialog_device_category">设备类型</string>
+    <string name="dialog_device_ip">网络地址</string>
+    <string name="dialog_device_port">通信端口</string>
+    <string name="dialog_device_alias">设备名称</string>
+    <string name="dialog_command_alias">指令名称</string>
+    <string name="dialog_command_string_cmd">字符指令</string>
+    <string name="dialog_command_byte_cmd">字节指令</string>
+
+    <!--power-->
+    <string name="power_progress_hint">正在获取设备状态</string>
+    <string name="power_communicate_port">通信端口</string>
+    <string name="power_device_recycler">设备列表</string>
+    <string name="power_button_recycler">指令列表</string>
 
     <!--video-->
     <string name="video_input">输入端</string>
@@ -47,17 +65,20 @@
     <string name="camera_logo">摄像机</string>
     <string name="preset_logo">预置位</string>
 
+    <!--baudrate-->
+
     <!--term hide layout-->
     <string name="term_black">黑屏</string>
     <string name="term_mute">消音</string>
     <string name="term_hangup">删除</string>
 
     <!--config-->
-    <string name="config_title">获取配置表</string>
-    <string name="config_ip1">IP1:</string>
-    <string name="config_ip2">IP2:</string>
-    <string name="config_ip3">IP3:</string>
-    <string name="config_type">型号:</string>
+    <string name="config_title">配置信息</string>
+    <string name="matrix_ip">网络地址:</string>
+    <string name="matrix_port">通信端口:</string>
+    <string name="matrix_id">矩阵编号:</string>
+    <string name="config_username">登录账号:</string>
+    <string name="config_password">登录密码:</string>
     <string name="config_subtitle">请输入默认字幕</string>
     <string name="config_commit">提交</string>
     <string name="config_reset">重置</string>

@@ -1,120 +1,282 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6"
-        android:orientation="horizontal"
-        android:paddingLeft="100dp"
-        android:paddingRight="100dp">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
-            android:text="预留区"
-            android:gravity="center"
-            android:background="#fff"
-            android:textSize="@dimen/text_size_f1"/>
-
-        <cn.diaovision.omnicontrol.widget.VideoLayout
-            android:id="@+id/video_layout"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/auxiliary"
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:layout_height="match_parent">
-
-        </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/layout_top"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5"
+        android:layout_marginTop="@dimen/video_layoutTop_marginTop"
+        android:layout_weight="1.1"
         android:orientation="horizontal">
 
-        <cn.diaovision.omnicontrol.widget.PortRadioGroupView
-            android:id="@+id/input"
+        <RelativeLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@color/panel_input"
-            android:layout_height="match_parent">
-
-        </cn.diaovision.omnicontrol.widget.PortRadioGroupView>
-
-        <cn.diaovision.omnicontrol.widget.PortRadioGroupView
-            android:id="@+id/output"
-            android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:background="@color/panel_output">
+            android:layout_weight="3">
 
-        </cn.diaovision.omnicontrol.widget.PortRadioGroupView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:background="@color/color_c2">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/scene_recycler"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/widget_margin"
+                        android:background="@color/color_c3"
+                        android:paddingBottom="@dimen/scene_item_marginBottom"
+                        android:paddingTop="@dimen/scene_item_marginTop">
+
+                    </android.support.v7.widget.RecyclerView>
+                </LinearLayout>
+            </LinearLayout>
+
+            <cn.diaovision.omnicontrol.widget.AssistDrawerLayout
+                android:id="@+id/assist_drawer_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </cn.diaovision.omnicontrol.widget.AssistDrawerLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/widget_margin"
+            android:layout_marginRight="@dimen/widget_margin"
+            android:layout_weight="4"
+            android:orientation="vertical">
+
+            <cn.diaovision.omnicontrol.widget.VideoLayout
+                android:id="@+id/video_layout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="9">
+
+            </cn.diaovision.omnicontrol.widget.VideoLayout>
+
+            <EditText
+                android:id="@+id/edit_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/widget_margin"
+                android:layout_weight="1"
+                android:background="@color/color_c7"
+                android:gravity="center"
+                android:hint="@string/video_edit_hint"
+                android:paddingLeft="@dimen/video_editView_paddingLeft"
+                android:textColorHint="@color/edit_hint_color"
+                android:textCursorDrawable="@null"
+                android:textSize="@dimen/text_size_f2"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@color/color_c2">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/auxiliary_recycler"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/widget_margin"
+                    android:background="@color/color_c3">
+
+                </android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+            </RelativeLayout>
+        </LinearLayout>
     </LinearLayout>
 
-<!--    <RelativeLayout
-        android:id="@+id/display_panel"
+    <LinearLayout
+        android:id="@+id/layout_bottom"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/video_layoutBottom_marginTop"
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
-        <VideoView
-            android:id="@+id/video_main"
-            android:layout_width="800dp"
-            android:layout_height="900dp"
-            android:layout_centerHorizontal="true"/>
-    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-    <android.support.percent.PercentRelativeLayout
-        xmlns:appCompat="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.2"
+                android:orientation="horizontal">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/txt_input"
-            android:layout_height="wrap_content"
-            android:background="@drawable/panel_title_bg"
-            android:gravity="center"
-            android:paddingBottom="@dimen/widget_padding"
-            android:paddingTop="@dimen/widget_padding"
-            android:text="@string/txt_input"
-            android:textAppearance="@style/PannelTitleText"
-            appCompat:layout_widthPercent="50%"/>
+                <RelativeLayout
+                    android:layout_width="@dimen/video_port_logo_width"
+                    android:layout_height="match_parent">
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/txt_output"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/txt_input"
-            android:background="@drawable/panel_title_bg"
-            android:gravity="center"
-            android:paddingBottom="@dimen/widget_padding"
-            android:paddingTop="@dimen/widget_padding"
-            android:text="@string/txt_output"
-            android:textAppearance="@style/PannelTitleText"
-            appCompat:layout_widthPercent="50%"/>
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/angle_bg_left"/>
 
-        <cn.diaovision.omnicontrol.widget.PortRadioGroupView
-            android:id="@+id/input"
-            android:layout_height="300dp"
-            android:layout_below="@+id/txt_input"
-            android:background="@color/panel_input"
-            appCompat:layout_widthPercent="50%"
-            />
+                    <ImageView
+                        android:id="@+id/icon_input"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/video_port_logo_image_margin"
+                        android:src="@mipmap/input"/>
 
-        <cn.diaovision.omnicontrol.widget.PortRadioGroupView
-            android:id="@+id/output"
-            android:layout_height="300dp"
-            android:layout_below="@+id/txt_input"
-            android:layout_toRightOf="@+id/input"
-            android:background="@color/panel_output"
-            appCompat:layout_widthPercent="50%"/>
-    </android.support.percent.PercentRelativeLayout>-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="@dimen/video_port_logo_text_margin"
+                        android:layout_toRightOf="@id/icon_input"
+                        android:text="@string/video_input"
+                        android:textColor="@color/color_c5"
+                        android:textSize="@dimen/text_size_f2"/>
+                </RelativeLayout>
 
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/recycler_border_width"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/recycler_border_color"/>
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/input"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/color_c2"
+                    android:overScrollMode="never"
+                    android:paddingLeft="@dimen/video_port_recycler_paddingLeft"
+                    android:paddingRight="@dimen/video_port_recycler_paddingRight"
+                    android:paddingTop="@dimen/video_port_recycler_paddingTop">
+
+                </android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/widget_margin"
+            android:layout_height="match_parent">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1.2"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/recycler_border_width"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/recycler_border_color"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="@dimen/video_port_logo_width"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/angle_bg_right"/>
+
+                    <ImageView
+                        android:id="@+id/icon_output"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/video_port_logo_image_margin"
+                        android:src="@mipmap/output"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="@dimen/video_port_logo_text_margin"
+                        android:layout_toLeftOf="@id/icon_output"
+                        android:text="@string/video_output"
+                        android:textColor="@color/color_c5"
+                        android:textSize="@dimen/text_size_f2"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/output"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/color_c2"
+                    android:overScrollMode="never"
+                    android:paddingLeft="@dimen/video_port_recycler_paddingLeft"
+                    android:paddingRight="@dimen/video_port_recycler_paddingRight"
+                    android:paddingTop="@dimen/video_port_recycler_paddingTop">
+                </android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

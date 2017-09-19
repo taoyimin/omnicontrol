@@ -7,12 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
 import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrixRemoter;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
-import cn.diaovision.omnicontrol.model.Config;
-import cn.diaovision.omnicontrol.model.ConfigFixed;
 import cn.diaovision.omnicontrol.rx.RxExecutor;
 import cn.diaovision.omnicontrol.rx.RxMessage;
 import cn.diaovision.omnicontrol.rx.RxReq;
@@ -22,22 +19,14 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
+import static cn.diaovision.omnicontrol.MainControlActivity.matrix;
+
 /* 兼容MVVM模式的Presenter样板
  * Created by liulingfeng on 2017/4/3.
  */
 
 public class VideoPresenter implements VideoContract.Presenter {
-    static final String TAG="video";
-    Config cfg = new ConfigFixed();
-    MediaMatrix matrix = new MediaMatrix.Builder()
-            .id(cfg.getMatrixId())
-            .ip(cfg.getMatrixIp())
-            .port(cfg.getMatrixUdpIpPort())
-            .localPreviewVideo(cfg.getMatrixPreviewIp(), cfg.getMatrixPreviewPort())
-            .videoInInit(cfg.getMatrixInputVideoNum())
-            .videoOutInit(cfg.getMatrixOutputVideoNum())
-            .build();
-
+    static final String TAG = "video";
     MediaMatrixRemoter matrixRemoter = new MediaMatrixRemoter(matrix);
 
     //通过Subject实现ViewModel的双向绑定
@@ -52,7 +41,6 @@ public class VideoPresenter implements VideoContract.Presenter {
     };
 
     Disposable subscription;
-
 
     /*double binding between view and presenter*/
     @NonNull
@@ -98,52 +86,72 @@ public class VideoPresenter implements VideoContract.Presenter {
         }
     }
 
+    /*获取输入端口对应的输出端口数组*/
     @Override
     public int[] getOutputIdx(int inputIdx) {
-        Set<Channel> chnSet=matrix.getVideoChnSet();
-        Iterator<Channel> iterator=chnSet.iterator();
-        while (iterator.hasNext()){
-            Channel channel=iterator.next();
-            if(channel.getInputIdx()==inputIdx){
+        Set<Channel> chnSet = matrix.getVideoChnSet();
+        Iterator<Channel> iterator = chnSet.iterator();
+        while (iterator.hasNext()) {
+            Channel channel = iterator.next();
+            if (channel.getInputIdx() == inputIdx) {
                 return channel.getOutputIdx();
             }
         }
         return null;
     }
 
+    /*获取输出端口对应的输入端口*/
     @Override
     public int getInputIdx(int outputIdx) {
-        Set<Channel> chnSet=matrix.getVideoChnSet();
-        Iterator<Channel> iterator=chnSet.iterator();
-        while (iterator.hasNext()){
-            Channel channel=iterator.next();
-            if(channel.containOutputIdx(outputIdx)){
+        Set<Channel> chnSet = matrix.getVideoChnSet();
+        Iterator<Channel> iterator = chnSet.iterator();
+        while (iterator.hasNext()) {
+            Channel channel = iterator.next();
+            if (channel.containOutputIdx(outputIdx)) {
                 return channel.getInputIdx();
             }
         }
         return -1;
     }
 
+    /*获取矩阵输入端口的集合*/
     @Override
     public List<Port> getInputList() {
         return matrix.getVideoInPort();
     }
 
+    /*获取矩阵输出端口的集合*/
     @Override
     public List<Port> getOutputList() {
         return matrix.getVideoOutPort();
     }
 
+    /*获取矩阵已配置好的通道集合*/
     @Override
-    public Set<Channel> getChannelSet(){
+    public Set<Channel> getChannelSet() {
         return matrix.getVideoChnSet();
     }
 
+    /*预览输入端口的流媒体时调用，将输入端口切换到流媒体卡端口*/
     @Override
-    public void setChannel(int input, int[] outputs, int mode) {
-        matrix.updateChannel(input,outputs,mode);
+    public void switchPreviewVideo(int portIn, int portOut) {
+        int res = matrixRemoter.switchPreviewVideo(portIn, portOut, new RxSubscriber<RxMessage>() {
+            @Override
+            public void onRxResult(RxMessage rxMessage) {
+                Log.i(TAG, "Switch preview video succeed");
+            }
+
+            @Override
+            public void onRxError(Throwable e) {
+                Log.i(TAG, "Switch preview video failed");
+            }
+        });
+        if (res < 0) {
+            Log.i(TAG, "invalid switch preview video");
+        }
     }
 
+    /*一对多输出，将矩阵输入端口切换到多个输出端口*/
     @Override
     public void switchVideo(int portIn, int[] portOut) {
         int res = matrixRemoter.switchVideo(portIn, portOut, new RxSubscriber<RxMessage>() {
@@ -162,9 +170,10 @@ public class VideoPresenter implements VideoContract.Presenter {
         }
     }
 
+    /*一对多输出（局部分割），将矩阵输入端口分割成多个画面输出到多个输出端口*/
     @Override
-    public void stitchVideo( int portIn,  int columnCnt,  int rowCnt,  int[] portOut) {
-        int res = matrixRemoter.stitchVideo( portIn,   columnCnt,   rowCnt, portOut, new RxSubscriber<RxMessage>() {
+    public void stitchVideo(int portIn, int columnCnt, int rowCnt, int[] portOut) {
+        int res = matrixRemoter.stitchVideo(portIn, columnCnt, rowCnt, portOut, new RxSubscriber<RxMessage>() {
             @Override
             public void onRxResult(RxMessage rxMessage) {
                 Log.i(TAG, "Stitch succeed");
@@ -180,25 +189,22 @@ public class VideoPresenter implements VideoContract.Presenter {
         }
     }
 
+    /*矩阵端口叠加字幕*/
     @Override
     public void setSubtitle(int portIdx, String str) {
-        int res=matrixRemoter.setSubtitle(portIdx, str, new RxSubscriber<RxMessage>() {
+        int res = matrixRemoter.setSubtitle(portIdx, str, new RxSubscriber<RxMessage>() {
             @Override
             public void onRxResult(RxMessage rxMessage) {
-                Log.i(TAG,"set subtitle success");
+                Log.i(TAG, "set subtitle success");
             }
 
             @Override
             public void onRxError(Throwable e) {
-                Log.i(TAG,"set subtitle failed");
+                Log.i(TAG, "set subtitle failed");
             }
         });
-        if(res<0){
-            Log.i(TAG,"invalid set subtitle");
+        if (res < 0) {
+            Log.i(TAG, "invalid set subtitle");
         }
     }
-
-    //TODO: add viewmodel operations if needed
-    //    public void onTitleChanged(String str){
-    //    }
 }

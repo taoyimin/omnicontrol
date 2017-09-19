@@ -32,5 +32,7 @@ public interface CameraContract {
         HiCamera getCamera(int port);
 
         List<HiCamera> getCameraList();
+
+        void switchPreviewVideo(int portIn, int portOut);
     }
 }

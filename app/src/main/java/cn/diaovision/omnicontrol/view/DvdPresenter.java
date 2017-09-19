@@ -14,7 +14,7 @@ import io.reactivex.subjects.Subject;
  * Created by liulingfeng on 2017/4/3.
  */
 
-public class DvdPresenter implements PowerContract.Presenter {
+public class DvdPresenter implements DvdContract.Presenter {
 
     //通过Subject实现ViewModel的双向绑定
     Subject bus = PublishSubject.create();

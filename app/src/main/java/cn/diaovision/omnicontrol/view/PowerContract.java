@@ -1,7 +1,11 @@
 package cn.diaovision.omnicontrol.view;
 
+import java.util.List;
+
 import cn.diaovision.omnicontrol.BasePresenter;
 import cn.diaovision.omnicontrol.BaseView;
+import cn.diaovision.omnicontrol.core.model.device.common.Device;
+import cn.diaovision.omnicontrol.core.model.device.common.DeviceLog;
 
 /* *
  * view + presenter统一的接口
@@ -12,10 +16,13 @@ import cn.diaovision.omnicontrol.BaseView;
 
 public interface PowerContract {
     interface View extends BaseView<Presenter>{
-//        void changeTitle();
+        void showToast(String str);
+        void notifyLogChange(int fromIndex,int count);
     }
 
     interface Presenter extends BasePresenter{
-//        void func();
+        List<Device> getDeviceList();
+        void sendCommand(Device device, Device.Command cmd);
+        List<DeviceLog> getLogList();
     }
 }

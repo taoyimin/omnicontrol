@@ -1,12 +1,13 @@
 package cn.diaovision.omnicontrol.model;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import cn.diaovision.omnicontrol.core.model.device.common.Device;
 import cn.diaovision.omnicontrol.core.model.device.endpoint.HiCamera;
 import cn.diaovision.omnicontrol.core.model.device.matrix.io.Channel;
+import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 
 /**
  * Created by liulingfeng on 2017/4/24.
@@ -26,6 +27,16 @@ public class ConfigFixed implements Config{
     @Override
     public String getMainPasswd() {
         return "diaovision";
+    }
+
+    @Override
+    public void setMainName(String name) {
+
+    }
+
+    @Override
+    public void setMainPasswd(String password) {
+
     }
 
     @Override
@@ -65,8 +76,18 @@ public class ConfigFixed implements Config{
     }
 
     @Override
+    public void setMatrixId(String id) {
+
+    }
+
+    @Override
     public String getMatrixIp() {
-        return "192.168.10.12";
+        return "192.168.10.11";
+    }
+
+    @Override
+    public void setMatrixIp(String ip) {
+
     }
 
     @Override
@@ -75,38 +96,18 @@ public class ConfigFixed implements Config{
     }
 
     @Override
+    public void setMatrixUdpIpPort(String port) {
+
+    }
+
+    @Override
     public String getMatrixPreviewIp() {
         return "192.168.10.31";
     }
 
     @Override
-    public int getMatrixPreviewIpPort() {
-        return 554;
-    }
-
-    @Override
     public int getMatrixPreviewPort() {
         return 29;
-    }
-
-    @Override
-    public int getMatrixInputVideoNum() {
-        return 32;
-    }
-
-    @Override
-    public int getMatrixOutputVideoNum() {
-        return 32;
-    }
-
-    @Override
-    public byte getSubtitleFontSize() {
-        return 13;
-    }
-
-    @Override
-    public byte getSubtitleFontColor() {
-        return 10;
     }
 
     @Override
@@ -120,18 +121,63 @@ public class ConfigFixed implements Config{
     }
 
     @Override
-    public Date getConfStartDate() {
-        return new Date();
+    public List<Port> getInputPortList() {
+        return null;
     }
 
     @Override
-    public Date getConfEndDate() {
-        Date date = new Date();
-        Calendar calendar = Calendar. getInstance();
-        calendar.setTime(date);
-        calendar. add(Calendar.HOUR, 1);
-        return date;
+    public List<Port> getOutputPortList() {
+        return null;
     }
 
+    @Override
+    public void setPort(Port port) {
+
+    }
+
+    @Override
+    public void setChannelSet(Set<Channel> channelSet) {
+
+    }
+
+    @Override
+    public void setPreviewVideoPort(int portIdx) {
+
+    }
+
+    @Override
+    public void setCamera(HiCamera hiCamera) {
+
+    }
+
+    @Override
+    public void deleteCamera(HiCamera camera) {
+
+    }
+
+    @Override
+    public void setCameraPreset(int cameraIdx, HiCamera.Preset preset) {
+
+    }
+
+    @Override
+    public void addCameraPreset(int cameraIdx, HiCamera.Preset preset) {
+
+    }
+
+    @Override
+    public void deleteCameraPreset(int cameraIdx, HiCamera.Preset preset) {
+
+    }
+
+    @Override
+    public List<Device> getDeviceList() {
+        return null;
+    }
+
+    @Override
+    public void setDeviceList(List<Device> devices) {
+
+    }
 
 }

@@ -17,6 +17,9 @@ import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 
 public interface VideoContract {
     interface View extends BaseView<Presenter>{
+        //void initScene(List<Scene> list);
+        void showToast(String string);
+        //void refreshSceneList();
     }
 
     interface Presenter extends BasePresenter{
@@ -25,15 +28,19 @@ public interface VideoContract {
         List<Port> getInputList();
         List<Port> getOutputList();
         Set<Channel> getChannelSet();
-        void setChannel(int input, int[] outputs,int mode);
+        //void setChannel(int input, int[] outputs,int mode);
         void switchVideo(int portIn, int[] portOut);
         void stitchVideo(int portIn,  int columnCnt,  int rowCnt,  int[] portOut);
+        void switchPreviewVideo(int portIn, int portOut);
         void setSubtitle(int portIdx, String str);
+        //void getSceneList(int group);
+        //void loadSceneList(int sceneId);
+        //void renameScene(int sceneId,String name,int groupId);
 
-        interface PortStateListener{
+/*        interface PortStateListener{
             void onPreviewDisconnected();
             void onPreviewConnected();
             void onMatrixDisconnected();
-        }
+        }*/
     }
 }

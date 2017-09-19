@@ -1,9 +1,11 @@
 package cn.diaovision.omnicontrol.view;
 
 import java.util.Date;
+import java.util.List;
 
 import cn.diaovision.omnicontrol.BasePresenter;
 import cn.diaovision.omnicontrol.BaseView;
+import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 
 /* *
  * view + presenter统一的接口
@@ -18,6 +20,8 @@ public interface ConferenceContract {
 
     interface Presenter extends BasePresenter {
         boolean login(String name, String passwd);
+
+        List<Port> getInputPortList();
 
         void setSubtitle(int portIdx, String str);
 

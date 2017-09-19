@@ -63,4 +63,10 @@ public class DateHelper {
         cal.setTime(date);
         return cal.get(Calendar.MINUTE);
     }
+
+    public int getSec(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.SECOND);
+    }
 }

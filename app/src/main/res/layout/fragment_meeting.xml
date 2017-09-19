@@ -38,7 +38,6 @@
                     android:background="@color/color_c3">
 
                     <TextView
-                        android:id="@+id/reserved"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
@@ -92,6 +91,7 @@
                     android:layout_weight="9">
 
                     <RadioGroup
+                        android:id="@+id/radio_group"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -99,7 +99,7 @@
                         android:orientation="vertical">
 
                         <RadioButton
-                            android:id="@+id/start_conf"
+                            android:id="@+id/conf_start"
                             android:layout_width="@dimen/meeting_radio_button_width"
                             android:layout_height="@dimen/meeting_radio_button_height"
                             android:background="@drawable/meeting_opening_selector"
@@ -112,7 +112,7 @@
                             android:text="开始会议"/>
 
                         <RadioButton
-                            android:id="@+id/end_conf"
+                            android:id="@+id/conf_end"
                             android:layout_width="47.04dp"
                             android:layout_height="47.04dp"
                             android:layout_marginTop="28.36dp"
@@ -204,9 +204,9 @@
                     android:layout_height="match_parent"
                     android:background="@color/color_c2"
                     android:overScrollMode="never"
-                    android:paddingLeft="@dimen/video_port_recycler_marginLeft"
-                    android:paddingRight="@dimen/video_port_recycler_marginRight"
-                    android:paddingTop="@dimen/video_port_recycler_marginTop">
+                    android:paddingLeft="@dimen/meeting_port_recycler_paddingLeft"
+                    android:paddingRight="@dimen/meeting_port_recycler_paddingRight"
+                    android:paddingTop="@dimen/meeting_port_recycler_paddingTop">
 
                 </android.support.v7.widget.RecyclerView>
             </RelativeLayout>
@@ -230,85 +230,3 @@
         </cn.diaovision.omnicontrol.widget.RecyclerViewWithSlidingItem>
     </RelativeLayout>
 </LinearLayout>
-    <!--
-    <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:clipChildren="false">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_weight="8"
-            android:layout_height="match_parent">
-
-            <RelativeLayout
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/start_conf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="开始会议"/>
-
-                <Button
-                    android:id="@+id/end_conf"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="结束会议"
-                    android:layout_below="@id/start_conf"/>
-
-                <EditText
-                    android:id="@+id/subtitle_edit"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/end_conf"/>
-
-                <Button
-                    android:id="@+id/commit_subtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="设置字幕"
-                    android:layout_below="@id/subtitle_edit"/>
-
-                <RelativeLayout
-                    android:id="@+id/video_layout"
-                    android:layout_width="400dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:background="#0ff">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="20sp"
-                        android:text="position=666"
-                        android:layout_centerInParent="true"/>
-                </RelativeLayout>
-
-            </RelativeLayout>
-
-            <cn.diaovision.omnicontrol.widget.PortRadioGroupView
-                android:id="@+id/port"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                android:layout_height="0dp">
-
-            </cn.diaovision.omnicontrol.widget.PortRadioGroupView>
-
-        </LinearLayout>
-
-        <cn.diaovision.omnicontrol.widget.RecyclerViewWithSlidingItem
-            android:id="@+id/auxiliary_recycler"
-            android:layout_width="0dp"
-            android:layout_weight="3"
-            android:layout_height="match_parent"
-            android:clipChildren="false">
-        </cn.diaovision.omnicontrol.widget.RecyclerViewWithSlidingItem>
-    </LinearLayout>-->

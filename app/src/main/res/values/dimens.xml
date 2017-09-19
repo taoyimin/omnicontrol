@@ -60,12 +60,58 @@
     <dimen name="port_alias_marginLeft">7dp</dimen>
     <dimen name="port_alias_marginRight">7dp</dimen>
     <dimen name="port_badge_textSize">13sp</dimen>
+
+    <!--recycler view preset item-->
+    <dimen name="preset_background_width">60.18dp</dimen>
+    <dimen name="preset_background_height">60.18dp</dimen>
+    <dimen name="preset_background_marginTop">10.03dp</dimen>
+    <dimen name="preset_alias_marginTop">6.92dp</dimen>
+    <dimen name="preset_alias_marginBottom">10.03dp</dimen>
+    <dimen name="preset_badge_textSize">13sp</dimen>
+
+    <!--recycler view device item-->
+    <dimen name="device_background_width">60.18dp</dimen>
+    <dimen name="device_background_height">60.18dp</dimen>
+    <dimen name="device_icon_width">38.12dp</dimen>
+    <dimen name="device_icon_height">38.12dp</dimen>
+    <dimen name="device_background_marginTop">10.03dp</dimen>
+    <dimen name="device_alias_marginTop">6.92dp</dimen>
+    <dimen name="device_alias_marginBottom">10.03dp</dimen>
+    <dimen name="device_alias_marginLeft">7dp</dimen>
+    <dimen name="device_alias_marginRight">7dp</dimen>
+
+    <!--recycler view device item-->
+    <dimen name="command_background_width">60.18dp</dimen>
+    <dimen name="command_background_height">60.18dp</dimen>
+    <dimen name="command_icon_width">34.12dp</dimen>
+    <dimen name="command_icon_height">34.12dp</dimen>
+    <dimen name="command_background_marginTop">10.03dp</dimen>
+    <dimen name="command_alias_marginTop">6.92dp</dimen>
+    <dimen name="command_alias_marginBottom">10.03dp</dimen>
+    <dimen name="command_alias_marginLeft">7dp</dimen>
+    <dimen name="command_alias_marginRight">7dp</dimen>
     
     <!--recycler view term item-->
     <dimen name="term_slide_height">72.93dp</dimen>
     <dimen name="term_slide_marginTop">3.38dp</dimen>
     <dimen name="term_slide_marginBottom">3.38dp</dimen>
     <dimen name="term_image_width">130.8dp</dimen>
+
+    <!--recycler view scene item-->
+    <dimen name="scene_item_height">40.93dp</dimen>
+    <dimen name="scene_item_marginTop">3.38dp</dimen>
+    <dimen name="scene_item_marginBottom">3.38dp</dimen>
+    <dimen name="scene_item_marginRight">6.76dp</dimen>
+    <dimen name="scene_item_marginLeft">6.76dp</dimen>
+    <dimen name="scene_id_width">50dp</dimen>
+
+    <!--recycler view power item-->
+    <dimen name="power_item_image_width">50dp</dimen>
+    <dimen name="power_item_image_height">50dp</dimen>
+    <dimen name="power_item_padding">10dp</dimen>
+    <dimen name="power_item_width">140dp</dimen>
+    <dimen name="power_item_height">140dp</dimen>
+    <dimen name="power_item_add_margin">40dp</dimen>
 
     <!--term hide layout-->
     <dimen name="term_hide_width">204dp</dimen>
@@ -88,6 +134,24 @@
     <dimen name="dialog_button_select_marginRight">10.38dp</dimen>
     <dimen name="dialog_icon_category_marginLeft">42.19dp</dimen>
 
+    <!--power fragment-->
+    <dimen name="power_device_logo_width">170dp</dimen>
+    <dimen name="power_button_logo_width">170dp</dimen>
+    <dimen name="power_log_recycler_marginLeft">100dp</dimen>
+    <dimen name="power_log_recycler_marginRight">100dp</dimen>
+    <dimen name="power_log_recycler_marginTop">5dp</dimen>
+    <dimen name="power_log_recycler_marginBottom">5dp</dimen>
+    <dimen name="power_device_logo_image_margin">32.5dp</dimen>
+    <dimen name="power_button_logo_image_margin">32.5dp</dimen>
+    <dimen name="power_device_logo_text_margin">15dp</dimen>
+    <dimen name="power_button_logo_text_margin">15dp</dimen>
+    <dimen name="power_device_recycler_paddingLeft">8.65dp</dimen>
+    <dimen name="power_device_recycler_paddingRight">8.65dp</dimen>
+    <dimen name="power_device_recycler_paddingTop">9.34dp</dimen>
+    <dimen name="power_button_recycler_paddingLeft">8.65dp</dimen>
+    <dimen name="power_button_recycler_paddingRight">8.65dp</dimen>
+    <dimen name="power_button_recycler_paddingTop">9.34dp</dimen>
+
     <!--video fragment-->
     <dimen name="video_layoutTop_marginTop">2.77dp</dimen>
     <dimen name="video_layoutBottom_marginTop">4.15dp</dimen>
@@ -95,9 +159,9 @@
     <dimen name="video_port_logo_width">150dp</dimen>
     <dimen name="video_port_logo_image_margin">32.5dp</dimen>
     <dimen name="video_port_logo_text_margin">15dp</dimen>
-    <dimen name="video_port_recycler_marginLeft">8.65dp</dimen>
-    <dimen name="video_port_recycler_marginRight">8.65dp</dimen>
-    <dimen name="video_port_recycler_marginTop">9.34dp</dimen>
+    <dimen name="video_port_recycler_paddingLeft">8.65dp</dimen>
+    <dimen name="video_port_recycler_paddingRight">8.65dp</dimen>
+    <dimen name="video_port_recycler_paddingTop">9.34dp</dimen>
 
     <!--camera fragment-->
     <dimen name="camera_layoutTop_marginTop">2.77dp</dimen>
@@ -131,12 +195,18 @@
     <dimen name="meeting_term_recycler_paddingLeft">15.04dp</dimen>
     <dimen name="meeting_radio_button_width">47.04dp</dimen>
     <dimen name="meeting_radio_button_height">47.04dp</dimen>
+    <dimen name="meeting_port_recycler_paddingLeft">8.65dp</dimen>
+    <dimen name="meeting_port_recycler_paddingRight">8.65dp</dimen>
+    <dimen name="meeting_port_recycler_paddingTop">9.34dp</dimen>
 
     <!--audio fragment-->
     <dimen name="audio_seekBar_maxHeight">6.77dp</dimen>
     <dimen name="audio_seekBarWrapper_width">45.11dp</dimen>
     <dimen name="audio_seekBarWrapper_marginBottom">-10dp</dimen>
     <dimen name="audio_seekBarWrapper_marginTop">5dp</dimen>
+    <dimen name="audio_port_recycler_paddingLeft">8.65dp</dimen>
+    <dimen name="audio_port_recycler_paddingRight">8.65dp</dimen>
+    <dimen name="audio_port_recycler_paddingTop">9.34dp</dimen>
     
     <!--config fragment-->
     <dimen name="config_item_width">327.07dp</dimen>

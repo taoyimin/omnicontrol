@@ -12,9 +12,18 @@
 
     <!--text color in white themes-->
     <color name="text_body_light">#555555</color>
+    <color name="text_device_na">#e6e6e6</color>
+    <color name="text_device_off">#ff5f3b</color>
+    <color name="text_device_on">#a4ef5f</color>
 
     <!--login title text color-->
     <color name="login_title_text">#cad3d7</color>
+
+    <!--power power_logo_device item text color-->
+    <color name="common_device_text">#ededed</color>
+
+    <!--power recycler item background color-->
+    <color name="common_device_background">#4d4d4d</color>
 
     <!--botton colors-->
     <color name="btn_light_bg">#57d2f7</color>
@@ -79,4 +88,8 @@
     <color name="video_blue">#01dff4</color>
     <color name="desktop_yellow">#fecd56</color>
     <color name="output_return_red">#ff5f3b</color>
+    <color name="voice_blue_green">#60d0b4</color>
+    <color name="voice_orange">#e77c0a</color>
+    <color name="voice_purple">#af60d0</color>
+    <color name="voice_sky_blue">#6078d0</color>
 </resources>

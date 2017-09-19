@@ -6,7 +6,6 @@ package cn.diaovision.omnicontrol.core.model.device;
  */
 
 public class State {
-
     static public final int ON = 0;
     static public final int OFF = 1;
     static public final int ERR = 2;

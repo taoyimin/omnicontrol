@@ -38,6 +38,12 @@ public class VerticalSeekBar extends com.h6ah4i.android.widget.verticalseekbar.V
         Drawable drawable = this.getThumb();
         // 得到放拖快图片的矩形。
         mRect = drawable.getBounds();
+/*        int height=Math.abs(mRect.right-mRect.left);
+        int width=Math.abs(mRect.bottom=mRect.top);
+        mRect.left=mRect.left-width/2;
+        mRect.right=mRect.right+width/2;
+        mRect.top=mRect.top-height/2;
+        mRect.bottom=mRect.bottom+height/2;*/
     }
 
     @Override
@@ -62,9 +68,15 @@ public class VerticalSeekBar extends com.h6ah4i.android.widget.verticalseekbar.V
 
     private boolean banAction(float x, float y) {
         if (mRect != null) {
-            if (mRect.contains((int) (x), (int) (y))) {
+/*            if (mRect.contains((int) (x), (int) (y))) {
+                Log.i("info","true");
                 return true;
             } else {
+                return false;
+            }*/
+            if(Math.abs(x-mRect.centerX())<mRect.width()&&Math.abs(y-mRect.centerY())<mRect.height()){
+                return true;
+            }else{
                 return false;
             }
         } else {

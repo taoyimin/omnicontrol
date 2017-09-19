@@ -5,70 +5,46 @@ import android.content.DialogInterface;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import cn.diaovision.omnicontrol.BaseFragment;
 import cn.diaovision.omnicontrol.R;
 import cn.diaovision.omnicontrol.core.model.conference.Term;
-import cn.diaovision.omnicontrol.core.model.device.matrix.io.Port;
 import cn.diaovision.omnicontrol.model.Config;
 import cn.diaovision.omnicontrol.model.ConfigFixed;
-import cn.diaovision.omnicontrol.rx.RxMessage;
-import cn.diaovision.omnicontrol.rx.RxSubscriber;
 import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
-import cn.diaovision.omnicontrol.widget.TermItemTouchCallback;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
 import cn.diaovision.omnicontrol.widget.RecyclerViewWithSlidingItem;
 import cn.diaovision.omnicontrol.widget.SlidingItemView;
+import cn.diaovision.omnicontrol.widget.TermItemTouchCallback;
 import cn.diaovision.omnicontrol.widget.adapter.PortAdapter;
 import cn.diaovision.omnicontrol.widget.adapter.TermItemAdapter;
-
-import static android.R.attr.id;
 
 /**
  * Created by liulingfeng on 2017/2/24.
  */
 
 public class ConferenceFragment extends BaseFragment implements ConferenceContract.View {
-/*    @BindView(R.id.port)
-    PortRadioGroupView portRadioGroupView;
-    @BindView(R.id.auxiliary_recycler)
-    RecyclerViewWithSlidingItem termRecycler;
-    @BindView(R.id.video_layout)
-    RelativeLayout videoLayout;
-    @BindView(R.id.commit_subtitle)
-    Button commitSubtitle;
-    @BindView(R.id.subtitle_edit)
-    EditText subtitleEdit;*/
-
-    @BindView((R.id.reserved))
-    TextView reserved;
-
-    @BindView(R.id.start_conf)
-    RadioButton btnStartConf;
-    @BindView(R.id.end_conf)
-    RadioButton btnStopConf;
+    @BindView(R.id.radio_group)
+    RadioGroup radioGroup;
 
     @BindView(R.id.auxiliary_recycler)
     RecyclerViewWithSlidingItem termRecycler;
@@ -91,7 +67,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
     ConferencePresenter presenter;
     private ItemTouchHelper itemTouchHelper;
     Config cfg = new ConfigFixed();
-    //TODO: 从MUC服务器拿到confId
+    //从MUC服务器拿到confId
     int confId=0;
 
     @Nullable
@@ -105,30 +81,13 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        /*test code*/
-        Port port;
-        List<Port> inputs=new ArrayList<>();
-        for (int m = 0; m < 32; m++) {
-            if(m<4){
-                port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_CAMERA);
-            }else if(m<8){
-                port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_VIDEO);
-            }else if(m<13){
-                port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_DESKTOP);
-            }else{
-                port=new Port(id,m,Port.TYPE_VIDEO,Port.DIR_IN,Port.CATEGORY_OUTPUT_RETURN);
-            }
-            port.alias="端口:"+m;
-            inputs.add(port);
-        }
-
+        //初始化输入端列表
         inputSelectionSupport=new ItemSelectionSupport(inputRecyclerView);
         inputSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.NONE);
-        inputAdapter=new PortAdapter(inputs,inputSelectionSupport);
+        inputAdapter=new PortAdapter(presenter.getInputPortList(),inputSelectionSupport);
         inputRecyclerView.setLayoutManager(new GridLayoutManager(getContext(),9));
         inputRecyclerView.setAdapter(inputAdapter);
-
+        //初始化一个终端，测试使用
         currentTerm = new Term(666);
         currentTerm.setName("position=666");
         list = new ArrayList<>();
@@ -203,7 +162,7 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
                 }
             }
         });
-        itemTouchHelper = new ItemTouchHelper(new TermItemTouchCallback(adapter).setOnDragListener(new TermItemTouchCallback.OnDragListener() {
+        itemTouchHelper = new ItemTouchHelper(new TermItemTouchCallback().setOnDragListener(new TermItemTouchCallback.OnDragListener() {
             @Override
             public void onFinishDrag(RecyclerView.ViewHolder viewHolder) {
                 //拖拽完成的回掉
@@ -214,6 +173,23 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
         }));
         //和RecyclerView进行关联
         itemTouchHelper.attachToRecyclerView(termRecycler);
+
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                switch (checkedId){
+                    case R.id.conf_start:
+                        //presenter.endConf(0);
+                        break;
+                    case R.id.conf_end:
+                        //presenter.hangupTerm(0,0);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
     }
 
     @Override
@@ -236,22 +212,6 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
                 }
             }
         }
-    }
-
-    @OnClick(R.id.start_conf)
-    void onStartConf(){
-        Toast.makeText(getContext(), "start conference", Toast.LENGTH_SHORT).show();
-        presenter.startConf(cfg.getConfStartDate(), cfg.getConfEndDate(), confId);
-    }
-
-    @OnClick(R.id.end_conf)
-    void onStopConf(){
-        presenter.endConf(confId);
-    }
-
-    @OnClick(R.id.reserved)
-    void onReservedCLicked(){
-        Toast.makeText(getContext(), "reserved selected", Toast.LENGTH_SHORT).show();
     }
 
     public void popupDialog() {

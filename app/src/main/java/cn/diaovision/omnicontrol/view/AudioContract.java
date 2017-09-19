@@ -25,6 +25,6 @@ public interface AudioContract {
         List<Port> getInputList();
         List<Port> getOutputList();
         Set<Channel> getChannelSet();
-        void setChannel(int input, int[] outputs,int mode);
+        void switchVideo(int portIn, int[] portOut);
     }
 }

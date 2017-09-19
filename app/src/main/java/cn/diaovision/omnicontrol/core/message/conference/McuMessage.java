@@ -113,8 +113,8 @@ public class McuMessage implements BaseMessage{
     public byte[] toBytes(){
         byte[] payload = submsg.toBytes();
         byte[] bytes = new byte[header.toBytes().length + payload.length];
-        System.arraycopy(header, 0, bytes, 0, header.toBytes().length);
-        System.arraycopy(payload.length, 0, bytes, header.toBytes().length, payload.length);
+        System.arraycopy(header.toBytes(), 0, bytes, 0, header.toBytes().length);
+        System.arraycopy(payload, 0, bytes, header.toBytes().length, payload.length);
         return bytes;
     }
 

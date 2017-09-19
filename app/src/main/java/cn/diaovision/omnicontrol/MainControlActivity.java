@@ -1,6 +1,7 @@
 package cn.diaovision.omnicontrol;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -13,7 +14,11 @@ import android.widget.RadioGroup;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.diaovision.omnicontrol.core.model.device.matrix.MediaMatrix;
+import cn.diaovision.omnicontrol.model.Config;
+import cn.diaovision.omnicontrol.model.ConfigXXX;
 import cn.diaovision.omnicontrol.util.CrashHandler;
+import cn.diaovision.omnicontrol.util.PortHelper;
 import cn.diaovision.omnicontrol.view.AudioFragment;
 import cn.diaovision.omnicontrol.view.CameraFragment;
 import cn.diaovision.omnicontrol.view.ConferenceFragment;
@@ -21,10 +26,9 @@ import cn.diaovision.omnicontrol.view.ConfigFragment;
 import cn.diaovision.omnicontrol.view.DvdFragment;
 import cn.diaovision.omnicontrol.view.LightFragment;
 import cn.diaovision.omnicontrol.view.PowerFragment;
-import cn.diaovision.omnicontrol.view.VideoFragment2;
-
-//import com.roughike.bottombar.BottomBar;
-//import devlight.io.library.ntb.NavigationTabBar;
+import cn.diaovision.omnicontrol.view.VideoFragment;
+import cn.diaovision.omnicontrol.widget.AssistDrawerLayout;
+import cn.diaovision.omnicontrol.widget.AudioDrawerLayout;
 
 public class MainControlActivity extends BaseActivity implements GestureDetector.OnGestureListener{
 
@@ -63,7 +67,7 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
 
     private final Fragment[] FRAGMENTS = {
             new PowerFragment(),
-            new VideoFragment2(),
+            new VideoFragment(),
             new AudioFragment(),
             new LightFragment(),
             new CameraFragment(),
@@ -74,13 +78,13 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
 
     //Context
     OmniControlApplication app;
+    private int currentIndex=0;
 
     //Data
     int preTab = 0;
 
-    //UIs
-/*    @BindView(R.id.navigation_bar)
-    TabLayout navigationBar;*/
+    public static MediaMatrix matrix;
+    public static Config cfg;
 
     @BindView(R.id.navigation_bar0)
     RadioGroup radioGroup;
@@ -95,9 +99,6 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         app = (OmniControlApplication) getApplication();
-        //添加解码监听判断
-        if (!io.vov.vitamio.LibsChecker.checkVitamioLibs(this))
-            return;
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
@@ -106,61 +107,12 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         transaction.commit();
 
-
-        //init tabs
-/*        for (int m = 0; m < TAB_FRAGMENT_NAME.length; m ++) {
-            TabLayout.Tab tab = navigationBar.newTab().setCustomView(R.layout.tab_navi_item);
-            View v = tab.getCustomView();
-
-            AppCompatImageView imgView = (AppCompatImageView) v.findViewById(R.id.img);
-            imgView.setImageResource(TAB_ICON[m]);
-            AppCompatTextView txtView = (AppCompatTextView) v.findViewById(R.id.txt);
-            txtView.setText(TAB_FRAGMENT_NAME[m]);
-
-            navigationBar.addTab(tab);
-
-
-        }*/
-        //set init tab scale
-/*        int pos =  navigationBar.getSelectedTabPosition();
-        navigationBar.getTabAt(pos).getCustomView().findViewById(R.id.tab_content).setScaleX(1.2f);
-        navigationBar.getTabAt(pos).getCustomView().findViewById(R.id.tab_content).setScaleY(1.2f);
-
-        //navigation tab selection
-        navigationBar.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-
-                AnimatorSet animeSet = new AnimatorSet();
-                ObjectAnimator animeX = ObjectAnimator.ofFloat(tab.getCustomView().findViewById(R.id.tab_content), "scaleX", 1, 1.2f);
-                ObjectAnimator animeY = ObjectAnimator.ofFloat(tab.getCustomView().findViewById(R.id.tab_content), "scaleY", 1, 1.2f);
-                animeSet.setDuration(120);
-                animeSet.playTogether(animeX, animeY);
-                animeSet.start();
-
-                switchFragment(tab.getPosition());
-            }
-
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-                AnimatorSet animeSet = new AnimatorSet();
-                ObjectAnimator animeX = ObjectAnimator.ofFloat(tab.getCustomView().findViewById(R.id.tab_content), "scaleX", 1.2f, 1);
-                ObjectAnimator animeY = ObjectAnimator.ofFloat(tab.getCustomView().findViewById(R.id.tab_content), "scaleY", 1.2f, 1);
-                animeSet.setDuration(120);
-                animeSet.playTogether(animeX, animeY);
-                animeSet.start();
-            }
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
-        });*/
-
         gestureDetector = new GestureDetectorCompat(this, this);
 
         CrashHandler.getInstance().init(this);
+        initConfig();
+        initMediaMatrix();
+        PortHelper.getInstance().init();
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -197,11 +149,29 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
         });
     }
 
+    private void initConfig() {
+        cfg=ConfigXXX.fromFile(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Omnicontrol/config/config.xml");
+    }
+
+    private void initMediaMatrix() {
+        matrix=new MediaMatrix.Builder()
+                .id(cfg.getMatrixId())
+                .ip(cfg.getMatrixIp())
+                .port(cfg.getMatrixUdpIpPort())
+                .localPreviewVideo(cfg.getMatrixPreviewIp(), cfg.getMatrixPreviewPort())
+                .videoInInit(cfg.getInputPortList())
+                .videoOutInit(cfg.getOutputPortList())
+                .camerasInit(cfg.getMatrixCameras())
+                .build();
+        matrix.setVideoChnSet(cfg.getMatrixChannels());
+    }
+
     void switchFragment(int i){
         if (i < 8) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, FRAGMENTS[i], TAG_FRAGMENT[i]);
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             transaction.commit();
+            currentIndex=i;
         }
     }
 
@@ -212,8 +182,10 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         //handle at this layer if needed
-        if(FRAGMENTS[6]!=null)
+        if(FRAGMENTS[6]!=null&&currentIndex==6)
             ((ConferenceFragment)FRAGMENTS[6]).getActivityDispatchTouchEvent(ev);
+        if(FRAGMENTS[1]!=null&&currentIndex==1)
+            ((VideoFragment)FRAGMENTS[1]).getActivityDispatchTouchEvent(ev);
         gestureDetector.onTouchEvent(ev);
         return super.dispatchTouchEvent(ev);
     }
@@ -271,5 +243,24 @@ public class MainControlActivity extends BaseActivity implements GestureDetector
             Log.i("<UI>", "<UI> y swipe");
         }
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(currentIndex==1){
+            AssistDrawerLayout drawerLayout=((VideoFragment)FRAGMENTS[1]).getDrawerLayout();
+            if(drawerLayout!=null&&drawerLayout.isDrawerOpen()){
+                ((VideoFragment)FRAGMENTS[1]).editComplete();
+                return;
+            }
+        }
+        if(currentIndex==2){
+            AudioDrawerLayout drawerLayout=((AudioFragment)FRAGMENTS[2]).getDrawerLayout();
+            if(drawerLayout!=null&&drawerLayout.isDrawerOpen()){
+                ((AudioFragment)FRAGMENTS[2]).editComplete();
+                return;
+            }
+        }
+        super.onBackPressed();
     }
 }

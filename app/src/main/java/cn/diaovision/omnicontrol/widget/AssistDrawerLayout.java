@@ -7,6 +7,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.transition.Scene;
 import android.transition.TransitionManager;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -39,7 +40,7 @@ public class AssistDrawerLayout extends DrawerLayout {
     public static final int MODE_2X2 = 2; //两行两列拼接显示
     public static final int MODE_3X3 = 3; //三行三列拼接显示
 
-    public int mode=0;
+    public int mode = 0;
 
     public AssistDrawerLayout(Context context) {
         this(context, null);
@@ -59,11 +60,11 @@ public class AssistDrawerLayout extends DrawerLayout {
         ButterKnife.bind(this, view);
         drawerLayout.setScrimColor(Color.TRANSPARENT);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        setChannel= (Button) view.findViewById(R.id.set_channel);
+        setChannel = (Button) view.findViewById(R.id.set_channel);
         setChannel.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(onEditCompleteListener!=null){
+                if (onEditCompleteListener != null) {
                     onEditCompleteListener.onComplete(mode);
                 }
             }
@@ -77,29 +78,29 @@ public class AssistDrawerLayout extends DrawerLayout {
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
                 switch (checkedId) {
                     case R.id.radio_btn1:
-                        mode=AssistDrawerLayout.MODE_1XN;
+                        mode = AssistDrawerLayout.MODE_1XN;
                         TransitionManager.go(scene1);
                         break;
                     case R.id.radio_btn2:
-                        mode=AssistDrawerLayout.MODE_2X1;
+                        mode = AssistDrawerLayout.MODE_2X1;
                         TransitionManager.go(scene2);
                         break;
                     case R.id.radio_btn3:
-                        mode=AssistDrawerLayout.MODE_2X2;
+                        mode = AssistDrawerLayout.MODE_2X2;
                         TransitionManager.go(scene3);
                         break;
                     case R.id.radio_btn4:
-                        mode=AssistDrawerLayout.MODE_3X3;
+                        mode = AssistDrawerLayout.MODE_3X3;
                         TransitionManager.go(scene4);
                         break;
                     default:
                         break;
                 }
-                setChannel= (Button) view.findViewById(R.id.set_channel);
+                setChannel = (Button) view.findViewById(R.id.set_channel);
                 setChannel.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(onEditCompleteListener!=null){
+                        if (onEditCompleteListener != null) {
                             onEditCompleteListener.onComplete(mode);
                         }
                     }
@@ -129,7 +130,7 @@ public class AssistDrawerLayout extends DrawerLayout {
         }
     }
 
-    public boolean isDrawerOpen(){
+    public boolean isDrawerOpen() {
         return drawerLayout.isDrawerOpen(drawer);
     }
 
@@ -142,11 +143,17 @@ public class AssistDrawerLayout extends DrawerLayout {
         radioGroup.getChildAt(mode).performClick();
     }
 
-    public interface OnEditCompleteListener{
+    public interface OnEditCompleteListener {
         void onComplete(int mode);
     }
 
     public void setOnEditCompleteListener(OnEditCompleteListener onEditCompleteListener) {
         this.onEditCompleteListener = onEditCompleteListener;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        //不消费触摸事件，继续向下传递给下层的RecyclerView
+        return false;
     }
 }

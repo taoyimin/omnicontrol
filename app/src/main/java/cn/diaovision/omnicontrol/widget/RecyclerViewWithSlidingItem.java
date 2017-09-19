@@ -23,7 +23,7 @@ public class RecyclerViewWithSlidingItem extends RecyclerView {
             isFirst = true;
         }
         //int count = getChildCount();
-        int count = getChildCount()-1;
+        int count = getChildCount() - 1;
         for (int i = 0; i < count; i++) {
             ViewGroup convertView = (ViewGroup) getChildAt(i);
             SlidingItemView itemview = (SlidingItemView) convertView.getTag(convertView.getId());
@@ -36,7 +36,7 @@ public class RecyclerViewWithSlidingItem extends RecyclerView {
             if (isFirst) {
                 for (int i = 0; i < count; i++) {
                     ViewGroup convertView = (ViewGroup) getChildAt(i);
-                    if(convertView==null){
+                    if (convertView == null) {
                         return flag;
                     }
                     SlidingItemView itemview = (SlidingItemView) convertView.getTag(convertView.getId());

@@ -3,7 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
-    <io.vov.vitamio.widget.VideoView
+    <cn.diaovision.omnicontrol.widget.media.IjkVideoView
         android:id="@+id/video_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
@@ -15,7 +15,8 @@
         android:text="通道名称"
         android:padding="5dp"
         android:textSize="15sp"
-        android:textColor="#ffffff"/>
+        android:textColor="#ffffff"
+        android:visibility="gone"/>
 
     <ImageView
         android:id="@+id/statue"
@@ -31,7 +32,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="暂停"
-        android:layout_alignParentBottom="true"/>
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"/>
 
     <Button
         android:id="@+id/screen_shot"
@@ -39,5 +41,6 @@
         android:layout_height="wrap_content"
         android:text="截屏"
         android:layout_toRightOf="@+id/pause"
-        android:layout_alignBottom="@id/pause"/>
+        android:layout_alignBottom="@id/pause"
+        android:visibility="gone"/>
 </RelativeLayout>
