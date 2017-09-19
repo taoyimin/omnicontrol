@@ -210,8 +210,4 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
         logAdapter.notifyItemRangeInserted(fromIndex,count);
         logRecycler.smoothScrollToPosition(logAdapter.getItemCount()-1);
     }
-
-    /* *********************************
-     * presenter-view interactions
-     * *********************************/
 }
