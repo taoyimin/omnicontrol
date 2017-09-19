@@ -9,6 +9,7 @@
         android:id="@+id/log_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:overScrollMode="never"
         android:layout_marginBottom="@dimen/power_log_recycler_marginBottom"
         android:layout_marginLeft="@dimen/power_log_recycler_marginLeft"
         android:layout_marginRight="@dimen/power_log_recycler_marginRight"
