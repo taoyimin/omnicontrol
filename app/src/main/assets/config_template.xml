@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
-    <matrix id="1">
+    <matrix>
+        <id>1</id>
         <ip>192.168.10.11</ip>
         <port>5000</port>
         <input_number>36</input_number>
@@ -604,6 +605,11 @@
         <ip>192.168.10.100</ip>
         <port_config>6190</port_config>
     </mcu>
+
+    <user>
+        <name>admin</name>
+        <password>123456</password>
+    </user>
 
     <common_device>
     </common_device>
