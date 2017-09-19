@@ -10,6 +10,8 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
+import static cn.diaovision.omnicontrol.MainControlActivity.cfg;
+
 /* 兼容MVVM模式的Presenter样板
  * Created by liulingfeng on 2017/4/3.
  */
@@ -48,21 +50,24 @@ public class ConfigPresenter implements ConfigContract.Presenter {
 
 
     /* invoked by the view interaction*/
-    public void func() {
+    @Override
+    public void config(final String ip, final String port, final String id, final String name, final String password) {
         RxExecutor.getInstance().post(new RxReq() {
             @Override
             public RxMessage request() {
-                /*TODO: 这里添加presenter对model的交互逻辑*/
-                return null;
+                cfg.setMatrixId(id);
+                cfg.setMatrixIp(ip);
+                cfg.setMatrixUdpIpPort(port);
+                cfg.setMainName(name);
+                cfg.setMainPasswd(password);
+                return new RxMessage(RxMessage.DONE);
             }
         }, new Consumer<RxMessage>() {
             @Override
             public void accept(RxMessage s) throws Exception {
-                //TODO: 这里添加presenter根据提交请求的异步返回结果对view的操作逻辑
-                view.changeTitle();
-
-                //TODO: 采用MVVM方式更新(可选)
-                //RxBus.getInstance().post(new RxMessage("MVP", null));
+                if(s.what==RxMessage.DONE){
+                    view.showToast("配置成功！");
+                }
             }
         }, RxExecutor.SCH_IO, RxExecutor.SCH_ANDROID_MAIN);
     }

@@ -12,10 +12,10 @@ import cn.diaovision.omnicontrol.BaseView;
 
 public interface ConfigContract {
     interface View extends BaseView<Presenter>{
-        void changeTitle();
+        void showToast(String string);
     }
 
     interface Presenter extends BasePresenter{
-        void func();
+        void config(String ip,String port,String id,String name,String password);
     }
 }
