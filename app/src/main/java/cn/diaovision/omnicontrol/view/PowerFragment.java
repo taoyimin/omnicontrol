@@ -3,6 +3,7 @@ package cn.diaovision.omnicontrol.view;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import cn.diaovision.omnicontrol.widget.ItemSelectionSupport;
 import cn.diaovision.omnicontrol.widget.OnRecyclerItemClickListener;
 import cn.diaovision.omnicontrol.widget.adapter.CommandAdapter;
 import cn.diaovision.omnicontrol.widget.adapter.DeviceAdapter;
+import cn.diaovision.omnicontrol.widget.adapter.LogAdapter;
 
 /* *
  * 开关控制页面
@@ -34,9 +36,12 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
     RecyclerView deviceRecycler;
     @BindView(R.id.command_recycler)
     RecyclerView commandRecycler;
+    @BindView(R.id.log_recycler)
+    RecyclerView logRecycler;
 
     DeviceAdapter deviceAdapter;
     CommandAdapter commandAdapter;
+    LogAdapter logAdapter;
     PowerPresenter presenter;
     ItemSelectionSupport deviceSelectionSupport;
 
@@ -58,17 +63,17 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         final List<Device> list = presenter.getDeviceList();
-/*        final List<Device> list = new ArrayList<>();
-        list.add(new Device(1, "123", "123", 123));
-        list.add(new Device(2, "321", "321", 321));*/
         deviceSelectionSupport = new ItemSelectionSupport(deviceRecycler);
         deviceSelectionSupport.setChoiceMode(ItemSelectionSupport.ChoiceMode.SINGLE);
         deviceAdapter = new DeviceAdapter(list, deviceSelectionSupport);
         commandAdapter = new CommandAdapter(null);
+        logAdapter = new LogAdapter(presenter.getLogList());
         deviceRecycler.setLayoutManager(new GridLayoutManager(getContext(), 6));
-        commandRecycler.setLayoutManager(new GridLayoutManager(getContext(),6));
+        commandRecycler.setLayoutManager(new GridLayoutManager(getContext(), 6));
+        logRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         deviceRecycler.setAdapter(deviceAdapter);
         commandRecycler.setAdapter(commandAdapter);
+        logRecycler.setAdapter(logAdapter);
         deviceRecycler.addOnItemTouchListener(new OnRecyclerItemClickListener(deviceRecycler) {
             @Override
             public void onItemClick(RecyclerView.ViewHolder vh, int position) {
@@ -110,23 +115,23 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
 
             }
         });
-        commandRecycler.addOnItemTouchListener(new OnRecyclerItemClickListener(commandRecycler){
+        commandRecycler.addOnItemTouchListener(new OnRecyclerItemClickListener(commandRecycler) {
             @Override
             public void onItemClick(RecyclerView.ViewHolder vh, int position) {
-                List<Device.Command> cmds=list.get(deviceSelectionSupport.getCheckedItemPosition()).getCmds();
+                List<Device.Command> cmds = list.get(deviceSelectionSupport.getCheckedItemPosition()).getCmds();
                 if (position == cmds.size()) {
                     //如果是最后一个，弹出添加指令对话框
                     popupCommandDialog(null, position);
                 } else {
                     //deviceSelectionSupport.itemClick(position);
-                    Device device=list.get(deviceSelectionSupport.getCheckedItemPosition());
-                    presenter.sendCommand(device,cmds.get(position));
+                    Device device = list.get(deviceSelectionSupport.getCheckedItemPosition());
+                    presenter.sendCommand(device, cmds.get(position));
                 }
             }
 
             @Override
             public void onLongClick(RecyclerView.ViewHolder vh, int position) {
-                List<Device.Command> cmds=list.get(deviceSelectionSupport.getCheckedItemPosition()).getCmds();
+                List<Device.Command> cmds = list.get(deviceSelectionSupport.getCheckedItemPosition()).getCmds();
                 if (position != cmds.size()) {
                     popupCommandDialog(cmds.get(position), position);
                 }
@@ -198,6 +203,12 @@ public class PowerFragment extends BaseFragment implements PowerContract.View {
     @Override
     public void showToast(String str) {
         Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void notifyLogChange(int fromIndex, int count) {
+        logAdapter.notifyItemRangeInserted(fromIndex,count);
+        logRecycler.smoothScrollToPosition(logAdapter.getItemCount()-1);
     }
 
     /* *********************************
