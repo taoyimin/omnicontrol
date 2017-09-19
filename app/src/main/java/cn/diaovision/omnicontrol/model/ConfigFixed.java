@@ -1,7 +1,5 @@
 package cn.diaovision.omnicontrol.model;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,6 +30,16 @@ public class ConfigFixed implements Config{
     }
 
     @Override
+    public void setMainName(String name) {
+
+    }
+
+    @Override
+    public void setMainPasswd(String password) {
+
+    }
+
+    @Override
     public String getConfName() {
         return "admin";
     }
@@ -57,8 +65,18 @@ public class ConfigFixed implements Config{
     }
 
     @Override
+    public void setMatrixId(String id) {
+
+    }
+
+    @Override
     public String getMatrixIp() {
         return "192.168.10.11";
+    }
+
+    @Override
+    public void setMatrixIp(String ip) {
+
     }
 
     @Override
@@ -67,38 +85,18 @@ public class ConfigFixed implements Config{
     }
 
     @Override
+    public void setMatrixUdpIpPort(String port) {
+
+    }
+
+    @Override
     public String getMatrixPreviewIp() {
         return "192.168.10.31";
     }
 
     @Override
-    public int getMatrixPreviewIpPort() {
-        return 554;
-    }
-
-    @Override
     public int getMatrixPreviewPort() {
         return 29;
-    }
-
-    @Override
-    public int getMatrixInputVideoNum() {
-        return 32;
-    }
-
-    @Override
-    public int getMatrixOutputVideoNum() {
-        return 32;
-    }
-
-    @Override
-    public byte getSubtitleFontSize() {
-        return 13;
-    }
-
-    @Override
-    public byte getSubtitleFontColor() {
-        return 10;
     }
 
     @Override
@@ -109,20 +107,6 @@ public class ConfigFixed implements Config{
     @Override
     public Set<Channel> getMatrixChannels() {
         return null;
-    }
-
-    @Override
-    public Date getConfStartDate() {
-        return new Date();
-    }
-
-    @Override
-    public Date getConfEndDate() {
-        Date date = new Date();
-        Calendar calendar = Calendar. getInstance();
-        calendar.setTime(date);
-        calendar. add(Calendar.HOUR, 1);
-        return calendar.getTime();
     }
 
     @Override

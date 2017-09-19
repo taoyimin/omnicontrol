@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -226,42 +225,6 @@ public class ConfigXXX implements Config {
     /*获取设备列表*/
     @Override
     public List<Device> getDeviceList() {
-/*        List<Device> devices = new ArrayList<>();
-        if (!root.element("common_device").elementIterator().hasNext()) {
-            return devices;
-        }
-        List<Element> elements = root.element("common_device").elements("device");
-        for (Element element : elements) {
-            Device device = new Device();
-            String alias = element.element("alias").getText();
-            String ip = element.element("ip").getTextTrim();
-            int port = Integer.parseInt(element.element("port").getTextTrim());
-            List<Element> commandElements=element.elements("command_list");
-            List<Device.Command> cmds=new ArrayList<>();
-            if(element.element("command_list").elementIterator().hasNext()&&element.element("command_list").element("command").elementIterator().hasNext()){
-                for(Element commandElement:commandElements){
-                    String name=commandElement.element("alias").getText();
-                    String stringCmd=commandElement.element("string_cmd").getText();
-                    String byteString=commandElement.element("bytes_cmd").getText();
-                    byte[] byteCmd=null;
-                    if(TextUtils.isEmpty(byteString)){
-                        byteCmd=new byte[0];
-                    }else{
-                        byteCmd=ByteUtils.string2bytes(byteString);
-                    }
-                    Device.Command cmd=new Device.Command();
-                    cmd.setName(name);
-                    cmd.setStringCmd(stringCmd);
-                    cmd.setByteCmd(byteCmd);
-                    cmds.add(cmd);
-                }
-            }
-            device.setName(alias);
-            device.setIp(ip);
-            device.setPort(port);
-            device.setCmds(cmds);
-            devices.add(device);*/
-
         List<Device> devices = new ArrayList<>();
         if (!root.element("common_device").elementIterator().hasNext()) {
             return devices;
@@ -337,12 +300,24 @@ public class ConfigXXX implements Config {
 
     @Override
     public String getMainName() {
-        return null;
+        return root.element("user").element("name").getTextTrim();
     }
 
     @Override
     public String getMainPasswd() {
-        return null;
+        return root.element("user").element("password").getTextTrim();
+    }
+
+    @Override
+    public void setMainName(String name) {
+        root.element("user").element("name").setText(name);
+        save();
+    }
+
+    @Override
+    public void setMainPasswd(String password) {
+        root.element("user").element("password").setText(password);
+        save();
     }
 
     @Override
@@ -370,7 +345,13 @@ public class ConfigXXX implements Config {
     /*获取多媒体矩阵的ID*/
     @Override
     public int getMatrixId() {
-        return Integer.parseInt(root.element("matrix").attributeValue("id").trim());
+        return Integer.parseInt(root.element("matrix").element("id").getTextTrim());
+    }
+
+    @Override
+    public void setMatrixId(String id) {
+        root.element("matrix").element("id").setText(id);
+        save();
     }
 
     /*获取多媒体矩阵的IP*/
@@ -379,10 +360,22 @@ public class ConfigXXX implements Config {
         return root.element("matrix").element("ip").getTextTrim();
     }
 
+    @Override
+    public void setMatrixIp(String ip) {
+        root.element("matrix").element("ip").setText(ip);
+        save();
+    }
+
     /*获取多媒体矩阵的UDP通信端口*/
     @Override
     public int getMatrixUdpIpPort() {
         return Integer.parseInt(root.element("matrix").element("port").getTextTrim());
+    }
+
+    @Override
+    public void setMatrixUdpIpPort(String port) {
+        root.element("matrix").element("port").setText(port);
+        save();
     }
 
     /*获取预览卡IP*/
@@ -392,10 +385,10 @@ public class ConfigXXX implements Config {
     }
 
     /*获取预览卡IP端口号*/
-    @Override
+/*    @Override
     public int getMatrixPreviewIpPort() {
         return Integer.parseInt(root.element("matrix").element("preview_video").element("ip_port").getTextTrim());
-    }
+    }*/
 
     /*获取预览卡在矩阵上的端口号*/
     @Override
@@ -404,28 +397,16 @@ public class ConfigXXX implements Config {
     }
 
     /*获取矩阵的输入端个数*/
-    @Override
+/*    @Override
     public int getMatrixInputVideoNum() {
         return Integer.parseInt(root.element("matrix").element("input_number").getTextTrim());
-    }
+    }*/
 
     /*获取矩阵的输出端个数*/
-    @Override
+/*    @Override
     public int getMatrixOutputVideoNum() {
         return Integer.parseInt(root.element("matrix").element("output_number").getTextTrim());
-    }
-
-    /*获取标题字体大小*/
-    @Override
-    public byte getSubtitleFontSize() {
-        return 0;
-    }
-
-    /*获取标题字体颜色*/
-    @Override
-    public byte getSubtitleFontColor() {
-        return 0;
-    }
+    }*/
 
     /*获取摄像机的集合*/
     @Override
@@ -501,16 +482,6 @@ public class ConfigXXX implements Config {
             channels.add(channel);
         }
         return channels;
-    }
-
-    @Override
-    public Date getConfStartDate() {
-        return null;
-    }
-
-    @Override
-    public Date getConfEndDate() {
-        return null;
     }
 
     /*获取所有输入端口信息*/
