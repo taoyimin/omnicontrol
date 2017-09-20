@@ -62,7 +62,8 @@
             android:layout_marginLeft="@dimen/widget_margin"
             android:layout_marginRight="@dimen/widget_margin"
             android:layout_weight="4"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/black">
 
             <cn.diaovision.omnicontrol.widget.VideoLayout
                 android:id="@+id/video_layout"

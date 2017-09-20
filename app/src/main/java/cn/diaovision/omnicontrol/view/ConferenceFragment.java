@@ -91,9 +91,9 @@ public class ConferenceFragment extends BaseFragment implements ConferenceContra
         currentTerm = new Term(666);
         currentTerm.setName("position=666");
         list = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 4; i++) {
             Term term = new Term(i);
-            term.setName("position=" + i);
+            term.setName("终端" + i);
             list.add(term);
         }
         adapter = new TermItemAdapter(getContext(), list);

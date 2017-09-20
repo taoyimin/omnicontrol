@@ -19,7 +19,6 @@
                 android:id="@+id/image"
                 android:layout_width="@dimen/term_image_width"
                 android:layout_height="match_parent"
-                android:text="辅助屏"
                 android:textSize="13sp"
                 android:gravity="center"
                 android:textColor="@color/edit_hint_color"

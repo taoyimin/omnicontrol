@@ -54,8 +54,10 @@ public class TermItemAdapter extends RecyclerView.Adapter<TermItemAdapter.MyView
             case TYPE_NORMAL:
                 Term term=list.get(position);
                 holder.title.setText(term.getName());
-                holder.speech.setText("黑屏："+term.isSpeaking());
-                holder.mute.setText("消音："+term.isMuted());
+                String isSpeaking=term.isSpeaking()?"是":"否";
+                String isMuted=term.isMuted()?"是":"否";
+                holder.speech.setText("黑屏："+isSpeaking);
+                holder.mute.setText("消音："+isMuted);
                 holder.slidingItemView.setOnHideViewClickListener(new SlidingItemView.OnHideViewClickListener() {
                     @Override
                     public void onClick1(View view, int pos) {

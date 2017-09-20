@@ -41,7 +41,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="预留区"
                         android:textColor="@color/color_c7"
                         android:textSize="20sp"/>
                 </RelativeLayout>
@@ -62,7 +61,6 @@
                     android:layout_weight="9"
                     android:background="@color/color_c3"
                     android:gravity="center"
-                    android:text="16:9显示屏"
                     android:textColor="@color/edit_hint_color"
                     android:textSize="30sp"/>
 

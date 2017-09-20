@@ -46,7 +46,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
-                            android:text="预留区"
                             android:textColor="@color/color_c7"
                             android:textSize="20sp"/>
                     </LinearLayout>
@@ -60,7 +59,8 @@
             android:layout_marginLeft="@dimen/widget_margin"
             android:layout_marginRight="@dimen/widget_margin"
             android:layout_weight="4"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/black">
 
             <cn.diaovision.omnicontrol.widget.VideoLayout
                 android:id="@+id/video_layout"
