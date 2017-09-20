@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#1d6966</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <!--<color name="colorAccent">#FF4081</color>-->
+    <color name="colorAccent">#7fa5bf</color>
 
     <!--common colors-->
     <color name="transparent">#00000000</color>

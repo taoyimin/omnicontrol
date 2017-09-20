@@ -86,7 +86,6 @@ public class McuCommManager {
                 client.connect();
                 if (client.getState() == TcpClient.STATE_CONNECTED) {
                     threadStart();
-                    Log.i("MCU", "connect result: " + client.getState());
                     e.onNext(new RxMessage(RxMessage.CONNECTED));
                 } else if (client.getState() == TcpClient.STATE_DISCONNECTED) {
                     e.onError(new IOException());
@@ -178,13 +177,11 @@ public class McuCommManager {
     /*这个方法同上，不同仅仅在于返回一个flowable供进一步的调用*/
     public Flowable<RxMessage> sendSequential(final List<McuBundle> bundleList) {
         if (client.getState() == TcpClient.STATE_CONNECTED) {
-            Log.i("MCU", "send sequential start");
             return Flowable.fromIterable(bundleList)
                     .map(new Function<McuBundle, RxMessage>() {
                         @Override
                         public RxMessage apply(McuBundle mcuBundle) throws Exception {
                             final McuMessage msg = mcuBundle.msg;
-                            Log.i("MCU", "send message");
                             int res = client.send(msg.toBytes());
                             if (res > 0) {
                                 return new RxMessage(RxMessage.DONE, mcuBundle);
@@ -196,7 +193,6 @@ public class McuCommManager {
                     .map(new Function<RxMessage, RxMessage>() {
                         @Override
                         public RxMessage apply(RxMessage rxMessage) throws Exception {
-                            Log.i("MCU", "edit conf");
                             McuBundle bundle = (McuBundle) rxMessage.val;
                             McuMessage msg = bundle.msg;
                             ConfEditor editor = bundle.confEditor;
