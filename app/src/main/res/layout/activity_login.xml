@@ -156,6 +156,20 @@
                         android:textColor="@color/color_c3"
                         android:textSize="@dimen/text_size_f1"
                         android:layout_alignParentRight="true"/>
+
+                    <CheckBox
+                        android:id="@+id/checkbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/checkbox"
+                        android:text="@string/remember_password"
+                        android:textColor="@color/color_c5"
+                        android:layout_centerVertical="true"/>
                 </RelativeLayout>
 
                 <RelativeLayout

@@ -36,9 +36,9 @@ public class LoginPresenter implements LoginContract.Presenter {
     /*double binding between view and presenter*/
     @NonNull
     private final LoginContract.View view;
-    IUser iUser=new IUserImpl();
+    IUser iUser = new IUserImpl();
 
-    public LoginPresenter(LoginContract.View view){
+    public LoginPresenter(LoginContract.View view) {
         this.view = view;
 
         bus.subscribe(subscriber);
@@ -72,23 +72,26 @@ public class LoginPresenter implements LoginContract.Presenter {
 
 
     //TODO: (optional) remove all subscriber before the presenter is destroyed
-    public void stopObserve(){
-        if (subscription != null){
+    public void stopObserve() {
+        if (subscription != null) {
             subscription.dispose();
         }
     }
 
     @Override
     public void login() {
-        String name=view.getName();
-        String password=view.getPassword();
-        if(name.isEmpty()||password.isEmpty()){
+        final String name = view.getName();
+        final String password = view.getPassword();
+        if (name.isEmpty() || password.isEmpty()) {
             view.showToast("用户名或密码不能为空！");
             return;
         }
         iUser.login(name, password, new IUser.UserLoginListener() {
             @Override
             public void success(User user) {
+                view.saveSharedPreferences("name", name);
+                view.saveSharedPreferences("password", password);
+                view.saveSharedPreferences("checked", view.getCheckState() ? true : false);
                 view.toMainActivity();
             }
 
@@ -101,6 +104,6 @@ public class LoginPresenter implements LoginContract.Presenter {
 
 
     //TODO: add viewmodel operations if needed
-//    public void onTitleChanged(String str){
-//    }
+    //    public void onTitleChanged(String str){
+    //    }
 }

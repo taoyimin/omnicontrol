@@ -17,6 +17,9 @@ public interface LoginContract {
         void toMainActivity();
         String getName();
         String getPassword();
+        void saveSharedPreferences(String key,String val);
+        void saveSharedPreferences(String key,boolean val);
+        boolean getCheckState();
     }
 
     interface Presenter extends BasePresenter{
